@@ -1,8 +1,11 @@
 import Link from "next/link";
 import type { Temple } from "@/types/database";
+import { slugify } from "@/lib/slug";
 
 export default function TempleCard({ temple }: { temple: Temple }) {
-  const href = temple.is_coming_soon ? "#" : `/temple/${temple.id}`;
+  const href = temple.is_coming_soon
+    ? "#"
+    : `/temple/${slugify(temple.name)}`;
 
   return (
     <Link

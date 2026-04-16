@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0" stop-color="#fff5d8"/>
+      <stop offset="0.6" stop-color="#f4b942"/>
+      <stop offset="1" stop-color="#c47020"/>
+    </radialGradient>
+    <linearGradient id="petal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffb070"/>
+      <stop offset="0.5" stop-color="#e84545"/>
+      <stop offset="1" stop-color="#7a0a0a"/>
+    </linearGradient>
+    <linearGradient id="petalLight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd6a8"/>
+      <stop offset="1" stop-color="#ff8a45"/>
+    </linearGradient>
+    <radialGradient id="center" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff5d8"/>
+      <stop offset="1" stop-color="#d4941a"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#bg)"/>
+
+  <!-- Outer mandala rings -->
+  <g fill="none" stroke="#7a0a0a" opacity="0.25">
+    <circle cx="400" cy="300" r="260" stroke-width="1"/>
+    <circle cx="400" cy="300" r="220" stroke-width="0.7"/>
+    <circle cx="400" cy="300" r="180" stroke-width="1"/>
+  </g>
+
+  <!-- Light rays -->
+  <g stroke="#fff5d8" stroke-width="2" opacity="0.5">
+    <line x1="400" y1="40"  x2="400" y2="120"/>
+    <line x1="400" y1="480" x2="400" y2="560"/>
+    <line x1="60"  y1="300" x2="140" y2="300"/>
+    <line x1="660" y1="300" x2="740" y2="300"/>
+    <line x1="160" y1="60"  x2="220" y2="120"/>
+    <line x1="640" y1="60"  x2="580" y2="120"/>
+    <line x1="160" y1="540" x2="220" y2="480"/>
+    <line x1="640" y1="540" x2="580" y2="480"/>
+  </g>
+
+  <g transform="translate(400 300)">
+    <!-- Outer petals (8) -->
+    <g fill="url(#petal)">
+      <ellipse cx="0"    cy="-150" rx="40" ry="100"/>
+      <ellipse cx="0"    cy="150"  rx="40" ry="100"/>
+      <ellipse cx="-150" cy="0"    rx="100" ry="40"/>
+      <ellipse cx="150"  cy="0"    rx="100" ry="40"/>
+      <g transform="rotate(45)">
+        <ellipse cx="0"    cy="-150" rx="40" ry="100"/>
+        <ellipse cx="0"    cy="150"  rx="40" ry="100"/>
+        <ellipse cx="-150" cy="0"    rx="100" ry="40"/>
+        <ellipse cx="150"  cy="0"    rx="100" ry="40"/>
+      </g>
+    </g>
+
+    <!-- Inner petals (8, smaller, lighter) -->
+    <g fill="url(#petalLight)">
+      <g transform="rotate(22.5)">
+        <ellipse cx="0"    cy="-100" rx="28" ry="70"/>
+        <ellipse cx="0"    cy="100"  rx="28" ry="70"/>
+        <ellipse cx="-100" cy="0"    rx="70" ry="28"/>
+        <ellipse cx="100"  cy="0"    rx="70" ry="28"/>
+        <g transform="rotate(45)">
+          <ellipse cx="0"    cy="-100" rx="28" ry="70"/>
+          <ellipse cx="0"    cy="100"  rx="28" ry="70"/>
+          <ellipse cx="-100" cy="0"    rx="70" ry="28"/>
+          <ellipse cx="100"  cy="0"    rx="70" ry="28"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- Center disc -->
+    <circle r="55" fill="url(#center)"/>
+    <circle r="40" fill="#fff5d8"/>
+    <circle r="28" fill="#ffd76b"/>
+
+    <!-- Om symbol in center -->
+    <text y="14" text-anchor="middle" font-family="Georgia, serif" font-size="48" font-weight="bold" fill="#7a0a0a">ॐ</text>
+  </g>
+</svg>

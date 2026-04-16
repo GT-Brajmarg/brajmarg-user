@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.5" r="0.7">
+      <stop offset="0" stop-color="#fff5d8"/>
+      <stop offset="0.6" stop-color="#f4b942"/>
+      <stop offset="1" stop-color="#c47020"/>
+    </radialGradient>
+    <radialGradient id="thali" cx="0.4" cy="0.3" r="0.7">
+      <stop offset="0" stop-color="#ffe089"/>
+      <stop offset="0.5" stop-color="#d4941a"/>
+      <stop offset="1" stop-color="#7a5208"/>
+    </radialGradient>
+    <radialGradient id="laddu" cx="0.35" cy="0.3" r="0.7">
+      <stop offset="0" stop-color="#ffd97a"/>
+      <stop offset="0.7" stop-color="#c47a20"/>
+      <stop offset="1" stop-color="#5a3008"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="600" fill="url(#bg)"/>
+
+  <!-- Lotus petals around -->
+  <g fill="#fff5d8" opacity="0.25">
+    <ellipse cx="300" cy="80"  rx="40" ry="80"/>
+    <ellipse cx="300" cy="520" rx="40" ry="80"/>
+    <ellipse cx="80"  cy="300" rx="80" ry="40"/>
+    <ellipse cx="520" cy="300" rx="80" ry="40"/>
+    <g transform="rotate(45 300 300)">
+      <ellipse cx="300" cy="80"  rx="40" ry="80"/>
+      <ellipse cx="300" cy="520" rx="40" ry="80"/>
+      <ellipse cx="80"  cy="300" rx="80" ry="40"/>
+      <ellipse cx="520" cy="300" rx="80" ry="40"/>
+    </g>
+  </g>
+
+  <!-- Concentric mandala rings -->
+  <g fill="none" stroke="#c47020" opacity="0.4">
+    <circle cx="300" cy="300" r="240" stroke-width="1"/>
+    <circle cx="300" cy="300" r="220" stroke-width="0.5"/>
+    <circle cx="300" cy="300" r="200" stroke-width="1"/>
+  </g>
+
+  <!-- Brass thali -->
+  <ellipse cx="300" cy="320" rx="190" ry="170" fill="url(#thali)"/>
+  <ellipse cx="300" cy="305" rx="170" ry="150" fill="#a06010" opacity="0.5"/>
+  <ellipse cx="300" cy="300" rx="155" ry="135" fill="url(#thali)"/>
+  <ellipse cx="290" cy="280" rx="120" ry="100" fill="#fff0c8" opacity="0.25"/>
+
+  <!-- Laddoos arranged in triangle -->
+  <g>
+    <!-- Back-left laddu -->
+    <circle cx="245" cy="265" r="48" fill="url(#laddu)"/>
+    <circle cx="232" cy="248" r="14" fill="#ffe89c" opacity="0.5"/>
+    <!-- Sprinkle dots -->
+    <circle cx="225" cy="275" r="2.5" fill="#fff0c8"/>
+    <circle cx="260" cy="252" r="2.5" fill="#fff0c8"/>
+    <circle cx="270" cy="285" r="2.5" fill="#fff0c8"/>
+
+    <!-- Back-right laddu -->
+    <circle cx="355" cy="265" r="48" fill="url(#laddu)"/>
+    <circle cx="342" cy="248" r="14" fill="#ffe89c" opacity="0.5"/>
+    <circle cx="335" cy="275" r="2.5" fill="#fff0c8"/>
+    <circle cx="370" cy="252" r="2.5" fill="#fff0c8"/>
+    <circle cx="380" cy="285" r="2.5" fill="#fff0c8"/>
+
+    <!-- Front laddu (largest, centered) -->
+    <circle cx="300" cy="335" r="55" fill="url(#laddu)"/>
+    <circle cx="285" cy="318" r="16" fill="#ffe89c" opacity="0.55"/>
+    <circle cx="280" cy="345" r="3" fill="#fff0c8"/>
+    <circle cx="320" cy="320" r="3" fill="#fff0c8"/>
+    <circle cx="328" cy="355" r="3" fill="#fff0c8"/>
+    <circle cx="295" cy="365" r="3" fill="#fff0c8"/>
+  </g>
+
+  <!-- Marigold petals scattered -->
+  <g fill="#ff8a1c">
+    <circle cx="170" cy="380" r="6"/>
+    <circle cx="160" cy="400" r="5"/>
+    <circle cx="430" cy="380" r="6"/>
+    <circle cx="440" cy="400" r="5"/>
+    <circle cx="300" cy="450" r="6"/>
+    <circle cx="280" cy="455" r="4"/>
+    <circle cx="320" cy="455" r="4"/>
+  </g>
+
+  <!-- Top text mark -->
+  <text x="300" y="100" text-anchor="middle" font-family="Georgia, serif" font-size="40" font-weight="bold" fill="#5a1d12" opacity="0.85">ॐ</text>
+</svg>

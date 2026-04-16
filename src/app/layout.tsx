@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import OnboardingTour from "@/components/OnboardingTour";
+import CartSync from "@/components/CartSync";
+import CartDrawer from "@/components/CartDrawer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -34,6 +37,9 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <OnboardingTour />
+        <CartSync />
+        <CartDrawer />
       </body>
     </html>
   );

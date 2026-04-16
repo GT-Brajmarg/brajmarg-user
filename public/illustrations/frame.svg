@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a1838"/>
+      <stop offset="0.5" stop-color="#1a2858"/>
+      <stop offset="1" stop-color="#3a1d4a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffe089"/>
+      <stop offset="0.5" stop-color="#d4941a"/>
+      <stop offset="1" stop-color="#7a5208"/>
+    </linearGradient>
+    <linearGradient id="goldH" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7a5208"/>
+      <stop offset="0.5" stop-color="#ffd76b"/>
+      <stop offset="1" stop-color="#7a5208"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff5d8" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#fff5d8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="750" fill="url(#bg)"/>
+
+  <!-- Stars -->
+  <g fill="#fff5d8" opacity="0.7">
+    <circle cx="80"  cy="100" r="1.5"/>
+    <circle cx="150" cy="60"  r="1"/>
+    <circle cx="220" cy="120" r="1.2"/>
+    <circle cx="380" cy="80"  r="1.5"/>
+    <circle cx="450" cy="130" r="1"/>
+    <circle cx="520" cy="90"  r="1.3"/>
+    <circle cx="60"  cy="680" r="1"/>
+    <circle cx="540" cy="700" r="1.5"/>
+  </g>
+
+  <!-- Outer ornate frame -->
+  <rect x="60" y="80" width="480" height="600" rx="20" fill="url(#goldH)"/>
+  <rect x="80" y="100" width="440" height="560" rx="14" fill="url(#bg)"/>
+
+  <!-- Inner gold border -->
+  <rect x="90" y="110" width="420" height="540" rx="10" fill="none" stroke="url(#gold)" stroke-width="3"/>
+  <rect x="100" y="120" width="400" height="520" rx="6" fill="none" stroke="url(#gold)" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- Decorative gold dots on frame -->
+  <g fill="#ffe089">
+    <circle cx="80"  cy="100" r="6"/>
+    <circle cx="520" cy="100" r="6"/>
+    <circle cx="80"  cy="660" r="6"/>
+    <circle cx="520" cy="660" r="6"/>
+    <circle cx="300" cy="80"  r="5"/>
+    <circle cx="300" cy="680" r="5"/>
+    <circle cx="60"  cy="380" r="5"/>
+    <circle cx="540" cy="380" r="5"/>
+  </g>
+
+  <!-- Top kalash decoration -->
+  <g fill="url(#gold)">
+    <ellipse cx="300" cy="55" rx="22" ry="14"/>
+    <rect x="294" y="40" width="12" height="20"/>
+    <circle cx="300" cy="36" r="8"/>
+    <path d="M 300 26 L 300 14" stroke="url(#gold)" stroke-width="3"/>
+  </g>
+
+  <!-- Halo behind deity -->
+  <circle cx="300" cy="320" r="170" fill="url(#halo)"/>
+
+  <!-- Stylized Krishna with peacock feather (silhouette) -->
+  <g>
+    <!-- Body / robe -->
+    <path d="M 300 280 Q 220 280 200 420 Q 220 540 300 560 Q 380 540 400 420 Q 380 280 300 280 Z" fill="#1a2858"/>
+    <path d="M 230 380 Q 300 360 370 380 L 360 480 Q 300 470 240 480 Z" fill="#ffd76b" opacity="0.4"/>
+
+    <!-- Head -->
+    <circle cx="300" cy="270" r="55" fill="#1a2858"/>
+    <circle cx="300" cy="270" r="50" fill="#3a1d4a"/>
+
+    <!-- Crown -->
+    <path d="M 250 235 Q 265 200 280 230 Q 290 195 300 230 Q 310 195 320 230 Q 335 200 350 235 L 345 250 L 255 250 Z" fill="url(#gold)"/>
+
+    <!-- Peacock feather -->
+    <ellipse cx="285" cy="195" rx="6" ry="35" fill="#0a8a4a"/>
+    <circle cx="285" cy="170" r="14" fill="#1a78d4"/>
+    <circle cx="285" cy="170" r="9" fill="#ffd76b"/>
+    <circle cx="285" cy="170" r="4" fill="#0a3878"/>
+
+    <!-- Flute (bansuri) -->
+    <line x1="200" y1="380" x2="280" y2="340" stroke="url(#gold)" stroke-width="6" stroke-linecap="round"/>
+    <line x1="200" y1="380" x2="280" y2="340" stroke="#7a5208" stroke-width="2" stroke-dasharray="3 8"/>
+  </g>
+
+  <!-- Bottom decoration -->
+  <g fill="url(#gold)">
+    <path d="M 200 700 L 400 700 L 380 720 L 220 720 Z"/>
+    <text x="300" y="715" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#0a1838">॥ श्री कृष्णाय नमः ॥</text>
+  </g>
+</svg>
