@@ -22,10 +22,10 @@ export default function AuthLink() {
     let cancelled = false;
 
     // Initial check
-    supabase.auth.getUser().then(({ data }) => {
-      if (cancelled) return;
-      setState(data.user ? "authed" : "guest");
-    });
+    supabase.auth.getSession().then(({ data }) => {
+  if (cancelled) return;
+  setState(data.session?.user ? "authed" : "guest");
+});
 
     // Live updates
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
