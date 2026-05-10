@@ -1,4 +1,5 @@
-import { verifyOtp } from "../actions";
+import Link from "next/link";
+import VerifyForm from "./VerifyForm";
 
 export default async function VerifyOtpPage({
   searchParams,
@@ -16,12 +17,12 @@ export default async function VerifyOtpPage({
 
   if (!phone && !email) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f5f0ea]">
-        <p>
+      <div className="flex min-h-screen items-center justify-center bg-[#f5f0ea] px-4">
+        <p className="text-sm">
           Invalid request.{" "}
-          <a href="/login" className="text-brand-red underline">
+          <Link href="/login" className="text-brand-red underline">
             Go back to login
-          </a>
+          </Link>
         </p>
       </div>
     );
@@ -31,79 +32,101 @@ export default async function VerifyOtpPage({
   const target = phone ?? email ?? "";
   const channelLabel = channel === "phone" ? "mobile" : "email";
 
-  // Build the link back to /login that preserves `next`
+  // Mask the target for display (privacy)
+  const masked =
+    channel === "phone"
+      ? maskPhone(target)
+      : maskEmail(target);
+
   const backHref = nextPath
     ? `/login?next=${encodeURIComponent(nextPath)}`
     : "/login";
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#f5f0ea] py-10 px-4">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
-        <div className="flex flex-col items-center space-y-2 mb-6">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/brajmarg_header_logo.png"
-            alt="Brajmarg"
-            className="h-14 w-auto"
-          />
-          <h1 className="text-2xl font-bold text-gray-900 font-serif">
-            Verify your {channelLabel}
-          </h1>
-          <p className="text-sm text-gray-500 text-center">
-            We sent a 6-digit code to{" "}
-            <span className="font-semibold text-gray-800">{target}</span>
-          </p>
-        </div>
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 px-4 py-10 overflow-hidden">
+      {/* Decorative red dots */}
+      <div className="pointer-events-none absolute inset-0 opacity-[0.06] [background-image:radial-gradient(circle_at_25%_30%,#c41e1e_2px,transparent_2px),radial-gradient(circle_at_75%_70%,#c41e1e_2px,transparent_2px)] [background-size:48px_48px]" />
+      <div className="pointer-events-none absolute -top-32 -right-24 h-72 w-72 rounded-full bg-brand-red/10 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-32 -left-24 h-72 w-72 rounded-full bg-amber-300/20 blur-3xl" />
 
-        {error && (
-          <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-            {error}
+      <div className="relative w-full max-w-md">
+        <div className="rounded-2xl bg-white p-8 shadow-2xl ring-1 ring-black/5">
+          <div className="flex flex-col items-center text-center">
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-brand-red mb-4">
+              <svg
+                className="h-7 w-7"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.8}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-7a2 2 0 00-2-2H6a2 2 0 00-2 2v7a2 2 0 002 2zm10-12V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 font-serif">
+              Verify your {channelLabel}
+            </h1>
+            <p className="mt-2 text-sm text-gray-500 leading-relaxed">
+              We sent a 6-digit code to{" "}
+              <span className="font-semibold text-gray-800">{masked}</span>
+            </p>
           </div>
-        )}
 
-        <form className="space-y-5">
-          {phone ? <input type="hidden" name="phone" value={phone} /> : null}
-          {email ? <input type="hidden" name="email" value={email} /> : null}
-          {nextPath ? (
-            <input type="hidden" name="next" value={nextPath} />
-          ) : null}
-
-          <div>
-            <label
-              htmlFor="otp"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Enter OTP
-            </label>
-            <input
-              id="otp"
-              name="otp"
-              type="text"
-              inputMode="numeric"
-              autoComplete="one-time-code"
-              autoFocus
-              placeholder="------"
-              pattern="[0-9]{6}"
-              maxLength={6}
-              required
-              className="w-full rounded-lg border border-gray-300 px-3 py-3 text-xl text-center tracking-[0.6em] font-bold outline-none focus:border-brand-red focus:ring-2 focus:ring-red-100"
+          <div className="mt-6">
+            <VerifyForm
+              phone={phone}
+              email={email}
+              next={nextPath || undefined}
+              channelLabel={channelLabel}
+              initialError={error}
             />
           </div>
 
-          <button
-            formAction={verifyOtp}
-            className="w-full rounded-lg bg-brand-red px-4 py-3 text-sm font-semibold text-white hover:bg-brand-red-dark active:scale-[0.98] transition-all shadow-sm"
-          >
-            Verify &amp; Continue
-          </button>
-        </form>
+          <p className="mt-6 text-center text-sm">
+            <Link
+              href={backHref}
+              className="inline-flex items-center gap-1 text-brand-red hover:underline"
+            >
+              <svg
+                className="h-3.5 w-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 18l-6-6 6-6" />
+              </svg>
+              Use a different {channelLabel}
+            </Link>
+          </p>
+        </div>
 
-        <p className="text-center text-sm text-gray-500 mt-5">
-          <a href={backHref} className="text-brand-red hover:underline">
-            ← Use a different {channelLabel}
-          </a>
+        <p className="mt-4 text-center text-xs text-gray-500">
+          Trouble signing in?{" "}
+          <Link href="/contact" className="font-semibold text-brand-red hover:underline">
+            Contact support
+          </Link>
         </p>
       </div>
     </div>
   );
+}
+
+function maskPhone(phone: string): string {
+  // +919876543210 -> +91 ••• ••• 3210
+  if (phone.length < 7) return phone;
+  const last4 = phone.slice(-4);
+  const cc = phone.startsWith("+") ? phone.slice(0, 3) : "";
+  return `${cc} ••• ••• ${last4}`.trim();
+}
+
+function maskEmail(email: string): string {
+  const [user, domain] = email.split("@");
+  if (!domain) return email;
+  if (user.length <= 2) return `${user[0] ?? ""}•@${domain}`;
+  return `${user.slice(0, 2)}${"•".repeat(Math.min(user.length - 2, 5))}@${domain}`;
 }

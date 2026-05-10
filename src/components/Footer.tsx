@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const QUICK_LINKS = [
   { href: "/", label: "Home" },
@@ -40,6 +43,10 @@ const SOCIALS = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+  // Hide footer on the login flow (login + verify)
+  if (pathname?.startsWith("/login")) return null;
+
   const year = new Date().getFullYear();
 
   return (

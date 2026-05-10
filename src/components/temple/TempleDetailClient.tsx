@@ -88,23 +88,39 @@ export default function TempleDetailClient({
 
   return (
     <div>
-      {/* Hero — full-width, reduced height */}
-      <div className="relative h-[200px] sm:h-[260px] w-full bg-gradient-to-br from-stone-700 via-stone-800 to-stone-900">
+      {/* Hero — full-width banner. Tall enough that portrait deity
+          photos read well; object-top keeps the face anchored when
+          the image aspect is taller than the container. */}
+      <div className="relative h-[360px] sm:h-[480px] lg:h-[560px] w-full overflow-hidden bg-gradient-to-br from-stone-700 via-stone-800 to-stone-900">
         {showHeroImage && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={temple.image_url ?? ""}
-            alt=""
-            onError={() => setHeroImgFailed(true)}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
+          <>
+            {/* Soft blurred backdrop fills any letterboxed area on
+                wider screens, so the hero never looks empty. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={temple.image_url ?? ""}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full object-cover scale-110 blur-2xl opacity-60"
+            />
+            {/* Foreground image — contained on large screens so the
+                full deity is visible, covered (top-anchored) on
+                smaller screens for an immersive banner. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={temple.image_url ?? ""}
+              alt={temple.name}
+              onError={() => setHeroImgFailed(true)}
+              className="relative h-full w-full object-cover object-top sm:object-contain"
+            />
+          </>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 px-4 pb-5 sm:px-8 sm:pb-7 max-w-screen-2xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/30" />
+        <div className="absolute bottom-0 left-0 right-0 px-4 pb-6 sm:px-8 sm:pb-8 max-w-screen-2xl mx-auto">
+          <h1 className="text-2xl sm:text-4xl font-bold text-white drop-shadow-lg">
             {temple.name}
           </h1>
-          <p className="mt-1 text-sm text-white/90 flex items-center gap-2">
+          <p className="mt-1.5 text-sm sm:text-base text-white/90 flex items-center gap-2">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-white" />
             {temple.location}
           </p>
@@ -113,6 +129,85 @@ export default function TempleDetailClient({
 
       {/* Content below hero */}
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+      {/* Breadcrumb + back link */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <nav aria-label="Breadcrumb">
+          <ol className="flex items-center gap-1.5 text-sm text-gray-500">
+            <li>
+              <Link
+                href="/"
+                className="inline-flex items-center gap-1 text-gray-500 hover:text-brand-red transition-colors"
+              >
+                <svg
+                  className="h-3.5 w-3.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3v-6h6v6h3a1 1 0 001-1V10"
+                  />
+                </svg>
+                Home
+              </Link>
+            </li>
+            <li aria-hidden="true">
+              <svg
+                className="h-3.5 w-3.5 text-gray-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 6l6 6-6 6" />
+              </svg>
+            </li>
+            <li>
+              <span className="text-gray-500">Temples</span>
+            </li>
+            <li aria-hidden="true">
+              <svg
+                className="h-3.5 w-3.5 text-gray-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 6l6 6-6 6" />
+              </svg>
+            </li>
+            <li aria-current="page">
+              <span className="font-semibold text-brand-red truncate max-w-[12rem] sm:max-w-none">
+                {temple.name}
+              </span>
+            </li>
+          </ol>
+        </nav>
+
+        <Link
+          href="/"
+          className="group inline-flex items-center gap-2 rounded-full border border-brand-red/30 bg-card-bg px-4 py-1.5 text-sm font-semibold text-brand-red hover:bg-brand-red hover:text-white hover:border-brand-red transition-colors"
+        >
+          <svg
+            className="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 18l-6-6 6-6"
+            />
+          </svg>
+          Back to dashboard
+        </Link>
+      </div>
 
       {temple.description && (
         <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
