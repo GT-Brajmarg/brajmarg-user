@@ -16,7 +16,9 @@ export default function Header() {
               alt="Brajmarg"
               className="h-10 w-auto"
             />
-            <span className="text-xl font-bold text-brand-red">Brajmarg</span>
+            <span className="text-xl font-bold text-brand-red">
+              Brajmarg
+            </span>
           </Link>
 
           {/* Primary nav */}
