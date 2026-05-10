@@ -83,8 +83,8 @@ export default async function VerifyOtpPage({
               autoComplete="one-time-code"
               autoFocus
               placeholder="------"
-              pattern="[0-9]{8}"
-              maxLength={8}
+              pattern="[0-9]{6}"
+              maxLength={6}
               required
               className="w-full rounded-lg border border-gray-300 px-3 py-3 text-xl text-center tracking-[0.6em] font-bold outline-none focus:border-brand-red focus:ring-2 focus:ring-red-100"
             />
