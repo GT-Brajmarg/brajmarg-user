@@ -21,9 +21,9 @@ export default async function AuthLink() {
 
   return (
     <Link
-      href="/cart"
+      href="/account"
       className="p-2 text-gray-600 hover:text-brand-red"
-      aria-label="Account"
+      aria-label="My account"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
