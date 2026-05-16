@@ -144,6 +144,8 @@ export type Order = {
   shipping_pincode: string | null;
   payment_method: string | null;
   payment_status: PaymentStatus;
+  payment_id: string | null;
+  razorpay_order_id: string | null;
   notes: string | null;
   created_at: string;
   updated_at: string;

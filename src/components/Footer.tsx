@@ -50,7 +50,9 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#CD0000] text-[#EFEDE6] mt-auto">
+    <footer className="bg-[#FFF4E8] text-[#CD0000] mt-auto">
+      {/* Thin top accent line */}
+      <div className="h-[3px] w-full bg-[#C41E1E]" />
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-0 items-start">
           {/* Brand */}
@@ -70,11 +72,11 @@ export default function Footer() {
           </div>
 
           {/* Quick links — two-column sub-grid, with white vertical separators */}
-          <div className="md:col-span-5 lg:col-span-5 md:px-6 md:border-l md:border-r md:border-[#EFEDE6]/40">
+          <div className="md:col-span-5 lg:col-span-5 md:px-6 md:border-l md:border-r md:border-[#CD0000]/40">
             <h3 className="text-base font-semibold tracking-wide">
               Quick Links
             </h3>
-            <span className="block mt-1 h-0.5 w-10 bg-[#EFEDE6]/70 rounded" />
+            <span className="block mt-1 h-0.5 w-10 bg-[#CD0000]/70 rounded" />
             <div className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2">
               {QUICK_LINKS.map((l) => (
                 <FooterLink key={l.href} href={l.href} label={l.label} />
@@ -88,7 +90,7 @@ export default function Footer() {
           {/* Social */}
           <div className="md:col-span-3 lg:col-span-3 md:pl-6">
             <h3 className="text-base font-semibold tracking-wide">Follow Us</h3>
-            <span className="block mt-1 h-0.5 w-10 bg-[#EFEDE6]/70 rounded" />
+            <span className="block mt-1 h-0.5 w-10 bg-[#CD0000]/70 rounded" />
             <ul className="mt-3 flex items-center gap-3">
               {SOCIALS.map((s) => (
                 <li key={s.label}>
@@ -97,7 +99,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full ring-[1.5px] ring-[#EFEDE6] text-[#EFEDE6] hover:bg-[#EFEDE6] hover:text-[#CD0000] transition-colors"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full ring-[1.5px] ring-[#CD0000] text-[#CD0000] hover:bg-[#CD0000] hover:text-white transition-colors"
                   >
                     <svg
                       viewBox="0 0 24 24"
@@ -115,8 +117,8 @@ export default function Footer() {
         </div>
 
         {/* Divider + copyright */}
-        <div className="mt-5 pt-3 border-t border-[#EFEDE6]/25 text-center">
-          <p className="text-xs sm:text-sm text-[#EFEDE6]/85">
+        <div className="mt-5 pt-3 border-t border-[#CD0000]/25 text-center">
+          <p className="text-xs sm:text-sm text-[#CD0000]/85">
             &copy; {year} Brajmarg. Connecting Devotees.
           </p>
         </div>
@@ -129,7 +131,7 @@ function FooterLink({ href, label }: { href: string; label: string }) {
   return (
     <Link
       href={href}
-      className="group inline-flex items-center gap-1.5 text-sm text-[#EFEDE6]/90 hover:text-white transition-colors w-fit"
+      className="group inline-flex items-center gap-1.5 text-sm text-[#CD0000]/90 hover:text-[#CD0000] transition-colors w-fit"
     >
       <svg
         className="h-3.5 w-3.5 opacity-80 group-hover:translate-x-0.5 transition-transform"

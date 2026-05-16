@@ -40,29 +40,15 @@ const NAV = [
 type Props = {
   fullName: string;
   email: string | null;
-  membershipTier: string;
 };
 
-export default function AccountSidebar({
-  fullName,
-  email,
-  membershipTier,
-}: Props) {
+export default function AccountSidebar({ fullName, email }: Props) {
   const pathname = usePathname() ?? "";
 
   function isActive(href: string) {
     if (href === "/account") return pathname === "/account";
     return pathname === href || pathname.startsWith(`${href}/`);
   }
-
-  const tierLabel =
-    membershipTier.charAt(0).toUpperCase() + membershipTier.slice(1) + " Member";
-  const tierClasses =
-    membershipTier === "platinum"
-      ? "bg-slate-100 text-slate-700"
-      : membershipTier === "silver"
-      ? "bg-zinc-100 text-zinc-700"
-      : "bg-amber-100 text-amber-800";
 
   const initials =
     fullName
@@ -84,11 +70,6 @@ export default function AccountSidebar({
         <p className="mt-0.5 text-xs text-gray-500 break-all">
           {email || "—"}
         </p>
-        <span
-          className={`mt-2 inline-block text-[11px] font-semibold px-3 py-0.5 rounded-full ${tierClasses}`}
-        >
-          {tierLabel}
-        </span>
       </div>
 
       {/* Nav */}

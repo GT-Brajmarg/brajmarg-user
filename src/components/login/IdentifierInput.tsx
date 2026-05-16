@@ -31,10 +31,23 @@ export default function IdentifierInput({
 
   const mode = useMemo(() => detectMode(value), [value]);
 
+  // Indian mobile numbers are exactly 10 digits.
+  const MAX_PHONE_DIGITS = 10;
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const raw = e.target.value;
+    // Phone mode: keep digits only, capped at 10. Email mode: free text.
+    if (detectMode(raw) === "phone") {
+      setValue(digitsOnly(raw).slice(0, MAX_PHONE_DIGITS));
+    } else {
+      setValue(raw);
+    }
+  }
+
   // The value the server action will receive
   const submitValue = useMemo(() => {
     if (mode === "email") return value.trim();
-    const digits = digitsOnly(value);
+    const digits = digitsOnly(value).slice(0, MAX_PHONE_DIGITS);
     if (!digits) return "";
     return `+${COUNTRY_CODE}${digits}`;
   }, [value, mode]);
@@ -78,11 +91,12 @@ export default function IdentifierInput({
 
         <input
           type="text"
-          inputMode={mode === "phone" ? "tel" : "email"}
+          inputMode={mode === "phone" ? "numeric" : "email"}
           autoComplete={mode === "phone" ? "tel-national" : "email"}
           autoFocus={autoFocus}
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={handleChange}
+          maxLength={mode === "phone" ? MAX_PHONE_DIGITS : 254}
           placeholder="Mobile number or email"
           className="flex-1 bg-transparent text-sm text-gray-900 placeholder:text-gray-400 outline-none px-1 py-2"
         />

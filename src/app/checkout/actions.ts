@@ -217,6 +217,7 @@ import Razorpay from "razorpay";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
+import { createServiceClient } from "@/utils/supabase/admin";
 import type { CartItem, ItemType } from "@/types/database";
 
 const razorpay = new Razorpay({
@@ -499,6 +500,17 @@ export async function createRazorpayOrder(formData: FormData) {
     },
   });
 
+  // Persist the Razorpay order id so the webhook can reconcile the
+  // payment even if the browser never returns to verifyRazorpayPayment.
+  // Uses the service-role client because `orders` has no UPDATE RLS policy.
+  const admin = createServiceClient();
+  if (admin) {
+    await admin
+      .from("orders")
+      .update({ razorpay_order_id: rzOrder.id })
+      .eq("id", orderRow.id);
+  }
+
   return {
     key: process.env.RAZORPAY_KEY_ID!,
     amount: rzOrder.amount,
@@ -514,54 +526,102 @@ export async function createRazorpayOrder(formData: FormData) {
   };
 }
 
+// `orders` has only SELECT/INSERT RLS policies, so payment state
+// transitions must go through the service-role client. Returns null
+// only if SUPABASE_SERVICE_ROLE_KEY is unset (treated as a hard error
+// by callers, since payment state would otherwise be lost).
+function requireAdmin() {
+  const admin = createServiceClient();
+  if (!admin) {
+    throw new Error(
+      "Payment store is not configured (missing SUPABASE_SERVICE_ROLE_KEY)."
+    );
+  }
+  return admin;
+}
+
 export async function verifyRazorpayPayment(payload: {
   razorpay_order_id: string;
   razorpay_payment_id: string;
   razorpay_signature: string;
   dbOrderId: string;
 }) {
-  const supabase = await createClient();
+  const admin = requireAdmin();
 
   const body =
-    payload.razorpay_order_id +
-    "|" +
-    payload.razorpay_payment_id;
+    payload.razorpay_order_id + "|" + payload.razorpay_payment_id;
 
   const expected = crypto
-    .createHmac(
-      "sha256",
-      process.env.RAZORPAY_KEY_SECRET!
-    )
+    .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET!)
     .update(body)
     .digest("hex");
 
   const valid = expected === payload.razorpay_signature;
 
   if (!valid) {
-    throw new Error("Invalid signature");
+    // Tampered/invalid response: record the failure so the order
+    // doesn't sit silently in `pending` forever.
+    await admin
+      .from("orders")
+      .update({ payment_status: "failed" })
+      .eq("id", payload.dbOrderId)
+      .eq("payment_status", "pending");
+    throw new Error("Payment verification failed. Your card was not charged.");
   }
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  await supabase
+  // Idempotent: only a still-pending order is promoted to paid, so a
+  // duplicate verify/webhook race cannot regress an already-paid order.
+  const { data: updated, error: updateError } = await admin
     .from("orders")
     .update({
       payment_status: "paid",
       status: "confirmed",
       payment_id: payload.razorpay_payment_id,
+      razorpay_order_id: payload.razorpay_order_id,
     })
-    .eq("id", payload.dbOrderId);
+    .eq("id", payload.dbOrderId)
+    .eq("payment_status", "pending")
+    .select("id, user_id")
+    .maybeSingle();
 
-  await supabase
-    .from("cart_items")
-    .delete()
-    .eq("user_id", user?.id);
+  if (updateError) {
+    console.error("RAZORPAY VERIFY UPDATE ERROR:", updateError);
+    throw new Error("Could not record your payment. Please contact support.");
+  }
+
+  // `updated` is null when the webhook already marked it paid — that's
+  // fine, the order is in the right state either way. Clear the cart
+  // only if we know whose order this is.
+  if (updated?.user_id) {
+    await admin.from("cart_items").delete().eq("user_id", updated.user_id);
+  }
 
   revalidatePath("/cart");
 
-  return {
-    success: true,
-  };
+  return { success: true };
+}
+
+/**
+ * Marks a still-pending Razorpay order as failed. Called when the user
+ * dismisses the checkout modal or Razorpay reports `payment.failed`.
+ * Never downgrades an already-paid order (guarded on payment_status).
+ */
+export async function markRazorpayPaymentFailed(dbOrderId: string) {
+  if (!dbOrderId) return { success: false };
+
+  const admin = requireAdmin();
+
+  const { error } = await admin
+    .from("orders")
+    .update({ payment_status: "failed" })
+    .eq("id", dbOrderId)
+    .eq("payment_status", "pending");
+
+  if (error) {
+    console.error("RAZORPAY MARK-FAILED ERROR:", error);
+    return { success: false };
+  }
+
+  revalidatePath("/cart");
+  return { success: true };
 }

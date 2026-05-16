@@ -235,7 +235,7 @@ export default function CartLinkWithBadge() {
     Logout
   </button>
 </form> */}
-<form action={logout}>
+{/* <form action={logout}>
   <button
     type="submit"
     className="inline-flex h-10 items-center gap-1 rounded-lg px-3 text-sm font-semibold text-gray-700 hover:text-brand-red hover:bg-red-50 transition-colors"
@@ -262,7 +262,7 @@ export default function CartLinkWithBadge() {
 
     <span className="leading-none">Logout</span>
   </button>
-</form>
+</form> */}
     </div>
   );
 }

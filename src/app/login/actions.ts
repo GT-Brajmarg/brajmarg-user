@@ -55,6 +55,25 @@ function isTestPhone(phone: string): boolean {
 }
 
 /**
+ * Development mode. When ID_TYPE=development, ANY valid Indian mobile
+ * number can log in: the allowlist is skipped, Supabase SMS is never
+ * called, and the OTP is always the fixed TEST_PHONE_OTP. Each unique
+ * number gets its own Supabase user (created on first verify).
+ */
+function isDevMode(): boolean {
+  return (process.env.ID_TYPE ?? "").trim().toLowerCase() === "development";
+}
+
+/**
+ * Should this phone use the fixed-OTP / admin-session bypass instead
+ * of real Supabase SMS? True in dev mode (any number) or for the
+ * legacy single TEST_PHONE_NUMBER in any environment.
+ */
+function usesBypass(phone: string): boolean {
+  return isDevMode() || isTestPhone(phone);
+}
+
+/**
  * Synthetic email used for the test phone's Supabase user record.
  * `+919876543210` -> `test-919876543210@brajmarg.local`
  */
@@ -190,17 +209,18 @@ export async function sendOtp(formData: FormData) {
     );
   }
 
-  if (!isPhoneAllowed(identifier)) {
+  // Allowlist only applies in production. In dev mode any number works.
+  if (!isDevMode() && !isPhoneAllowed(identifier)) {
     loginErrorRedirect(
       "This mobile number is not authorised to log in yet. Please contact support.",
       next
     );
   }
 
-  // Test-phone bypass: skip Supabase OTP entirely and send the user
-  // straight to the verify screen, where any real OTP request would
-  // have landed them too.
-  if (isTestPhone(identifier)) {
+  // Bypass (dev mode, or the legacy single test phone): skip Supabase
+  // OTP entirely and send the user straight to the verify screen,
+  // where any real OTP request would have landed them too.
+  if (usesBypass(identifier)) {
     const params = new URLSearchParams({ phone: identifier });
     if (next) params.set("next", next);
     redirect(`/login/verify?${params.toString()}`);
@@ -234,14 +254,14 @@ export async function resendOtp(input: {
     if (!isValidE164(phone)) {
       return { ok: false, error: "Invalid mobile number." };
     }
-    if (!isPhoneAllowed(phone)) {
+    if (!isDevMode() && !isPhoneAllowed(phone)) {
       return {
         ok: false,
         error: "This mobile number is not authorised to log in.",
       };
     }
-    if (isTestPhone(phone)) {
-      // No-op for the test bypass — the OTP is fixed.
+    if (usesBypass(phone)) {
+      // No-op for the bypass — the OTP is fixed (TEST_PHONE_OTP).
       return { ok: true };
     }
     const { error } = await supabase.auth.signInWithOtp({ phone });
@@ -284,9 +304,10 @@ export async function verifyOtp(formData: FormData) {
     redirect(`/login/verify?${params.toString()}`);
   }
 
-  // Test-phone bypass — match the configured fixed OTP and mint a
-  // real Supabase session via the admin API.
-  if (phone && isTestPhone(phone)) {
+  // Bypass — match the configured fixed OTP and mint a real Supabase
+  // session via the admin API. In dev mode this works for ANY number
+  // (a new user is created on first verify).
+  if (phone && usesBypass(phone)) {
     if (otp !== getTestOtp()) {
       const params = new URLSearchParams({
         phone,

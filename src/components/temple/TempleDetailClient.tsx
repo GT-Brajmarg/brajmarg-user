@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import type {
   ClothItem,
@@ -70,7 +71,12 @@ export default function TempleDetailClient({
   frames: FrameItem[];
   cloth: ClothItem[];
 }) {
-  const [tab, setTab] = useState<TabId>("schedule");
+  const searchParams = useSearchParams();
+  const initialTab = ((): TabId => {
+    const t = searchParams.get("tab");
+    return TABS.some((x) => x.id === t) ? (t as TabId) : "schedule";
+  })();
+  const [tab, setTab] = useState<TabId>(initialTab);
   const [toast, setToast] = useState<string | null>(null);
   const [heroImgFailed, setHeroImgFailed] = useState(false);
   const showHeroImage = Boolean(temple.image_url) && !heroImgFailed;
@@ -154,20 +160,6 @@ export default function TempleDetailClient({
                 </svg>
                 Home
               </Link>
-            </li>
-            <li aria-hidden="true">
-              <svg
-                className="h-3.5 w-3.5 text-gray-400"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 6l6 6-6 6" />
-              </svg>
-            </li>
-            <li>
-              <span className="text-gray-500">Temples</span>
             </li>
             <li aria-hidden="true">
               <svg

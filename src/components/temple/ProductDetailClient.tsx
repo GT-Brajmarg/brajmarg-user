@@ -111,7 +111,12 @@ export default function ProductDetailClient({
           {temple.name}
         </Link>
         <span>/</span>
-        <span className="capitalize">{category}</span>
+        <Link
+          href={`/temple/${slugify(temple.name)}?tab=${category}`}
+          className="hover:text-brand-red capitalize"
+        >
+          {category}
+        </Link>
         <span>/</span>
         <span className="text-gray-800 truncate">{productName}</span>
       </nav>

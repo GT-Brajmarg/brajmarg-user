@@ -75,6 +75,7 @@ alter table public.temples enable row level security;
 
 create policy "Temples are publicly readable"
   on public.temples for select
+  to anon, authenticated
   using (true);
 
 
@@ -97,6 +98,7 @@ alter table public.temple_timings enable row level security;
 
 create policy "Temple timings are publicly readable"
   on public.temple_timings for select
+  to anon, authenticated
   using (true);
 
 
@@ -119,6 +121,7 @@ alter table public.events enable row level security;
 
 create policy "Events are publicly readable"
   on public.events for select
+  to anon, authenticated
   using (true);
 
 
@@ -143,6 +146,7 @@ alter table public.prasad_items enable row level security;
 
 create policy "Prasad items are publicly readable"
   on public.prasad_items for select
+  to anon, authenticated
   using (true);
 
 
@@ -169,6 +173,7 @@ alter table public.seva_items enable row level security;
 
 create policy "Seva items are publicly readable"
   on public.seva_items for select
+  to anon, authenticated
   using (true);
 
 
@@ -194,6 +199,7 @@ alter table public.frame_items enable row level security;
 
 create policy "Frame items are publicly readable"
   on public.frame_items for select
+  to anon, authenticated
   using (true);
 
 
@@ -220,6 +226,7 @@ alter table public.cloth_items enable row level security;
 
 create policy "Cloth items are publicly readable"
   on public.cloth_items for select
+  to anon, authenticated
   using (true);
 
 
@@ -279,6 +286,8 @@ create table public.orders (
   shipping_pincode text,
   payment_method text,
   payment_status text default 'pending' check (payment_status in ('pending', 'paid', 'failed', 'refunded')),
+  payment_id text,
+  razorpay_order_id text,
   notes text,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
