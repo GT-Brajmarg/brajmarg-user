@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import OnboardingTour from "@/components/OnboardingTour";
 import CartSync from "@/components/CartSync";
 import CartDrawer from "@/components/CartDrawer";
+import CartFab from "@/components/CartFab";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -40,6 +41,7 @@ export default function RootLayout({
         <OnboardingTour />
         <CartSync />
         <CartDrawer />
+        <CartFab />
       </body>
     </html>
   );

@@ -5,6 +5,11 @@
   --foreground: #171717;
   --brand-red: #c41e1e;
   --brand-red-dark: #a01818;
+  /* Soft devotional accents — used sparingly for a premium,
+     temple-gold feel without disturbing the red brand identity. */
+  --brand-gold: #c2902f;
+  --brand-gold-soft: #f4ead2;
+  --surface-soft: #fbf7f1;
   --header-bg: #faf6f1;
   --footer-bg: #1a1a1a;
   --card-bg: #ffffff;
@@ -15,6 +20,9 @@
   --color-foreground: var(--foreground);
   --color-brand-red: var(--brand-red);
   --color-brand-red-dark: var(--brand-red-dark);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-gold-soft: var(--brand-gold-soft);
+  --color-surface-soft: var(--surface-soft);
   --color-header-bg: var(--header-bg);
   --color-footer-bg: var(--footer-bg);
   --color-card-bg: var(--card-bg);
@@ -75,14 +83,70 @@ body {
   animation: badgePop 0.45s ease-out;
 }
 
-/* Cart drawer — push page content left on desktop so
-   the drawer doesn't overlap product cards / prices. */
-@media (min-width: 640px) {
-  body.cart-drawer-open {
-    padding-right: 400px;
-    transition: padding-right 0.3s ease-out;
-  }
+/* Floating cart is fully non-blocking — it never dims, locks scroll
+   or reflows the page, so the user can keep shopping while it's open. */
+
+/* ── Premium devotional UI helpers ─────────────────────────────── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-body:not(.cart-drawer-open) {
-  transition: padding-right 0.3s ease-out;
+
+.animate-fade-up {
+  animation: fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Slow, gentle zoom for hero/gallery imagery — adds a calm,
+   meditative motion without feeling like a flashy ad. */
+@keyframes kenBurns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.06); }
+}
+
+.animate-ken-burns {
+  animation: kenBurns 7s ease-out forwards;
+}
+
+/* Soft, warm elevation tuned to the cream background — replaces
+   harsh neutral shadows with a devotional, premium depth. */
+.shadow-devotional {
+  box-shadow:
+    0 1px 2px rgba(120, 53, 15, 0.04),
+    0 10px 28px -12px rgba(120, 53, 15, 0.18);
+}
+.shadow-devotional-lg {
+  box-shadow:
+    0 2px 6px rgba(120, 53, 15, 0.06),
+    0 22px 48px -16px rgba(120, 53, 15, 0.26);
+}
+
+/* Thin, elegant scrollbar for horizontal recommendation rails. */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(120, 53, 15, 0.25) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(120, 53, 15, 0.2);
+  border-radius: 9999px;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-ken-burns,
+  .animate-cart-bump,
+  .animate-badge-pop {
+    animation: none !important;
+  }
 }

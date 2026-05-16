@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { addToCart, openCart } from "@/lib/cart-store";
+import { addToCart, autoOpenCartOnce } from "@/lib/cart-store";
 import type { ItemType } from "@/types/database";
 
 type Props = {
@@ -73,7 +73,7 @@ export default function AddToCartButton({
             setPhase("idle");
             successTimer.current = null;
           }, 1600);
-          openCart();
+          autoOpenCartOnce();
           onSuccess?.();
         } catch {
           setPhase("idle");

@@ -3,9 +3,9 @@
 import { useState } from "react";
 import {
   addToCart,
+  autoOpenCartOnce,
   findCartRowId,
   getCartLineQty,
-  openCart,
   removeFromCart,
   updateCartQty,
   useCartTick,
@@ -74,7 +74,7 @@ export default function CartItemControl({
         selected_color: selectedColor,
       });
       if (res.ok) {
-        if (!silent) openCart();
+        if (!silent) autoOpenCartOnce();
         setJustAdded(true);
         window.setTimeout(() => setJustAdded(false), 1100);
       }

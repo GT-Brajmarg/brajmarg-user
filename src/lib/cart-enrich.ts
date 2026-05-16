@@ -1,15 +1,25 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { ItemType } from "@/types/database";
+import type { ItemType, ProductImage } from "@/types/database";
 import type { CartRow } from "./cart-store";
 import type { EnrichedCartRow } from "@/types/cart";
 import { parseNumeric } from "./format";
+import { galleryOf } from "./gallery";
 
 type ItemMeta = {
   id: string;
   name: string;
   price: number | string;
   image_url: string | null;
+  product_images: ProductImage[] | null;
   temples: { name: string } | null;
+};
+
+// Each item table has its own image child table.
+const IMAGE_TABLE: Record<string, string> = {
+  prasad_items: "prasad_images",
+  seva_items: "", // seva has no gallery table
+  frame_items: "frame_images",
+  cloth_items: "cloth_images",
 };
 
 /**
@@ -31,13 +41,14 @@ export async function enrichCartRows(
   };
   for (const r of rows) byType[r.item_type].push(r.item_id);
 
-  const fetchType = (table: string, ids: string[]) =>
-    ids.length
-      ? supabase
-          .from(table)
-          .select("id, name, price, image_url, temples(name)")
-          .in("id", ids)
-      : Promise.resolve({ data: [] as ItemMeta[] });
+  const fetchType = (table: string, ids: string[]) => {
+    if (!ids.length) return Promise.resolve({ data: [] as ItemMeta[] });
+    const imgTable = IMAGE_TABLE[table];
+    const select = imgTable
+      ? `id, name, price, image_url, temples(name), product_images:${imgTable}(image_url,is_primary,display_order)`
+      : "id, name, price, image_url, temples(name)";
+    return supabase.from(table).select(select).in("id", ids);
+  };
 
   const [prasadRes, sevaRes, frameRes, clothRes] = await Promise.all([
     fetchType("prasad_items", byType.prasad),
@@ -60,7 +71,8 @@ export async function enrichCartRows(
         ...row,
         title: meta.name,
         unit_price: parseNumeric(meta.price),
-        image_url: meta.image_url,
+        // Primary gallery image first; falls back to legacy single.
+        image_url: galleryOf(meta)[0] ?? meta.image_url,
         temple_name: meta.temples?.name ?? null,
       };
     });

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import type {
   ClothItem,
   FrameItem,
@@ -17,6 +17,8 @@ import { slugify } from "@/lib/slug";
 import CartItemControl from "@/components/CartItemControl";
 import InCartBadge from "@/components/InCartBadge";
 import ToastHost from "@/components/ToastHost";
+import { ProductCarousel } from "@/components/temple/ProductCarousel";
+import { galleryOf } from "@/lib/gallery";
 
 type TabId = "schedule" | "prasad" | "seva" | "frame" | "cloth";
 
@@ -267,64 +269,17 @@ export default function TempleDetailClient({
       )}
 
       {tab === "prasad" && (
-        <section className="space-y-4">
-          <h2 className="text-lg font-bold text-gray-900">Prasad</h2>
+        <section className="space-y-5">
+          <SectionHeading
+            title="Sacred Prasad"
+            subtitle="Blessed offerings, prepared with devotion and delivered to your door"
+          />
           {prasad.length === 0 ? (
             <p className="text-sm text-gray-500">No prasad listed yet.</p>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {prasad.map((p) => (
-                <article
-                  key={p.id}
-                  className="rounded-xl border border-gray-200 bg-card-bg overflow-hidden flex flex-col"
-                >
-                  <div className="relative aspect-square w-full bg-gray-100 overflow-hidden">
-                    {p.image_url ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={p.image_url}
-                        alt={p.name}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="h-full w-full bg-gradient-to-br from-gray-200 to-gray-300" />
-                    )}
-                    <div className="absolute top-2 left-2">
-                      <InCartBadge itemType="prasad" itemId={p.id} />
-                    </div>
-                    {!p.in_stock && (
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <span className="rounded-full bg-white px-4 py-1.5 text-xs font-semibold text-gray-900">
-                          Out of stock
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-4 flex flex-col flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="font-semibold text-gray-900 leading-snug">
-                        {p.name}
-                      </h3>
-                      <p className="text-sm font-bold text-brand-red whitespace-nowrap">
-                        {formatInr(parseNumeric(p.price))}
-                      </p>
-                    </div>
-                    {p.ingredients && (
-                      <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-                        <span className="font-semibold">Ingredients:</span>{" "}
-                        {p.ingredients}
-                      </p>
-                    )}
-                    <div className="mt-auto pt-4">
-                      <CartItemControl
-                        itemType="prasad"
-                        itemId={p.id}
-                        disabled={!p.in_stock}
-                        label={p.in_stock ? "Add to cart" : "Out of stock"}
-                      />
-                    </div>
-                  </div>
-                </article>
+                <PrasadCard key={p.id} item={p} />
               ))}
             </div>
           )}
@@ -341,8 +296,21 @@ export default function TempleDetailClient({
               {seva.map((s) => (
                 <article
                   key={s.id}
-                  className="rounded-xl border border-gray-200 bg-card-bg p-5 space-y-3"
+                  className="group overflow-hidden rounded-xl border border-gray-200 bg-card-bg"
                 >
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface-soft">
+                    <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
+                      <ProductCarousel
+                        images={galleryOf(s)}
+                        alt={s.name}
+                      />
+                    </div>
+                    <div className="absolute left-2.5 top-2.5 z-10">
+                      <InCartBadge itemType="seva" itemId={s.id} />
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 p-5">
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="text-lg font-bold text-gray-900 font-serif">
                       {s.name}
@@ -400,6 +368,7 @@ export default function TempleDetailClient({
                     label="Register for Seva"
                     className="py-3"
                   />
+                  </div>
                 </article>
               ))}
             </div>
@@ -408,12 +377,15 @@ export default function TempleDetailClient({
       )}
 
       {tab === "frame" && (
-        <section className="space-y-4">
-          <h2 className="text-lg font-bold text-gray-900">Frames</h2>
+        <section className="space-y-5">
+          <SectionHeading
+            title="Divine Frames"
+            subtitle="Bring the deity's darshan home — curated frames for your sacred space"
+          />
           {frameGroups.length === 0 ? (
             <p className="text-sm text-gray-500">No frames listed yet.</p>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {frameGroups.map((g) => (
                 <FrameGroupCard
                   key={g.name}
@@ -427,12 +399,15 @@ export default function TempleDetailClient({
       )}
 
       {tab === "cloth" && (
-        <section className="space-y-4">
-          <h2 className="text-lg font-bold text-gray-900">Cloth / Poshak</h2>
+        <section className="space-y-5">
+          <SectionHeading
+            title="Poshak & Cloth"
+            subtitle="Handcrafted attire to adorn the deity with reverence"
+          />
           {cloth.length === 0 ? (
             <p className="text-sm text-gray-500">No cloth items yet.</p>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {cloth.map((c) => (
                 <ClothProductCard
                   key={c.id}
@@ -452,9 +427,89 @@ export default function TempleDetailClient({
 }
 
 /**
+ * Premium section heading shared by the product tabs — a devotional
+ * eyebrow rule, serif title, and a soft supporting line.
+ */
+function SectionHeading({
+  title,
+  subtitle,
+}: {
+  title: string;
+  subtitle: string;
+}) {
+  return (
+    <div className="space-y-1.5">
+      <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-gold">
+        <span className="h-px w-6 bg-brand-gold/50" />
+        Brajmarg
+      </span>
+      <h2 className="font-serif text-2xl font-bold text-gray-900 sm:text-[28px]">
+        {title}
+      </h2>
+      <p className="max-w-xl text-sm text-gray-500">{subtitle}</p>
+    </div>
+  );
+}
+
+/** Shared shell so every product card reads as one curated system. */
+function CardShell({
+  href,
+  children,
+}: {
+  href: string;
+  children: ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group relative flex flex-col overflow-hidden rounded-xl border border-brand-gold/15 bg-card-bg shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-gold/30 hover:shadow-md"
+    >
+      {children}
+    </Link>
+  );
+}
+
+/**
+ * Compact price + action footer, pinned to the card bottom so every
+ * CTA aligns on the same baseline regardless of title length.
+ */
+function CardFooter({
+  price,
+  fromLabel = false,
+}: {
+  price: number;
+  fromLabel?: boolean;
+}) {
+  return (
+    <div className="mt-auto flex items-center justify-between gap-2 pt-3">
+      <div className="flex items-baseline gap-1">
+        {fromLabel && (
+          <span className="text-[10px] font-medium text-gray-400">From</span>
+        )}
+        <span className="text-base font-bold text-brand-red">
+          {formatInr(price)}
+        </span>
+      </div>
+      <span className="inline-flex items-center gap-1 rounded-lg bg-brand-red px-3 py-1.5 text-xs font-semibold text-white transition-colors group-hover:bg-brand-red-dark">
+        View
+        <svg
+          className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-0.5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2.5}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </span>
+    </div>
+  );
+}
+
+/**
  * Frame card on the temple listing — links to the product detail
- * page. Shows minimum price across size variants. The InCartBadge
- * counts the cover variant since that's what the user lands on.
+ * page. Each size variant carries its own image, so a grouped frame
+ * gets a real multi-image carousel. Shows min price across variants.
  */
 function FrameGroupCard({
   group,
@@ -471,44 +526,37 @@ function FrameGroupCard({
   );
   const hasMultiple = group.variants.length > 1;
   const href = `/temple/${templeSlug}/frame/${slugify(group.name)}`;
+  // Each size variant carries its own gallery → combine them all so
+  // the card carousel walks every photo across every variant.
+  const images = group.variants.flatMap((v) => galleryOf(v));
 
   return (
-    <Link
-      href={href}
-      className="group rounded-xl border border-gray-200 bg-card-bg overflow-hidden hover:shadow-md transition-shadow flex flex-col"
-    >
-      <div className="relative aspect-[4/5] w-full bg-gray-100 overflow-hidden">
-        {cover.image_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={cover.image_url}
-            alt={group.name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-          />
-        ) : (
-          <div className="h-full w-full bg-gradient-to-br from-gray-200 to-gray-300" />
-        )}
-        <div className="absolute top-2 left-2">
+    <CardShell href={href}>
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface-soft">
+        <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
+          <ProductCarousel images={images} alt={group.name} />
+        </div>
+        <div className="absolute left-2.5 top-2.5 z-10">
           <InCartBadge itemType="frame" itemId={cover.id} />
         </div>
+        {hasMultiple && (
+          <span className="absolute right-2.5 top-2.5 z-10 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-gold shadow-sm backdrop-blur">
+            {group.variants.length} sizes
+          </span>
+        )}
       </div>
-      <div className="p-4 flex flex-col flex-1">
-        <h3 className="font-semibold text-gray-900 line-clamp-2">
+      <div className="flex flex-1 flex-col p-3.5">
+        <h3 className="text-sm font-semibold leading-snug text-gray-900 line-clamp-2">
           {group.name}
         </h3>
         {group.material && (
-          <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">
-            {group.material}
+          <p className="mt-0.5 text-[11px] font-medium uppercase tracking-wide text-gray-400 line-clamp-1">
+            {group.material} · Frame
           </p>
         )}
-        <p className="text-sm font-bold text-brand-red mt-2">
-          {hasMultiple ? `From ${formatInr(minPrice)}` : formatInr(minPrice)}
-        </p>
-        <p className="mt-auto pt-3 text-xs font-semibold text-brand-red group-hover:underline">
-          View details →
-        </p>
+        <CardFooter price={minPrice} fromLabel={hasMultiple} />
       </div>
-    </Link>
+    </CardShell>
   );
 }
 
@@ -526,48 +574,89 @@ function ClothProductCard({
   const href = `/temple/${templeSlug}/cloth/${slugify(item.name)}`;
 
   return (
-    <Link
-      href={href}
-      className="group rounded-xl border border-gray-200 bg-card-bg overflow-hidden hover:shadow-md transition-shadow flex flex-col"
-    >
-      <div className="relative aspect-[4/5] w-full bg-gray-100 overflow-hidden">
-        {item.image_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={item.image_url}
-            alt={item.name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-          />
-        ) : (
-          <div className="h-full w-full bg-gradient-to-br from-gray-200 to-gray-300" />
-        )}
-        <div className="absolute top-2 left-2">
+    <CardShell href={href}>
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface-soft">
+        <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
+          <ProductCarousel images={galleryOf(item)} alt={item.name} />
+        </div>
+        <div className="absolute left-2.5 top-2.5 z-10">
           <InCartBadge itemType="cloth" itemId={item.id} />
         </div>
         {!item.in_stock && (
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <span className="rounded-full bg-white px-4 py-1.5 text-xs font-semibold text-gray-900">
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/45">
+            <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-gray-900">
               Out of stock
             </span>
           </div>
         )}
       </div>
-      <div className="p-4 flex flex-col flex-1">
-        <h3 className="font-semibold text-gray-900 line-clamp-2">
+      <div className="flex flex-1 flex-col p-3.5">
+        <h3 className="text-sm font-semibold leading-snug text-gray-900 line-clamp-2">
           {item.name}
         </h3>
         {item.material && (
-          <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">
-            {item.material}
+          <p className="mt-0.5 text-[11px] font-medium uppercase tracking-wide text-gray-400 line-clamp-1">
+            {item.material} · Poshak
           </p>
         )}
-        <p className="text-sm font-bold text-brand-red mt-2">
-          {formatInr(parseNumeric(item.price))}
-        </p>
-        <p className="mt-auto pt-3 text-xs font-semibold text-brand-red group-hover:underline">
-          View details →
-        </p>
+        <CardFooter price={parseNumeric(item.price)} />
       </div>
-    </Link>
+    </CardShell>
+  );
+}
+
+/**
+ * Prasad has no detail page, so the card carries the full story:
+ * an image carousel, devotional context, price, and an inline
+ * add-to-cart / quantity control. Compact and warm by design.
+ */
+function PrasadCard({ item }: { item: PrasadItem }) {
+  return (
+    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-brand-gold/15 bg-card-bg shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-gold/30 hover:shadow-md">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface-soft">
+        <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
+          <ProductCarousel images={galleryOf(item)} alt={item.name} />
+        </div>
+        <div className="absolute left-2.5 top-2.5 z-10">
+          <InCartBadge itemType="prasad" itemId={item.id} />
+        </div>
+        <span className="absolute right-2.5 top-2.5 z-10 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-gold shadow-sm backdrop-blur">
+          Prasad
+        </span>
+        {!item.in_stock && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/45">
+            <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-gray-900">
+              Out of stock
+            </span>
+          </div>
+        )}
+      </div>
+      <div className="flex flex-1 flex-col p-3.5">
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="text-sm font-semibold leading-snug text-gray-900 line-clamp-2">
+            {item.name}
+          </h3>
+          <p className="shrink-0 text-base font-bold text-brand-red">
+            {formatInr(parseNumeric(item.price))}
+          </p>
+        </div>
+        {item.ingredients && (
+          <p className="mt-1 text-[11px] leading-relaxed text-gray-500 line-clamp-1">
+            <span className="font-medium uppercase tracking-wide text-gray-400">
+              Ingredients:
+            </span>{" "}
+            {item.ingredients}
+          </p>
+        )}
+        <div className="mt-auto pt-3">
+          <CartItemControl
+            itemType="prasad"
+            itemId={item.id}
+            disabled={!item.in_stock}
+            label={item.in_stock ? "Add to cart" : "Out of stock"}
+          />
+        </div>
+      </div>
+    </article>
   );
 }

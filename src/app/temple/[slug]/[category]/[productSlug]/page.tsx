@@ -36,13 +36,18 @@ export default async function ProductDetailPage({
   if (!temple || temple.is_coming_soon) notFound();
 
   const tableName = category === "frame" ? "frame_items" : "cloth_items";
+  const imagesTable =
+    category === "frame" ? "frame_images" : "cloth_images";
 
   // Pull all items in this category for this temple — we use them
   // both to find the matching product and to render the "more like
-  // this" sibling list.
+  // this" sibling list. The aliased nested select pulls the admin's
+  // multi-image gallery from the child *_images table.
   const { data: itemsRaw } = await supabase
     .from(tableName)
-    .select("*")
+    .select(
+      `*, product_images:${imagesTable}(image_url,is_primary,display_order)`
+    )
     .eq("temple_id", temple.id)
     .order("display_order");
 

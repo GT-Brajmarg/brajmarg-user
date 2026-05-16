@@ -47,6 +47,17 @@ export type Event = {
   created_at: string;
 };
 
+/**
+ * A row from a `*_images` child table (frame_images / prasad_images /
+ * cloth_items) — this is where the admin panel stores multi-image
+ * galleries. Nested selects alias the relation to `product_images`.
+ */
+export type ProductImage = {
+  image_url: string | null;
+  is_primary: boolean | null;
+  display_order: number | null;
+};
+
 export type PrasadItem = {
   id: string;
   temple_id: string;
@@ -54,6 +65,7 @@ export type PrasadItem = {
   price: number;
   ingredients: string | null;
   image_url: string | null;
+  product_images?: ProductImage[] | null;
   in_stock: boolean;
   display_order: number;
   created_at: string;
@@ -69,6 +81,7 @@ export type SevaItem = {
   details: string | null;
   significance: string | null;
   image_url: string | null;
+  product_images?: ProductImage[] | null;
   is_active: boolean;
   display_order: number;
   created_at: string;
@@ -83,6 +96,7 @@ export type FrameItem = {
   price: number;
   size: string | null;
   image_url: string | null;
+  product_images?: ProductImage[] | null;
   in_stock: boolean;
   display_order: number;
   created_at: string;
@@ -98,6 +112,7 @@ export type ClothItem = {
   sizes: string[];
   colors: string[];
   image_url: string | null;
+  product_images?: ProductImage[] | null;
   in_stock: boolean;
   display_order: number;
   created_at: string;

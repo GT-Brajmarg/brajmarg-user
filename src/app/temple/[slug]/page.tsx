@@ -51,7 +51,9 @@ export default async function TemplePage({
       .order("day_of_week"),
     supabase
       .from("prasad_items")
-      .select("*")
+      .select(
+        "*, product_images:prasad_images(image_url,is_primary,display_order)"
+      )
       .eq("temple_id", id)
       .order("display_order"),
     supabase
@@ -62,12 +64,16 @@ export default async function TemplePage({
       .order("display_order"),
     supabase
       .from("frame_items")
-      .select("*")
+      .select(
+        "*, product_images:frame_images(image_url,is_primary,display_order)"
+      )
       .eq("temple_id", id)
       .order("display_order"),
     supabase
       .from("cloth_items")
-      .select("*")
+      .select(
+        "*, product_images:cloth_images(image_url,is_primary,display_order)"
+      )
       .eq("temple_id", id)
       .order("display_order"),
   ]);
