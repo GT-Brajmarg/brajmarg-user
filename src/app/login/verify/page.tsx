@@ -7,11 +7,12 @@ export default async function VerifyOtpPage({
   searchParams: Promise<{
     phone?: string;
     email?: string;
+    sid?: string;
     error?: string;
     next?: string;
   }>;
 }) {
-  const { phone, email, error, next } = await searchParams;
+  const { phone, email, sid, error, next } = await searchParams;
   const nextPath =
     next && next.startsWith("/") && !next.startsWith("//") ? next : "";
 
@@ -80,6 +81,7 @@ export default async function VerifyOtpPage({
             <VerifyForm
               phone={phone}
               email={email}
+              sid={sid}
               next={nextPath || undefined}
               channelLabel={channelLabel}
               initialError={error}

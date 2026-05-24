@@ -7,6 +7,7 @@ import {
   useState,
   type RefObject,
 } from "react";
+import { ImageLightbox } from "@/components/temple/ImageLightbox";
 
 /**
  * Premium devotional image experience.
@@ -289,21 +290,6 @@ export function ProductGallery({
     [count]
   );
 
-  useEffect(() => {
-    if (!lightbox) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLightbox(false);
-      if (e.key === "ArrowRight") go(view + 1);
-      if (e.key === "ArrowLeft") go(view - 1);
-    };
-    window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
-    };
-  }, [lightbox, view, go]);
-
   if (count === 0) {
     return (
       <div className="aspect-square w-full rounded-2xl bg-gradient-to-br from-brand-gold-soft via-surface-soft to-amber-100 flex items-center justify-center">
@@ -357,36 +343,14 @@ export function ProductGallery({
         </div>
       )}
 
-      {/* Lightbox */}
+      {/* Lightbox — shared full-screen viewer (zoom + swipe + thumbs) */}
       {lightbox && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 animate-fade-up"
-          onClick={() => setLightbox(false)}
-        >
-          <button
-            type="button"
-            aria-label="Close"
-            className="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full bg-white/15 text-white hover:bg-white/25"
-            onClick={() => setLightbox(false)}
-          >
-            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6L6 18" />
-            </svg>
-          </button>
-          <div
-            className="h-[80vh] w-full max-w-4xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <GalleryStage
-              pics={pics}
-              alt={alt}
-              view={view}
-              go={go}
-              swipeRef={swipe}
-              contain
-            />
-          </div>
-        </div>
+        <ImageLightbox
+          images={pics}
+          alt={alt}
+          startIndex={view}
+          onClose={() => setLightbox(false)}
+        />
       )}
     </div>
   );

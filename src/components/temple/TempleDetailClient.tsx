@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useMemo, useState, type ReactNode } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import type {
   ClothItem,
   FrameItem,
@@ -18,7 +18,12 @@ import CartItemControl from "@/components/CartItemControl";
 import InCartBadge from "@/components/InCartBadge";
 import ToastHost from "@/components/ToastHost";
 import { ProductCarousel } from "@/components/temple/ProductCarousel";
+import { ImageLightbox } from "@/components/temple/ImageLightbox";
+import { ZoomTrigger } from "@/components/temple/ZoomTrigger";
 import { galleryOf } from "@/lib/gallery";
+
+/** Payload for the shared, single-instance lightbox overlay. */
+type LightboxState = { images: Array<string | null | undefined>; alt: string };
 
 type TabId = "schedule" | "prasad" | "seva" | "frame" | "cloth";
 
@@ -30,20 +35,31 @@ const TABS: { id: TabId; label: string }[] = [
   { id: "cloth", label: "Cloth" },
 ];
 
-const DAY_ORDER = [
-  "daily",
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday",
-  "sunday",
+// day_of_week is stored as a numeric string matching JS Date.getDay():
+// 0 = Sunday … 6 = Saturday (the admin panel's convention). Some rows may
+// also use the legacy "daily" tag, which applies to every weekday.
+const WEEKDAYS = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
 ];
 
-function dayRank(d: string) {
-  const i = DAY_ORDER.indexOf(d.toLowerCase());
-  return i === -1 ? 99 : i;
+const DAILY = "daily";
+
+/** Normalises a stored day_of_week into a comparable key. */
+function dayKey(d: string): string {
+  return (d ?? "").trim().toLowerCase();
+}
+
+/** True if a timing row applies to the given weekday index (0–6). */
+function timingMatchesDay(rowDay: string, weekdayIndex: number): boolean {
+  const key = dayKey(rowDay);
+  if (key === DAILY) return true;
+  return key === String(weekdayIndex);
 }
 
 function formatTime(t: string) {
@@ -73,26 +89,130 @@ export default function TempleDetailClient({
   frames: FrameItem[];
   cloth: ClothItem[];
 }) {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const initialTab = ((): TabId => {
-    const t = searchParams.get("tab");
-    return TABS.some((x) => x.id === t) ? (t as TabId) : "schedule";
-  })();
+
+  // Resolve the tab to show on first paint.
+  //   • A hard reload always falls back to the default (first) tab —
+  //     per product spec, refreshing forgets the active tab.
+  //   • Any other entry (deep link from a detail page, back/forward
+  //     navigation) honours the ?tab= param so the last tab is kept.
+  const initialTab = useMemo<TabId>(() => {
+    const fromUrl = searchParams.get("tab");
+    const valid = TABS.some((x) => x.id === fromUrl) ? (fromUrl as TabId) : null;
+    if (typeof window !== "undefined") {
+      const nav = performance.getEntriesByType("navigation")[0] as
+        | PerformanceNavigationTiming
+        | undefined;
+      if (nav?.type === "reload") return "schedule";
+    }
+    return valid ?? "schedule";
+    // Read once on mount; later changes are driven by selectTab/popstate.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [tab, setTab] = useState<TabId>(initialTab);
+
+  // Switching a tab rewrites the URL in place (replace — no new history
+  // entry, no scroll jump, no server round-trip). We use the Next router's
+  // replace (not window.history.replaceState) so the App Router's own
+  // history entry stays in sync with the URL. Otherwise a later
+  // router.push("/cart") is recorded against the stale entry (the bare
+  // temple URL with no ?tab=), and Back lands on the default Schedule tab
+  // instead of the tab the cart was opened from.
+  const selectTab = useCallback(
+    (next: TabId) => {
+      setTab(next);
+      if (typeof window === "undefined") return;
+      const url = new URL(window.location.href);
+      if (next === "schedule") url.searchParams.delete("tab");
+      else url.searchParams.set("tab", next);
+      router.replace(`${url.pathname}${url.search}`, { scroll: false });
+    },
+    [router]
+  );
+
+  // Keep the active tab in sync with Back/Forward navigation.
+  useEffect(() => {
+    const onPop = () => {
+      const fromUrl = new URLSearchParams(window.location.search).get("tab");
+      setTab(TABS.some((x) => x.id === fromUrl) ? (fromUrl as TabId) : "schedule");
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  // Make sure the URL reflects the resolved initial tab so the first
+  // detail-page link or cart-open captures the correct tab on return.
+  // Uses router.replace (not history.replaceState) for the same reason as
+  // selectTab: keep the App Router history entry in sync with the URL.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    const current = url.searchParams.get("tab");
+    const desired = tab === "schedule" ? null : tab;
+    if (current !== desired) {
+      if (desired) url.searchParams.set("tab", desired);
+      else url.searchParams.delete("tab");
+      router.replace(`${url.pathname}${url.search}`, { scroll: false });
+    }
+    // Run once after mount to align URL ↔ initialTab.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [toast, setToast] = useState<string | null>(null);
+  const [lightbox, setLightbox] = useState<LightboxState | null>(null);
+  const [descExpanded, setDescExpanded] = useState(false);
   const [heroImgFailed, setHeroImgFailed] = useState(false);
   const showHeroImage = Boolean(temple.image_url) && !heroImgFailed;
 
-  const sortedTimings = useMemo(
+  // Selected weekday (0–6). Defaults to today; the user can switch days.
+  // Initialised in an effect so SSR and the first client render agree
+  // (today is only known client-side).
+  const [selectedDay, setSelectedDay] = useState<number>(0);
+  useEffect(() => {
+    setSelectedDay(new Date().getDay());
+  }, []);
+
+  // Which weekdays actually have any slots (incl. "daily"), so we can
+  // hint which tabs are populated.
+  const daysWithSlots = useMemo(() => {
+    const set = new Set<number>();
+    for (const row of timings) {
+      const key = dayKey(row.day_of_week);
+      if (key === DAILY) {
+        for (let i = 0; i < 7; i++) set.add(i);
+      } else {
+        const n = Number(key);
+        if (Number.isInteger(n) && n >= 0 && n <= 6) set.add(n);
+      }
+    }
+    return set;
+  }, [timings]);
+
+  // Timings for the selected day only, ordered by opening time.
+  const dayTimings = useMemo(
     () =>
-      [...timings].sort(
-        (a, b) => dayRank(a.day_of_week) - dayRank(b.day_of_week)
-      ),
-    [timings]
+      timings
+        .filter((row) => timingMatchesDay(row.day_of_week, selectedDay))
+        .sort((a, b) => a.opening_time.localeCompare(b.opening_time)),
+    [timings, selectedDay]
   );
 
   const frameGroups = useMemo(() => groupFrameItems(frames), [frames]);
   const templeSlug = useMemo(() => slugify(temple.name), [temple.name]);
+
+  const openLightbox = (images: Array<string | null | undefined>, alt: string) =>
+    setLightbox({ images, alt });
+
+  // Breadcrumb Back: step back through history when there's an
+  // in-app entry to return to, otherwise land on the home dashboard.
+  const goBack = useCallback(() => {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  }, [router]);
 
   return (
     <div>
@@ -138,14 +258,32 @@ export default function TempleDetailClient({
       {/* Content below hero */}
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-      {/* Breadcrumb + back link */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <nav aria-label="Breadcrumb">
+      {/* Back button + breadcrumb */}
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={goBack}
+          aria-label="Go back"
+          className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-brand-red/30 bg-card-bg px-3.5 py-1.5 text-sm font-semibold text-brand-red transition-colors hover:bg-brand-red hover:text-white hover:border-brand-red"
+        >
+          <svg
+            className="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 18l-6-6 6-6" />
+          </svg>
+          Back
+        </button>
+
+        <nav aria-label="Breadcrumb" className="min-w-0">
           <ol className="flex items-center gap-1.5 text-sm text-gray-500">
             <li>
               <Link
                 href="/"
-                className="inline-flex items-center gap-1 text-gray-500 hover:text-brand-red transition-colors"
+                className="inline-flex items-center gap-1 text-gray-500 transition-colors hover:text-brand-red"
               >
                 <svg
                   className="h-3.5 w-3.5"
@@ -160,7 +298,7 @@ export default function TempleDetailClient({
                     d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3v-6h6v6h3a1 1 0 001-1V10"
                   />
                 </svg>
-                Home
+                <span className="hidden sm:inline">Home</span>
               </Link>
             </li>
             <li aria-hidden="true">
@@ -174,39 +312,34 @@ export default function TempleDetailClient({
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 6l6 6-6 6" />
               </svg>
             </li>
-            <li aria-current="page">
-              <span className="font-semibold text-brand-red truncate max-w-[12rem] sm:max-w-none">
+            <li aria-current="page" className="min-w-0">
+              <span className="block truncate font-semibold text-brand-red">
                 {temple.name}
               </span>
             </li>
           </ol>
         </nav>
-
-        <Link
-          href="/"
-          className="group inline-flex items-center gap-2 rounded-full border border-brand-red/30 bg-card-bg px-4 py-1.5 text-sm font-semibold text-brand-red hover:bg-brand-red hover:text-white hover:border-brand-red transition-colors"
-        >
-          <svg
-            className="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M15 18l-6-6 6-6"
-            />
-          </svg>
-          Back to dashboard
-        </Link>
       </div>
 
       {temple.description && (
-        <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-          {temple.description}
-        </p>
+        <div>
+          <p
+            className={`text-sm leading-relaxed text-gray-700 sm:text-base ${
+              descExpanded ? "" : "line-clamp-3"
+            }`}
+          >
+            {temple.description}
+          </p>
+          {temple.description.length > 220 && (
+            <button
+              type="button"
+              onClick={() => setDescExpanded((v) => !v)}
+              className="mt-1 text-sm font-semibold text-brand-red hover:text-brand-red-dark"
+            >
+              {descExpanded ? "Show less" : "Read more"}
+            </button>
+          )}
+        </div>
       )}
 
       {/* Tabs */}
@@ -216,11 +349,12 @@ export default function TempleDetailClient({
             <button
               key={t.id}
               type="button"
-              onClick={() => setTab(t.id)}
-              className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors border ${
+              onClick={() => selectTab(t.id)}
+              aria-pressed={tab === t.id}
+              className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-red/40 focus-visible:ring-offset-1 focus-visible:ring-offset-background ${
                 tab === t.id
-                  ? "bg-brand-red text-white border-brand-red"
-                  : "bg-card-bg text-gray-700 border-gray-200 hover:border-gray-300"
+                  ? "border-brand-red bg-brand-red text-white shadow-sm"
+                  : "border-gray-200 bg-card-bg text-gray-700 hover:border-brand-red/40 hover:text-brand-red"
               }`}
             >
               {t.label}
@@ -231,38 +365,74 @@ export default function TempleDetailClient({
 
       {tab === "schedule" && (
         <section className="space-y-4">
-          <h2 className="text-lg font-bold text-gray-900">Daily timings</h2>
-          {sortedTimings.length === 0 ? (
-            <p className="text-sm text-gray-500">Schedule coming soon.</p>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="font-serif text-xl font-bold text-gray-900">
+              Daily Darshan Timings
+            </h2>
+            {selectedDay === new Date().getDay() && (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-gold-soft px-3 py-1 text-xs font-semibold text-brand-gold">
+                <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3M4 11h16M5 5h14a1 1 0 011 1v13a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z" />
+                </svg>
+                Today
+              </span>
+            )}
+          </div>
+
+          {/* Day selector — pick any weekday to see its slots. */}
+          <div className="flex flex-wrap gap-2">
+            {WEEKDAYS.map((name, i) => {
+              const isSelected = i === selectedDay;
+              const hasSlots = daysWithSlots.has(i);
+              return (
+                <button
+                  key={name}
+                  type="button"
+                  onClick={() => setSelectedDay(i)}
+                  aria-pressed={isSelected}
+                  className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                    isSelected
+                      ? "bg-brand-red text-white shadow-sm"
+                      : hasSlots
+                        ? "bg-card-bg text-gray-700 ring-1 ring-brand-gold/20 hover:bg-brand-gold-soft"
+                        : "bg-surface-soft text-gray-400 ring-1 ring-gray-200 hover:bg-gray-100"
+                  }`}
+                >
+                  {name.slice(0, 3)}
+                </button>
+              );
+            })}
+          </div>
+
+          {dayTimings.length === 0 ? (
+            <p className="text-sm text-gray-500">
+              No darshan timings for {WEEKDAYS[selectedDay]}.
+            </p>
           ) : (
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-card-bg">
-              <table className="min-w-full text-sm">
-                <thead className="bg-gray-50 text-left text-gray-600">
-                  <tr>
-                    <th className="px-4 py-3 font-semibold">Day</th>
-                    <th className="px-4 py-3 font-semibold">Slot</th>
-                    <th className="px-4 py-3 font-semibold">Time</th>
-                    <th className="px-4 py-3 font-semibold">Note</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {sortedTimings.map((row) => (
-                    <tr key={row.id} className="text-gray-800">
-                      <td className="px-4 py-3 capitalize whitespace-nowrap">
-                        {row.day_of_week}
-                      </td>
-                      <td className="px-4 py-3">{row.label ?? "—"}</td>
-                      <td className="px-4 py-3 whitespace-nowrap">
-                        {formatTime(row.opening_time)} –{" "}
-                        {formatTime(row.closing_time)}
-                      </td>
-                      <td className="px-4 py-3 text-gray-600">
-                        {row.special_note ?? "—"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
+              {dayTimings.map((row) => (
+                <div
+                  key={row.id}
+                  className="flex flex-col rounded-xl border border-brand-gold/15 bg-card-bg p-4 shadow-sm transition-shadow hover:shadow-devotional"
+                >
+                  <span className="grid h-9 w-9 place-items-center rounded-full bg-brand-gold-soft text-brand-gold">
+                    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </span>
+                  <p className="mt-3 font-serif text-base font-bold text-gray-900">
+                    {row.label ?? "Darshan"}
+                  </p>
+                  <p className="mt-1 text-sm font-semibold tabular-nums text-brand-red">
+                    {formatTime(row.opening_time)} – {formatTime(row.closing_time)}
+                  </p>
+                  {row.special_note && (
+                    <p className="mt-2 text-xs leading-snug text-gray-500">
+                      {row.special_note}
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
           )}
         </section>
@@ -277,9 +447,9 @@ export default function TempleDetailClient({
           {prasad.length === 0 ? (
             <p className="text-sm text-gray-500">No prasad listed yet.</p>
           ) : (
-            <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {prasad.map((p) => (
-                <PrasadCard key={p.id} item={p} />
+                <PrasadCard key={p.id} item={p} onZoom={openLightbox} />
               ))}
             </div>
           )}
@@ -308,6 +478,7 @@ export default function TempleDetailClient({
                     <div className="absolute left-2.5 top-2.5 z-10">
                       <InCartBadge itemType="seva" itemId={s.id} />
                     </div>
+                    <ZoomTrigger onOpen={() => openLightbox(galleryOf(s), s.name)} />
                   </div>
 
                   <div className="space-y-3 p-5">
@@ -391,6 +562,7 @@ export default function TempleDetailClient({
                   key={g.name}
                   group={g}
                   templeSlug={templeSlug}
+                  onZoom={openLightbox}
                 />
               ))}
             </div>
@@ -413,6 +585,7 @@ export default function TempleDetailClient({
                   key={c.id}
                   item={c}
                   templeSlug={templeSlug}
+                  onZoom={openLightbox}
                 />
               ))}
             </div>
@@ -422,6 +595,14 @@ export default function TempleDetailClient({
 
       <ToastHost message={toast} onDismiss={() => setToast(null)} />
       </div>
+
+      {lightbox && (
+        <ImageLightbox
+          images={lightbox.images}
+          alt={lightbox.alt}
+          onClose={() => setLightbox(null)}
+        />
+      )}
     </div>
   );
 }
@@ -514,9 +695,11 @@ function CardFooter({
 function FrameGroupCard({
   group,
   templeSlug,
+  onZoom,
 }: {
   group: FrameGroup;
   templeSlug: string;
+  onZoom: (images: Array<string | null | undefined>, alt: string) => void;
 }) {
   const cover = group.variants[0];
   if (!cover) return null;
@@ -544,6 +727,7 @@ function FrameGroupCard({
             {group.variants.length} sizes
           </span>
         )}
+        <ZoomTrigger onOpen={() => onZoom(images, group.name)} />
       </div>
       <div className="flex flex-1 flex-col p-3.5">
         <h3 className="text-sm font-semibold leading-snug text-gray-900 line-clamp-2">
@@ -567,21 +751,25 @@ function FrameGroupCard({
 function ClothProductCard({
   item,
   templeSlug,
+  onZoom,
 }: {
   item: ClothItem;
   templeSlug: string;
+  onZoom: (images: Array<string | null | undefined>, alt: string) => void;
 }) {
   const href = `/temple/${templeSlug}/cloth/${slugify(item.name)}`;
+  const images = galleryOf(item);
 
   return (
     <CardShell href={href}>
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface-soft">
         <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
-          <ProductCarousel images={galleryOf(item)} alt={item.name} />
+          <ProductCarousel images={images} alt={item.name} />
         </div>
         <div className="absolute left-2.5 top-2.5 z-10">
           <InCartBadge itemType="cloth" itemId={item.id} />
         </div>
+        <ZoomTrigger onOpen={() => onZoom(images, item.name)} />
         {!item.in_stock && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/45">
             <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-gray-900">
@@ -610,12 +798,19 @@ function ClothProductCard({
  * an image carousel, devotional context, price, and an inline
  * add-to-cart / quantity control. Compact and warm by design.
  */
-function PrasadCard({ item }: { item: PrasadItem }) {
+function PrasadCard({
+  item,
+  onZoom,
+}: {
+  item: PrasadItem;
+  onZoom: (images: Array<string | null | undefined>, alt: string) => void;
+}) {
+  const images = galleryOf(item);
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-xl border border-brand-gold/15 bg-card-bg shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-gold/30 hover:shadow-md">
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface-soft">
         <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
-          <ProductCarousel images={galleryOf(item)} alt={item.name} />
+          <ProductCarousel images={images} alt={item.name} />
         </div>
         <div className="absolute left-2.5 top-2.5 z-10">
           <InCartBadge itemType="prasad" itemId={item.id} />
@@ -623,6 +818,7 @@ function PrasadCard({ item }: { item: PrasadItem }) {
         <span className="absolute right-2.5 top-2.5 z-10 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-gold shadow-sm backdrop-blur">
           Prasad
         </span>
+        <ZoomTrigger onOpen={() => onZoom(images, item.name)} />
         {!item.in_stock && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/45">
             <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-gray-900">

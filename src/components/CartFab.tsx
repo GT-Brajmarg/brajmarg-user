@@ -7,15 +7,18 @@ import {
   useRef,
   useState,
 } from "react";
-import { CART_CHANGE_EVENT, getCartCount, openCart } from "@/lib/cart-store";
+import { usePathname, useRouter } from "next/navigation";
+import { CART_CHANGE_EVENT, getCartCount } from "@/lib/cart-store";
 
 /**
  * Floating, draggable cart bubble — behaves like a chat-widget icon.
  *
- *  - Sits at the bottom-right corner by default.
  *  - Can be dragged anywhere on screen; the position is remembered.
- *  - A click (without dragging) opens the floating cart panel.
- *  - Only rendered while the cart has at least one item.
+ *  - A click (without dragging) navigates to the full /cart page
+ *    (there is no slide-in drawer anymore).
+ *  - Only rendered on temple pages, and only while the cart has at
+ *    least one item. It is intentionally hidden on the cart page, home,
+ *    yatra, contact and terms (privacy) pages.
  *
  * Visual language matches the brand (red circle, devotional shadow,
  * the same badge-pop / cart-bump animations used elsewhere).
@@ -27,6 +30,13 @@ const MARGIN = 24; // default offset from bottom-right
 const CLICK_SLOP = 6; // px of movement still treated as a click
 
 export default function CartFab() {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  // Only show the floating cart on temple pages. It must stay hidden on
+  // the cart page itself, home, yatra, contact and terms (privacy).
+  const onTemplePage = pathname?.startsWith("/temple") ?? false;
+
   const [count, setCount] = useState<number | null>(null);
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
   const [bumping, setBumping] = useState(false);
@@ -165,18 +175,19 @@ export default function CartFab() {
         /* ignore */
       }
     } else {
-      // Treated as a tap → open the cart panel.
-      openCart();
+      // Treated as a tap → go straight to the full cart page.
+      router.push("/cart");
     }
   };
 
   const n = count ?? 0;
-  if (count == null || n === 0 || !pos) return null;
+  // Hidden unless: on a temple page, cart has items, and position is ready.
+  if (!onTemplePage || count == null || n === 0 || !pos) return null;
 
   return (
     <button
       type="button"
-      aria-label={`Open cart, ${n} item${n === 1 ? "" : "s"}`}
+      aria-label={`View cart, ${n} item${n === 1 ? "" : "s"}`}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}

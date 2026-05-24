@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useMemo, useState, type ReactNode } from "react";
 import type { ClothItem, FrameItem, Temple } from "@/types/database";
 import { formatInr, parseNumeric } from "@/lib/format";
 import { slugify } from "@/lib/slug";
@@ -64,6 +65,19 @@ export default function ProductDetailClient({
   siblings,
 }: ProductDetailProps) {
   const cover = variants[0];
+  const router = useRouter();
+
+  // Back returns to wherever the user came from (usually the temple
+  // page with its active tab preserved). If this page was opened cold
+  // — e.g. a shared link with no in-app history — fall back to the
+  // temple's matching tab so the breadcrumb context still holds.
+  const goBack = useCallback(() => {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push(`/temple/${slugify(temple.name)}?tab=${category}`);
+    }
+  }, [router, temple.name, category]);
 
   const itemType: "frame" | "cloth" = category;
 
@@ -130,28 +144,51 @@ export default function ProductDetailClient({
 
   return (
     <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-28 lg:pb-10 space-y-12">
-      {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-xs text-gray-500">
-        <Link href="/" className="hover:text-brand-red">
-          Home
-        </Link>
-        <span className="text-gray-300">/</span>
-        <Link
-          href={`/temple/${slugify(temple.name)}`}
-          className="hover:text-brand-red truncate"
+      {/* Back button + breadcrumb */}
+      <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={goBack}
+          aria-label="Go back"
+          className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-brand-red/30 bg-card-bg px-3.5 py-1.5 text-sm font-semibold text-brand-red transition-colors hover:bg-brand-red hover:text-white hover:border-brand-red"
         >
-          {temple.name}
-        </Link>
-        <span className="text-gray-300">/</span>
-        <Link
-          href={`/temple/${slugify(temple.name)}?tab=${category}`}
-          className="hover:text-brand-red capitalize"
+          <svg
+            className="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 18l-6-6 6-6" />
+          </svg>
+          Back
+        </button>
+
+        <nav
+          aria-label="Breadcrumb"
+          className="flex min-w-0 items-center gap-1.5 text-xs text-gray-500"
         >
-          {category}
-        </Link>
-        <span className="text-gray-300">/</span>
-        <span className="text-gray-800 truncate font-medium">{productName}</span>
-      </nav>
+          <Link href="/" className="shrink-0 hover:text-brand-red">
+            Home
+          </Link>
+          <span className="text-gray-300">/</span>
+          <Link
+            href={`/temple/${slugify(temple.name)}?tab=${category}`}
+            className="shrink-0 truncate hover:text-brand-red"
+          >
+            {temple.name}
+          </Link>
+          <span className="text-gray-300">/</span>
+          <Link
+            href={`/temple/${slugify(temple.name)}?tab=${category}`}
+            className="shrink-0 capitalize hover:text-brand-red"
+          >
+            {category}
+          </Link>
+          <span className="text-gray-300">/</span>
+          <span className="truncate font-medium text-gray-800">{productName}</span>
+        </nav>
+      </div>
 
       {/* Hero — gallery + details */}
       <section className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-12">

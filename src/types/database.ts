@@ -119,7 +119,82 @@ export type ClothItem = {
   updated_at: string;
 };
 
-export type ItemType = "prasad" | "seva" | "frame" | "cloth";
+export type Vehicle = {
+  id: string;
+  name: string;
+  vehicle_type: string | null;
+  seating_capacity: number | null;
+  is_ac: boolean | null;
+  features: string[] | null;
+  image_url: string | null;
+  is_active: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+/**
+ * Booking model of a yatra package.
+ *  - "solo"  → Full Package: the whole vehicle is booked; price is the
+ *    total package price; no shared seat inventory.
+ *  - "group" → Seat Booking (Shared Yatra): individual seats are sold on
+ *    a fixed weekday schedule; `price` is per-seat and `seats_total`
+ *    caps inventory.
+ * (Authored in the admin panel; new packages may add other values, so
+ * callers should treat unknown values as "solo".)
+ */
+export type PackageType = "solo" | "group";
+
+/**
+ * A travel package authored in the admin panel (admin.brajmarg.com).
+ * Lives in the shared Supabase DB — not in this repo's migrations.
+ * Read-only on the user side; see the `yatra-schema` memory note.
+ */
+export type YatraPackage = {
+  id: string;
+  vehicle_id: string | null;
+  name: string;
+  from_location: string;
+  to_location: string;
+  distance_km: number | null;
+  duration_days: number | null;
+  duration_nights: number | null;
+  price: number;
+  price_per_km: number | null;
+  route_description: string | null;
+  inclusions: string[] | null;
+  exclusions: string[] | null;
+  itinerary: string | null;
+  image_url: string | null;
+  is_active: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+
+  /* ── Booking-model fields (added by the admin app, 2026-05) ──────── */
+  /** "solo" (full package) or "group" (shared seat booking). */
+  package_type: PackageType;
+  /** For group packages: ISO weekdays the shared yatra departs on
+   *  (0 = Sunday … 6 = Saturday, matching JS `Date.getDay()`). */
+  weekdays: number[] | null;
+  /** "HH:MM:SS" — shared-yatra departure / arrival times (group only). */
+  departure_time: string | null;
+  arrival_time: string | null;
+  /** Total seats for a group package; null for solo (whole vehicle). */
+  seats_total: number | null;
+  /** Whether online (Razorpay) payment is offered for this package. */
+  allow_direct_payment: boolean;
+  /** Whether Cash-on-Delivery (pay later) booking is offered. */
+  allow_cod: boolean;
+
+  /** Embedded via PostgREST when selected with `vehicles(...)`. */
+  vehicles?: Pick<
+    Vehicle,
+    "name" | "vehicle_type" | "seating_capacity" | "is_ac" | "features" | "image_url"
+  > | null;
+};
+
+export type ItemType = "prasad" | "seva" | "frame" | "cloth" | "yatra";
 
 export type CartItem = {
   id: string;

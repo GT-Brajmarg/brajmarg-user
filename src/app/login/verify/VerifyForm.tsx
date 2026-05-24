@@ -9,6 +9,7 @@ const RESEND_SECONDS = 15;
 type Props = {
   phone?: string;
   email?: string;
+  sid?: string; // 2Factor session id (phone logins only)
   next?: string;
   channelLabel: string; // "mobile" | "email"
   initialError?: string;
@@ -17,6 +18,7 @@ type Props = {
 export default function VerifyForm({
   phone,
   email,
+  sid,
   next,
   channelLabel,
   initialError,
@@ -24,6 +26,9 @@ export default function VerifyForm({
   const [digits, setDigits] = useState<string[]>(() =>
     Array(OTP_LENGTH).fill("")
   );
+  // Held in state so a resend (which mints a NEW 2Factor session) can
+  // swap in the fresh session id without a full page reload.
+  const [sessionId, setSessionId] = useState<string | undefined>(sid);
   const [error, setError] = useState<string | undefined>(initialError);
   const [resendInfo, setResendInfo] = useState<string | null>(null);
   const [secondsLeft, setSecondsLeft] = useState(RESEND_SECONDS);
@@ -160,6 +165,8 @@ export default function VerifyForm({
     startResend(async () => {
       const res = await resendOtp({ phone, email });
       if (res.ok) {
+        // 2Factor issues a new session on resend — use it for verify.
+        if (res.sessionId) setSessionId(res.sessionId);
         setResendInfo(`A new code was sent to your ${channelLabel}.`);
         setDigits(Array(OTP_LENGTH).fill(""));
         autoSubmittedRef.current = false;
@@ -175,6 +182,9 @@ export default function VerifyForm({
     <form ref={formRef} action={verifyOtp} className="space-y-6">
       {phone ? <input type="hidden" name="phone" value={phone} /> : null}
       {email ? <input type="hidden" name="email" value={email} /> : null}
+      {sessionId ? (
+        <input type="hidden" name="sid" value={sessionId} />
+      ) : null}
       {next ? <input type="hidden" name="next" value={next} /> : null}
       <input type="hidden" name="otp" value={otp} />
 

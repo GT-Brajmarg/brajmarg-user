@@ -38,6 +38,7 @@ export async function enrichCartRows(
     seva: [],
     frame: [],
     cloth: [],
+    yatra: [], // never a cart item; present only to satisfy the map type
   };
   for (const r of rows) byType[r.item_type].push(r.item_id);
 

@@ -341,7 +341,8 @@ import { createClient } from "@/utils/supabase/server";
 import type { CartItem, ItemType, Profile } from "@/types/database";
 import { formatInr, parseNumeric } from "@/lib/format";
 import { placeOrder } from "./actions";
-import RazorpayButton from "./razorpay-button";
+import { aggregatePaymentOptions } from "@/lib/payment";
+import PaymentOptions from "./payment-options";
 
 type ItemMeta = {
   id: string;
@@ -352,6 +353,8 @@ type ItemMeta = {
     | { name: string }
     | { name: string }[]
     | null;
+  allow_direct_payment?: boolean | null;
+  allow_cod?: boolean | null;
 };
 
 function getTempleName(
@@ -403,6 +406,7 @@ export default async function CheckoutPage({
     seva: [],
     frame: [],
     cloth: [],
+    yatra: [], // yatra is booked directly, never via the cart
   };
 
   for (const item of cart) {
@@ -415,7 +419,7 @@ export default async function CheckoutPage({
         ? supabase
             .from("prasad_items")
             .select(
-              "id,name,price,image_url,temples(name)"
+              "id,name,price,image_url,temples(name),allow_direct_payment,allow_cod"
             )
             .in("id", byType.prasad)
         : Promise.resolve({ data: [] }),
@@ -424,7 +428,7 @@ export default async function CheckoutPage({
         ? supabase
             .from("seva_items")
             .select(
-              "id,name,price,image_url,temples(name)"
+              "id,name,price,image_url,temples(name),allow_direct_payment,allow_cod"
             )
             .in("id", byType.seva)
         : Promise.resolve({ data: [] }),
@@ -433,7 +437,7 @@ export default async function CheckoutPage({
         ? supabase
             .from("frame_items")
             .select(
-              "id,name,price,image_url,temples(name)"
+              "id,name,price,image_url,temples(name),allow_direct_payment,allow_cod"
             )
             .in("id", byType.frame)
         : Promise.resolve({ data: [] }),
@@ -442,7 +446,7 @@ export default async function CheckoutPage({
         ? supabase
             .from("cloth_items")
             .select(
-              "id,name,price,image_url,temples(name)"
+              "id,name,price,image_url,temples(name),allow_direct_payment,allow_cod"
             )
             .in("id", byType.cloth)
         : Promise.resolve({ data: [] }),
@@ -501,6 +505,11 @@ export default async function CheckoutPage({
   const subtotal = enriched.reduce(
     (sum, item) => sum + item.lineTotal,
     0
+  );
+
+  // Cart-level payment capability (strictest wins across all items).
+  const { allowOnline, allowCod } = aggregatePaymentOptions(
+    enriched.map((e) => e.meta)
   );
 
   return (
@@ -637,17 +646,16 @@ export default async function CheckoutPage({
                   />
                 </section>
 
-                <button
-                  type="submit"
-                  className="w-full rounded-lg bg-gray-900 text-white px-5 py-3"
-                >
-                  Cash on Delivery (
-                  {formatInr(subtotal)})
-                </button>
               </form>
 
-              <RazorpayButton
-                total={subtotal}
+              {/* Payment buttons: COD is gated on live per-pincode
+                  serviceability in addition to the item-level flags. The
+                  COD button lives here (outside the form) but submits it
+                  via form="checkout-form". */}
+              <PaymentOptions
+                subtotal={subtotal}
+                allowCod={allowCod}
+                allowOnline={allowOnline}
               />
             </div>
 

@@ -18,38 +18,21 @@ const STORAGE_KEY = "brajmarg:cart:v1";
 export const CART_CHANGE_EVENT = "brajmarg:cart-changed";
 export const CART_OPEN_EVENT = "brajmarg:cart-open";
 
-/** Tell any mounted CartDrawer to slide in (explicit user intent). */
+/**
+ * No-op kept for backward compatibility. The slide-in CartDrawer was
+ * removed; the floating cart (CartFab) now navigates to /cart instead,
+ * so there is no panel to open.
+ */
 export function openCart(): void {
-  if (typeof window === "undefined") return;
-  window.dispatchEvent(new Event(CART_OPEN_EVENT));
+  /* drawer removed — intentionally does nothing */
 }
 
-const AUTO_OPEN_KEY = "brajmarg:cart-autoopened";
-
 /**
- * Add-driven open. Intelligent + non-intrusive:
- *   - The FIRST product a user adds in a session auto-opens the cart
- *     so they discover it.
- *   - Every add after that only bumps the badge (handled elsewhere) and
- *     never interrupts the shopping flow again.
- *
- * Use this from "Add to cart" actions instead of openCart().
+ * No-op kept for backward compatibility. Adding to cart no longer opens
+ * a drawer; the floating cart bubble + badge are the only cart UI now.
  */
 export function autoOpenCartOnce(): void {
-  if (typeof window === "undefined") return;
-  let already = false;
-  try {
-    already = window.sessionStorage.getItem(AUTO_OPEN_KEY) === "1";
-  } catch {
-    /* sessionStorage unavailable (private mode) — fall back to open once */
-  }
-  if (already) return;
-  try {
-    window.sessionStorage.setItem(AUTO_OPEN_KEY, "1");
-  } catch {
-    /* ignore */
-  }
-  window.dispatchEvent(new Event(CART_OPEN_EVENT));
+  /* drawer removed — intentionally does nothing */
 }
 
 export type CartRow = {

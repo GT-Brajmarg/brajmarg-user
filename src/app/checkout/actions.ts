@@ -218,6 +218,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { createServiceClient } from "@/utils/supabase/admin";
+import { aggregatePaymentOptions } from "@/lib/payment";
+import {
+  createShipmentsForOrder,
+  createPrepaidShipmentForOrderId,
+} from "@/lib/shipping/fulfillment";
+import type { RoutableItem } from "@/lib/shipping/resolve-pickup";
 import type { CartItem, ItemType } from "@/types/database";
 
 const razorpay = new Razorpay({
@@ -231,11 +237,72 @@ function genOrderNumber(): string {
   return `BRJ-${ts}-${rand}`;
 }
 
+/**
+ * Checks whether a destination pincode is serviceable, and whether COD
+ * is available there, from the default pickup location. Called from the
+ * checkout form as the user enters their pincode so the UI can hide the
+ * COD option for prepaid-only / unserviceable pincodes.
+ *
+ * Fails OPEN on configuration/network errors (returns serviceable:true,
+ * cod:true) so a transient Shiprocket issue never blocks checkout — the
+ * server-side guards in placeOrder still apply at order time.
+ */
+export async function checkPincodeServiceability(
+  pincode: string
+): Promise<{ serviceable: boolean; cod: boolean; cheapestRate: number | null }> {
+  if (!/^\d{6}$/.test(pincode)) {
+    return { serviceable: false, cod: false, cheapestRate: null };
+  }
+
+  const admin = createServiceClient();
+  if (!admin) return { serviceable: true, cod: true, cheapestRate: null };
+
+  const { data: pickup } = await admin
+    .from("pickup_locations")
+    .select("pincode")
+    .eq("is_default", true)
+    .maybeSingle();
+
+  if (!pickup?.pincode) {
+    // No pickup configured yet: don't block checkout.
+    return { serviceable: true, cod: true, cheapestRate: null };
+  }
+
+  try {
+    const { shiprocket, pickCheapestServiceable } = await import(
+      "@/lib/shipping/shiprocket"
+    );
+    const couriers = await shiprocket.checkServiceability({
+      pickupPincode: pickup.pincode as string,
+      deliveryPincode: pincode,
+      cod: true,
+      weight: 0.5,
+    });
+
+    if (couriers.length === 0) {
+      return { serviceable: false, cod: false, cheapestRate: null };
+    }
+    const codCourier = pickCheapestServiceable(couriers, true);
+    const anyCourier = pickCheapestServiceable(couriers, false);
+    return {
+      serviceable: true,
+      cod: Boolean(codCourier),
+      cheapestRate: (anyCourier ?? couriers[0]).rate ?? null,
+    };
+  } catch (e) {
+    console.error("checkPincodeServiceability error:", e);
+    return { serviceable: true, cod: true, cheapestRate: null }; // fail open
+  }
+}
+
 type ItemMeta = {
   id: string;
   name: string;
   price: number | string;
+  temple_id: string | null;
   temples: { name: string } | null;
+  allow_direct_payment?: boolean | null;
+  allow_cod?: boolean | null;
 };
 
 async function getCheckoutData(formData: FormData) {
@@ -300,37 +367,28 @@ async function getCheckoutData(formData: FormData) {
     seva: [],
     frame: [],
     cloth: [],
+    yatra: [], // yatra is booked directly, never via the cart
   };
 
   for (const r of cart) byType[r.item_type].push(r.item_id);
 
+  const cols =
+    "id,name,price,temple_id,temples(name),allow_direct_payment,allow_cod";
   const [prasadRes, sevaRes, frameRes, clothRes] = await Promise.all([
     byType.prasad.length
-      ? supabase
-          .from("prasad_items")
-          .select("id,name,price,temples(name)")
-          .in("id", byType.prasad)
+      ? supabase.from("prasad_items").select(cols).in("id", byType.prasad)
       : Promise.resolve({ data: [] }),
 
     byType.seva.length
-      ? supabase
-          .from("seva_items")
-          .select("id,name,price,temples(name)")
-          .in("id", byType.seva)
+      ? supabase.from("seva_items").select(cols).in("id", byType.seva)
       : Promise.resolve({ data: [] }),
 
     byType.frame.length
-      ? supabase
-          .from("frame_items")
-          .select("id,name,price,temples(name)")
-          .in("id", byType.frame)
+      ? supabase.from("frame_items").select(cols).in("id", byType.frame)
       : Promise.resolve({ data: [] }),
 
     byType.cloth.length
-      ? supabase
-          .from("cloth_items")
-          .select("id,name,price,temples(name)")
-          .in("id", byType.cloth)
+      ? supabase.from("cloth_items").select(cols).in("id", byType.cloth)
       : Promise.resolve({ data: [] }),
   ]);
 
@@ -349,12 +407,17 @@ async function getCheckoutData(formData: FormData) {
     total += Number(meta.price) * row.quantity;
   }
 
+  // Cart-level payment capability (strictest wins across all items).
+  const { allowOnline, allowCod } = aggregatePaymentOptions([...map.values()]);
+
   return {
     supabase,
     user,
     cart,
     map,
     total,
+    allowOnline,
+    allowCod,
     customer: {
       full_name,
       customer_phone,
@@ -374,6 +437,26 @@ async function getCheckoutData(formData: FormData) {
 export async function placeOrder(formData: FormData) {
   const data = await getCheckoutData(formData);
 
+  // Server-side guard: COD must be permitted by every item in the cart.
+  if (!data.allowCod) {
+    throw new Error(
+      "Cash on Delivery isn't available for one or more items in your cart."
+    );
+  }
+
+  // Server-side guard: COD must be serviceable at the destination pincode.
+  // The client hides COD for unserviceable pincodes, but enforce it here
+  // too so a tampered request can't place an undeliverable COD order.
+  const cod = await checkPincodeServiceability(data.customer.pincode);
+  if (!cod.serviceable) {
+    throw new Error("We don't deliver to this pincode yet.");
+  }
+  if (!cod.cod) {
+    throw new Error(
+      "Cash on Delivery isn't available for this pincode. Please pay online."
+    );
+  }
+
   const order_number = genOrderNumber();
 
   const { data: orderRow, error } = await data.supabase
@@ -381,7 +464,10 @@ export async function placeOrder(formData: FormData) {
     .insert({
       user_id: data.user.id,
       order_number,
-      status: "pending",
+      // COD has no online payment step, so the order is auto-confirmed
+      // at placement — no admin verification gate. payment_status stays
+      // 'pending' until the courier collects cash and Shiprocket remits.
+      status: "confirmed",
       total_amount: data.total,
       customer_name: data.customer.full_name,
       customer_phone: data.customer.customer_phone,
@@ -420,25 +506,92 @@ export async function placeOrder(formData: FormData) {
       selected_size: row.selected_size,
       selected_color: row.selected_color,
       temple_name: meta.temples?.name ?? "Brajmarg",
+      temple_id: meta.temple_id ?? null,
     };
   });
 
-  await data.supabase.from("order_items").insert(rows);
+  const { error: itemErr } = await data.supabase
+    .from("order_items")
+    .insert(rows);
+
+  if (itemErr) {
+    console.error("COD ORDER ITEMS ERROR:", itemErr);
+    // Roll back the just-created order so a failed insert doesn't leave an
+    // orphaned pending order behind. Service client: orders has no DELETE RLS.
+    const cleanup = createServiceClient();
+    await (cleanup ?? data.supabase).from("orders").delete().eq("id", orderRow.id);
+    throw new Error("Could not place your order. Please try again.");
+  }
 
   await data.supabase
     .from("cart_items")
     .delete()
     .eq("user_id", data.user.id);
 
+  // COD orders are auto-confirmed at placement (status set above). Now
+  // create the shipment(s). Best-effort: createShipments swallows errors
+  // so a courier hiccup can't fail a placed order.
+  const admin = createServiceClient();
+  if (admin) {
+    await createShipmentsForOrder(
+      admin,
+      {
+        id: orderRow.id,
+        order_number,
+        total_amount: data.total,
+        customer_name: data.customer.full_name,
+        customer_phone: data.customer.customer_phone,
+        customer_email: data.customer.customer_email || data.user.email || null,
+        shipping_address_line1: data.customer.address_line1,
+        shipping_address_line2: data.customer.address_line2 || null,
+        shipping_city: data.customer.city,
+        shipping_state: data.customer.state,
+        shipping_pincode: data.customer.pincode,
+      },
+      buildRoutableItems(data.cart, data.map),
+      "COD"
+    );
+  }
+
   revalidatePath("/cart");
 
   redirect(`/cart?placed=${order_number}`);
+}
+
+/**
+ * Converts the cart + metadata map into the RoutableItem[] shape the
+ * fulfillment orchestrator needs (carries temple_id for pickup routing).
+ */
+function buildRoutableItems(
+  cart: CartItem[],
+  map: Map<string, ItemMeta>
+): RoutableItem[] {
+  return cart
+    .map((row) => {
+      const meta = map.get(`${row.item_type}:${row.item_id}`);
+      if (!meta) return null;
+      return {
+        item_id: row.item_id,
+        item_name: meta.name,
+        item_price: Number(meta.price),
+        quantity: row.quantity,
+        temple_id: meta.temple_id ?? null,
+      };
+    })
+    .filter((x): x is RoutableItem => x !== null);
 }
 
 /* ================= RAZORPAY ================= */
 
 export async function createRazorpayOrder(formData: FormData) {
   const data = await getCheckoutData(formData);
+
+  // Server-side guard: online payment must be permitted by every item.
+  if (!data.allowOnline) {
+    throw new Error(
+      "Online payment isn't available for one or more items in your cart."
+    );
+  }
 
   const order_number = genOrderNumber();
 
@@ -486,10 +639,20 @@ export async function createRazorpayOrder(formData: FormData) {
       selected_size: row.selected_size,
       selected_color: row.selected_color,
       temple_name: meta.temples?.name ?? "Brajmarg",
+      temple_id: meta.temple_id ?? null,
     };
   });
 
-  await data.supabase.from("order_items").insert(rows);
+  const { error: itemErr } = await data.supabase
+    .from("order_items")
+    .insert(rows);
+
+  if (itemErr) {
+    console.error("RAZORPAY ORDER ITEMS ERROR:", itemErr);
+    const cleanup = createServiceClient();
+    await (cleanup ?? data.supabase).from("orders").delete().eq("id", orderRow.id);
+    throw new Error("Could not start payment. Please try again.");
+  }
 
   const rzOrder = await razorpay.orders.create({
     amount: Math.round(data.total * 100),
@@ -594,6 +757,11 @@ export async function verifyRazorpayPayment(payload: {
   // only if we know whose order this is.
   if (updated?.user_id) {
     await admin.from("cart_items").delete().eq("user_id", updated.user_id);
+
+    // Only the call that actually promoted the order (updated != null)
+    // creates the shipment — guards against the verify/webhook race
+    // double-shipping. Prepaid: Razorpay already collected the money.
+    await createPrepaidShipmentForOrderId(admin, payload.dbOrderId);
   }
 
   revalidatePath("/cart");

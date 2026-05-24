@@ -191,19 +191,42 @@ export default function TermsPage() {
             </Section>
 
             <Section id="cancellations" title="7. Cancellations & refunds">
+              <p className="font-semibold text-gray-900">
+                Cancellation &amp; Refund Policy
+              </p>
+              <ul>
+                <li>
+                  <strong>Free Cancellation:</strong> up to 24 hours before
+                  pickup time.
+                </li>
+                <li>
+                  <strong>50% Refund:</strong> 12&ndash;24 hours before pickup
+                  time.
+                </li>
+                <li>
+                  <strong>No Refund:</strong> less than 12 hours before pickup
+                  time, or in case of a no-show.
+                </li>
+                <li>
+                  <strong>Refund Processing:</strong> approved refunds are
+                  processed within 5&ndash;7 business days to the original
+                  payment method.
+                </li>
+              </ul>
               <p>
-                Orders may be cancelled before they are dispatched by
-                contacting our support team. Once an order is shipped or a
-                seva is performed it cannot be cancelled.
+                You can request a cancellation from{" "}
+                <Link href="/account/orders">My Orders</Link>. The applicable
+                refund tier is determined automatically from the time remaining
+                until pickup. For orders paid online, the approved refund is
+                returned to your original payment method; Cash-on-Delivery
+                orders have nothing to refund unless already collected.
               </p>
               <p>
-                Because prasad and seva offerings are consecrated items, we
-                do not accept returns once the order has been delivered or
-                the seva completed. Refunds will be processed only for
-                damaged items, shipping errors or sevas that we were unable
-                to perform, in which case the refund will be credited to the
-                original payment instrument within 7&ndash;14 working days
-                after the claim is approved.
+                Because prasad and seva offerings are consecrated items, we do
+                not accept returns once the order has been delivered or the
+                seva completed. Beyond the pickup-time tiers above, refunds are
+                otherwise processed only for damaged items, shipping errors or
+                sevas that we were unable to perform.
               </p>
             </Section>
 

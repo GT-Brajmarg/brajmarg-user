@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { createServiceClient } from "@/utils/supabase/admin";
 import { isValidE164, isValidEmail } from "@/lib/identifier";
+import * as twofactor from "@/lib/twofactor";
 
 function safeNext(value: FormDataEntryValue | null): string {
   if (typeof value !== "string") return "";
@@ -74,20 +75,27 @@ function usesBypass(phone: string): boolean {
 }
 
 /**
- * Synthetic email used for the test phone's Supabase user record.
- * `+919876543210` -> `test-919876543210@brajmarg.local`
+ * Synthetic email backing a phone-only Supabase user record.
+ * `+919876543210` -> `phone-919876543210@brajmarg.local`
+ *
+ * Supabase has no admin API to mint a session directly from a phone, so
+ * we attach a deterministic synthetic email to the user and exchange an
+ * email magic-link token for a real session. The email is never shown to
+ * the user — phone remains the identity. Used for BOTH the dev/test
+ * bypass and real 2Factor-verified logins.
  */
 function syntheticEmailFor(phone: string): string {
   const digits = phone.replace(/\D/g, "");
-  return `test-${digits}@brajmarg.local`;
+  return `phone-${digits}@brajmarg.local`;
 }
 
 /**
- * Sign the test user in by minting a real Supabase session via the
- * admin API + magic-link token exchange. Sets the auth cookies on
- * the current SSR response.
+ * Mint a real Supabase session for a phone-verified user via the admin
+ * API + magic-link token exchange. Sets the auth cookies on the current
+ * SSR response. The caller is responsible for having already verified
+ * the phone (2Factor in production, fixed OTP for the dev/test bypass).
  */
-async function loginAsTestUser(phone: string): Promise<{
+async function mintSessionForPhone(phone: string): Promise<{
   ok: boolean;
   error?: string;
 }> {
@@ -217,22 +225,25 @@ export async function sendOtp(formData: FormData) {
     );
   }
 
-  // Bypass (dev mode, or the legacy single test phone): skip Supabase
-  // OTP entirely and send the user straight to the verify screen,
-  // where any real OTP request would have landed them too.
+  // Bypass (dev mode, or the legacy single test phone): skip the SMS
+  // provider entirely and send the user straight to the verify screen,
+  // where any real OTP request would have landed them too. The OTP is
+  // the fixed TEST_PHONE_OTP.
   if (usesBypass(identifier)) {
     const params = new URLSearchParams({ phone: identifier });
     if (next) params.set("next", next);
     redirect(`/login/verify?${params.toString()}`);
   }
 
-  const { error } = await supabase.auth.signInWithOtp({
+  // Production: send the OTP via 2Factor. The returned session id must
+  // be carried to the verify screen (and back to verifyOtp).
+  const result = await twofactor.sendOtp(identifier);
+  if (!result.ok) loginErrorRedirect(result.error, next);
+
+  const params = new URLSearchParams({
     phone: identifier,
+    sid: result.sessionId,
   });
-
-  if (error) loginErrorRedirect(error.message, next);
-
-  const params = new URLSearchParams({ phone: identifier });
   if (next) params.set("next", next);
   redirect(`/login/verify?${params.toString()}`);
 }
@@ -245,7 +256,7 @@ export async function sendOtp(formData: FormData) {
 export async function resendOtp(input: {
   phone?: string;
   email?: string;
-}): Promise<{ ok: boolean; error?: string }> {
+}): Promise<{ ok: boolean; error?: string; sessionId?: string }> {
   const supabase = await createClient();
   const phone = (input.phone ?? "").trim();
   const email = (input.email ?? "").trim();
@@ -264,9 +275,11 @@ export async function resendOtp(input: {
       // No-op for the bypass — the OTP is fixed (TEST_PHONE_OTP).
       return { ok: true };
     }
-    const { error } = await supabase.auth.signInWithOtp({ phone });
-    if (error) return { ok: false, error: error.message };
-    return { ok: true };
+    // Production: 2Factor generates a NEW session on resend. Return the
+    // new session id so the verify form can swap in the fresh sid.
+    const result = await twofactor.sendOtp(phone);
+    if (!result.ok) return { ok: false, error: result.error };
+    return { ok: true, sessionId: result.sessionId };
   }
 
   if (email) {
@@ -317,11 +330,11 @@ export async function verifyOtp(formData: FormData) {
       redirect(`/login/verify?${params.toString()}`);
     }
 
-    const result = await loginAsTestUser(phone);
+    const result = await mintSessionForPhone(phone);
     if (!result.ok) {
       const params = new URLSearchParams({
         phone,
-        error: result.error ?? "Test login failed.",
+        error: result.error ?? "Login failed.",
       });
       if (next !== "/") params.set("next", next);
       redirect(`/login/verify?${params.toString()}`);
@@ -332,16 +345,37 @@ export async function verifyOtp(formData: FormData) {
   }
 
   if (phone) {
-    const { error } = await supabase.auth.verifyOtp({
-      phone,
-      token: otp,
-      type: "sms",
-    });
-    if (error) {
-      const params = new URLSearchParams({ phone, error: error.message });
+    // Production: verify the OTP against 2Factor using the session id
+    // (sid) created in sendOtp, then mint the Supabase session.
+    const sid = ((formData.get("sid") as string) ?? "").trim();
+    if (!sid) {
+      const params = new URLSearchParams({
+        phone,
+        error: "Your session expired. Please request a new OTP.",
+      });
       if (next !== "/") params.set("next", next);
       redirect(`/login/verify?${params.toString()}`);
     }
+
+    const verified = await twofactor.verifyOtp(sid, otp);
+    if (!verified.ok) {
+      const params = new URLSearchParams({ phone, sid, error: verified.error });
+      if (next !== "/") params.set("next", next);
+      redirect(`/login/verify?${params.toString()}`);
+    }
+
+    const minted = await mintSessionForPhone(phone);
+    if (!minted.ok) {
+      const params = new URLSearchParams({
+        phone,
+        error: minted.error ?? "Login failed.",
+      });
+      if (next !== "/") params.set("next", next);
+      redirect(`/login/verify?${params.toString()}`);
+    }
+
+    revalidatePath("/", "layout");
+    redirect(next);
   } else if (email) {
     const { error } = await supabase.auth.verifyOtp({
       email,

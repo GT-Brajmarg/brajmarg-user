@@ -4,7 +4,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import OnboardingTour from "@/components/OnboardingTour";
 import CartSync from "@/components/CartSync";
-import CartDrawer from "@/components/CartDrawer";
 import CartFab from "@/components/CartFab";
 import "./globals.css";
 
@@ -40,7 +39,6 @@ export default function RootLayout({
         <Footer />
         <OnboardingTour />
         <CartSync />
-        <CartDrawer />
         <CartFab />
       </body>
     </html>
