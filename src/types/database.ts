@@ -18,6 +18,7 @@ export type Temple = {
   location: string;
   description: string | null;
   image_url: string | null;
+  contact_phone: string | null;
   is_active: boolean;
   is_coming_soon: boolean;
   display_order: number;
@@ -45,6 +46,33 @@ export type Event = {
   image_url: string | null;
   is_active: boolean;
   created_at: string;
+};
+
+export type AlertType =
+  | "festival"
+  | "special_darshan"
+  | "closure"
+  | "timing_change"
+  | "general";
+
+export type AlertPriority = "info" | "important" | "urgent";
+
+export type Alert = {
+  id: string;
+  temple_id: string | null;
+  alert_type: AlertType;
+  priority: AlertPriority;
+  title: string;
+  description: string | null;
+  starts_at: string | null;
+  ends_at: string | null;
+  image_url: string | null;
+  cta_label: string | null;
+  cta_url: string | null;
+  display_order: number | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 };
 
 /**

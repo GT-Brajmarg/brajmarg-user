@@ -15,6 +15,18 @@ export function formatDateIn(dateStr: string) {
   });
 }
 
+export function formatDateTimeIn(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
 export function parseNumeric(value: number | string | null | undefined): number {
   if (value == null) return 0;
   const n = typeof value === "number" ? value : Number(value);

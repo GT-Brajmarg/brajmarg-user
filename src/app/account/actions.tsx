@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
+import { toIndianE164 } from "@/lib/identifier";
 
 const EDITABLE_FIELDS = [
   "full_name",
@@ -75,8 +76,8 @@ export async function updateProfileField(
   if (field === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
     return { ok: false, error: "Please enter a valid email address." };
   }
-  if (field === "phone" && value && !/^\+?[0-9][0-9\s-]{6,16}$/.test(value)) {
-    return { ok: false, error: "Please enter a valid phone number." };
+  if (field === "phone" && value && !toIndianE164(value)) {
+    return { ok: false, error: "Please enter a valid 10-digit mobile number." };
   }
   if (field === "pincode" && value && !/^\d{6}$/.test(value)) {
     return { ok: false, error: "Pincode must be 6 digits." };
@@ -92,7 +93,13 @@ export async function updateProfileField(
   if (!user) return { ok: false, error: "Not signed in." };
 
   const payload: Record<string, unknown> = { id: user.id };
-  payload[field] = value === "" ? null : value;
+  // Store the phone normalised to E.164 (+91XXXXXXXXXX).
+  payload[field] =
+    value === ""
+      ? null
+      : field === "phone"
+        ? toIndianE164(value)
+        : value;
 
   const { error } = await supabase
     .from("profiles")

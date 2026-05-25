@@ -34,6 +34,97 @@ function isPhoneAllowed(phone: string): boolean {
 }
 
 /* --------------------------------------------------------------- */
+/*  Guest cart merge (server-side, runs right after session mint)  */
+/* --------------------------------------------------------------- */
+
+const PENDING_CART_COOKIE = "brajmarg_pending_cart";
+
+// item_types that can live in cart_items. `yatra` is booked directly and
+// is excluded by the table's CHECK constraint, so we must never insert it.
+const CART_ITEM_TYPES = new Set(["prasad", "seva", "frame", "cloth"]);
+
+type SlimCartRow = {
+  t: string;
+  i: string;
+  q: number;
+  s: string | null;
+  c: string | null;
+};
+
+/**
+ * Merge the guest cart (snapshotted into a cookie on the login page) into
+ * the freshly-signed-in user's cart_items, then delete the cookie. Runs
+ * before the post-login redirect so server components (e.g. /checkout) see
+ * the correct cart immediately. Duplicate variants increment quantity.
+ *
+ * Best-effort: any failure is swallowed so it can never block login. The
+ * client-side CartSync merge remains as a fallback for the localStorage copy.
+ */
+async function mergePendingCartCookie(): Promise<void> {
+  const supabase = await createClient();
+  const { cookies } = await import("next/headers");
+  const jar = await cookies();
+
+  const raw = jar.get(PENDING_CART_COOKIE)?.value;
+  // Always clear the cookie once we've read it, even on early return.
+  if (raw) jar.delete(PENDING_CART_COOKIE);
+  if (!raw) return;
+
+  let rows: SlimCartRow[];
+  try {
+    const parsed = JSON.parse(decodeURIComponent(raw));
+    if (!Array.isArray(parsed)) return;
+    rows = parsed as SlimCartRow[];
+  } catch {
+    return;
+  }
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  for (const r of rows) {
+    const item_type = r.t;
+    const item_id = r.i;
+    const quantity = Number(r.q);
+    const selected_size = r.s ?? null;
+    const selected_color = r.c ?? null;
+
+    if (!CART_ITEM_TYPES.has(item_type)) continue;
+    if (!item_id || !Number.isFinite(quantity) || quantity < 1) continue;
+
+    // Find an existing identical variant in the user's cart (RLS scopes
+    // this to the current user automatically).
+    let q = supabase
+      .from("cart_items")
+      .select("id, quantity")
+      .eq("item_type", item_type)
+      .eq("item_id", item_id);
+    q = selected_size == null ? q.is("selected_size", null) : q.eq("selected_size", selected_size);
+    q = selected_color == null ? q.is("selected_color", null) : q.eq("selected_color", selected_color);
+
+    const { data: existing } = await q.maybeSingle();
+
+    if (existing) {
+      await supabase
+        .from("cart_items")
+        .update({ quantity: existing.quantity + quantity })
+        .eq("id", existing.id);
+    } else {
+      await supabase.from("cart_items").insert({
+        user_id: user.id,
+        item_type,
+        item_id,
+        quantity,
+        selected_size,
+        selected_color,
+      });
+    }
+  }
+}
+
+/* --------------------------------------------------------------- */
 /*  Test-phone bypass                                              */
 /* --------------------------------------------------------------- */
 
@@ -340,6 +431,7 @@ export async function verifyOtp(formData: FormData) {
       redirect(`/login/verify?${params.toString()}`);
     }
 
+    await mergePendingCartCookie();
     revalidatePath("/", "layout");
     redirect(next);
   }
@@ -374,6 +466,7 @@ export async function verifyOtp(formData: FormData) {
       redirect(`/login/verify?${params.toString()}`);
     }
 
+    await mergePendingCartCookie();
     revalidatePath("/", "layout");
     redirect(next);
   } else if (email) {
@@ -406,6 +499,7 @@ export async function verifyOtp(formData: FormData) {
     );
   }
 
+  await mergePendingCartCookie();
   revalidatePath("/", "layout");
   redirect(next);
 }

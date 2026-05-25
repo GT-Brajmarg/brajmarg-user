@@ -2,6 +2,11 @@
 
 import { useState, useTransition } from "react";
 import { updateProfileField } from "@/app/account/actions";
+import {
+  INDIA_DIAL_CODE,
+  digitsOnly,
+  indianNationalDigits,
+} from "@/lib/identifier";
 
 type Props = {
   field:
@@ -33,8 +38,12 @@ export default function EditableField({
   icon,
   multiline,
 }: Props) {
+  const isPhone = field === "phone";
+  // For phone, the draft holds the 10 national digits; +91 is a fixed prefix.
+  const toDraft = (v: string) => (isPhone ? indianNationalDigits(v) : v);
+
   const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState(value);
+  const [draft, setDraft] = useState(() => toDraft(value));
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -51,7 +60,7 @@ export default function EditableField({
   }
 
   function cancel() {
-    setDraft(value);
+    setDraft(toDraft(value));
     setError(null);
     setEditing(false);
   }
@@ -89,6 +98,27 @@ export default function EditableField({
                 rows={2}
                 className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-brand-red focus:ring-2 focus:ring-red-100"
               />
+            ) : isPhone ? (
+              <div className="flex items-center rounded-lg border border-gray-300 bg-white px-2 py-1 transition-colors focus-within:border-brand-red focus-within:ring-2 focus-within:ring-red-100">
+                <span className="px-2 py-1 text-sm font-medium text-gray-700 select-none mr-1">
+                  +{INDIA_DIAL_CODE}
+                </span>
+                <input
+                  autoFocus
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="tel-national"
+                  value={draft}
+                  onChange={(e) => setDraft(digitsOnly(e.target.value).slice(0, 10))}
+                  maxLength={10}
+                  placeholder="10-digit mobile number"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") save();
+                    if (e.key === "Escape") cancel();
+                  }}
+                  className="flex-1 bg-transparent text-sm text-gray-900 placeholder:text-gray-400 outline-none px-1 py-1"
+                />
+              </div>
             ) : (
               <input
                 autoFocus
@@ -153,7 +183,7 @@ export default function EditableField({
           <button
             type="button"
             onClick={() => {
-              setDraft(value);
+              setDraft(toDraft(value));
               setEditing(true);
             }}
             className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:border-brand-red hover:text-brand-red transition-colors"

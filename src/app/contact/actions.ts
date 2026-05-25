@@ -2,6 +2,7 @@
 
 import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
+import { toIndianE164 } from "@/lib/identifier";
 
 export type ContactFormState = {
   ok: boolean;
@@ -19,7 +20,6 @@ export type ContactFormState = {
 };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const PHONE_RE = /^\+?[0-9][0-9\s-]{7,16}$/;
 
 function validate(values: ContactFormState["values"]) {
   const errors: ContactFormState["errors"] = {};
@@ -39,8 +39,8 @@ function validate(values: ContactFormState["values"]) {
     errors.email = "Please enter a valid email address.";
   }
 
-  if (values.phone.trim() && !PHONE_RE.test(values.phone.trim())) {
-    errors.phone = "Please enter a valid phone number.";
+  if (values.phone.trim() && !toIndianE164(values.phone)) {
+    errors.phone = "Please enter a valid 10-digit mobile number.";
   }
 
   if (!values.subject.trim()) {
@@ -102,7 +102,7 @@ export async function submitContactMessage(
     const { error } = await supabase.from("contact_messages").insert({
       full_name: values.full_name.trim(),
       email: values.email.trim().toLowerCase(),
-      phone: values.phone.trim() || null,
+      phone: values.phone.trim() ? toIndianE164(values.phone) : null,
       subject: values.subject.trim(),
       message: values.message.trim(),
       user_id: user?.id ?? null,

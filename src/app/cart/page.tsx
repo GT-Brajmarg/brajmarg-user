@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import { CART_CHANGE_EVENT, getCart } from "@/lib/cart-store";
+import { CART_CHANGE_EVENT, getCart, discardLocalCart } from "@/lib/cart-store";
 import { enrichCartRows } from "@/lib/cart-enrich";
 import type { OrderItem, Order } from "@/types/database";
 import type { EnrichedCartRow } from "@/types/cart";
@@ -39,6 +39,8 @@ function PlacedBanner() {
 }
 
 function CartPageInner() {
+  const params = useSearchParams();
+  const placed = params.get("placed");
   const [phase, setPhase] = useState<Phase>("loading");
   const [rows, setRows] = useState<EnrichedCartRow[]>([]);
   const [authed, setAuthed] = useState<boolean>(false);
@@ -46,6 +48,11 @@ function CartPageInner() {
 
   const load = useCallback(async () => {
     const supabase = createClient();
+
+    // After a successful order (?placed=...), the DB cart was already
+    // cleared server-side. Defensively wipe any lingering guest localStorage
+    // cart so stale items can't reappear in the UI.
+    if (placed) discardLocalCart();
 
     // Check auth
     const {
@@ -75,7 +82,7 @@ function CartPageInner() {
     }
 
     setPhase("ready");
-  }, []);
+  }, [placed]);
 
   useEffect(() => {
     void load();

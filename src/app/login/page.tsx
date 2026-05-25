@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { sendOtp } from "./actions";
 import IdentifierInput from "@/components/login/IdentifierInput";
+import PendingCartSnapshot from "@/components/login/PendingCartSnapshot";
 
 export default async function LoginPage({
   searchParams,
@@ -13,6 +14,8 @@ export default async function LoginPage({
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 px-4 py-10 overflow-hidden">
+      {/* Capture the guest cart into a cookie for the server-side merge. */}
+      <PendingCartSnapshot />
       {/* Decorative red dots */}
       <div className="pointer-events-none absolute inset-0 opacity-[0.06] [background-image:radial-gradient(circle_at_25%_30%,#c41e1e_2px,transparent_2px),radial-gradient(circle_at_75%_70%,#c41e1e_2px,transparent_2px)] [background-size:48px_48px]" />
       <div className="pointer-events-none absolute -top-32 -right-24 h-72 w-72 rounded-full bg-brand-red/10 blur-3xl" />

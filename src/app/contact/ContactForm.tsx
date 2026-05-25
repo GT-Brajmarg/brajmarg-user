@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { submitContactMessage, type ContactFormState } from "./actions";
+import { toIndianE164 } from "@/lib/identifier";
 
 const INITIAL_STATE: ContactFormState = { ok: false, message: "" };
 
@@ -16,7 +17,6 @@ const SUBJECTS = [
 ];
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const PHONE_RE = /^\+?[0-9][0-9\s-]{7,16}$/;
 
 type ClientErrors = Partial<
   Record<"full_name" | "email" | "phone" | "subject" | "message", string>
@@ -35,7 +35,8 @@ function validateField(name: keyof ClientErrors, value: string): string {
       if (!EMAIL_RE.test(v)) return "Please enter a valid email address.";
       return "";
     case "phone":
-      if (v && !PHONE_RE.test(v)) return "Please enter a valid phone number.";
+      // Optional, but if provided must be a valid 10-digit Indian mobile.
+      if (v && !toIndianE164(v)) return "Enter a valid 10-digit mobile number.";
       return "";
     case "subject":
       if (!v) return "Please choose a subject.";
@@ -165,8 +166,9 @@ function ContactFormInner({
           label="Phone (optional)"
           name="phone"
           type="tel"
-          placeholder="+91 98765 43210"
+          placeholder="+91 10-digit mobile number"
           autoComplete="tel"
+          inputMode="tel"
           defaultValue={initialValues?.phone}
           error={showError("phone")}
           onBlur={handleBlur}
@@ -273,6 +275,7 @@ function Field({
   placeholder,
   defaultValue,
   autoComplete,
+  inputMode,
   onBlur,
   onChange,
 }: FieldBaseProps & {
@@ -280,6 +283,7 @@ function Field({
   placeholder?: string;
   defaultValue?: string;
   autoComplete?: string;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }) {
@@ -296,6 +300,7 @@ function Field({
         type={type}
         placeholder={placeholder}
         autoComplete={autoComplete}
+        inputMode={inputMode}
         defaultValue={defaultValue}
         aria-invalid={!!error}
         aria-describedby={error ? errId : undefined}

@@ -1,7 +1,17 @@
 import { createClient } from "@/utils/supabase/server";
 import TempleCard from "@/components/TempleCard";
-import EventCard from "@/components/EventCard";
-import type { Temple, Event } from "@/types/database";
+import AlertCarousel from "@/components/AlertCarousel";
+import type { Temple, Alert, AlertPriority } from "@/types/database";
+
+// Always render fresh so newly-published / expired alerts reflect on reload.
+export const dynamic = "force-dynamic";
+
+// Higher = shown first. Drives priority-based ordering on top of display_order.
+const PRIORITY_RANK: Record<AlertPriority, number> = {
+  urgent: 3,
+  important: 2,
+  info: 1,
+};
 
 export default async function Home() {
   const supabase = await createClient();
@@ -13,17 +23,29 @@ export default async function Home() {
     .eq("is_active", true)
     .order("display_order", { ascending: true });
 
-  // Fetch upcoming events with temple name
-  const today = new Date().toISOString().split("T")[0];
-  const { data: events } = await supabase
-    .from("events")
-    .select("*, temples(name)")
+  // Fetch live alerts within their date window, with optional temple name.
+  // Window logic: started already (or no start) AND not yet ended (or no end).
+  const nowIso = new Date().toISOString();
+  // temples(*) so a not-yet-migrated column (e.g. contact_phone) never breaks
+  // the join — we read whatever temple columns currently exist.
+  const { data: alertsData } = await supabase
+    .from("alerts")
+    .select("*, temples(*)")
     .eq("is_active", true)
-    .gte("event_date", today)
-    .order("event_date", { ascending: true })
-    .limit(4);
+    .or(`starts_at.is.null,starts_at.lte.${nowIso}`)
+    .or(`ends_at.is.null,ends_at.gte.${nowIso}`)
+    .order("display_order", { ascending: true });
 
-  const eventList = (events ?? []) as (Event & { temples: { name: string } | null })[];
+  const alerts = ((alertsData ?? []) as (Alert & {
+    temples: Temple | null;
+  })[]).sort((a, b) => {
+    // Priority first (urgent → info), then display_order, then start date.
+    const p = PRIORITY_RANK[b.priority] - PRIORITY_RANK[a.priority];
+    if (p !== 0) return p;
+    const d = (a.display_order ?? 0) - (b.display_order ?? 0);
+    if (d !== 0) return d;
+    return (a.starts_at ?? "").localeCompare(b.starts_at ?? "");
+  });
 
   return (
     <main className="flex-1">
@@ -49,16 +71,8 @@ export default async function Home() {
             </span>
             Upcoming Alerts
           </h2>
-          {eventList.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {eventList.map((event) => (
-                <EventCard
-                  key={event.id}
-                  event={event}
-                  templeName={event.temples?.name ?? ""}
-                />
-              ))}
-            </div>
+          {alerts.length > 0 ? (
+            <AlertCarousel alerts={alerts} />
           ) : (
             <div className="rounded-xl border border-dashed border-gray-300 bg-card-bg p-8 text-center text-gray-500">
               <p className="font-medium">No upcoming alerts right now.</p>

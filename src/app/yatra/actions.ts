@@ -8,6 +8,7 @@ import { createClient } from "@/utils/supabase/server";
 import { createServiceClient } from "@/utils/supabase/admin";
 import { slugify } from "@/lib/slug";
 import { isGroupPackage, seatsLeftForOne } from "@/lib/yatra";
+import { toIndianE164 } from "@/lib/identifier";
 import type { YatraPackage } from "@/types/database";
 
 const razorpay = new Razorpay({
@@ -58,10 +59,15 @@ function parseBookingForm(formData: FormData): BookingInput {
   if (!full_name || !customer_phone || !travel_date) {
     throw new Error("Please fill name, phone and travel date.");
   }
+  // Normalise + validate the phone server-side (client can be bypassed).
+  const phoneE164 = toIndianE164(customer_phone);
+  if (!phoneE164) {
+    throw new Error("Please enter a valid 10-digit mobile number.");
+  }
   return {
     packageId,
     full_name,
-    customer_phone,
+    customer_phone: phoneE164,
     customer_email,
     travel_date,
     travellers,

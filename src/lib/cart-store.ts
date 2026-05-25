@@ -270,6 +270,15 @@ export async function removeFromCart(rowId: string): Promise<{ ok: boolean }> {
 }
 
 /**
+ * Discard the guest (localStorage) cart without merging. Used after the
+ * server already merged the guest cart via the login cookie, so a second
+ * client-side merge would double-count quantities.
+ */
+export function discardLocalCart(): void {
+  clearLocal();
+}
+
+/**
  * Merge the localStorage cart into the user's remote cart, then
  * clear localStorage. Called by CartSync after successful login.
  */

@@ -225,6 +225,7 @@ import {
 } from "@/lib/shipping/fulfillment";
 import type { RoutableItem } from "@/lib/shipping/resolve-pickup";
 import type { CartItem, ItemType } from "@/types/database";
+import { toIndianE164 } from "@/lib/identifier";
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID!,
@@ -324,9 +325,12 @@ async function getCheckoutData(formData: FormData) {
   const pincode = ((formData.get("pincode") as string) ?? "").trim();
   const notes = ((formData.get("notes") as string) ?? "").trim();
 
+  // Normalise the phone to E.164 (+91XXXXXXXXXX); reject non-Indian-mobile.
+  const phoneE164 = toIndianE164(customer_phone);
+
   const errors: string[] = [];
   if (!full_name) errors.push("name");
-  if (!customer_phone) errors.push("phone");
+  if (!phoneE164) errors.push("phone");
   if (!address_line1) errors.push("address");
   if (!city) errors.push("city");
   if (!state) errors.push("state");
@@ -340,7 +344,7 @@ async function getCheckoutData(formData: FormData) {
     {
       id: user.id,
       full_name,
-      phone: customer_phone || null,
+      phone: phoneE164,
       email: customer_email || user.email || null,
       address_line1,
       address_line2: address_line2 || null,
@@ -420,7 +424,8 @@ async function getCheckoutData(formData: FormData) {
     allowCod,
     customer: {
       full_name,
-      customer_phone,
+      // Always the normalised E.164 form (validated above).
+      customer_phone: phoneE164 as string,
       customer_email,
       address_line1,
       address_line2,

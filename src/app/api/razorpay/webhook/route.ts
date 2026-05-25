@@ -95,7 +95,7 @@ export async function POST(request: Request) {
       })
       .eq(matchCol, matchVal)
       .eq("payment_status", "pending")
-      .select("id")
+      .select("id, user_id")
       .maybeSingle();
 
     if (error) {
@@ -103,9 +103,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "db error" }, { status: 500 });
     }
 
-    // Fulfillment fallback: if the browser never returned to
-    // verifyRazorpayPayment, the shipment is created here instead.
+    // Only the call that actually promoted the order acts (idempotent vs.
+    // the browser-side verifyRazorpayPayment race).
     if (promoted?.id) {
+      // Clear the cart here too: if the browser never returned to
+      // verifyRazorpayPayment (closed tab, lost connection), that path's
+      // cart-clear never ran — this is the safety net so paid orders don't
+      // leave items lingering in the user's cart.
+      if (promoted.user_id) {
+        await admin
+          .from("cart_items")
+          .delete()
+          .eq("user_id", promoted.user_id as string);
+      }
+      // Fulfillment fallback: create the shipment if verify didn't.
       await createPrepaidShipmentForOrderId(admin, promoted.id as string);
     }
   } else if (event.event === "payment.failed") {

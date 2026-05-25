@@ -343,6 +343,7 @@ import { formatInr, parseNumeric } from "@/lib/format";
 import { placeOrder } from "./actions";
 import { aggregatePaymentOptions } from "@/lib/payment";
 import PaymentOptions from "./payment-options";
+import PhoneInput from "@/components/input/PhoneInput";
 
 type ItemMeta = {
   id: string;
@@ -560,16 +561,20 @@ export default async function CheckoutPage({
                   />
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field
-                      label="Mobile number"
-                      name="customer_phone"
-                      required
-                      defaultValue={
-                        profile.phone ??
-                        user.phone ??
-                        ""
-                      }
-                    />
+                    <div>
+                      <label className="block text-xs font-semibold mb-1">
+                        Mobile number
+                      </label>
+                      <PhoneInput
+                        name="customer_phone"
+                        required
+                        defaultValue={
+                          profile.phone ??
+                          user.phone ??
+                          ""
+                        }
+                      />
+                    </div>
 
                     <Field
                       label="Email"

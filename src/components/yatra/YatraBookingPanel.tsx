@@ -7,6 +7,13 @@ import type { YatraPackage } from "@/types/database";
 import { formatInr, parseNumeric } from "@/lib/format";
 import { formatTime, formatWeekdays, isGroupPackage } from "@/lib/yatra";
 import {
+  INDIA_DIAL_CODE,
+  digitsOnly,
+  indianNationalDigits,
+  isValidIndianMobile,
+  toIndianE164,
+} from "@/lib/identifier";
+import {
   createYatraCodBooking,
   createYatraRazorpayOrder,
   verifyYatraPayment,
@@ -55,7 +62,10 @@ export default function YatraBookingPanel({
 
   const [seats, setSeats] = useState(1);
   const [fullName, setFullName] = useState(prefill?.name ?? "");
-  const [phone, setPhone] = useState(prefill?.phone ?? "");
+  // Holds the 10-digit national number only; +91 is shown as a fixed prefix.
+  const [phone, setPhone] = useState(() =>
+    indianNationalDigits(prefill?.phone ?? ""),
+  );
   const [email, setEmail] = useState(prefill?.email ?? "");
   const [travelDate, setTravelDate] = useState("");
   const [pickup, setPickup] = useState("");
@@ -80,7 +90,8 @@ export default function YatraBookingPanel({
     const fd = new FormData();
     fd.set("package_id", pkg.id);
     fd.set("full_name", fullName);
-    fd.set("customer_phone", phone);
+    // Submit the normalised E.164 value (+91XXXXXXXXXX).
+    fd.set("customer_phone", toIndianE164(phone) ?? "");
     fd.set("customer_email", email);
     fd.set("travel_date", travelDate);
     fd.set("travellers", String(billedSeats));
@@ -91,6 +102,8 @@ export default function YatraBookingPanel({
   function validateDetails(): string | null {
     if (!fullName.trim()) return "Please enter your full name.";
     if (!phone.trim()) return "Please enter a mobile number.";
+    if (!isValidIndianMobile(phone))
+      return "Please enter a valid 10-digit mobile number.";
     if (!travelDate) return "Please choose a travel date.";
     if (soldOut) return "This yatra is sold out.";
     if (isGroup && seats > maxSeats)
@@ -300,7 +313,26 @@ export default function YatraBookingPanel({
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <TextField label="Full Name" required value={fullName} onChange={setFullName} placeholder="Enter full name" />
-                <TextField label="Mobile Number" required type="tel" value={phone} onChange={setPhone} placeholder="Enter mobile number" />
+                <div>
+                  <label className="mb-1 block text-xs font-semibold text-gray-700">
+                    Mobile Number <span className="text-brand-red">*</span>
+                  </label>
+                  <div className="flex items-center rounded-lg border border-gray-300 bg-white px-2 py-1 transition-colors focus-within:border-brand-red focus-within:ring-2 focus-within:ring-red-100">
+                    <span className="px-2 py-1.5 text-sm font-medium text-gray-700 select-none mr-1">
+                      +{INDIA_DIAL_CODE}
+                    </span>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="tel-national"
+                      value={phone}
+                      onChange={(e) => setPhone(digitsOnly(e.target.value).slice(0, 10))}
+                      maxLength={10}
+                      placeholder="10-digit mobile number"
+                      className="flex-1 bg-transparent text-sm text-gray-900 placeholder:text-gray-400 outline-none px-1 py-2"
+                    />
+                  </div>
+                </div>
               </div>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <TextField label="Email Address" type="email" value={email} onChange={setEmail} placeholder="Enter email address" />
@@ -344,7 +376,7 @@ export default function YatraBookingPanel({
 
               <dl className="space-y-1.5 rounded-xl border border-brand-gold/15 p-4 text-sm">
                 <ReviewRow label="Name" value={fullName} />
-                <ReviewRow label="Mobile" value={phone} />
+                <ReviewRow label="Mobile" value={phone ? `+${INDIA_DIAL_CODE} ${phone}` : ""} />
                 {email && <ReviewRow label="Email" value={email} />}
                 <ReviewRow label="Travel date" value={travelDate} />
                 {pickup && <ReviewRow label="Pickup" value={pickup} />}
