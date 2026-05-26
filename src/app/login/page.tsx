@@ -2,6 +2,7 @@ import Link from "next/link";
 import { sendOtp } from "./actions";
 import IdentifierInput from "@/components/login/IdentifierInput";
 import PendingCartSnapshot from "@/components/login/PendingCartSnapshot";
+import SubmitButton from "@/components/login/SubmitButton";
 
 export default async function LoginPage({
   searchParams,
@@ -50,17 +51,14 @@ export default async function LoginPage({
             </div>
           )}
 
-          <form className="mt-6 space-y-5">
+          <form action={sendOtp} className="mt-6 space-y-5">
             {nextPath ? (
               <input type="hidden" name="next" value={nextPath} />
             ) : null}
 
             <IdentifierInput autoFocus />
 
-            <button
-              formAction={sendOtp}
-              className="w-full rounded-xl bg-brand-red px-4 py-3.5 text-sm font-semibold text-white hover:bg-brand-red-dark active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-sm"
-            >
+            <SubmitButton pendingLabel="Sending OTP…">
               Continue
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +74,7 @@ export default async function LoginPage({
                   d="M14 5l7 7m0 0l-7 7m7-7H3"
                 />
               </svg>
-            </button>
+            </SubmitButton>
           </form>
 
           <p className="mt-6 text-center text-xs text-gray-500 leading-relaxed">

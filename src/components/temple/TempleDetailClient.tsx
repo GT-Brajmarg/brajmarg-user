@@ -364,11 +364,12 @@ export default function TempleDetailClient({
       </div>
 
       {tab === "schedule" && (
-        <section className="space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="font-serif text-xl font-bold text-gray-900">
-              Daily Darshan Timings
-            </h2>
+        <section className="space-y-5">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <SectionHeading
+              title="Daily Darshan Timings"
+              subtitle="Plan your darshan — slots listed for the selected weekday"
+            />
             {selectedDay === new Date().getDay() && (
               <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-gold-soft px-3 py-1 text-xs font-semibold text-brand-gold">
                 <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
@@ -457,90 +458,17 @@ export default function TempleDetailClient({
       )}
 
       {tab === "seva" && (
-        <section className="space-y-4">
-          <h2 className="text-lg font-bold text-gray-900">Rajbhog / Seva</h2>
+        <section className="space-y-5">
+          <SectionHeading
+            title="Rajbhog / Seva"
+            subtitle="Register a sankalp — sacred service offerings performed in your name"
+          />
           {seva.length === 0 ? (
             <p className="text-sm text-gray-500">No seva listed yet.</p>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {seva.map((s) => (
-                <article
-                  key={s.id}
-                  className="group overflow-hidden rounded-xl border border-gray-200 bg-card-bg"
-                >
-                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-surface-soft">
-                    <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
-                      <ProductCarousel
-                        images={galleryOf(s)}
-                        alt={s.name}
-                      />
-                    </div>
-                    <div className="absolute left-2.5 top-2.5 z-10">
-                      <InCartBadge itemType="seva" itemId={s.id} />
-                    </div>
-                    <ZoomTrigger onOpen={() => openLightbox(galleryOf(s), s.name)} />
-                  </div>
-
-                  <div className="space-y-3 p-5">
-                  <div className="flex items-start justify-between gap-3">
-                    <h3 className="text-lg font-bold text-gray-900 font-serif">
-                      {s.name}
-                    </h3>
-                    <p className="text-base font-bold text-brand-red whitespace-nowrap">
-                      {formatInr(parseNumeric(s.price))}
-                    </p>
-                  </div>
-
-                  {s.time && (
-                    <span className="inline-flex items-center gap-1 text-xs font-medium text-brand-red bg-red-50 px-2.5 py-1 rounded-md">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                      {s.time}
-                    </span>
-                  )}
-
-                  {s.details && (
-                    <div>
-                      <p className="text-xs font-bold text-gray-900 uppercase tracking-wide">
-                        Details
-                      </p>
-                      <p className="text-sm text-gray-600 leading-snug mt-1">
-                        {s.details}
-                      </p>
-                    </div>
-                  )}
-
-                  {s.significance && (
-                    <div>
-                      <p className="text-xs font-bold text-gray-900 uppercase tracking-wide">
-                        Significance
-                      </p>
-                      <blockquote className="border-l-2 border-brand-red pl-3 mt-1 text-sm italic text-gray-600 leading-snug">
-                        {s.significance}
-                      </blockquote>
-                    </div>
-                  )}
-
-                  <CartItemControl
-                    itemType="seva"
-                    itemId={s.id}
-                    label="Register for Seva"
-                    className="py-3"
-                  />
-                  </div>
-                </article>
+                <SevaCard key={s.id} item={s} onZoom={openLightbox} />
               ))}
             </div>
           )}
@@ -850,6 +778,82 @@ function PrasadCard({
             itemId={item.id}
             disabled={!item.in_stock}
             label={item.in_stock ? "Add to cart" : "Out of stock"}
+          />
+        </div>
+      </div>
+    </article>
+  );
+}
+
+/**
+ * Seva card — same compact 4:3 layout as Prasad/Frame/Cloth so the grid
+ * stays uniform across tabs. Surfaces the time pill and a single-line
+ * details hint; the Register CTA replaces the linked footer pill since
+ * Seva (like Prasad) has no detail page.
+ */
+function SevaCard({
+  item,
+  onZoom,
+}: {
+  item: SevaItem;
+  onZoom: (images: Array<string | null | undefined>, alt: string) => void;
+}) {
+  const images = galleryOf(item);
+  return (
+    <article className="group relative flex flex-col overflow-hidden rounded-xl border border-brand-gold/15 bg-card-bg shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-gold/30 hover:shadow-md">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface-soft">
+        <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.03]">
+          <ProductCarousel images={images} alt={item.name} />
+        </div>
+        <div className="absolute left-2.5 top-2.5 z-10">
+          <InCartBadge itemType="seva" itemId={item.id} />
+        </div>
+        <span className="absolute right-2.5 top-2.5 z-10 rounded-full bg-white/90 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-gold shadow-sm backdrop-blur">
+          Seva
+        </span>
+        <ZoomTrigger onOpen={() => onZoom(images, item.name)} />
+      </div>
+      <div className="flex flex-1 flex-col p-3.5">
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="text-sm font-semibold leading-snug text-gray-900 line-clamp-2">
+            {item.name}
+          </h3>
+          <p className="shrink-0 text-base font-bold text-brand-red">
+            {formatInr(parseNumeric(item.price))}
+          </p>
+        </div>
+        {item.time && (
+          <span className="mt-1.5 inline-flex w-fit items-center gap-1 rounded-md bg-red-50 px-2 py-0.5 text-[11px] font-medium text-brand-red">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-3 w-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            {item.time}
+          </span>
+        )}
+        {item.details && (
+          <p className="mt-1 text-[11px] leading-relaxed text-gray-500 line-clamp-1">
+            <span className="font-medium uppercase tracking-wide text-gray-400">
+              Details:
+            </span>{" "}
+            {item.details}
+          </p>
+        )}
+        <div className="mt-auto pt-3">
+          <CartItemControl
+            itemType="seva"
+            itemId={item.id}
+            label="Register for Seva"
           />
         </div>
       </div>

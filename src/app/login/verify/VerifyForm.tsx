@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { resendOtp, verifyOtp } from "../actions";
+import SubmitButton from "@/components/login/SubmitButton";
 
 const OTP_LENGTH = 6;
 const RESEND_SECONDS = 15;
@@ -244,11 +245,7 @@ export default function VerifyForm({
         </div>
       </div>
 
-      <button
-        type="submit"
-        disabled={!otpFilled}
-        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-red px-4 py-3.5 text-sm font-semibold text-white hover:bg-brand-red-dark disabled:bg-brand-red/50 disabled:cursor-not-allowed transition-all shadow-sm"
-      >
+      <SubmitButton disabled={!otpFilled} pendingLabel="Verifying…">
         Verify &amp; Continue
         <svg
           className="h-4 w-4"
@@ -259,7 +256,7 @@ export default function VerifyForm({
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14m0 0l-6-6m6 6l-6 6" />
         </svg>
-      </button>
+      </SubmitButton>
 
       {/* Resend */}
       <div className="text-center text-sm">
