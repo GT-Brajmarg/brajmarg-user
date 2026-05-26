@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff5e0"/>
+      <stop offset="1" stop-color="#f4d8a0"/>
+    </linearGradient>
+    <linearGradient id="silk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e84545"/>
+      <stop offset="0.4" stop-color="#c41e1e"/>
+      <stop offset="1" stop-color="#7a0a0a"/>
+    </linearGradient>
+    <linearGradient id="silkLight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7a0a0a"/>
+      <stop offset="0.5" stop-color="#ff5c5c"/>
+      <stop offset="1" stop-color="#7a0a0a"/>
+    </linearGradient>
+    <linearGradient id="zari" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd76b"/>
+      <stop offset="0.5" stop-color="#d4941a"/>
+      <stop offset="1" stop-color="#7a5208"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="750" fill="url(#bg)"/>
+
+  <!-- Subtle background pattern -->
+  <g fill="#d4941a" opacity="0.08">
+    <circle cx="100" cy="100" r="40"/>
+    <circle cx="500" cy="100" r="40"/>
+    <circle cx="100" cy="650" r="40"/>
+    <circle cx="500" cy="650" r="40"/>
+    <circle cx="300" cy="50" r="20"/>
+    <circle cx="300" cy="700" r="20"/>
+  </g>
+
+  <!-- Folded silk fabric (back layer) -->
+  <path d="M 130 200 L 470 200 L 480 580 L 120 580 Z" fill="#5a0808"/>
+
+  <!-- Main silk fabric -->
+  <path d="M 140 180 L 460 180 L 470 590 L 130 590 Z" fill="url(#silk)"/>
+
+  <!-- Silk highlight (sheen) -->
+  <path d="M 200 180 L 240 180 L 250 590 L 210 590 Z" fill="#ff5c5c" opacity="0.35"/>
+  <path d="M 360 180 L 400 180 L 405 590 L 365 590 Z" fill="#ff5c5c" opacity="0.25"/>
+
+  <!-- Top zari border -->
+  <rect x="130" y="180" width="340" height="36" fill="url(#zari)"/>
+  <rect x="130" y="180" width="340" height="6" fill="#ffe089"/>
+  <rect x="130" y="210" width="340" height="6" fill="#7a5208"/>
+
+  <!-- Top pattern (alternating diamonds) -->
+  <g fill="#7a0a0a">
+    <path d="M 160 188 L 170 198 L 160 208 L 150 198 Z"/>
+    <path d="M 200 188 L 210 198 L 200 208 L 190 198 Z"/>
+    <path d="M 240 188 L 250 198 L 240 208 L 230 198 Z"/>
+    <path d="M 280 188 L 290 198 L 280 208 L 270 198 Z"/>
+    <path d="M 320 188 L 330 198 L 320 208 L 310 198 Z"/>
+    <path d="M 360 188 L 370 198 L 360 208 L 350 198 Z"/>
+    <path d="M 400 188 L 410 198 L 400 208 L 390 198 Z"/>
+    <path d="M 440 188 L 450 198 L 440 208 L 430 198 Z"/>
+  </g>
+
+  <!-- Bottom zari border -->
+  <rect x="130" y="540" width="340" height="50" fill="url(#zari)"/>
+  <rect x="130" y="540" width="340" height="6" fill="#ffe089"/>
+  <rect x="130" y="584" width="340" height="6" fill="#7a5208"/>
+
+  <!-- Bottom decorative pattern (paisley shapes) -->
+  <g fill="#7a0a0a">
+    <path d="M 175 555 Q 185 545 195 555 Q 200 565 195 575 Q 185 580 175 575 Q 170 565 175 555 Z"/>
+    <path d="M 235 555 Q 245 545 255 555 Q 260 565 255 575 Q 245 580 235 575 Q 230 565 235 555 Z"/>
+    <path d="M 295 555 Q 305 545 315 555 Q 320 565 315 575 Q 305 580 295 575 Q 290 565 295 555 Z"/>
+    <path d="M 355 555 Q 365 545 375 555 Q 380 565 375 575 Q 365 580 355 575 Q 350 565 355 555 Z"/>
+    <path d="M 415 555 Q 425 545 435 555 Q 440 565 435 575 Q 425 580 415 575 Q 410 565 415 555 Z"/>
+  </g>
+
+  <!-- Side zari borders (vertical) -->
+  <rect x="130" y="216" width="14" height="324" fill="url(#zari)" opacity="0.85"/>
+  <rect x="456" y="216" width="14" height="324" fill="url(#zari)" opacity="0.85"/>
+
+  <!-- Center embroidery motif -->
+  <g transform="translate(300 380)">
+    <circle r="50" fill="none" stroke="url(#zari)" stroke-width="3" opacity="0.85"/>
+    <circle r="35" fill="none" stroke="url(#zari)" stroke-width="1.5" opacity="0.7"/>
+    <!-- Star/flower -->
+    <g fill="url(#zari)">
+      <ellipse cx="0"   cy="-32" rx="6" ry="20"/>
+      <ellipse cx="0"   cy="32"  rx="6" ry="20"/>
+      <ellipse cx="-32" cy="0"   rx="20" ry="6"/>
+      <ellipse cx="32"  cy="0"   rx="20" ry="6"/>
+      <g transform="rotate(45)">
+        <ellipse cx="0"   cy="-28" rx="5" ry="16"/>
+        <ellipse cx="0"   cy="28"  rx="5" ry="16"/>
+        <ellipse cx="-28" cy="0"   rx="16" ry="5"/>
+        <ellipse cx="28"  cy="0"   rx="16" ry="5"/>
+      </g>
+      <circle r="8" fill="#ffe089"/>
+    </g>
+  </g>
+
+  <!-- Tassels at bottom -->
+  <g stroke="url(#zari)" stroke-width="2.5" stroke-linecap="round">
+    <line x1="160" y1="590" x2="155" y2="640"/>
+    <line x1="170" y1="590" x2="170" y2="645"/>
+    <line x1="180" y1="590" x2="185" y2="640"/>
+
+    <line x1="420" y1="590" x2="415" y2="640"/>
+    <line x1="430" y1="590" x2="430" y2="645"/>
+    <line x1="440" y1="590" x2="445" y2="640"/>
+  </g>
+  <g fill="url(#zari)">
+    <circle cx="170" cy="650" r="6"/>
+    <circle cx="430" cy="650" r="6"/>
+  </g>
+</svg>
