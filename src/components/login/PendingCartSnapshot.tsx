@@ -36,6 +36,8 @@ export default function PendingCartSnapshot() {
           q: r.quantity,
           s: r.selected_size ?? null,
           c: r.selected_color ?? null,
+          // Seva contribution override; null/absent for everything else.
+          p: typeof r.item_price === "number" ? r.item_price : null,
         }))
         .filter((r) => r.t && r.i && r.q > 0);
       if (slim.length === 0) return;

@@ -19,8 +19,10 @@ export default function RazorpayButton({
   total: number;
 }) {
   const [loading, setLoading] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   async function handlePay() {
+    setFormError(null);
     setLoading(true);
 
     const form = document.getElementById(
@@ -33,8 +35,22 @@ export default function RazorpayButton({
       return;
     }
 
-    // Trigger browser validation
-    if (!form.reportValidity()) {
+    // Validate the checkout form before opening Razorpay. Without this, a
+    // missing required field would silently block the popup and the user
+    // would think the button was broken. Surface a clear inline message AND
+    // scroll the first invalid field into view, so the cause is obvious.
+    if (!form.checkValidity()) {
+      const firstInvalid = form.querySelector<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >(":invalid");
+      const label = describeField(firstInvalid);
+      setFormError(
+        label
+          ? `Please complete the “${label}” field before paying.`
+          : "Please complete all required fields before paying.",
+      );
+      form.reportValidity(); // native focus ring on the bad field
+      firstInvalid?.scrollIntoView({ behavior: "smooth", block: "center" });
       setLoading(false);
       return;
     }
@@ -119,13 +135,50 @@ export default function RazorpayButton({
   }
 
   return (
-    <button
-      type="button"
-      onClick={handlePay}
-      disabled={loading}
-      className="w-full rounded-lg bg-brand-red text-white px-5 py-3 font-semibold disabled:opacity-60"
-    >
-      {loading ? "Processing..." : `Pay Online ₹${total}`}
-    </button>
+    <div className="space-y-2">
+      {formError && (
+        <div
+          role="alert"
+          className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-2.5 text-sm text-amber-800"
+        >
+          {formError}
+        </div>
+      )}
+      <button
+        type="button"
+        onClick={handlePay}
+        disabled={loading}
+        className="w-full rounded-lg bg-brand-red text-white px-5 py-3 font-semibold disabled:opacity-60"
+      >
+        {loading ? "Processing..." : `Pay Online ₹${total}`}
+      </button>
+    </div>
   );
+}
+
+/**
+ * Best-effort human label for a form control: prefers a <label for=...>,
+ * falls back to aria-label, then the name attribute. Used to tell the user
+ * which field is blocking the Razorpay popup.
+ */
+function describeField(
+  el: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null,
+): string | null {
+  if (!el) return null;
+  if (el.id) {
+    const lbl = document.querySelector(
+      `label[for="${CSS.escape(el.id)}"]`,
+    );
+    if (lbl?.textContent) return lbl.textContent.trim().replace(/\s*\*$/, "");
+  }
+  const parentLabel = el.closest("label")?.textContent;
+  if (parentLabel) return parentLabel.trim().replace(/\s*\*$/, "");
+  const aria = el.getAttribute("aria-label");
+  if (aria) return aria;
+  if (el.name) {
+    // "address_line1" -> "Address line1", "customer_phone" -> "Customer phone"
+    const pretty = el.name.replace(/_/g, " ");
+    return pretty.charAt(0).toUpperCase() + pretty.slice(1);
+  }
+  return null;
 }

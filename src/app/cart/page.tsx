@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { CART_CHANGE_EVENT, getCart, discardLocalCart } from "@/lib/cart-store";
 import { enrichCartRows } from "@/lib/cart-enrich";
+import {
+  readCartSnapshot,
+  writeCartSnapshot,
+  clearCartSnapshot,
+} from "@/lib/cart-snapshot";
 import type { OrderItem, Order } from "@/types/database";
 import type { EnrichedCartRow } from "@/types/cart";
 import { formatInr, parseNumeric } from "@/lib/format";
 import CartActions from "@/components/CartActions";
-
-type Phase = "loading" | "ready";
 
 type LastOrder = Order & { order_items: OrderItem[] };
 
@@ -41,53 +44,78 @@ function PlacedBanner() {
 function CartPageInner() {
   const params = useSearchParams();
   const placed = params.get("placed");
-  const [phase, setPhase] = useState<Phase>("loading");
-  const [rows, setRows] = useState<EnrichedCartRow[]>([]);
+
+  // Hydrate from the session snapshot synchronously so the cart UI renders
+  // instantly — no full-screen "Loading your cart…" gate on repeat visits.
+  const initialSnapshot = readCartSnapshot(null);
+  const [rows, setRows] = useState<EnrichedCartRow[]>(
+    () => initialSnapshot ?? [],
+  );
+  // True until the FIRST background fetch resolves. Used only to keep the
+  // empty-state from flashing before we actually know the cart is empty.
+  const [bootstrapped, setBootstrapped] = useState<boolean>(
+    initialSnapshot !== null,
+  );
+  const [refreshing, setRefreshing] = useState<boolean>(false);
   const [authed, setAuthed] = useState<boolean>(false);
   const [lastOrder, setLastOrder] = useState<LastOrder | null>(null);
 
+  // Guard against overlapping fetches (e.g. event + qty change firing together).
+  const loadingRef = useRef(false);
+
   const load = useCallback(async () => {
-    const supabase = createClient();
+    if (loadingRef.current) return;
+    loadingRef.current = true;
+    setRefreshing(true);
+    try {
+      const supabase = createClient();
 
-    // After a successful order (?placed=...), the DB cart was already
-    // cleared server-side. Defensively wipe any lingering guest localStorage
-    // cart so stale items can't reappear in the UI.
-    if (placed) discardLocalCart();
+      // After a successful order (?placed=...), the DB cart was already
+      // cleared server-side. Defensively wipe any lingering guest cart
+      // AND the snapshot so stale items can't reappear in the UI.
+      if (placed) {
+        discardLocalCart();
+        clearCartSnapshot();
+      }
 
-    // Check auth
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    const isAuthed = Boolean(user);
-    setAuthed(isAuthed);
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const isAuthed = Boolean(user);
+      setAuthed(isAuthed);
 
-    // Read cart (works for both modes)
-    const cart = await getCart();
+      const cart = await getCart();
+      const enriched = await enrichCartRows(supabase, cart);
 
-    // Enrich with item details
-    const enriched = await enrichCartRows(supabase, cart);
-    setRows(enriched);
+      setRows(enriched);
+      writeCartSnapshot(user?.id ?? null, enriched);
 
-    // Fetch last order if logged in
-    if (isAuthed) {
-      const { data: orderRows } = await supabase
-        .from("orders")
-        .select("*, order_items(*)")
-        .order("created_at", { ascending: false })
-        .limit(1);
-      const last = (orderRows ?? [])[0] as LastOrder | undefined;
-      setLastOrder(last ?? null);
-    } else {
-      setLastOrder(null);
+      if (isAuthed) {
+        const { data: orderRows } = await supabase
+          .from("orders")
+          .select("*, order_items(*)")
+          .order("created_at", { ascending: false })
+          .limit(1);
+        const last = (orderRows ?? [])[0] as LastOrder | undefined;
+        setLastOrder(last ?? null);
+      } else {
+        setLastOrder(null);
+      }
+    } finally {
+      setRefreshing(false);
+      setBootstrapped(true);
+      loadingRef.current = false;
     }
-
-    setPhase("ready");
   }, [placed]);
 
+  // Background refresh on mount — does NOT block the UI; rows are already
+  // hydrated from the snapshot.
   useEffect(() => {
     void load();
   }, [load]);
 
+  // Live updates: when something elsewhere mutates the cart (add / remove /
+  // qty), re-run the same silent load. No loader is shown.
   useEffect(() => {
     const onCart = () => void load();
     window.addEventListener(CART_CHANGE_EVENT, onCart);
@@ -96,11 +124,24 @@ function CartPageInner() {
 
   const subtotal = rows.reduce((s, r) => s + r.unit_price * r.quantity, 0);
 
+  // The empty state is only "truthful" after the first background fetch
+  // resolved — before that, an empty cache could mean "we don't know yet".
+  const showEmptyState = bootstrapped && rows.length === 0;
+
   return (
     <main className="flex-1">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <div className="flex items-center justify-between gap-4">
-          <h1 className="text-2xl font-bold text-gray-900">Your cart</h1>
+          <h1 className="flex items-center gap-2 text-2xl font-bold text-gray-900">
+            Your cart
+            {refreshing && rows.length > 0 && (
+              <span
+                className="inline-flex h-3 w-3 animate-pulse rounded-full bg-brand-red/60"
+                aria-label="Refreshing cart"
+                title="Refreshing…"
+              />
+            )}
+          </h1>
           <Link
             href="/"
             className="text-sm font-semibold text-brand-red hover:underline"
@@ -127,24 +168,7 @@ function CartPageInner() {
           </div>
         )}
 
-        {phase === "loading" ? (
-          <div className="rounded-xl border border-gray-200 bg-card-bg p-10 text-center text-gray-500">
-            Loading your cart…
-          </div>
-        ) : rows.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-gray-300 bg-card-bg p-10 text-center text-gray-600">
-            <p className="font-medium">Your cart is empty</p>
-            <p className="text-sm mt-2">
-              Add prasad, seva, frames, or cloth from a temple page.
-            </p>
-            <Link
-              href="/"
-              className="inline-flex mt-6 rounded-lg bg-brand-red text-white text-sm font-semibold px-5 py-2.5 hover:bg-brand-red-dark"
-            >
-              Explore temples
-            </Link>
-          </div>
-        ) : (
+        {rows.length > 0 ? (
           <>
             <ul className="space-y-4">
               {rows.map((row) => (
@@ -193,6 +217,24 @@ function CartPageInner() {
               )}
             </div>
           </>
+        ) : showEmptyState ? (
+          <div className="rounded-xl border border-dashed border-gray-300 bg-card-bg p-10 text-center text-gray-600">
+            <p className="font-medium">Your cart is empty</p>
+            <p className="text-sm mt-2">
+              Add prasad, seva, frames, or cloth from a temple page.
+            </p>
+            <Link
+              href="/"
+              className="inline-flex mt-6 rounded-lg bg-brand-red text-white text-sm font-semibold px-5 py-2.5 hover:bg-brand-red-dark"
+            >
+              Explore temples
+            </Link>
+          </div>
+        ) : (
+          // First-ever visit with no snapshot — show a quiet skeleton, not
+          // a full-screen blocker. Disappears the moment the background
+          // fetch resolves.
+          <CartSkeleton />
         )}
 
         {/* Last order section (only for logged-in users) */}
@@ -254,3 +296,23 @@ function CartPageInner() {
   );
 }
 
+/** Lightweight skeleton — shown only on the very first visit (no snapshot). */
+function CartSkeleton() {
+  return (
+    <ul className="space-y-4" aria-hidden="true">
+      {[0, 1].map((i) => (
+        <li
+          key={i}
+          className="flex gap-4 rounded-xl border border-gray-200 bg-card-bg p-4"
+        >
+          <div className="h-20 w-20 shrink-0 animate-pulse rounded-lg bg-gray-100" />
+          <div className="flex-1 space-y-2 py-1">
+            <div className="h-4 w-3/5 animate-pulse rounded bg-gray-100" />
+            <div className="h-3 w-2/5 animate-pulse rounded bg-gray-100" />
+            <div className="h-8 w-28 mt-3 animate-pulse rounded bg-gray-100" />
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}

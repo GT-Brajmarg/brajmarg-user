@@ -344,6 +344,7 @@ import { placeOrder } from "./actions";
 import { aggregatePaymentOptions } from "@/lib/payment";
 import PaymentOptions from "./payment-options";
 import PhoneInput from "@/components/input/PhoneInput";
+import CityStateFields from "@/components/checkout/CityStateFields";
 
 type ItemMeta = {
   id: string;
@@ -563,7 +564,7 @@ export default async function CheckoutPage({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold mb-1">
-                        Mobile number
+                        Mobile number <span className="text-brand-red">*</span>
                       </label>
                       <PhoneInput
                         name="customer_phone"
@@ -612,32 +613,10 @@ export default async function CheckoutPage({
                   />
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <Field
-                      label="City"
-                      name="city"
-                      required
-                      defaultValue={
-                        profile.city ?? ""
-                      }
-                    />
-
-                    <Field
-                      label="State"
-                      name="state"
-                      required
-                      defaultValue={
-                        profile.state ?? ""
-                      }
-                    />
-
-                    <Field
-                      label="Pincode"
-                      name="pincode"
-                      required
-                      maxLength={6}
-                      defaultValue={
-                        profile.pincode ?? ""
-                      }
+                    <CityStateFields
+                      defaultCity={profile.city ?? ""}
+                      defaultState={profile.state ?? ""}
+                      defaultPincode={profile.pincode ?? ""}
                     />
                   </div>
                 </section>
@@ -736,19 +715,22 @@ function Field({
   defaultValue?: string;
   maxLength?: number;
 }) {
+  const inputId = `field-${name}`;
   return (
     <div>
-      <label className="block text-xs font-semibold mb-1">
+      <label htmlFor={inputId} className="block text-xs font-semibold mb-1">
         {label}
+        {required && <span className="text-brand-red"> *</span>}
       </label>
 
       <input
+        id={inputId}
         name={name}
         type={type}
         required={required}
         defaultValue={defaultValue}
         maxLength={maxLength}
-        className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm"
+        className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-brand-red focus:ring-2 focus:ring-red-100"
       />
     </div>
   );

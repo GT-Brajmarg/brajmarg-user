@@ -8,6 +8,7 @@ import {
   useRemoteCartCache,
   CART_CHANGE_EVENT,
 } from "@/lib/cart-store";
+import { clearCartSnapshot } from "@/lib/cart-snapshot";
 
 // Set by PendingCartSnapshot when the guest cart was flushed to the login
 // cookie. If present, the server already merged it — clear local, don't merge.
@@ -41,7 +42,14 @@ export default function CartSync() {
     let active = true;
 
     async function maybeMerge(userId: string | null) {
-      // Only act on the transition into a signed-in state.
+      // On any user-id change, the previous user's enriched-cart snapshot
+      // must be dropped so a different signed-in user (or a guest after
+      // logout) never sees stale items from another session.
+      if (userId !== lastUserId.current) {
+        clearCartSnapshot();
+      }
+      // Only run the guest -> user merge on the transition INTO a
+      // signed-in state. Logout / unchanged state: nothing more to do.
       if (!userId || userId === lastUserId.current) {
         lastUserId.current = userId;
         return;

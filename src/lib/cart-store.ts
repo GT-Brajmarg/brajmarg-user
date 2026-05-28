@@ -42,6 +42,11 @@ export type CartRow = {
   quantity: number;
   selected_size: string | null;
   selected_color: string | null;
+  // Optional per-row price override. Used by Seva contributions where the
+  // user picks the amount (the catalog price is just a suggestion). NULL
+  // for every other item type — prasad / frame / cloth use the catalog
+  // price as-is. Mirrors order_items.item_price.
+  item_price: number | null;
   created_at: string;
 };
 
@@ -115,7 +120,9 @@ export async function getCart(): Promise<CartRow[]> {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("cart_items")
-    .select("id, item_type, item_id, quantity, selected_size, selected_color, created_at")
+    .select(
+      "id, item_type, item_id, quantity, selected_size, selected_color, item_price, created_at"
+    )
     .order("created_at", { ascending: true });
   if (error) return [];
   return (data ?? []) as CartRow[];
@@ -139,6 +146,10 @@ export type AddToCartArgs = {
   quantity?: number;
   selected_size?: string | null;
   selected_color?: string | null;
+  // When set, this is a per-row price override (used by Seva). Triggers the
+  // "set my contribution" semantic in addToCart: an existing row is REPLACED
+  // (not summed) so the user can change their amount.
+  item_price?: number | null;
 };
 
 function sameVariant(
@@ -153,13 +164,30 @@ function sameVariant(
   );
 }
 
-/** Add an item to the cart (works for guest and logged-in users). */
+/** Add an item to the cart (works for guest and logged-in users).
+ *
+ * Two semantics, switched by whether `item_price` is passed:
+ *
+ *  - **undefined** (default for prasad/frame/cloth): existing dedupe
+ *    behavior — if the same (item_type, item_id, size, color) row exists,
+ *    its quantity is INCREASED by `quantity`. Catalog price applies.
+ *
+ *  - **set** (Seva contributions): "set my contribution to X" semantic —
+ *    if the row exists, the price is REPLACED and quantity is kept at 1
+ *    (we're not stacking ₹500 + ₹501, we're updating the amount). If
+ *    explicitly passed as `null`, the override is cleared (catalog price
+ *    applies again).
+ */
 export async function addToCart(
   args: AddToCartArgs
 ): Promise<{ ok: true } | { ok: false; message: string }> {
-  const quantity = args.quantity ?? 1;
+  // Price-override path forces quantity to 1 (per the "set my contribution"
+  // semantic above). Otherwise honour the caller's quantity (default 1).
+  const overridePrice = args.item_price !== undefined;
+  const quantity = overridePrice ? 1 : args.quantity ?? 1;
   const selected_size = args.selected_size ?? null;
   const selected_color = args.selected_color ?? null;
+  const item_price = overridePrice ? (args.item_price ?? null) : null;
 
   const userId = await getAuthUserId();
 
@@ -168,7 +196,13 @@ export async function addToCart(
     const items = readLocal();
     const existing = items.find((i) => sameVariant(i, args));
     if (existing) {
-      existing.quantity += quantity;
+      if (overridePrice) {
+        // Replace amount; keep quantity at 1.
+        existing.item_price = item_price;
+        existing.quantity = 1;
+      } else {
+        existing.quantity += quantity;
+      }
     } else {
       items.push({
         id: newId(),
@@ -177,6 +211,7 @@ export async function addToCart(
         quantity,
         selected_size,
         selected_color,
+        item_price,
         created_at: new Date().toISOString(),
       });
     }
@@ -203,9 +238,12 @@ export async function addToCart(
   if (selErr) return { ok: false, message: selErr.message };
 
   if (existing) {
+    const update: { quantity: number; item_price?: number | null } = overridePrice
+      ? { quantity: 1, item_price }
+      : { quantity: existing.quantity + quantity };
     const { error: upErr } = await supabase
       .from("cart_items")
-      .update({ quantity: existing.quantity + quantity })
+      .update(update)
       .eq("id", existing.id);
     if (upErr) return { ok: false, message: upErr.message };
   } else {
@@ -216,6 +254,7 @@ export async function addToCart(
       quantity,
       selected_size,
       selected_color,
+      item_price,
     });
     if (insErr) return { ok: false, message: insErr.message };
   }
@@ -319,6 +358,8 @@ export async function mergeLocalIntoRemote(): Promise<void> {
         quantity: item.quantity,
         selected_size: item.selected_size,
         selected_color: item.selected_color,
+        // Carry the local Seva contribution override into the remote cart.
+        item_price: item.item_price ?? null,
       });
     }
   }
