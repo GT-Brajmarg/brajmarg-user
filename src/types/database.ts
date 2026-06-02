@@ -232,6 +232,8 @@ export type CartItem = {
   quantity: number;
   selected_size: string | null;
   selected_color: string | null;
+  // Per-row price override (Seva contributions). NULL = use catalog price.
+  item_price: number | null;
   created_at: string;
   updated_at: string;
 };

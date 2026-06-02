@@ -68,10 +68,20 @@ export async function enrichCartRows(
     .filter((row) => map.has(`${row.item_type}:${row.item_id}`))
     .map((row) => {
       const meta = map.get(`${row.item_type}:${row.item_id}`)!;
+      // Effective unit price: Seva contributions can override the catalog
+      // price via cart_items.item_price ("set my contribution to X"). For
+      // every other item type the override is null and we fall back to the
+      // catalog price. Mirrors checkout's effectiveUnitPrice helper.
+      const override =
+        typeof row.item_price === "number" &&
+        Number.isFinite(row.item_price) &&
+        row.item_price > 0
+          ? row.item_price
+          : null;
       return {
         ...row,
         title: meta.name,
-        unit_price: parseNumeric(meta.price),
+        unit_price: override ?? parseNumeric(meta.price),
         // Primary gallery image first; falls back to legacy single.
         image_url: galleryOf(meta)[0] ?? meta.image_url,
         temple_name: meta.temples?.name ?? null,

@@ -468,7 +468,12 @@ export default function TempleDetailClient({
           ) : (
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {seva.map((s) => (
-                <SevaCard key={s.id} item={s} onZoom={openLightbox} />
+                <SevaCard
+                  key={s.id}
+                  item={s}
+                  templeSlug={templeSlug}
+                  onZoom={openLightbox}
+                />
               ))}
             </div>
           )}
@@ -793,11 +798,17 @@ function PrasadCard({
  */
 function SevaCard({
   item,
+  templeSlug,
   onZoom,
 }: {
   item: SevaItem;
+  templeSlug: string;
   onZoom: (images: Array<string | null | undefined>, alt: string) => void;
 }) {
+  // Seva names are Hindi/Devanagari -> slugify() returns "" for them; use
+  // the row id as the URL key (robust + unique). The detail page also lets
+  // the user pick a CUSTOM contribution amount.
+  const detailHref = `/temple/${templeSlug}/seva/${item.id}`;
   const images = galleryOf(item);
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-xl border border-brand-gold/15 bg-card-bg shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-gold/30 hover:shadow-md">
@@ -815,9 +826,12 @@ function SevaCard({
       </div>
       <div className="flex flex-1 flex-col p-3.5">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="text-sm font-semibold leading-snug text-gray-900 line-clamp-2">
+          <Link
+            href={detailHref}
+            className="text-sm font-semibold leading-snug text-gray-900 line-clamp-2 hover:text-brand-red"
+          >
             {item.name}
-          </h3>
+          </Link>
           <p className="shrink-0 text-base font-bold text-brand-red">
             {formatInr(parseNumeric(item.price))}
           </p>
@@ -855,6 +869,12 @@ function SevaCard({
             itemId={item.id}
             label="Register for Seva"
           />
+          <Link
+            href={detailHref}
+            className="mt-2 block text-center text-[11px] font-medium text-brand-red hover:underline"
+          >
+            View details · Contribute custom amount →
+          </Link>
         </div>
       </div>
     </article>

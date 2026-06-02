@@ -306,6 +306,29 @@ type ItemMeta = {
   allow_cod?: boolean | null;
 };
 
+/**
+ * Effective per-unit price for a cart row.
+ *
+ * Seva contributions can override the catalog price via cart_items.item_price
+ * ("set my contribution to X"). For every other item type, item_price is NULL
+ * and we use the catalog price as-is. A positive, finite override wins;
+ * otherwise fall back to the catalog price so a bad override never silently
+ * sets the price to zero.
+ */
+function effectiveUnitPrice(
+  row: { item_price?: number | null },
+  meta: { price: number | string }
+): number {
+  if (
+    typeof row.item_price === "number" &&
+    Number.isFinite(row.item_price) &&
+    row.item_price > 0
+  ) {
+    return row.item_price;
+  }
+  return Number(meta.price) || 0;
+}
+
 async function getCheckoutData(formData: FormData) {
   const supabase = await createClient();
 
@@ -408,7 +431,8 @@ async function getCheckoutData(formData: FormData) {
   for (const row of cart) {
     const meta = map.get(`${row.item_type}:${row.item_id}`);
     if (!meta) continue;
-    total += Number(meta.price) * row.quantity;
+    // Honor per-row price override (Seva contributions); fallback = catalog.
+    total += effectiveUnitPrice(row, meta) * row.quantity;
   }
 
   // Cart-level payment capability (strictest wins across all items).
@@ -506,7 +530,7 @@ export async function placeOrder(formData: FormData) {
       item_type: row.item_type,
       item_id: row.item_id,
       item_name: meta.name,
-      item_price: Number(meta.price),
+      item_price: effectiveUnitPrice(row, meta),
       quantity: row.quantity,
       selected_size: row.selected_size,
       selected_color: row.selected_color,
@@ -578,7 +602,7 @@ function buildRoutableItems(
       return {
         item_id: row.item_id,
         item_name: meta.name,
-        item_price: Number(meta.price),
+        item_price: effectiveUnitPrice(row, meta),
         quantity: row.quantity,
         temple_id: meta.temple_id ?? null,
       };
@@ -639,7 +663,7 @@ export async function createRazorpayOrder(formData: FormData) {
       item_type: row.item_type,
       item_id: row.item_id,
       item_name: meta.name,
-      item_price: Number(meta.price),
+      item_price: effectiveUnitPrice(row, meta),
       quantity: row.quantity,
       selected_size: row.selected_size,
       selected_color: row.selected_color,

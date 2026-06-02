@@ -49,6 +49,8 @@ type SlimCartRow = {
   q: number;
   s: string | null;
   c: string | null;
+  // Seva contribution price override. null/missing = catalog price.
+  p?: number | null;
 };
 
 /**
@@ -87,9 +89,15 @@ async function mergePendingCartCookie(): Promise<void> {
   for (const r of rows) {
     const item_type = r.t;
     const item_id = r.i;
-    const quantity = Number(r.q);
     const selected_size = r.s ?? null;
     const selected_color = r.c ?? null;
+    const item_price =
+      typeof r.p === "number" && Number.isFinite(r.p) && r.p > 0 ? r.p : null;
+    // Seva contribution override = "set my amount" semantic (qty stays 1,
+    // existing row's price gets REPLACED, not summed). Anything else uses
+    // the usual sum-quantity-on-dedupe behavior.
+    const overridePrice = item_price !== null;
+    const quantity = overridePrice ? 1 : Number(r.q);
 
     if (!CART_ITEM_TYPES.has(item_type)) continue;
     if (!item_id || !Number.isFinite(quantity) || quantity < 1) continue;
@@ -107,10 +115,10 @@ async function mergePendingCartCookie(): Promise<void> {
     const { data: existing } = await q.maybeSingle();
 
     if (existing) {
-      await supabase
-        .from("cart_items")
-        .update({ quantity: existing.quantity + quantity })
-        .eq("id", existing.id);
+      const update: { quantity: number; item_price?: number | null } = overridePrice
+        ? { quantity: 1, item_price }
+        : { quantity: existing.quantity + quantity };
+      await supabase.from("cart_items").update(update).eq("id", existing.id);
     } else {
       await supabase.from("cart_items").insert({
         user_id: user.id,
@@ -119,6 +127,7 @@ async function mergePendingCartCookie(): Promise<void> {
         quantity,
         selected_size,
         selected_color,
+        item_price,
       });
     }
   }

@@ -11,6 +11,11 @@ type Props = {
   selectedSize?: string | null;
   selectedColor?: string | null;
   quantity?: number;
+  // Optional per-row price override. Used by the Seva "Contribute" flow:
+  // when set, the cart row is created/updated with this exact amount
+  // instead of the catalog price, and quantity is forced to 1 ("set my
+  // contribution to X" — see cart-store.addToCart).
+  itemPrice?: number | null;
   label?: string;
   onSuccess?: () => void;
   onError?: (message: string) => void;
@@ -26,6 +31,7 @@ export default function AddToCartButton({
   selectedSize = null,
   selectedColor = null,
   quantity = 1,
+  itemPrice,
   label = "Add to cart",
   onSuccess,
   onError,
@@ -62,6 +68,9 @@ export default function AddToCartButton({
             quantity,
             selected_size: selectedSize,
             selected_color: selectedColor,
+            // Only thread the override when explicitly provided. undefined =
+            // catalog price (sum-on-dedupe); number = override (replace, qty 1).
+            ...(itemPrice !== undefined ? { item_price: itemPrice } : {}),
           });
           if (!res.ok) {
             setPhase("idle");
