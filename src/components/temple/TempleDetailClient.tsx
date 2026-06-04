@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import type {
   ClothItem,
   FrameItem,
@@ -99,7 +105,9 @@ export default function TempleDetailClient({
   //     navigation) honours the ?tab= param so the last tab is kept.
   const initialTab = useMemo<TabId>(() => {
     const fromUrl = searchParams.get("tab");
-    const valid = TABS.some((x) => x.id === fromUrl) ? (fromUrl as TabId) : null;
+    const valid = TABS.some((x) => x.id === fromUrl)
+      ? (fromUrl as TabId)
+      : null;
     if (typeof window !== "undefined") {
       const nav = performance.getEntriesByType("navigation")[0] as
         | PerformanceNavigationTiming
@@ -129,14 +137,16 @@ export default function TempleDetailClient({
       else url.searchParams.set("tab", next);
       router.replace(`${url.pathname}${url.search}`, { scroll: false });
     },
-    [router]
+    [router],
   );
 
   // Keep the active tab in sync with Back/Forward navigation.
   useEffect(() => {
     const onPop = () => {
       const fromUrl = new URLSearchParams(window.location.search).get("tab");
-      setTab(TABS.some((x) => x.id === fromUrl) ? (fromUrl as TabId) : "schedule");
+      setTab(
+        TABS.some((x) => x.id === fromUrl) ? (fromUrl as TabId) : "schedule",
+      );
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
@@ -195,14 +205,86 @@ export default function TempleDetailClient({
       timings
         .filter((row) => timingMatchesDay(row.day_of_week, selectedDay))
         .sort((a, b) => a.opening_time.localeCompare(b.opening_time)),
-    [timings, selectedDay]
+    [timings, selectedDay],
   );
+  // const now = new Date();
+  // const TEST_MODE = true;
+  // const TEST_TIME = "07:40"; // Change this while testing
 
+  const now = new Date();
+
+  // if (TEST_MODE) {
+  //   const [h, m] = TEST_TIME.split(":").map(Number);
+  //   now.setHours(h, m, 0, 0);
+  // }
+
+  const isToday = selectedDay === now.getDay();
+
+  const activeEvents = isToday
+    ? dayTimings.filter((row) =>
+        isCurrentDarshan(row.opening_time, row.closing_time, selectedDay, now),
+      )
+    : [];
+
+  const currentEvent = activeEvents.sort((a, b) => {
+    const durationA =
+      new Date(`2000-01-01T${a.closing_time}`).getTime() -
+      new Date(`2000-01-01T${a.opening_time}`).getTime();
+
+    const durationB =
+      new Date(`2000-01-01T${b.closing_time}`).getTime() -
+      new Date(`2000-01-01T${b.opening_time}`).getTime();
+
+    return durationA - durationB;
+  })[0];
+
+  const upcomingEvent = isToday
+    ? dayTimings.find((row) => {
+        const [hour, minute] = row.opening_time.split(":").map(Number);
+
+        const start = new Date(now);
+        start.setHours(hour, minute, 0, 0);
+
+        return start > now;
+      })
+    : undefined;
+
+  const nextDarshanCountdown = useMemo(() => {
+    if (!isToday || !upcomingEvent) return null;
+
+    const [hour, minute] = upcomingEvent.opening_time.split(":").map(Number);
+
+    const start = new Date(now);
+    start.setHours(hour, minute, 0, 0);
+
+    const diffMs = start.getTime() - now.getTime();
+
+    if (diffMs <= 0) return null;
+
+    const totalMinutes = Math.floor(diffMs / 1000 / 60);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+
+    return { hours, minutes };
+  }, [isToday, upcomingEvent, now]);
+
+  const visibleTimings = useMemo(() => {
+    // For today, hide completed darshans
+    if (isToday) {
+      return dayTimings.filter(
+        (row) => !isCompletedDarshan(row.closing_time, selectedDay, now),
+      );
+    }
+
+    return dayTimings;
+  }, [dayTimings, isToday, selectedDay, now]);
   const frameGroups = useMemo(() => groupFrameItems(frames), [frames]);
   const templeSlug = useMemo(() => slugify(temple.name), [temple.name]);
 
-  const openLightbox = (images: Array<string | null | undefined>, alt: string) =>
-    setLightbox({ images, alt });
+  const openLightbox = (
+    images: Array<string | null | undefined>,
+    alt: string,
+  ) => setLightbox({ images, alt });
 
   // Breadcrumb Back: step back through history when there's an
   // in-app entry to return to, otherwise land on the home dashboard.
@@ -213,6 +295,41 @@ export default function TempleDetailClient({
       router.push("/");
     }
   }, [router]);
+
+  function isCurrentDarshan(
+    openingTime: string,
+    closingTime: string,
+    selectedDay: number,
+    now: Date,
+  ) {
+    if (selectedDay !== now.getDay()) return false;
+
+    const [openHour, openMinute] = openingTime.split(":").map(Number);
+    const [closeHour, closeMinute] = closingTime.split(":").map(Number);
+
+    const start = new Date(now);
+    start.setHours(openHour, openMinute, 0, 0);
+
+    const end = new Date(now);
+    end.setHours(closeHour, closeMinute, 0, 0);
+
+    return now >= start && now <= end;
+  }
+
+  function isCompletedDarshan(
+    closingTime: string,
+    selectedDay: number,
+    now: Date,
+  ) {
+    if (selectedDay !== now.getDay()) return false;
+
+    const [hour, minute] = closingTime.split(":").map(Number);
+
+    const end = new Date(now);
+    end.setHours(hour, minute, 0, 0);
+
+    return now > end;
+  }
 
   return (
     <div>
@@ -257,36 +374,56 @@ export default function TempleDetailClient({
 
       {/* Content below hero */}
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-
-      {/* Back button + breadcrumb */}
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          onClick={goBack}
-          aria-label="Go back"
-          className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-brand-red/30 bg-card-bg px-3.5 py-1.5 text-sm font-semibold text-brand-red transition-colors hover:bg-brand-red hover:text-white hover:border-brand-red"
-        >
-          <svg
-            className="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
+        {/* Back button + breadcrumb */}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={goBack}
+            aria-label="Go back"
+            className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-brand-red/30 bg-card-bg px-3.5 py-1.5 text-sm font-semibold text-brand-red transition-colors hover:bg-brand-red hover:text-white hover:border-brand-red"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 18l-6-6 6-6" />
-          </svg>
-          Back
-        </button>
+            <svg
+              className="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 18l-6-6 6-6"
+              />
+            </svg>
+            Back
+          </button>
 
-        <nav aria-label="Breadcrumb" className="min-w-0">
-          <ol className="flex items-center gap-1.5 text-sm text-gray-500">
-            <li>
-              <Link
-                href="/"
-                className="inline-flex items-center gap-1 text-gray-500 transition-colors hover:text-brand-red"
-              >
+          <nav aria-label="Breadcrumb" className="min-w-0">
+            <ol className="flex items-center gap-1.5 text-sm text-gray-500">
+              <li>
+                <Link
+                  href="/"
+                  className="inline-flex items-center gap-1 text-gray-500 transition-colors hover:text-brand-red"
+                >
+                  <svg
+                    className="h-3.5 w-3.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3v-6h6v6h3a1 1 0 001-1V10"
+                    />
+                  </svg>
+                  <span className="hidden sm:inline">Home</span>
+                </Link>
+              </li>
+              <li aria-hidden="true">
                 <svg
-                  className="h-3.5 w-3.5"
+                  className="h-3.5 w-3.5 text-gray-400"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -295,238 +432,328 @@ export default function TempleDetailClient({
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3v-6h6v6h3a1 1 0 001-1V10"
+                    d="M9 6l6 6-6 6"
                   />
                 </svg>
-                <span className="hidden sm:inline">Home</span>
-              </Link>
-            </li>
-            <li aria-hidden="true">
-              <svg
-                className="h-3.5 w-3.5 text-gray-400"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 6l6 6-6 6" />
-              </svg>
-            </li>
-            <li aria-current="page" className="min-w-0">
-              <span className="block truncate font-semibold text-brand-red">
-                {temple.name}
-              </span>
-            </li>
-          </ol>
-        </nav>
-      </div>
-
-      {temple.description && (
-        <div>
-          <p
-            className={`text-sm leading-relaxed text-gray-700 sm:text-base ${
-              descExpanded ? "" : "line-clamp-3"
-            }`}
-          >
-            {temple.description}
-          </p>
-          {temple.description.length > 220 && (
-            <button
-              type="button"
-              onClick={() => setDescExpanded((v) => !v)}
-              className="mt-1 text-sm font-semibold text-brand-red hover:text-brand-red-dark"
-            >
-              {descExpanded ? "Show less" : "Read more"}
-            </button>
-          )}
+              </li>
+              <li aria-current="page" className="min-w-0">
+                <span className="block truncate font-semibold text-brand-red">
+                  {temple.name}
+                </span>
+              </li>
+            </ol>
+          </nav>
         </div>
-      )}
 
-      {/* Tabs */}
-      <div className="sticky top-16 z-40 -mx-4 px-4 sm:mx-0 sm:px-0 bg-background/90 backdrop-blur border-b border-gray-200 sm:border-0 pb-2 sm:pb-0">
-        <div className="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap scrollbar-thin">
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => selectTab(t.id)}
-              aria-pressed={tab === t.id}
-              className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-red/40 focus-visible:ring-offset-1 focus-visible:ring-offset-background ${
-                tab === t.id
-                  ? "border-brand-red bg-brand-red text-white shadow-sm"
-                  : "border-gray-200 bg-card-bg text-gray-700 hover:border-brand-red/40 hover:text-brand-red"
+        {temple.description && (
+          <div>
+            <p
+              className={`text-sm leading-relaxed text-gray-700 sm:text-base ${
+                descExpanded ? "" : "line-clamp-3"
               }`}
             >
-              {t.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {tab === "schedule" && (
-        <section className="space-y-5">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <SectionHeading
-              title="Daily Darshan Timings"
-              subtitle="Plan your darshan — slots listed for the selected weekday"
-            />
-            {selectedDay === new Date().getDay() && (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-gold-soft px-3 py-1 text-xs font-semibold text-brand-gold">
-                <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3M4 11h16M5 5h14a1 1 0 011 1v13a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z" />
-                </svg>
-                Today
-              </span>
+              {temple.description}
+            </p>
+            {temple.description.length > 220 && (
+              <button
+                type="button"
+                onClick={() => setDescExpanded((v) => !v)}
+                className="mt-1 text-sm font-semibold text-brand-red hover:text-brand-red-dark"
+              >
+                {descExpanded ? "Show less" : "Read more"}
+              </button>
             )}
           </div>
+        )}
 
-          {/* Day selector — pick any weekday to see its slots. */}
-          <div className="flex flex-wrap gap-2">
-            {WEEKDAYS.map((name, i) => {
-              const isSelected = i === selectedDay;
-              const hasSlots = daysWithSlots.has(i);
-              return (
-                <button
-                  key={name}
-                  type="button"
-                  onClick={() => setSelectedDay(i)}
-                  aria-pressed={isSelected}
-                  className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
-                    isSelected
-                      ? "bg-brand-red text-white shadow-sm"
-                      : hasSlots
-                        ? "bg-card-bg text-gray-700 ring-1 ring-brand-gold/20 hover:bg-brand-gold-soft"
-                        : "bg-surface-soft text-gray-400 ring-1 ring-gray-200 hover:bg-gray-100"
-                  }`}
-                >
-                  {name.slice(0, 3)}
-                </button>
-              );
-            })}
+        {/* Tabs */}
+        <div className="sticky top-16 z-40 -mx-4 px-4 sm:mx-0 sm:px-0 bg-background/90 backdrop-blur border-b border-gray-200 sm:border-0 pb-2 sm:pb-0">
+          <div className="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap scrollbar-thin">
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => selectTab(t.id)}
+                aria-pressed={tab === t.id}
+                className={`shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-red/40 focus-visible:ring-offset-1 focus-visible:ring-offset-background ${
+                  tab === t.id
+                    ? "border-brand-red bg-brand-red text-white shadow-sm"
+                    : "border-gray-200 bg-card-bg text-gray-700 hover:border-brand-red/40 hover:text-brand-red"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
           </div>
+        </div>
 
-          {dayTimings.length === 0 ? (
-            <p className="text-sm text-gray-500">
-              No darshan timings for {WEEKDAYS[selectedDay]}.
-            </p>
-          ) : (
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
-              {dayTimings.map((row) => (
-                <div
-                  key={row.id}
-                  className="flex flex-col rounded-xl border border-brand-gold/15 bg-card-bg p-4 shadow-sm transition-shadow hover:shadow-devotional"
-                >
-                  <span className="grid h-9 w-9 place-items-center rounded-full bg-brand-gold-soft text-brand-gold">
-                    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </span>
-                  <p className="mt-3 font-serif text-base font-bold text-gray-900">
-                    {row.label ?? "Darshan"}
-                  </p>
-                  <p className="mt-1 text-sm font-semibold tabular-nums text-brand-red">
-                    {formatTime(row.opening_time)} – {formatTime(row.closing_time)}
-                  </p>
-                  {row.special_note && (
-                    <p className="mt-2 text-xs leading-snug text-gray-500">
-                      {row.special_note}
+        {tab === "schedule" && (
+          <section className="space-y-5">
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <SectionHeading
+                title="Daily Darshan Timings"
+                subtitle="Plan your darshan — slots listed for the selected weekday"
+              />
+              {selectedDay === new Date().getDay() && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-gold-soft px-3 py-1 text-xs font-semibold text-brand-gold">
+                  <svg
+                    className="h-3.5 w-3.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8 7V3m8 4V3M4 11h16M5 5h14a1 1 0 011 1v13a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z"
+                    />
+                  </svg>
+                  Today
+                </span>
+              )}
+            </div>
+
+            {/* Day selector — pick any weekday to see its slots. */}
+            <div className="flex flex-wrap gap-2">
+              {WEEKDAYS.map((name, i) => {
+                const isSelected = i === selectedDay;
+                const hasSlots = daysWithSlots.has(i);
+                return (
+                  <button
+                    key={name}
+                    type="button"
+                    onClick={() => setSelectedDay(i)}
+                    aria-pressed={isSelected}
+                    className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                      isSelected
+                        ? "bg-brand-red text-white shadow-sm"
+                        : hasSlots
+                          ? "bg-card-bg text-gray-700 ring-1 ring-brand-gold/20 hover:bg-brand-gold-soft"
+                          : "bg-surface-soft text-gray-400 ring-1 ring-gray-200 hover:bg-gray-100"
+                    }`}
+                  >
+                    {name.slice(0, 3)}
+                  </button>
+                );
+              })}
+            </div>
+            {/* {isToday && upcomingEvent && nextDarshanCountdown && (
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+                      Next Darshan
                     </p>
-                  )}
+
+                    <h3 className="mt-1 text-lg font-bold text-gray-900">
+                      {upcomingEvent.label}
+                    </h3>
+
+                    <p className="text-sm text-gray-600">
+                      Starts at {formatTime(upcomingEvent.opening_time)}
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="text-xs text-gray-500">Begins in</p>
+
+                    <p className="text-2xl font-bold text-amber-600">
+                      {nextDarshanCountdown.hours > 0
+                        ? `${nextDarshanCountdown.hours}h ${nextDarshanCountdown.minutes}m`
+                        : `${nextDarshanCountdown.minutes}m`}
+                    </p>
+                  </div>
                 </div>
-              ))}
-            </div>
-          )}
-        </section>
-      )}
+              </div>
+            )} */}
 
-      {tab === "prasad" && (
-        <section className="space-y-5">
-          <SectionHeading
-            title="Sacred Prasad"
-            subtitle="Blessed offerings, prepared with devotion and delivered to your door"
-          />
-          {prasad.length === 0 ? (
-            <p className="text-sm text-gray-500">No prasad listed yet.</p>
-          ) : (
-            <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {prasad.map((p) => (
-                <PrasadCard key={p.id} item={p} onZoom={openLightbox} />
-              ))}
-            </div>
-          )}
-        </section>
-      )}
+            {dayTimings.length === 0 ? (
+              <p className="text-sm text-gray-500">
+                No darshan timings for {WEEKDAYS[selectedDay]}.
+              </p>
+            ) : (
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
+                {visibleTimings.map((row) => {
+                  const isCurrent = isToday && currentEvent?.id === row.id;
+                  const isUpcoming = isToday && upcomingEvent?.id === row.id;
 
-      {tab === "seva" && (
-        <section className="space-y-5">
-          <SectionHeading
-            title="Rajbhog / Seva"
-            subtitle="Register a sankalp — sacred service offerings performed in your name"
-          />
-          {seva.length === 0 ? (
-            <p className="text-sm text-gray-500">No seva listed yet.</p>
-          ) : (
-            <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {seva.map((s) => (
-                <SevaCard
-                  key={s.id}
-                  item={s}
-                  templeSlug={templeSlug}
-                  onZoom={openLightbox}
-                />
-              ))}
-            </div>
-          )}
-        </section>
-      )}
+                  return (
+                    <div
+                      key={row.id}
+                      className={`relative flex flex-col rounded-xl border p-4 shadow-sm transition-all hover:shadow-devotional ${
+                        isCurrent
+                          ? "border-green-500 bg-green-50"
+                          : isUpcoming
+                            ? "border-amber-500 bg-amber-50"
+                            : "border-brand-gold/15 bg-card-bg"
+                      }`}
+                    >
+                      {isCurrent && (
+                        <span className="absolute right-3 top-3 rounded-full bg-green-600 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+                          Currently
+                        </span>
+                      )}
+                      {!isCurrent && isUpcoming && (
+                        <div className="absolute right-3 top-3 flex flex-col items-end gap-1">
+                          <span className="rounded-full bg-amber-500 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
+                            Upcoming
+                          </span>
 
-      {tab === "frame" && (
-        <section className="space-y-5">
-          <SectionHeading
-            title="Divine Frames"
-            subtitle="Bring the deity's darshan home — curated frames for your sacred space"
-          />
-          {frameGroups.length === 0 ? (
-            <p className="text-sm text-gray-500">No frames listed yet.</p>
-          ) : (
-            <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {frameGroups.map((g) => (
-                <FrameGroupCard
-                  key={g.name}
-                  group={g}
-                  templeSlug={templeSlug}
-                  onZoom={openLightbox}
-                />
-              ))}
-            </div>
-          )}
-        </section>
-      )}
+                          {isUpcoming && nextDarshanCountdown && (
+                            <span className="mt-2 inline-flex w-fit items-center rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
+                              Starts in{" "}
+                              {nextDarshanCountdown.hours > 0
+                                ? `${nextDarshanCountdown.hours}h ${nextDarshanCountdown.minutes}m`
+                                : `${nextDarshanCountdown.minutes}m`}
+                            </span>
+                          )}
+                        </div>
+                      )}
 
-      {tab === "cloth" && (
-        <section className="space-y-5">
-          <SectionHeading
-            title="Poshak & Cloth"
-            subtitle="Handcrafted attire to adorn the deity with reverence"
-          />
-          {cloth.length === 0 ? (
-            <p className="text-sm text-gray-500">No cloth items yet.</p>
-          ) : (
-            <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {cloth.map((c) => (
-                <ClothProductCard
-                  key={c.id}
-                  item={c}
-                  templeSlug={templeSlug}
-                  onZoom={openLightbox}
-                />
-              ))}
-            </div>
-          )}
-        </section>
-      )}
+                      <span
+                        className={`grid h-9 w-9 place-items-center rounded-full ${
+                          isCurrent
+                            ? "bg-green-100 text-green-600"
+                            : isUpcoming
+                              ? "bg-amber-100 text-amber-600"
+                              : "bg-brand-gold-soft text-brand-gold"
+                        }`}
+                      >
+                        <svg
+                          className="h-5 w-5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </span>
 
-      <ToastHost message={toast} onDismiss={() => setToast(null)} />
+                      <p className="mt-3 font-serif text-base font-bold text-gray-900">
+                        {row.label ?? "Darshan"}
+                      </p>
+
+                      <p className="mt-1 text-sm font-semibold tabular-nums text-brand-red">
+                        {formatTime(row.opening_time)} –{" "}
+                        {formatTime(row.closing_time)}
+                      </p>
+
+                      {/* {isUpcoming && nextDarshanCountdown && (
+                        <span className="mt-2 inline-flex w-fit items-center rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
+                          Starts in{" "}
+                          {nextDarshanCountdown.hours > 0
+                            ? `${nextDarshanCountdown.hours}h ${nextDarshanCountdown.minutes}m`
+                            : `${nextDarshanCountdown.minutes}m`}
+                        </span>
+                      )} */}
+
+                      {row.special_note && (
+                        <p className="mt-2 text-xs leading-snug text-gray-500">
+                          {row.special_note}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </section>
+        )}
+
+        {tab === "prasad" && (
+          <section className="space-y-5">
+            <SectionHeading
+              title="Sacred Prasad"
+              subtitle="Blessed offerings, prepared with devotion and delivered to your door"
+            />
+            {prasad.length === 0 ? (
+              <p className="text-sm text-gray-500">No prasad listed yet.</p>
+            ) : (
+              <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {prasad.map((p) => (
+                  <PrasadCard key={p.id} item={p} onZoom={openLightbox} />
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        {tab === "seva" && (
+          <section className="space-y-5">
+            <SectionHeading
+              title="Rajbhog / Seva"
+              subtitle="Register a sankalp — sacred service offerings performed in your name"
+            />
+            {seva.length === 0 ? (
+              <p className="text-sm text-gray-500">No seva listed yet.</p>
+            ) : (
+              <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {seva.map((s) => (
+                  <SevaCard
+                    key={s.id}
+                    item={s}
+                    templeSlug={templeSlug}
+                    onZoom={openLightbox}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        {tab === "frame" && (
+          <section className="space-y-5">
+            <SectionHeading
+              title="Divine Frames"
+              subtitle="Bring the deity's darshan home — curated frames for your sacred space"
+            />
+            {frameGroups.length === 0 ? (
+              <p className="text-sm text-gray-500">No frames listed yet.</p>
+            ) : (
+              <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {frameGroups.map((g) => (
+                  <FrameGroupCard
+                    key={g.name}
+                    group={g}
+                    templeSlug={templeSlug}
+                    onZoom={openLightbox}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        {tab === "cloth" && (
+          <section className="space-y-5">
+            <SectionHeading
+              title="Poshak & Cloth"
+              subtitle="Handcrafted attire to adorn the deity with reverence"
+            />
+            {cloth.length === 0 ? (
+              <p className="text-sm text-gray-500">No cloth items yet.</p>
+            ) : (
+              <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {cloth.map((c) => (
+                  <ClothProductCard
+                    key={c.id}
+                    item={c}
+                    templeSlug={templeSlug}
+                    onZoom={openLightbox}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        <ToastHost message={toast} onDismiss={() => setToast(null)} />
       </div>
 
       {lightbox && (
@@ -566,13 +793,7 @@ function SectionHeading({
 }
 
 /** Shared shell so every product card reads as one curated system. */
-function CardShell({
-  href,
-  children,
-}: {
-  href: string;
-  children: ReactNode;
-}) {
+function CardShell({ href, children }: { href: string; children: ReactNode }) {
   return (
     <Link
       href={href}
@@ -613,7 +834,11 @@ function CardFooter({
           stroke="currentColor"
           strokeWidth={2.5}
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M5 12h14M13 6l6 6-6 6"
+          />
         </svg>
       </span>
     </div>
@@ -638,7 +863,7 @@ function FrameGroupCard({
   if (!cover) return null;
 
   const minPrice = Math.min(
-    ...group.variants.map((v) => parseNumeric(v.price))
+    ...group.variants.map((v) => parseNumeric(v.price)),
   );
   const hasMultiple = group.variants.length > 1;
   const href = `/temple/${templeSlug}/frame/${slugify(group.name)}`;

@@ -36,9 +36,11 @@ export default async function Home() {
     .or(`ends_at.is.null,ends_at.gte.${nowIso}`)
     .order("display_order", { ascending: true });
 
-  const alerts = ((alertsData ?? []) as (Alert & {
-    temples: Temple | null;
-  })[]).sort((a, b) => {
+  const alerts = (
+    (alertsData ?? []) as (Alert & {
+      temples: Temple | null;
+    })[]
+  ).sort((a, b) => {
     // Priority first (urgent → info), then display_order, then start date.
     const p = PRIORITY_RANK[b.priority] - PRIORITY_RANK[a.priority];
     if (p !== 0) return p;
