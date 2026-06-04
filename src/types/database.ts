@@ -86,6 +86,20 @@ export type ProductImage = {
   display_order: number | null;
 };
 
+// export type PrasadItem = {
+//   id: string;
+//   temple_id: string;
+//   name: string;
+//   price: number;
+//   ingredients: string | null;
+//   image_url: string | null;
+//   product_images?: ProductImage[] | null;
+//   in_stock: boolean;
+//   display_order: number;
+//   created_at: string;
+//   updated_at: string;
+// };
+
 export type PrasadItem = {
   id: string;
   temple_id: string;
@@ -93,9 +107,16 @@ export type PrasadItem = {
   price: number;
   ingredients: string | null;
   image_url: string | null;
+
   product_images?: ProductImage[] | null;
+
   in_stock: boolean;
   display_order: number;
+
+  quantity: number;
+  allow_direct_payment: boolean;
+  allow_cod: boolean;
+
   created_at: string;
   updated_at: string;
 };
@@ -218,7 +239,12 @@ export type YatraPackage = {
   /** Embedded via PostgREST when selected with `vehicles(...)`. */
   vehicles?: Pick<
     Vehicle,
-    "name" | "vehicle_type" | "seating_capacity" | "is_ac" | "features" | "image_url"
+    | "name"
+    | "vehicle_type"
+    | "seating_capacity"
+    | "is_ac"
+    | "features"
+    | "image_url"
   > | null;
 };
 

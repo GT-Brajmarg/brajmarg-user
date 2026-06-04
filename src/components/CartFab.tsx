@@ -35,7 +35,8 @@ export default function CartFab() {
 
   // Only show the floating cart on temple pages. It must stay hidden on
   // the cart page itself, home, yatra, contact and terms (privacy).
-  const onTemplePage = pathname?.startsWith("/temple") ?? false;
+  const showFab =
+    pathname?.startsWith("/temple") || pathname?.startsWith("/shop");
 
   const [count, setCount] = useState<number | null>(null);
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
@@ -135,7 +136,8 @@ export default function CartFab() {
   // Keep within the viewport on resize.
   useEffect(() => {
     const onResize = () => {
-      if (posRef.current) setPosition(clamp(posRef.current.x, posRef.current.y));
+      if (posRef.current)
+        setPosition(clamp(posRef.current.x, posRef.current.y));
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
@@ -182,7 +184,7 @@ export default function CartFab() {
 
   const n = count ?? 0;
   // Hidden unless: on a temple page, cart has items, and position is ready.
-  if (!onTemplePage || count == null || n === 0 || !pos) return null;
+  if (!showFab || count == null || n === 0 || !pos) return null;
 
   return (
     <button
