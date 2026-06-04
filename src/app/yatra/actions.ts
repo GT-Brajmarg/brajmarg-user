@@ -1,7 +1,7 @@
 "use server";
 
 import crypto from "crypto";
-import Razorpay from "razorpay";
+import { getRazorpay } from "@/lib/razorpay";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
@@ -10,11 +10,6 @@ import { slugify } from "@/lib/slug";
 import { isGroupPackage, seatsLeftForOne } from "@/lib/yatra";
 import { toIndianE164 } from "@/lib/identifier";
 import type { YatraPackage } from "@/types/database";
-
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-});
 
 function genOrderNumber(): string {
   const ts = Date.now().toString(36).toUpperCase();
@@ -221,7 +216,7 @@ export async function createYatraRazorpayOrder(formData: FormData) {
     temple_name: "Brajmarg Yatra",
   });
 
-  const rzOrder = await razorpay.orders.create({
+  const rzOrder = await getRazorpay().orders.create({
     amount: Math.round(total * 100),
     currency: "INR",
     receipt: order_number,
