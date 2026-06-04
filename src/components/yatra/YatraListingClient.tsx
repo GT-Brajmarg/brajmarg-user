@@ -10,13 +10,22 @@ import YatraCard from "@/components/yatra/YatraCard";
 type Filter = "all" | PackageType;
 type Sort = "recommended" | "price_low" | "price_high";
 
-const TABS: { key: Filter; label: string; sub: string; icon: React.ReactNode }[] = [
+const TABS: {
+  key: Filter;
+  label: string;
+  sub: string;
+  icon: React.ReactNode;
+}[] = [
   {
     key: "all",
     label: "All Yatras",
     sub: "View all available yatras",
     icon: (
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M4 6h16M4 12h16M4 18h16"
+      />
     ),
   },
   {
@@ -24,7 +33,11 @@ const TABS: { key: Filter; label: string; sub: string; icon: React.ReactNode }[]
     label: "Full Package",
     sub: "Vehicle Included",
     icon: (
-      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l1.5-4.5A2 2 0 018.4 7h7.2a2 2 0 011.9 1.5L19 13m-14 0h14m-14 0v4m14-4v4M7 17h.01M17 17h.01" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M5 13l1.5-4.5A2 2 0 018.4 7h7.2a2 2 0 011.9 1.5L19 13m-14 0h14m-14 0v4m14-4v4M7 17h.01M17 17h.01"
+      />
     ),
   },
   {
@@ -32,7 +45,11 @@ const TABS: { key: Filter; label: string; sub: string; icon: React.ReactNode }[]
     label: "Seat Booking",
     sub: "Shared Yatra",
     icon: (
-      <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4z"
+      />
     ),
   },
 ];
@@ -66,7 +83,7 @@ export default function YatraListingClient({
 
   const visible = useMemo(() => {
     const filtered = packages.filter((p) =>
-      filter === "all" ? true : normalizePackageType(p.package_type) === filter
+      filter === "all" ? true : normalizePackageType(p.package_type) === filter,
     );
     const sorted = [...filtered];
     if (sort === "price_low") {
@@ -103,8 +120,18 @@ export default function YatraListingClient({
             <div className="flex shrink-0 gap-3">
               <div className="flex items-center gap-2.5 rounded-xl border-2 border-brand-red/40 bg-card-bg px-4 py-3 shadow-sm">
                 <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand-red/10 text-brand-red">
-                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1m4 0h1M9 13h1m4 0h1M9 17h1m4 0h1" />
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1m4 0h1M9 13h1m4 0h1M9 17h1m4 0h1"
+                    />
                   </svg>
                 </span>
                 <div>
@@ -119,13 +146,25 @@ export default function YatraListingClient({
                 className="group flex items-center gap-2.5 rounded-xl border border-brand-gold/25 bg-card-bg px-4 py-3 shadow-sm transition-colors hover:border-brand-gold/50"
               >
                 <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand-gold-soft text-brand-gold">
-                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3M4 11h16M5 5h14a1 1 0 011 1v13a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z" />
+                  <svg
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8 7V3m8 4V3M4 11h16M5 5h14a1 1 0 011 1v13a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1z"
+                    />
                   </svg>
                 </span>
                 <div>
                   <p className="text-sm font-bold text-gray-900">My Bookings</p>
-                  <p className="text-[11px] text-gray-500">Check your bookings</p>
+                  <p className="text-[11px] text-gray-500">
+                    Check your bookings
+                  </p>
                 </div>
               </Link>
             </div>
@@ -155,7 +194,13 @@ export default function YatraListingClient({
                         : "border-brand-gold/25 bg-card-bg text-gray-700 hover:border-brand-gold/50",
                     ].join(" ")}
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <svg
+                      className="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
                       {tab.icon}
                     </svg>
                     <span className="flex flex-col">
@@ -164,7 +209,9 @@ export default function YatraListingClient({
                         <span
                           className={[
                             "ml-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-bold",
-                            active ? "bg-white/20" : "bg-brand-gold-soft text-brand-gold",
+                            active
+                              ? "bg-white/20"
+                              : "bg-brand-gold-soft text-brand-gold",
                           ].join(" ")}
                         >
                           {count}
@@ -213,8 +260,18 @@ export default function YatraListingClient({
         ) : (
           <div className="rounded-2xl border border-dashed border-brand-gold/30 bg-card-bg p-12 text-center">
             <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-full bg-brand-gold-soft text-brand-gold">
-              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              <svg
+                className="h-6 w-6"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                />
               </svg>
             </div>
             <p className="font-semibold text-gray-800">

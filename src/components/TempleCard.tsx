@@ -3,9 +3,7 @@ import type { Temple } from "@/types/database";
 import { slugify } from "@/lib/slug";
 
 export default function TempleCard({ temple }: { temple: Temple }) {
-  const href = temple.is_coming_soon
-    ? "#"
-    : `/temple/${slugify(temple.name)}`;
+  const href = temple.is_coming_soon ? "#" : `/temple/${slugify(temple.name)}`;
 
   return (
     <Link
@@ -65,7 +63,11 @@ export default function TempleCard({ temple }: { temple: Temple }) {
               stroke="currentColor"
               strokeWidth={2.5}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 12h14M13 6l6 6-6 6"
+              />
             </svg>
           </span>
         )}
