@@ -213,7 +213,7 @@
 "use server";
 
 import crypto from "crypto";
-import Razorpay from "razorpay";
+import { getRazorpay } from "@/lib/razorpay";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
@@ -226,11 +226,6 @@ import {
 import type { RoutableItem } from "@/lib/shipping/resolve-pickup";
 import type { CartItem, ItemType } from "@/types/database";
 import { toIndianE164 } from "@/lib/identifier";
-
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-});
 
 function genOrderNumber(): string {
   const ts = Date.now().toString(36).toUpperCase();
@@ -683,7 +678,7 @@ export async function createRazorpayOrder(formData: FormData) {
     throw new Error("Could not start payment. Please try again.");
   }
 
-  const rzOrder = await razorpay.orders.create({
+  const rzOrder = await getRazorpay().orders.create({
     amount: Math.round(data.total * 100),
     currency: "INR",
     receipt: order_number,
