@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a0a05"/>
+      <stop offset="0.35" stop-color="#5a1a0a"/>
+      <stop offset="0.7" stop-color="#c4521e"/>
+      <stop offset="1" stop-color="#f4b942"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff5d0" stop-opacity="1"/>
+      <stop offset="0.4" stop-color="#ffd76b" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#ffaa3a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="temple" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a0608"/>
+      <stop offset="1" stop-color="#3a0e10"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="1200" height="675" fill="url(#sky)"/>
+
+  <!-- Sun glow -->
+  <circle cx="600" cy="430" r="280" fill="url(#sun)"/>
+  <circle cx="600" cy="430" r="65" fill="#fff7d8"/>
+
+  <!-- Sun rays -->
+  <g stroke="#fff5d0" stroke-width="1.2" opacity="0.35">
+    <line x1="600" y1="100" x2="600" y2="280"/>
+    <line x1="350" y1="200" x2="470" y2="320"/>
+    <line x1="850" y1="200" x2="730" y2="320"/>
+    <line x1="200" y1="430" x2="350" y2="430"/>
+    <line x1="850" y1="430" x2="1000" y2="430"/>
+  </g>
+
+  <!-- Distant hills -->
+  <path d="M 0 540 Q 200 480 400 510 T 800 500 T 1200 530 L 1200 675 L 0 675 Z" fill="#1a0608" opacity="0.55"/>
+
+  <!-- Temple silhouette -->
+  <g fill="url(#temple)">
+    <!-- Base platform / steps -->
+    <rect x="200" y="540" width="800" height="135"/>
+    <rect x="180" y="555" width="840" height="14" opacity="0.7"/>
+
+    <!-- Left side shikhara -->
+    <path d="M 320 360 L 320 540 L 440 540 L 440 360 L 380 280 Z"/>
+    <rect x="370" y="270" width="20" height="14"/>
+    <circle cx="380" cy="262" r="9"/>
+    <path d="M 380 250 L 380 240" stroke="#3a0e10" stroke-width="3"/>
+
+    <!-- Right side shikhara -->
+    <path d="M 760 360 L 760 540 L 880 540 L 880 360 L 820 280 Z"/>
+    <rect x="810" y="270" width="20" height="14"/>
+    <circle cx="820" cy="262" r="9"/>
+    <path d="M 820 250 L 820 240" stroke="#3a0e10" stroke-width="3"/>
+
+    <!-- Main center shikhara -->
+    <path d="M 510 320 L 510 540 L 690 540 L 690 320 L 600 180 Z"/>
+    <rect x="588" y="165" width="24" height="18"/>
+    <circle cx="600" cy="155" r="13"/>
+    <path d="M 600 140 L 600 124" stroke="#3a0e10" stroke-width="4"/>
+    <circle cx="600" cy="120" r="5"/>
+
+    <!-- Temple curves on shikharas -->
+    <path d="M 510 380 Q 600 350 690 380" fill="none" stroke="#5a1d12" stroke-width="2"/>
+    <path d="M 510 430 Q 600 405 690 430" fill="none" stroke="#5a1d12" stroke-width="2"/>
+    <path d="M 510 480 Q 600 460 690 480" fill="none" stroke="#5a1d12" stroke-width="2"/>
+
+    <!-- Door arch -->
+    <path d="M 575 540 L 575 470 Q 575 440 600 440 Q 625 440 625 470 L 625 540 Z" fill="#0a0306"/>
+    <path d="M 580 540 L 580 472 Q 580 446 600 446 Q 620 446 620 472 L 620 540 Z" fill="#5a1d12" opacity="0.4"/>
+  </g>
+
+  <!-- Foreground lotus silhouettes -->
+  <g fill="#0a0306" opacity="0.85">
+    <ellipse cx="120" cy="640" rx="35" ry="8"/>
+    <ellipse cx="1080" cy="640" rx="35" ry="8"/>
+  </g>
+
+  <!-- Decorative golden glow at horizon -->
+  <ellipse cx="600" cy="540" rx="500" ry="20" fill="#ffd76b" opacity="0.3"/>
+</svg>

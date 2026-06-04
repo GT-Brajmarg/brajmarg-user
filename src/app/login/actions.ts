@@ -1,0 +1,523 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { createClient } from "@/utils/supabase/server";
+import { createServiceClient } from "@/utils/supabase/admin";
+import { isValidE164, isValidEmail } from "@/lib/identifier";
+import * as twofactor from "@/lib/twofactor";
+
+function safeNext(value: FormDataEntryValue | null): string {
+  if (typeof value !== "string") return "";
+  if (!value.startsWith("/") || value.startsWith("//")) return "";
+  return value;
+}
+
+function loginErrorRedirect(message: string, next: string): never {
+  const params = new URLSearchParams({ error: message });
+  if (next) params.set("next", next);
+  redirect(`/login?${params.toString()}`);
+}
+
+function getPhoneAllowlist(): string[] {
+  const raw = process.env.LOGIN_ALLOWED_PHONES ?? "";
+  return raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function isPhoneAllowed(phone: string): boolean {
+  const list = getPhoneAllowlist();
+  if (list.length === 0) return true;
+  return list.includes(phone);
+}
+
+/* --------------------------------------------------------------- */
+/*  Guest cart merge (server-side, runs right after session mint)  */
+/* --------------------------------------------------------------- */
+
+const PENDING_CART_COOKIE = "brajmarg_pending_cart";
+
+// item_types that can live in cart_items. `yatra` is booked directly and
+// is excluded by the table's CHECK constraint, so we must never insert it.
+const CART_ITEM_TYPES = new Set(["prasad", "seva", "frame", "cloth"]);
+
+type SlimCartRow = {
+  t: string;
+  i: string;
+  q: number;
+  s: string | null;
+  c: string | null;
+  // Seva contribution price override. null/missing = catalog price.
+  p?: number | null;
+};
+
+/**
+ * Merge the guest cart (snapshotted into a cookie on the login page) into
+ * the freshly-signed-in user's cart_items, then delete the cookie. Runs
+ * before the post-login redirect so server components (e.g. /checkout) see
+ * the correct cart immediately. Duplicate variants increment quantity.
+ *
+ * Best-effort: any failure is swallowed so it can never block login. The
+ * client-side CartSync merge remains as a fallback for the localStorage copy.
+ */
+async function mergePendingCartCookie(): Promise<void> {
+  const supabase = await createClient();
+  const { cookies } = await import("next/headers");
+  const jar = await cookies();
+
+  const raw = jar.get(PENDING_CART_COOKIE)?.value;
+  // Always clear the cookie once we've read it, even on early return.
+  if (raw) jar.delete(PENDING_CART_COOKIE);
+  if (!raw) return;
+
+  let rows: SlimCartRow[];
+  try {
+    const parsed = JSON.parse(decodeURIComponent(raw));
+    if (!Array.isArray(parsed)) return;
+    rows = parsed as SlimCartRow[];
+  } catch {
+    return;
+  }
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  for (const r of rows) {
+    const item_type = r.t;
+    const item_id = r.i;
+    const selected_size = r.s ?? null;
+    const selected_color = r.c ?? null;
+    const item_price =
+      typeof r.p === "number" && Number.isFinite(r.p) && r.p > 0 ? r.p : null;
+    // Seva contribution override = "set my amount" semantic (qty stays 1,
+    // existing row's price gets REPLACED, not summed). Anything else uses
+    // the usual sum-quantity-on-dedupe behavior.
+    const overridePrice = item_price !== null;
+    const quantity = overridePrice ? 1 : Number(r.q);
+
+    if (!CART_ITEM_TYPES.has(item_type)) continue;
+    if (!item_id || !Number.isFinite(quantity) || quantity < 1) continue;
+
+    // Find an existing identical variant in the user's cart (RLS scopes
+    // this to the current user automatically).
+    let q = supabase
+      .from("cart_items")
+      .select("id, quantity")
+      .eq("item_type", item_type)
+      .eq("item_id", item_id);
+    q = selected_size == null ? q.is("selected_size", null) : q.eq("selected_size", selected_size);
+    q = selected_color == null ? q.is("selected_color", null) : q.eq("selected_color", selected_color);
+
+    const { data: existing } = await q.maybeSingle();
+
+    if (existing) {
+      const update: { quantity: number; item_price?: number | null } = overridePrice
+        ? { quantity: 1, item_price }
+        : { quantity: existing.quantity + quantity };
+      await supabase.from("cart_items").update(update).eq("id", existing.id);
+    } else {
+      await supabase.from("cart_items").insert({
+        user_id: user.id,
+        item_type,
+        item_id,
+        quantity,
+        selected_size,
+        selected_color,
+        item_price,
+      });
+    }
+  }
+}
+
+/* --------------------------------------------------------------- */
+/*  Test-phone bypass                                              */
+/* --------------------------------------------------------------- */
+
+/**
+ * Returns the configured test phone number (E.164) if the bypass is
+ * enabled, else null. Empty TEST_PHONE_NUMBER disables the bypass.
+ */
+function getTestPhone(): string | null {
+  const v = (process.env.TEST_PHONE_NUMBER ?? "").trim();
+  return v || null;
+}
+
+function getTestOtp(): string {
+  return (process.env.TEST_PHONE_OTP ?? "").trim();
+}
+
+function isTestPhone(phone: string): boolean {
+  const test = getTestPhone();
+  return test !== null && phone === test;
+}
+
+/**
+ * Development mode. When ID_TYPE=development, ANY valid Indian mobile
+ * number can log in: the allowlist is skipped, Supabase SMS is never
+ * called, and the OTP is always the fixed TEST_PHONE_OTP. Each unique
+ * number gets its own Supabase user (created on first verify).
+ */
+function isDevMode(): boolean {
+  return (process.env.ID_TYPE ?? "").trim().toLowerCase() === "development";
+}
+
+/**
+ * Should this phone use the fixed-OTP / admin-session bypass instead
+ * of real Supabase SMS? True in dev mode (any number) or for the
+ * legacy single TEST_PHONE_NUMBER in any environment.
+ */
+function usesBypass(phone: string): boolean {
+  return isDevMode() || isTestPhone(phone);
+}
+
+/**
+ * Synthetic email backing a phone-only Supabase user record.
+ * `+919876543210` -> `phone-919876543210@brajmarg.local`
+ *
+ * Supabase has no admin API to mint a session directly from a phone, so
+ * we attach a deterministic synthetic email to the user and exchange an
+ * email magic-link token for a real session. The email is never shown to
+ * the user — phone remains the identity. Used for BOTH the dev/test
+ * bypass and real 2Factor-verified logins.
+ */
+function syntheticEmailFor(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  return `phone-${digits}@brajmarg.local`;
+}
+
+/**
+ * Mint a real Supabase session for a phone-verified user via the admin
+ * API + magic-link token exchange. Sets the auth cookies on the current
+ * SSR response. The caller is responsible for having already verified
+ * the phone (2Factor in production, fixed OTP for the dev/test bypass).
+ */
+async function mintSessionForPhone(phone: string): Promise<{
+  ok: boolean;
+  error?: string;
+}> {
+  const admin = createServiceClient();
+  if (!admin) {
+    return {
+      ok: false,
+      error:
+        "Test-phone login is not configured. Add SUPABASE_SERVICE_ROLE_KEY to your .env file.",
+    };
+  }
+
+  const email = syntheticEmailFor(phone);
+
+  // Ensure the user exists. listUsers is paginated; for a one-off
+  // test user we just check page 1 (default 50/page is plenty).
+  const { data: list, error: listErr } = await admin.auth.admin.listUsers();
+  if (listErr) return { ok: false, error: listErr.message };
+
+  let user = list.users.find(
+    (u) => u.email === email || u.phone === phone.replace(/^\+/, "")
+  );
+
+  if (!user) {
+    const { data: created, error: createErr } =
+      await admin.auth.admin.createUser({
+        email,
+        phone,
+        email_confirm: true,
+        phone_confirm: true,
+      });
+    if (createErr) return { ok: false, error: createErr.message };
+    user = created.user ?? undefined;
+    if (!user) return { ok: false, error: "Failed to create test user." };
+  }
+
+  // Generate a magic link to the synthetic email so we can exchange
+  // its hashed_token for a real session via the SSR client.
+  const { data: linkData, error: linkErr } =
+    await admin.auth.admin.generateLink({
+      type: "magiclink",
+      email,
+    });
+
+  if (linkErr) return { ok: false, error: linkErr.message };
+  const tokenHash = linkData?.properties?.hashed_token;
+  if (!tokenHash) {
+    return { ok: false, error: "Could not mint test session token." };
+  }
+
+  // SSR client — verifyOtp with token_hash sets the auth cookies on
+  // the outgoing response, exactly like a normal login.
+  const ssr = await createClient();
+  const { error: verifyErr } = await ssr.auth.verifyOtp({
+    token_hash: tokenHash,
+    type: "email",
+  });
+  if (verifyErr) return { ok: false, error: verifyErr.message };
+
+  // Seed the profile row (same as the regular flow)
+  const {
+    data: { user: signedIn },
+  } = await ssr.auth.getUser();
+  if (signedIn) {
+    await ssr.from("profiles").upsert(
+      {
+        id: signedIn.id,
+        phone: phone,
+        email: signedIn.email ?? null,
+      },
+      { onConflict: "id", ignoreDuplicates: false }
+    );
+  }
+
+  return { ok: true };
+}
+
+/* --------------------------------------------------------------- */
+/*  Server actions                                                 */
+/* --------------------------------------------------------------- */
+
+/**
+ * Send a one-time code. Accepts EITHER a mobile (E.164) or an email
+ * via the unified `identifier` form field.
+ */
+export async function sendOtp(formData: FormData) {
+  const supabase = await createClient();
+
+  const identifier = ((formData.get("identifier") as string) ?? "").trim();
+  const mode = (formData.get("identifier_mode") as string) ?? "phone";
+  const next = safeNext(formData.get("next"));
+
+  if (!identifier) {
+    loginErrorRedirect("Please enter your mobile number or email.", next);
+  }
+
+  if (mode === "email") {
+    if (!isValidEmail(identifier)) {
+      loginErrorRedirect("Please enter a valid email address.", next);
+    }
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email: identifier,
+      options: { shouldCreateUser: true },
+    });
+
+    if (error) loginErrorRedirect(error.message, next);
+
+    const params = new URLSearchParams({ email: identifier });
+    if (next) params.set("next", next);
+    redirect(`/login/verify?${params.toString()}`);
+  }
+
+  // Phone branch
+  if (!isValidE164(identifier)) {
+    loginErrorRedirect(
+      "Please enter a valid mobile number including country code.",
+      next
+    );
+  }
+
+  // Allowlist only applies in production. In dev mode any number works.
+  if (!isDevMode() && !isPhoneAllowed(identifier)) {
+    loginErrorRedirect(
+      "This mobile number is not authorised to log in yet. Please contact support.",
+      next
+    );
+  }
+
+  // Bypass (dev mode, or the legacy single test phone): skip the SMS
+  // provider entirely and send the user straight to the verify screen,
+  // where any real OTP request would have landed them too. The OTP is
+  // the fixed TEST_PHONE_OTP.
+  if (usesBypass(identifier)) {
+    const params = new URLSearchParams({ phone: identifier });
+    if (next) params.set("next", next);
+    redirect(`/login/verify?${params.toString()}`);
+  }
+
+  // Production: send the OTP via 2Factor. The returned session id must
+  // be carried to the verify screen (and back to verifyOtp).
+  const result = await twofactor.sendOtp(identifier);
+  if (!result.ok) loginErrorRedirect(result.error, next);
+
+  const params = new URLSearchParams({
+    phone: identifier,
+    sid: result.sessionId,
+  });
+  if (next) params.set("next", next);
+  redirect(`/login/verify?${params.toString()}`);
+}
+
+/**
+ * Resend OTP — used by the client-side resend button. Unlike sendOtp
+ * this does NOT redirect; it returns a status so the UI can keep its
+ * countdown state and show inline feedback.
+ */
+export async function resendOtp(input: {
+  phone?: string;
+  email?: string;
+}): Promise<{ ok: boolean; error?: string; sessionId?: string }> {
+  const supabase = await createClient();
+  const phone = (input.phone ?? "").trim();
+  const email = (input.email ?? "").trim();
+
+  if (phone) {
+    if (!isValidE164(phone)) {
+      return { ok: false, error: "Invalid mobile number." };
+    }
+    if (!isDevMode() && !isPhoneAllowed(phone)) {
+      return {
+        ok: false,
+        error: "This mobile number is not authorised to log in.",
+      };
+    }
+    if (usesBypass(phone)) {
+      // No-op for the bypass — the OTP is fixed (TEST_PHONE_OTP).
+      return { ok: true };
+    }
+    // Production: 2Factor generates a NEW session on resend. Return the
+    // new session id so the verify form can swap in the fresh sid.
+    const result = await twofactor.sendOtp(phone);
+    if (!result.ok) return { ok: false, error: result.error };
+    return { ok: true, sessionId: result.sessionId };
+  }
+
+  if (email) {
+    if (!isValidEmail(email)) {
+      return { ok: false, error: "Invalid email address." };
+    }
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { shouldCreateUser: true },
+    });
+    if (error) return { ok: false, error: error.message };
+    return { ok: true };
+  }
+
+  return { ok: false, error: "Missing phone or email." };
+}
+
+/**
+ * Verify the OTP. Accepts either a `phone` or `email` field
+ * (whichever was used to send the code).
+ */
+export async function verifyOtp(formData: FormData) {
+  const supabase = await createClient();
+
+  const phone = ((formData.get("phone") as string) ?? "").trim();
+  const email = ((formData.get("email") as string) ?? "").trim();
+  const otp = ((formData.get("otp") as string) ?? "").trim();
+  const next = safeNext(formData.get("next")) || "/";
+
+  if (!otp) {
+    const params = new URLSearchParams({ error: "Please enter the OTP." });
+    if (phone) params.set("phone", phone);
+    if (email) params.set("email", email);
+    if (next !== "/") params.set("next", next);
+    redirect(`/login/verify?${params.toString()}`);
+  }
+
+  // Bypass — match the configured fixed OTP and mint a real Supabase
+  // session via the admin API. In dev mode this works for ANY number
+  // (a new user is created on first verify).
+  if (phone && usesBypass(phone)) {
+    if (otp !== getTestOtp()) {
+      const params = new URLSearchParams({
+        phone,
+        error: "Incorrect OTP. Please try again.",
+      });
+      if (next !== "/") params.set("next", next);
+      redirect(`/login/verify?${params.toString()}`);
+    }
+
+    const result = await mintSessionForPhone(phone);
+    if (!result.ok) {
+      const params = new URLSearchParams({
+        phone,
+        error: result.error ?? "Login failed.",
+      });
+      if (next !== "/") params.set("next", next);
+      redirect(`/login/verify?${params.toString()}`);
+    }
+
+    await mergePendingCartCookie();
+    revalidatePath("/", "layout");
+    redirect(next);
+  }
+
+  if (phone) {
+    // Production: verify the OTP against 2Factor using the session id
+    // (sid) created in sendOtp, then mint the Supabase session.
+    const sid = ((formData.get("sid") as string) ?? "").trim();
+    if (!sid) {
+      const params = new URLSearchParams({
+        phone,
+        error: "Your session expired. Please request a new OTP.",
+      });
+      if (next !== "/") params.set("next", next);
+      redirect(`/login/verify?${params.toString()}`);
+    }
+
+    const verified = await twofactor.verifyOtp(sid, otp);
+    if (!verified.ok) {
+      const params = new URLSearchParams({ phone, sid, error: verified.error });
+      if (next !== "/") params.set("next", next);
+      redirect(`/login/verify?${params.toString()}`);
+    }
+
+    const minted = await mintSessionForPhone(phone);
+    if (!minted.ok) {
+      const params = new URLSearchParams({
+        phone,
+        error: minted.error ?? "Login failed.",
+      });
+      if (next !== "/") params.set("next", next);
+      redirect(`/login/verify?${params.toString()}`);
+    }
+
+    await mergePendingCartCookie();
+    revalidatePath("/", "layout");
+    redirect(next);
+  } else if (email) {
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token: otp,
+      type: "email",
+    });
+    if (error) {
+      const params = new URLSearchParams({ email, error: error.message });
+      if (next !== "/") params.set("next", next);
+      redirect(`/login/verify?${params.toString()}`);
+    }
+  } else {
+    redirect("/login");
+  }
+
+  // Ensure a profile row exists for this user.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (user) {
+    await supabase.from("profiles").upsert(
+      {
+        id: user.id,
+        phone: user.phone ?? null,
+        email: user.email ?? null,
+      },
+      { onConflict: "id", ignoreDuplicates: false }
+    );
+  }
+
+  await mergePendingCartCookie();
+  revalidatePath("/", "layout");
+  redirect(next);
+}
+
+export async function logout() {
+  const supabase = await createClient();
+
+  await supabase.auth.signOut();
+
+  revalidatePath("/", "layout");
+  redirect("/login");
+}

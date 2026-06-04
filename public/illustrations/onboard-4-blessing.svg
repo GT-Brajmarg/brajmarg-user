@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.4" r="0.7">
+      <stop offset="0" stop-color="#fff5d8"/>
+      <stop offset="0.6" stop-color="#f4b942"/>
+      <stop offset="1" stop-color="#c47020"/>
+    </radialGradient>
+    <linearGradient id="hand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4c896"/>
+      <stop offset="1" stop-color="#c4895a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff5d8" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#fff5d8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#bg)"/>
+
+  <!-- Light rays from center top -->
+  <g stroke="#fff5d8" stroke-width="3" opacity="0.4" stroke-linecap="round">
+    <line x1="400" y1="80"  x2="400" y2="180"/>
+    <line x1="280" y1="120" x2="340" y2="200"/>
+    <line x1="520" y1="120" x2="460" y2="200"/>
+    <line x1="200" y1="200" x2="290" y2="240"/>
+    <line x1="600" y1="200" x2="510" y2="240"/>
+    <line x1="160" y1="320" x2="280" y2="320"/>
+    <line x1="640" y1="320" x2="520" y2="320"/>
+  </g>
+
+  <!-- Sun glow behind hands -->
+  <circle cx="400" cy="280" r="200" fill="url(#glow)"/>
+
+  <!-- Praying hands (Anjali Mudra) silhouette -->
+  <g transform="translate(400 380)">
+    <!-- Left hand -->
+    <path d="M -10 -120
+             Q -45 -130 -55 -100
+             Q -68 -50 -68 -20
+             Q -68 30 -55 70
+             Q -40 100 -10 100
+             L -10 -120 Z" fill="url(#hand)"/>
+    <!-- Right hand -->
+    <path d="M 10 -120
+             Q 45 -130 55 -100
+             Q 68 -50 68 -20
+             Q 68 30 55 70
+             Q 40 100 10 100
+             L 10 -120 Z" fill="url(#hand)"/>
+    <!-- Middle line where palms meet -->
+    <line x1="0" y1="-120" x2="0" y2="100" stroke="#7a4520" stroke-width="2" opacity="0.6"/>
+
+    <!-- Finger details (left) -->
+    <line x1="-25" y1="-100" x2="-25" y2="-30" stroke="#a06840" stroke-width="1.5" opacity="0.6"/>
+    <line x1="-40" y1="-90"  x2="-40" y2="-30" stroke="#a06840" stroke-width="1.5" opacity="0.6"/>
+    <line x1="-52" y1="-70"  x2="-52" y2="-30" stroke="#a06840" stroke-width="1.5" opacity="0.6"/>
+
+    <!-- Finger details (right) -->
+    <line x1="25" y1="-100" x2="25" y2="-30" stroke="#a06840" stroke-width="1.5" opacity="0.6"/>
+    <line x1="40" y1="-90"  x2="40" y2="-30" stroke="#a06840" stroke-width="1.5" opacity="0.6"/>
+    <line x1="52" y1="-70"  x2="52" y2="-30" stroke="#a06840" stroke-width="1.5" opacity="0.6"/>
+
+    <!-- Wrist bands -->
+    <rect x="-70" y="60"  width="20" height="40" fill="#c41e1e"/>
+    <rect x="50"  y="60"  width="20" height="40" fill="#c41e1e"/>
+    <line x1="-70" y1="70" x2="-50" y2="70" stroke="#ffd76b" stroke-width="2"/>
+    <line x1="-70" y1="90" x2="-50" y2="90" stroke="#ffd76b" stroke-width="2"/>
+    <line x1="50"  y1="70" x2="70"  y2="70" stroke="#ffd76b" stroke-width="2"/>
+    <line x1="50"  y1="90" x2="70"  y2="90" stroke="#ffd76b" stroke-width="2"/>
+  </g>
+
+  <!-- Floating flower petals around -->
+  <g fill="#ff8a1c">
+    <ellipse cx="200" cy="180" rx="8" ry="14" transform="rotate(20 200 180)"/>
+    <ellipse cx="600" cy="180" rx="8" ry="14" transform="rotate(-20 600 180)"/>
+    <ellipse cx="160" cy="280" rx="8" ry="14" transform="rotate(45 160 280)"/>
+    <ellipse cx="640" cy="280" rx="8" ry="14" transform="rotate(-45 640 280)"/>
+    <ellipse cx="220" cy="450" rx="8" ry="14"/>
+    <ellipse cx="580" cy="450" rx="8" ry="14"/>
+  </g>
+  <g fill="#ffd76b">
+    <circle cx="200" cy="180" r="3"/>
+    <circle cx="600" cy="180" r="3"/>
+    <circle cx="160" cy="280" r="3"/>
+    <circle cx="640" cy="280" r="3"/>
+  </g>
+
+  <!-- Om symbol at top -->
+  <text x="400" y="90" text-anchor="middle" font-family="Georgia, serif" font-size="60" font-weight="bold" fill="#7a0a0a" opacity="0.85">ॐ</text>
+</svg>
