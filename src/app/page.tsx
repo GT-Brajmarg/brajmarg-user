@@ -17,9 +17,19 @@ export default async function Home() {
   const supabase = await createClient();
 
   // Fetch active temples ordered by display_order
+  // const { data: temples } = await supabase
+  //   .from("temples")
+  //   .select("*")
+  //   .eq("is_active", true)
+  //   .order("display_order", { ascending: true });
   const { data: temples } = await supabase
     .from("temples")
-    .select("*")
+    .select(
+      `
+    *,
+    temple_timings (*)
+  `,
+    )
     .eq("is_active", true)
     .order("display_order", { ascending: true });
 
@@ -48,6 +58,120 @@ export default async function Home() {
     if (d !== 0) return d;
     return (a.starts_at ?? "").localeCompare(b.starts_at ?? "");
   });
+
+  const now = new Date();
+  const today = now.getDay();
+
+  const templesWithStatus =
+    temples?.map((temple: any) => {
+      const timings = temple.temple_timings ?? [];
+
+      const todayTimings = timings
+        .filter(
+          (t: any) =>
+            t.day_of_week === String(today) || t.day_of_week === "daily",
+        )
+        .sort((a: any, b: any) => a.opening_time.localeCompare(b.opening_time));
+
+      const currentEvent = todayTimings.find((row: any) => {
+        const start = new Date(now);
+        const end = new Date(now);
+
+        const [oh, om] = row.opening_time.split(":").map(Number);
+        const [ch, cm] = row.closing_time.split(":").map(Number);
+
+        start.setHours(oh, om, 0, 0);
+        end.setHours(ch, cm, 0, 0);
+
+        return now >= start && now <= end;
+      });
+
+      let currentRemainingTime: string | undefined;
+
+      if (currentEvent) {
+        const endTime = new Date(now);
+
+        const [h, m] = currentEvent.closing_time.split(":").map(Number);
+
+        endTime.setHours(h, m, 0, 0);
+
+        const diff = endTime.getTime() - now.getTime();
+
+        if (diff > 0) {
+          const hours = Math.floor(diff / (1000 * 60 * 60));
+          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+          currentRemainingTime =
+            hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+        }
+      }
+
+      const upcomingEvent =
+        todayTimings.find((row: any) => {
+          const start = new Date(now);
+
+          const [h, m] = row.opening_time.split(":").map(Number);
+
+          start.setHours(h, m, 0, 0);
+
+          return start > now;
+        }) ||
+        timings.sort((a: any, b: any) => {
+          return Number(a.day_of_week) - Number(b.day_of_week);
+        })[0];
+      let remainingTime: string | undefined;
+
+      if (upcomingEvent) {
+        const nextTime = new Date(now);
+
+        const [h, m] = upcomingEvent.opening_time.split(":").map(Number);
+
+        nextTime.setHours(h, m, 0, 0);
+
+        if (nextTime <= now) {
+          nextTime.setDate(nextTime.getDate() + 1);
+        }
+
+        const diff = nextTime.getTime() - now.getTime();
+
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+        remainingTime = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+      }
+
+      const hasEventsToday = todayTimings.length > 0;
+
+      const allEventsFinishedToday =
+        hasEventsToday &&
+        !currentEvent &&
+        !todayTimings.some((row: any) => {
+          const start = new Date(now);
+
+          const [h, m] = row.opening_time.split(":").map(Number);
+
+          start.setHours(h, m, 0, 0);
+
+          return start > now;
+        });
+      return {
+        ...temple,
+        allEventsFinishedToday,
+        currentEvent: currentEvent
+          ? {
+              ...currentEvent,
+              remainingTime: currentRemainingTime,
+            }
+          : undefined,
+
+        upcomingEvent: upcomingEvent
+          ? {
+              ...upcomingEvent,
+              remainingTime,
+            }
+          : undefined,
+      };
+    }) ?? [];
 
   return (
     <main className="flex-1">
@@ -94,7 +218,10 @@ export default async function Home() {
 
           {temples && temples.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {(temples as Temple[]).map((temple) => (
+              {/* {(temples as Temple[]).map((temple) => (
+                <TempleCard key={temple.id} temple={temple} />
+              ))} */}
+              {templesWithStatus.map((temple) => (
                 <TempleCard key={temple.id} temple={temple} />
               ))}
             </div>

@@ -209,7 +209,7 @@ export default function TempleDetailClient({
   );
   // const now = new Date();
   // const TEST_MODE = true;
-  // const TEST_TIME = "07:40"; // Change this while testing
+  // const TEST_TIME = "22:40"; // Change this while testing
 
   const now = new Date();
 
@@ -572,6 +572,33 @@ export default function TempleDetailClient({
               <p className="text-sm text-gray-500">
                 No darshan timings for {WEEKDAYS[selectedDay]}.
               </p>
+            ) : visibleTimings.length === 0 ? (
+              <div className="rounded-2xl border border-green-200 bg-green-50 p-6 text-center">
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                  <svg
+                    className="h-6 w-6 text-green-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+
+                <h3 className="text-lg font-semibold text-green-800">
+                  Today's Darshan Has Concluded
+                </h3>
+
+                <p className="mt-1 text-sm text-green-700">
+                  All darshan sessions for today have concluded. We look forward
+                  to welcoming you again tomorrow.
+                </p>
+              </div>
             ) : (
               <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
                 {visibleTimings.map((row) => {

@@ -327,3 +327,20 @@ export type SevaRegistration = {
   created_at: string;
   updated_at: string;
 };
+
+export type TempleWithStatus = Temple & {
+  allEventsFinishedToday?: boolean;
+
+  currentEvent?: {
+    label: string;
+    opening_time: string;
+    closing_time: string;
+    remainingTime?: string;
+  };
+
+  upcomingEvent?: {
+    label: string;
+    opening_time: string;
+    remainingTime?: string;
+  };
+};

@@ -16,21 +16,21 @@ const LEGAL_LINKS = [
 
 const SOCIALS = [
   {
-    href: "https://facebook.com/brajmarg",
+    href: "https://www.facebook.com/share/18rkd8ebbH/",
     label: "Facebook",
     icon: (
       <path d="M14 13.5h2.5l1-4H14V7.5c0-1.03.5-2 2-2h1.5v-3.4c-.32-.04-1.55-.1-2.85-.1C11.93 2 10 3.66 10 6.7v2.8H7v4h3V22h4v-8.5z" />
     ),
   },
   {
-    href: "https://twitter.com/brajmarg",
+    href: "https://x.com/Brajmarg",
     label: "Twitter",
     icon: (
       <path d="M17.53 3h3.04l-6.64 7.59L22 21h-6.13l-4.8-6.27L5.57 21H2.52l7.1-8.12L2 3h6.27l4.34 5.74L17.53 3zm-1.07 16.18h1.69L7.62 4.72H5.81l10.65 14.46z" />
     ),
   },
   {
-    href: "https://instagram.com/brajmarg",
+    href: "https://www.instagram.com/shreebrajmarg",
     label: "Instagram",
     icon: (
       <>
