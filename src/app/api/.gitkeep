@@ -1,0 +1,2 @@
+# Route Handlers go here, e.g. src/app/api/<name>/route.ts
+# Use the server client from "@/lib/supabase/server" inside handlers.
