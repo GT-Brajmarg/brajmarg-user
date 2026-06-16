@@ -1,0 +1,4 @@
+# Auth-related routes/pages go here, e.g.
+#   src/app/auth/callback/route.ts  (OAuth/code exchange)
+#   src/app/auth/login/page.tsx     (login UI)
+# Not implemented yet — folder reserved for future development.
