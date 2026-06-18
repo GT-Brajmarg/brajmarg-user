@@ -1,0 +1,308 @@
+/* =============================================
+   Brajmarg Navbar Styles
+   ============================================= */
+
+/* ---------- Top Strip ---------- */
+.headerWrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.topStrip {
+  background-color: #2c2c2c;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.topStripText {
+  color: #cccccc;
+  font-size: 12px;
+  font-family: "Lato", sans-serif;
+  letter-spacing: 0.3px;
+}
+
+/* ---------- Main Navbar ---------- */
+.navbar {
+  background-color: #f5f0e8;
+  border-bottom: 1px solid #e0d8c8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.navInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* ---------- Logo ---------- */
+.logoSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logoIcon {
+  display: flex;
+  align-items: center;
+}
+
+.logoText {
+  display: flex;
+  align-items: center;
+}
+
+/* ---------- Nav Links ---------- */
+.navLinks {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  justify-content: center;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+}
+
+.navLink {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 12px 4px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+  position: relative;
+  gap: 2px;
+  min-width: 60px;
+}
+
+.navLink:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Nav link text – all same font size */
+.navLinkText {
+  font-family: "Lato", Arial, sans-serif;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #3d3832;
+  letter-spacing: 0.15px;
+  white-space: nowrap;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+/* Active state: text turns orange-gold */
+.navLinkActive .navLinkText {
+  color: #c8860a;
+  font-weight: 700;
+}
+
+.navLink:hover .navLinkText {
+  color: #a06c05;
+}
+
+/* Lotus decoration below active link */
+.lotusWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 12px;
+  margin-top: 2px;
+}
+
+.lotusImg {
+  display: block;
+  object-fit: contain;
+}
+
+/* ---------- CTA Buttons ---------- */
+.ctaButtons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btnSubscribe {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background-color: #1a7a7a;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.btnSubscribe:hover {
+  background-color: #155f5f;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26, 122, 122, 0.3);
+}
+
+.bellIcon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Login – single outlined button (user icon + text), using image asset */
+.btnLogin {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.btnLogin:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+/* ---------- Hamburger ---------- */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 26px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  gap: 5px;
+}
+
+.bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #2c2c2c;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.barOpen1 {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.barOpen2 {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.barOpen3 {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ---------- Mobile Menu ---------- */
+.mobileMenu {
+  display: none;
+  flex-direction: column;
+  background-color: #f5f0e8;
+  padding: 0 24px;
+  border-top: 1px solid #e0d8c8;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.mobileMenuOpen {
+  max-height: 400px;
+  padding: 16px 24px 20px;
+}
+
+.mobileNavLink {
+  display: block;
+  padding: 12px 0;
+  font-family: "Lato", sans-serif;
+  font-size: 15px;
+  color: #3d3d3d;
+  text-decoration: none;
+  border-bottom: 1px solid #e8e0d0;
+  transition: color 0.2s;
+}
+
+.mobileNavLink:hover,
+.mobileNavLinkActive {
+  color: #c8860a;
+}
+
+.mobileCtas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.btnLoginMobile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 2px solid #1a7a7a;
+  color: #1a7a7a;
+  border-radius: 6px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-family: "Lato", sans-serif;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.btnLoginMobile:hover {
+  background-color: #1a7a7a;
+  color: #fff;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .navLinks,
+  .ctaButtons {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .mobileMenu {
+    display: flex;
+  }
+}
+
+@media (max-width: 600px) {
+  .navInner {
+    padding: 0 16px;
+    height: 60px;
+  }
+
+  .topStrip {
+    padding: 0 16px;
+  }
+}

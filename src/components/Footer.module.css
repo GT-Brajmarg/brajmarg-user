@@ -1,0 +1,347 @@
+/* ══════════════════════════════════════
+   FOOTER — pixel-accurate to Figma
+══════════════════════════════════════ */
+.footer {
+  width: 100%;
+  font-family: var(--font-lato), sans-serif;
+}
+
+/* ────────────────────────────────────
+   PART 1 · Teal Trust Banner
+──────────────────────────────────── */
+.trustBanner {
+  background-color: #08545e;
+  width: 100%;
+  position: relative;
+}
+
+.trustInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 52px 48px 40px;
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+/* LEFT column */
+.trustLeft {
+  flex: 0 0 38%;
+  max-width: 38%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-right: 40px;
+}
+
+.trustHeading {
+  font-family: var(--font-lato), serif;
+  font-size: clamp(22px, 2.6vw, 34px);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.25;
+  margin: 0 0 16px;
+}
+
+.trustBody {
+  font-size: 13.5px;
+  color: #b8d8dc;
+  line-height: 1.7;
+  margin: 0 0 28px;
+  max-width: 320px;
+}
+
+.disclaimerBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 24px;
+  border: 1.5px solid #c8860a;
+  border-radius: 6px;
+  color: #e8c97a;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  transition: background 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+
+.disclaimerBtn:hover {
+  background: rgba(200, 134, 10, 0.15);
+  color: #fff;
+}
+
+/* Vertical divider between left & right */
+.vDivider {
+  width: 1.5px;
+  align-self: stretch;
+  background: rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+  margin: 4px 0;
+}
+
+/* RIGHT column */
+.trustRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 40px;
+  gap: 12px;
+}
+
+.iconsRow {
+  width: 100%;
+  max-width: 580px;
+}
+
+.labelsRow {
+  width: 100%;
+  max-width: 580px;
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.iconLabel {
+  flex: 1;
+  text-align: center;
+  font-size: 11.5px;
+  color: #c0dde0;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+/* Temple skyline strip */
+.skylineWrap {
+  position: relative;
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+}
+
+.skylineImg {
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+/* ────────────────────────────────────
+   PART 2 · Bottom Footer (golden bar)
+──────────────────────────────────── */
+.bottomFooter {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  min-height: 160px;
+}
+
+.bottomBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.bottomInner {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 48px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+/* Col 1 — Brand */
+.brandCol {
+  flex: 0 0 36%;
+  max-width: 36%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.logoRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Vertical divider between footer columns */
+.footerVDivider {
+  width: 1.5px;
+  height: 100px;
+  background: rgba(8, 84, 94, 0.25);
+  flex-shrink: 0;
+  margin: 0 36px;
+  align-self: center;
+}
+
+/* Col 2 — Quick Links */
+.linksCol {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+}
+
+.linksBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.linksTitle {
+  font-family: var(--font-lato), serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #08545e;
+  margin: 0 0 16px;
+  letter-spacing: 0.5px;
+}
+
+.linksGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 48px;
+}
+
+.linksItem {
+  font-family: var(--font-lato), serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #08545e;
+  text-decoration: none;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+
+.linksItem:hover {
+  opacity: 0.75;
+  text-decoration: underline;
+}
+
+/* Col 3 — Social */
+.socialCol {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.socialTitle {
+  font-family: var(--font-lato), serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #08545e;
+  margin: 0 0 16px;
+}
+
+.socialIcons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.socialLink:hover {
+  transform: scale(1.1);
+  opacity: 0.75;
+}
+
+/* ────────────────────────────────────
+   PART 3 · Copyright bar
+──────────────────────────────────── */
+.copyrightBar {
+  background-color: #08545e;
+  width: 100%;
+  padding: 13px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copyrightText {
+  font-size: 13px;
+  color: #7fc5cc;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+/* ────────────────────────────────────
+   Responsive
+──────────────────────────────────── */
+@media (max-width: 900px) {
+  .trustInner {
+    flex-direction: column;
+    padding: 40px 28px 32px;
+    gap: 32px;
+  }
+
+  .trustLeft {
+    flex: 1 1 auto;
+    max-width: 100%;
+    padding-right: 0;
+  }
+
+  .vDivider {
+    width: 60%;
+    height: 1.5px;
+    align-self: auto;
+    margin: 0;
+  }
+
+  .trustRight {
+    flex: 1 1 auto;
+    width: 100%;
+    padding-left: 0;
+  }
+
+  .labelsRow {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .iconLabel {
+    flex: 0 0 28%;
+    text-align: center;
+  }
+
+  .skylineWrap {
+    height: 100px;
+  }
+
+  .bottomInner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 28px 28px;
+    gap: 20px;
+  }
+
+  .brandCol {
+    flex: 1 1 auto;
+    max-width: 100%;
+  }
+
+  .footerVDivider {
+    width: 60%;
+    height: 1.5px;
+    margin: 0;
+    align-self: auto;
+  }
+
+  .linksCol {
+    flex: 1 1 auto;
+  }
+
+  .copyrightBar {
+    padding: 12px 28px;
+  }
+}

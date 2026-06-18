@@ -1,0 +1,195 @@
+/* ══════════════════════════════════════
+   ServicesSection CSS Module
+══════════════════════════════════════ */
+.section {
+  position: relative;
+  width: 100%;
+  background-color: #08545e;
+  padding: 80px 0 90px;
+  overflow: hidden;
+  user-select: none;
+}
+
+.bgDecoLeft {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 380px;
+  height: 380px;
+  pointer-events: none;
+  opacity: 0.4;
+  z-index: 0;
+}
+
+.bgDecoRight {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 380px;
+  height: 380px;
+  pointer-events: none;
+  opacity: 0.4;
+  z-index: 0;
+  transform: scaleX(-1);
+}
+
+.inner {
+  position: relative;
+  z-index: 10;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.title {
+  color: #ffffff;
+  font-family: var(--font-lato), serif;
+  font-size: clamp(28px, 3.5vw, 46px);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-align: center;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  color: #cce2e5;
+  font-family: var(--font-lato), serif;
+  font-size: clamp(14px, 1.8vw, 17px);
+  text-align: center;
+  max-width: 520px;
+  margin: 0 0 56px 0;
+  line-height: 1.6;
+  padding: 0 16px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 420px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+  padding: 32px 16px 24px;
+}
+
+.iconWrap {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .iconWrap {
+  transform: scale(1.1);
+}
+
+.cardTitle {
+  color: #dfa133;
+  font-family: var(--font-lato), serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 16px 0;
+  letter-spacing: 0.5px;
+  font-style: italic;
+}
+
+.cardDesc {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12.5px;
+  line-height: 1.7;
+  font-family: var(--font-lato), sans-serif;
+  margin: 0;
+}
+
+.btnWrap {
+  width: 100%;
+  padding: 0 20px 28px;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  color: #ffffff !important;
+  font-size: 12.5px;
+  font-weight: 700;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  letter-spacing: 0.5px;
+  transition: opacity 0.2s ease;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #c8860a;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+/* ────────────────────────────────────
+   Responsive Layouts
+──────────────────────────────────── */
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .bgDecoLeft, .bgDecoRight {
+    width: 240px;
+    height: 240px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,292 @@
+/* =============================================
+   Temples Section Styles — Brajmarg Home Page
+   ============================================= */
+
+.section {
+  position: relative;
+  width: 100%;
+  padding: 60px 0 80px;
+  overflow: hidden;
+}
+
+/* Cream parchment background matching navbar */
+.sectionBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: #f5f0e8;
+}
+
+.parchmentTexture {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.6;
+}
+
+/* Inner wrapper */
+.inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── Section Header ── */
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title {
+  font-family: "Lato", Georgia, serif;
+  font-size: clamp(22px, 2.6vw, 30px);
+  font-weight: 900;
+  color: #2a1f0e;
+  letter-spacing: -0.3px;
+}
+
+.subtitle {
+  font-family: "Lato", sans-serif;
+  font-size: 14px;
+  color: #6b5c45;
+  margin-left: 2px;
+}
+
+.viewAllBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: transparent;
+  border: 2px solid #1a7a7a;
+  color: #1a7a7a;
+  padding: 9px 20px;
+  border-radius: 6px;
+  font-family: "Lato", sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.viewAllBtn:hover {
+  background-color: #1a7a7a;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ── Grid ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* ── Card Container ── */
+.card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 0.72; /* matches scroll frame tall aspect ratio */
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
+/* ── Scroll Frame Overlay ── */
+.frameOverlay {
+  position: absolute;
+  top: -8px;
+  left: -6px;
+  right: -6px;
+  bottom: -8px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ── Card Inner Content (Padded to sit inside gold borders) ── */
+.cardContent {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  padding: 24px 22px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Image container */
+.imageArea {
+  position: relative;
+  width: 100%;
+  height: 55%; /* takes up the top portion of the frame */
+  margin-bottom: 12px;
+}
+
+/* Arch/dome mask shape for the temple photo */
+.archMask {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 100px 100px 8px 8px; /* dome arch top */
+  overflow: hidden;
+  border: 1.5px solid #d2b48c; /* light bronze border around the photo */
+  background-color: #e8dfd0;
+}
+
+.templePhoto {
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* ── Status Badge ── */
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-family: "Lato", sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.badgeLive {
+  background-color: #16a34a; /* Figma green */
+  color: #fff;
+}
+
+.badgeSoon {
+  background-color: #c8860a; /* Figma gold */
+  color: #fff;
+}
+
+.badgeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #fff;
+  animation: pulseDot 1.4s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Card Body (Text and button) ── */
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.templeName {
+  font-family: Georgia, Garamond, serif; /* Figma serif style */
+  font-size: 15px;
+  font-weight: 600;
+  color: #1d3557; /* Deep blue/green font */
+  line-height: 1.3;
+  margin: 0;
+}
+
+.locationRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.pinIcon {
+  font-size: 11px;
+  color: #c8860a;
+}
+
+.templeLocation {
+  font-family: "Lato", sans-serif;
+  font-size: 11.5px;
+  color: #7a6a55;
+  font-weight: 600;
+}
+
+/* Visit temple button matches the design button style */
+.visitBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1a7a7a;
+  color: #ffffff;
+  padding: 8px 24px;
+  border-radius: 6px;
+  font-family: "Lato", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  width: 100%;
+  max-width: 140px;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.visitBtn:hover {
+  background-color: #155f5f;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(26, 122, 122, 0.25);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
