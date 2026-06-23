@@ -1,89 +1,53 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 export interface Temple {
-  id: number;
+  id: string;
   name: string;
   location: string;
-  image: string;
-  status: "LIVE" | "COMING SOON";
-  href: string;
+  description: string | null;
+  image_url: string | null;
+  is_active: boolean;
+  is_coming_soon: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
 }
 
 interface TemplesState {
   temples: Temple[];
+  loading: boolean;
+  error: string | null;
   searchQuery: string;
   popularSearches: string[];
 }
 
+export const fetchTemples = createAsyncThunk(
+  "temples/fetchTemples",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch("/api/temples");
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch temples");
+      }
+
+      const result = await response.json();
+
+      return result.data as Temple[];
+    } catch (error) {
+      return rejectWithValue(
+        error instanceof Error ? error.message : "Failed to fetch temples",
+      );
+    }
+  },
+);
+
 const initialState: TemplesState = {
+  temples: [],
+  loading: false,
+  error: null,
   searchQuery: "",
   popularSearches: ["Nathdwara", "Khatu", "Jaipur", "Barsana", "Chittorgarh"],
-  temples: [
-    {
-      id: 1,
-      name: "Shreenathji Temple",
-      location: "Nathdwara, Rajasthan",
-      image: "/images/temple_shreenathji.png",
-      status: "LIVE",
-      href: "/temples/shreenathji",
-    },
-    {
-      id: 2,
-      name: "Shri Khatu Shyamji Temple",
-      location: "Khatu, Rajasthan",
-      image: "/images/temple_khatu_shyam.png",
-      status: "LIVE",
-      href: "/temples/khatu-shyamji",
-    },
-    {
-      id: 3,
-      name: "Shri Govind Devji Temple",
-      location: "Jaipur, Rajasthan",
-      image: "/images/temple_govind_devji.png",
-      status: "LIVE",
-      href: "/temples/govind-devji",
-    },
-    {
-      id: 4,
-      name: "Shree Radha Rani Temple",
-      location: "Barsana, Uttar Pradesh",
-      image: "/images/temple_radha_rani.png",
-      status: "LIVE",
-      href: "/temples/radha-rani",
-    },
-    {
-      id: 5,
-      name: "Shree Sawariya Seth Ji Temple",
-      location: "Chittorgarh, Rajasthan",
-      image: "/images/temple_banke_bihari.png",
-      status: "LIVE",
-      href: "/temples/sawariya-seth",
-    },
-    {
-      id: 6,
-      name: "Shreenathji Temple",
-      location: "Nathdwara, Rajasthan",
-      image: "/images/temple_shreenathji.png",
-      status: "COMING SOON",
-      href: "/temples/shreenathji-2",
-    },
-    {
-      id: 7,
-      name: "Shri Govind Devji Temple",
-      location: "Jaipur, Rajasthan",
-      image: "/images/temple_govind_devji.png",
-      status: "COMING SOON",
-      href: "/temples/govind-devji-2",
-    },
-    {
-      id: 8,
-      name: "Shri Khatu Shyamji Temple",
-      location: "Khatu, Rajasthan",
-      image: "/images/temple_khatu_shyam.png",
-      status: "COMING SOON",
-      href: "/temples/khatu-shyamji-2",
-    },
-  ],
 };
 
 const templesSlice = createSlice({
@@ -93,8 +57,31 @@ const templesSlice = createSlice({
     setSearchQuery(state, action: PayloadAction<string>) {
       state.searchQuery = action.payload;
     },
+
+    clearTempleError(state) {
+      state.error = null;
+    },
+  },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTemples.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(fetchTemples.fulfilled, (state, action) => {
+        state.loading = false;
+        state.temples = action.payload;
+      })
+
+      .addCase(fetchTemples.rejected, (state, action) => {
+        state.loading = false;
+        state.error = (action.payload as string) ?? "Failed to fetch temples";
+      });
   },
 });
 
-export const { setSearchQuery } = templesSlice.actions;
+export const { setSearchQuery, clearTempleError } = templesSlice.actions;
+
 export default templesSlice.reducer;

@@ -3,28 +3,30 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./SubscriptionSection.module.css";
-
-const monthlyFeatures = [
-  "Festival & Ekadashi reminders",
-  "Temple darshan timing alerts",
-  "WhatsApp notifications",
-  "Upcoming events calendar",
-  "Weekly prasad availability alerts",
-  "Priority customer support",
-];
-
-const yearlyFeatures = [
-  "Everything in Monthly Plan",
-  "Live darshan notifications",
-  "Exclusive festival updates",
-  "Early access to seva bookings",
-  "Exclusive yatra discounts (10%)",
-  "Birthday & anniversary puja reminders",
-  "Priority WhatsApp support",
-  "Exclusive member prasad boxes",
-];
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchPlans } from "@/store/slices/subscriptionSlice";
 
 export default function SubscriptionSection() {
+  const dispatch = useAppDispatch();
+
+  const { plans, loading } = useAppSelector((state) => state.subscriptions);
+
+  useEffect(() => {
+    dispatch(fetchPlans());
+  }, [dispatch]);
+
+  const monthlyPlan = plans.find((plan) => plan.plan_type === "monthly");
+
+  const yearlyPlan = plans.find((plan) => plan.plan_type === "yearly");
+
+  if (loading || !monthlyPlan || !yearlyPlan) {
+    return (
+      <section className={styles.section}>
+        <div className={styles.inner}>Loading subscription plans...</div>
+      </section>
+    );
+  }
   return (
     <section className={styles.section}>
       {/* Parchment background */}
@@ -90,13 +92,13 @@ export default function SubscriptionSection() {
               {/* Price */}
               <div className={styles.priceRow}>
                 <span className={styles.currency}>₹</span>
-                <span className={styles.price}>99</span>
+                <span className={styles.price}>{monthlyPlan.price}</span>
                 <span className={styles.period}>/month</span>
               </div>
 
               {/* Features */}
               <ul className={styles.featureList}>
-                {monthlyFeatures.map((f) => (
+                {monthlyPlan.features.map((f: string) => (
                   <li key={f} className={styles.featureItem}>
                     <Image
                       src="/images4/iconstack.io - (Ticktick).png"
@@ -111,8 +113,11 @@ export default function SubscriptionSection() {
               </ul>
 
               {/* CTA */}
-              <Link href="/subscribe?plan=monthly" className={styles.btnMonthly}>
-                Subscribe Monthly →
+              <Link
+                href="/subscribe?plan=monthly"
+                className={styles.btnMonthly}
+              >
+                {monthlyPlan.button_text} →
               </Link>
             </div>
           </div>
@@ -121,13 +126,11 @@ export default function SubscriptionSection() {
           <div className={`${styles.card} ${styles.cardYearly}`}>
             {/* Best Value badge */}
             <div className={styles.bestValueBadge}>
-              <Image
-                src="/images4/Best Value.png"
-                alt="Best Value"
-                width={90}
-                height={22}
-                style={{ objectFit: "contain" }}
-              />
+              {yearlyPlan.badge_text && (
+                <div className={styles.bestValueBadge}>
+                  <span>{yearlyPlan.badge_text}</span>
+                </div>
+              )}
             </div>
 
             {/* Card background */}
@@ -154,15 +157,23 @@ export default function SubscriptionSection() {
 
               {/* Price */}
               <div className={styles.priceRow}>
-                <span className={`${styles.currency} ${styles.currencyGold}`}>₹</span>
-                <span className={`${styles.price} ${styles.priceGold}`}>799</span>
-                <span className={`${styles.period} ${styles.periodGold}`}>/month</span>
-                <span className={styles.saveBadge}>Save 43%</span>
+                <span className={`${styles.currency} ${styles.currencyGold}`}>
+                  ₹
+                </span>
+                <span className={`${styles.price} ${styles.priceGold}`}>
+                  {yearlyPlan.price}
+                </span>
+                <span className={`${styles.period} ${styles.periodGold}`}>
+                  /month
+                </span>
+                <span className={styles.saveBadge}>
+                  {yearlyPlan.savings_text}
+                </span>
               </div>
 
               {/* Features */}
               <ul className={styles.featureList}>
-                {yearlyFeatures.map((f) => (
+                {yearlyPlan.features.map((f: string) => (
                   <li key={f} className={styles.featureItem}>
                     <Image
                       src="/images4/iconstack.io - (Ticktick) (1).png"
@@ -179,7 +190,7 @@ export default function SubscriptionSection() {
 
               {/* CTA */}
               <Link href="/subscribe?plan=yearly" className={styles.btnYearly}>
-                Subscribe Yearly →
+                {yearlyPlan.button_text} →
               </Link>
             </div>
           </div>

@@ -1,34 +1,79 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+export const fetchLiveDarshan = createAsyncThunk(
+  "hero/fetchLiveDarshan",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch("/api/live-darshan");
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch live darshan");
+      }
+
+      const result = await response.json();
+
+      return result.data;
+    } catch (error) {
+      return rejectWithValue(
+        error instanceof Error ? error.message : "Failed to fetch live darshan",
+      );
+    }
+  },
+);
+
+export interface DarshanTiming {
+  id: string;
+  day_of_week: string;
+  opening_time: string;
+  closing_time: string;
+  label: string;
+  is_active: boolean;
+}
+
+interface Darshan {
+  templeName: string;
+  location: string;
+  label: string;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  date: string;
+
+  timings: DarshanTiming[];
+  nextDarshan: DarshanTiming | null;
+}
 
 interface HeroState {
   heroTemple: string;
-  darshan: {
-    templeName: string;
-    location: string;
-    label: string;
-    hours: number;
-    minutes: number;
-    seconds: number;
-    date: string;
-  };
+  darshan: Darshan;
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: HeroState = {
-  heroTemple: "Shreenathji Temple",
+  heroTemple: "",
+
   darshan: {
-    templeName: "Shreenathji Temple",
-    location: "Nathdwara, Rajasthan",
-    label: "Rajbhog darshan starts in",
+    templeName: "",
+    location: "",
+    label: "",
     hours: 0,
-    minutes: 12,
-    seconds: 45,
-    date: "16 June, 2026",
+    minutes: 0,
+    seconds: 0,
+    date: "",
+
+    timings: [],
+    nextDarshan: null,
   },
+
+  loading: false,
+  error: null,
 };
 
 const heroSlice = createSlice({
   name: "hero",
   initialState,
+
   reducers: {
     tickCountdown(state) {
       if (state.darshan.seconds > 0) {
@@ -43,7 +88,31 @@ const heroSlice = createSlice({
       }
     },
   },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchLiveDarshan.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(fetchLiveDarshan.fulfilled, (state, action) => {
+        state.loading = false;
+
+        state.heroTemple = action.payload.templeName;
+
+        state.darshan = action.payload;
+      })
+
+      .addCase(fetchLiveDarshan.rejected, (state, action) => {
+        state.loading = false;
+
+        state.error =
+          (action.payload as string) ?? "Failed to fetch live darshan";
+      });
+  },
 });
 
 export const { tickCountdown } = heroSlice.actions;
+
 export default heroSlice.reducer;
