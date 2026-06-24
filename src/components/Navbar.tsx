@@ -42,7 +42,7 @@ export default function Navbar() {
   return (
     <header className="w-full border-t-[3px] border-[#2F2A24] bg-[#EFDEC7]">
       <nav className="w-full border-b">
-        <div className="mx-auto max-w-[1440px] px-4 md:px-6 lg:px-10">
+        <div className="w-full px-8 lg:px-20">
           {/* Mobile Navbar */}
           <div className="flex h-[72px] items-center justify-between md:hidden">
             <Link href="/" className="flex items-center gap-2">
@@ -99,10 +99,13 @@ export default function Navbar() {
                 ))}
               </ul>
 
-              <div className="mx-auto mt-6 flex max-w-[280px] flex-col gap-3">
+              <div
+                className="mx-auto mt-6 flex flex-col items-center gap-3"
+                style={{ marginTop: "30px" }}
+              >
                 <button
                   onClick={() => setShowAlerts((prev) => !prev)}
-                  className="flex h-[44px] w-full items-center justify-center gap-2 rounded-[10px] bg-[#005D63]"
+                  className="flex h-[44px] w-[280px] items-center justify-center gap-2 rounded-[10px] bg-[#005D63]"
                 >
                   <Bell size={18} className="text-[#F7F1E8]" />
 
@@ -116,7 +119,7 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => dispatch(closeMenu())}
-                  className="flex h-[44px] w-full items-center justify-center gap-2 rounded-[10px] border border-[#005D63]"
+                  className="flex h-[44px] w-[280px] items-center justify-center gap-2 rounded-[10px] border border-[#005D63]"
                 >
                   <User size={18} className="text-[#2D2924]" />
 
@@ -131,7 +134,7 @@ export default function Navbar() {
           )}
 
           {/* Desktop Navbar */}
-          <div className="hidden h-[84px] grid-cols-[280px_1fr_260px] items-center md:grid">
+          <div className="hidden h-[84px] grid-cols-[280px_1fr_340px] items-center md:grid">
             {/* Logo */}
             <div className="flex justify-end pr-40">
               <Link href="/" className="flex items-center gap-3">
@@ -187,7 +190,10 @@ export default function Navbar() {
             </ul>
 
             {/* Right Side */}
-            <div className="flex items-center justify-end gap-3">
+            <div
+              className="flex items-center justify-end gap-3 pr-8"
+              style={{ marginRight: "30px" }}
+            >
               <button
                 onClick={() => setShowAlerts((prev) => !prev)}
                 className="flex h-[38px] w-[165px] items-center justify-center gap-2 rounded-[10px] bg-[#005D63]"
