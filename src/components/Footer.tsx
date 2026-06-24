@@ -16,15 +16,14 @@ const trustIconLabels = [
 export default function Footer() {
   return (
     <footer className={styles.footer}>
-
       {/* ══ PART 1: Teal Trust Banner ══ */}
       <div className={styles.trustBanner}>
         <div className={styles.trustInner}>
-
           {/* LEFT: headline + body + button */}
           <div className={styles.trustLeft}>
             <h2 className={styles.trustHeading}>
-              Built on Transparency.<br />
+              Built on Transparency.
+              <br />
               Devotion with Integrity.
             </h2>
             <p className={styles.trustBody}>
@@ -51,9 +50,22 @@ export default function Footer() {
                 style={{ objectFit: "contain", width: "100%", height: "auto" }}
               />
             </div>
-            <div className={styles.labelsRow}>
+            <div className={`${styles.labelsRow} ${styles.desktopLabels}`}>
               {trustIconLabels.map((label) => (
-                <span key={label} className={styles.iconLabel}>{label}</span>
+                <span key={label} className={styles.iconLabel}>
+                  {label}
+                </span>
+              ))}
+            </div>
+
+            <div
+              className="grid grid-cols-2 gap-x-4 gap-y-3 px-6 text-center md:hidden"
+              // style={{ marginTop: "2px" }}
+            >
+              {trustIconLabels.map((label) => (
+                <span key={label} className="text-[11px] text-white">
+                  {label}
+                </span>
               ))}
             </div>
           </div>
@@ -67,6 +79,7 @@ export default function Footer() {
             fill
             className={styles.skylineImg}
             sizes="100vw"
+            style={{ objectFit: "fill" }}
           />
         </div>
       </div>
@@ -107,7 +120,11 @@ export default function Footer() {
               alt="Connecting devotees with sacred temples across India through authentic sevas, prasadam and spiritual experiences."
               width={270}
               height={56}
-              style={{ objectFit: "contain", objectPosition: "left", marginTop: "10px" }}
+              style={{
+                objectFit: "contain",
+                objectPosition: "left",
+                marginTop: "10px",
+              }}
             />
           </div>
 
@@ -119,12 +136,24 @@ export default function Footer() {
             <div className={styles.linksBlock}>
               <h4 className={styles.linksTitle}>Quick Links</h4>
               <div className={styles.linksGrid}>
-                <Link href="/" className={styles.linksItem}>Home</Link>
-                <Link href="/services/seva" className={styles.linksItem}>Seva</Link>
-                <Link href="/temples" className={styles.linksItem}>Temples</Link>
-                <Link href="/services/yatra" className={styles.linksItem}>Yatra</Link>
-                <Link href="/shop" className={styles.linksItem}>Shop</Link>
-                <Link href="/about" className={styles.linksItem}>About Us</Link>
+                <Link href="/" className={styles.linksItem}>
+                  Home
+                </Link>
+                <Link href="/services/seva" className={styles.linksItem}>
+                  Seva
+                </Link>
+                <Link href="/temples" className={styles.linksItem}>
+                  Temples
+                </Link>
+                <Link href="/services/yatra" className={styles.linksItem}>
+                  Yatra
+                </Link>
+                <Link href="/shop" className={styles.linksItem}>
+                  Shop
+                </Link>
+                <Link href="/about" className={styles.linksItem}>
+                  About Us
+                </Link>
               </div>
             </div>
           </div>
@@ -137,26 +166,97 @@ export default function Footer() {
             <h4 className={styles.socialTitle}>Follow Us</h4>
             <div className={styles.socialIcons}>
               {/* Facebook */}
-              <Link href="https://facebook.com" target="_blank" aria-label="Facebook" className={styles.socialLink}>
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="22" cy="22" r="21" stroke="#08545e" strokeWidth="1.5"/>
-                  <path d="M24.5 15h-2.5a1.5 1.5 0 0 0-1.5 1.5v2.5h-2v3.5h2v8.5h3.5v-8.5h2.3l.7-3.5h-3v-1.5a.5.5 0 0 1 .5-.5h2.5V15Z" fill="#08545e"/>
+              <Link
+                href="https://facebook.com"
+                target="_blank"
+                aria-label="Facebook"
+                className={styles.socialLink}
+              >
+                <svg
+                  width="44"
+                  height="44"
+                  viewBox="0 0 44 44"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="22"
+                    cy="22"
+                    r="21"
+                    stroke="#08545e"
+                    strokeWidth="1.5"
+                  />
+                  <path
+                    d="M24.5 15h-2.5a1.5 1.5 0 0 0-1.5 1.5v2.5h-2v3.5h2v8.5h3.5v-8.5h2.3l.7-3.5h-3v-1.5a.5.5 0 0 1 .5-.5h2.5V15Z"
+                    fill="#08545e"
+                  />
                 </svg>
               </Link>
               {/* X (Twitter) */}
-              <Link href="https://x.com" target="_blank" aria-label="X" className={styles.socialLink}>
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="22" cy="22" r="21" stroke="#08545e" strokeWidth="1.5"/>
-                  <path d="M13 14h5.5l3.8 5.2L26.5 14H31l-7 8.5 7.5 8.5H26l-4.2-5.5L17 31h-4.5l7.3-8.5L13 14Z" fill="#08545e"/>
+              <Link
+                href="https://x.com"
+                target="_blank"
+                aria-label="X"
+                className={styles.socialLink}
+              >
+                <svg
+                  width="44"
+                  height="44"
+                  viewBox="0 0 44 44"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="22"
+                    cy="22"
+                    r="21"
+                    stroke="#08545e"
+                    strokeWidth="1.5"
+                  />
+                  <path
+                    d="M13 14h5.5l3.8 5.2L26.5 14H31l-7 8.5 7.5 8.5H26l-4.2-5.5L17 31h-4.5l7.3-8.5L13 14Z"
+                    fill="#08545e"
+                  />
                 </svg>
               </Link>
               {/* Instagram */}
-              <Link href="https://instagram.com" target="_blank" aria-label="Instagram" className={styles.socialLink}>
-                <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="22" cy="22" r="21" stroke="#08545e" strokeWidth="1.5"/>
-                  <rect x="13" y="13" width="18" height="18" rx="5" stroke="#08545e" strokeWidth="1.5"/>
-                  <circle cx="22" cy="22" r="4.5" stroke="#08545e" strokeWidth="1.5"/>
-                  <circle cx="27.5" cy="16.5" r="1.2" fill="#08545e"/>
+              <Link
+                href="https://instagram.com"
+                target="_blank"
+                aria-label="Instagram"
+                className={styles.socialLink}
+              >
+                <svg
+                  width="44"
+                  height="44"
+                  viewBox="0 0 44 44"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="22"
+                    cy="22"
+                    r="21"
+                    stroke="#08545e"
+                    strokeWidth="1.5"
+                  />
+                  <rect
+                    x="13"
+                    y="13"
+                    width="18"
+                    height="18"
+                    rx="5"
+                    stroke="#08545e"
+                    strokeWidth="1.5"
+                  />
+                  <circle
+                    cx="22"
+                    cy="22"
+                    r="4.5"
+                    stroke="#08545e"
+                    strokeWidth="1.5"
+                  />
+                  <circle cx="27.5" cy="16.5" r="1.2" fill="#08545e" />
                 </svg>
               </Link>
             </div>
@@ -166,9 +266,10 @@ export default function Footer() {
 
       {/* ══ PART 3: Copyright bar ══ */}
       <div className={styles.copyrightBar}>
-        <p className={styles.copyrightText}>© 2026 Brajmarg. Connecting Devotees.</p>
+        <p className={styles.copyrightText}>
+          © 2026 Brajmarg. Connecting Devotees.
+        </p>
       </div>
-
     </footer>
   );
 }
