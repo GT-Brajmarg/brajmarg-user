@@ -12,8 +12,6 @@ export default function HeroSection() {
   const { darshan, loading } = useAppSelector((state) => state.hero);
 
   useEffect(() => {
-    dispatch(fetchLiveDarshan());
-
     const interval = setInterval(() => {
       dispatch(tickCountdown());
     }, 1000);

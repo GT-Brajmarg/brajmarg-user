@@ -12,10 +12,6 @@ export default function TemplesSection() {
 
   const { temples, loading, error } = useAppSelector((state) => state.temples);
 
-  useEffect(() => {
-    dispatch(fetchTemples());
-  }, [dispatch]);
-
   if (loading) {
     return <div>Loading temples...</div>;
   }
