@@ -50,17 +50,20 @@ export default function TempleSevas({ templeId }: TempleSevasProps) {
 
       <div className="relative">
         {/* Header */}
-        <div
-          className="mb-4 flex items-center justify-center gap-3"
-          style={{ marginBottom: "10px", marginTop: "10px" }}
-        >
-          <Image src="/images/lotus.png" alt="" width={42} height={42} />
+        <div className="my-4 flex flex-col items-center justify-center text-center md:flex-row md:gap-3">
+          <div
+            className="flex items-center justify-center gap-2"
+            style={{ marginBottom: "20px", marginTop: "20px" }}
+          >
+            <Image src="/images/lotus.png" alt="" width={40} height={40} />
 
-          <h2 className="font-cormorant text-[28px] font-semibold text-[#0B6670]">
-            Seva at ShreenathJi Temple
-          </h2>
+            <h2 className="font-cormorant text-[24px] leading-tight font-semibold text-[#0B6670] md:text-[28px]">
+              Seva at <br className="md:hidden" />
+              ShreenathJi Temple
+            </h2>
 
-          <Image src="/images/lotus.png" alt="" width={42} height={42} />
+            <Image src="/images/lotus.png" alt="" width={30} height={30} />
+          </div>
         </div>
 
         {/* Cards */}

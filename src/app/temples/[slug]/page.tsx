@@ -13,6 +13,7 @@ import TemplePrasad from "@/components/temple/TemplePrasad";
 import TempleOfferings from "@/components/temple/TempleOfferings";
 import TempleGallery from "@/components/temple/TempleGallery";
 import TempleLocation from "@/components/temple/TempleLocation";
+import RelatedTemples from "@/components/temple/RelatedTemples";
 
 export default function TempleDetailsPage() {
   const { slug } = useParams();
@@ -37,6 +38,7 @@ export default function TempleDetailsPage() {
       dispatch(getTempleDetails(slug as string));
     }
   }, [dispatch, slug]);
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
 
   useEffect(() => {
     dispatch(fetchLiveDarshan());
@@ -52,25 +54,49 @@ export default function TempleDetailsPage() {
 
   return (
     <main className="bg-[#F8F2E8]">
-      <TempleHero temple={temple} />
+      {/* <TempleHero temple={temple} /> */}
 
-      <div className="mx-auto mt-3 flex justify-center">
+      <div className="mx-auto flex justify-center">
         <div className="w-full max-w-[1200px]">
-          <DarshanTimings templeId={temple.id} />
-          <div style={{ marginTop: "60px" }}>
+          <div style={{ marginBottom: isMobile ? "40px" : "10px" }}>
+            <TempleHero temple={temple} />
+          </div>
+
+          {/* <DarshanTimings templeId={temple.id} /> */}
+          <div>
+            <DarshanTimings templeId={temple.id} />
+          </div>
+          <div style={{ marginTop: isMobile ? "90px" : "40px" }}>
             <TempleSevas templeId={temple.id} />
           </div>
-          <div style={{ marginTop: "60px" }}>
+
+          <div style={{ marginTop: isMobile ? "90px" : "40px" }}>
             <TemplePrasad templeId={temple.id} />
           </div>
-          <div style={{ marginTop: "60px" }}>
+
+          <div style={{ marginTop: isMobile ? "90px" : "40px" }}>
             <TempleOfferings templeId={temple.id} />
           </div>
-          <div style={{ marginTop: "60px" }}>
-            <TempleGallery />
+
+          <div style={{ marginTop: isMobile ? "90px" : "40px" }}>
+            <TempleGallery templeId={temple.id} />
           </div>
-          <div style={{ marginTop: "60px", marginBottom: "60px" }}>
-            <TempleLocation />
+
+          <div
+            style={{
+              marginTop: isMobile ? "90px" : "60px",
+              marginBottom: isMobile ? "90px" : "60px",
+            }}
+          >
+            <TempleLocation templeId={temple.id} />
+          </div>
+          <div
+            style={{
+              marginTop: isMobile ? "90px" : "60px",
+              marginBottom: isMobile ? "90px" : "60px",
+            }}
+          >
+            <RelatedTemples currentTempleId={temple.id} />
           </div>
         </div>
       </div>

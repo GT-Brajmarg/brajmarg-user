@@ -56,17 +56,20 @@ export default function TemplePrasad({ templeId }: TemplePrasadProps) {
 
       <div className="relative">
         {/* Heading */}
-        <div
-          className="mb-4 flex items-center justify-center gap-3"
-          style={{ marginBottom: "10px", marginTop: "10px" }}
-        >
-          <Image src="/images/lotus.png" alt="" width={48} height={48} />
+        <div className="my-4 flex flex-col items-center justify-center text-center md:flex-row md:gap-3">
+          <div
+            className="flex items-center justify-center gap-2"
+            style={{ marginBottom: "10px", marginTop: "10px" }}
+          >
+            <Image src="/images/lotus.png" alt="" width={40} height={40} />
 
-          <h2 className="font-cormorant text-[28px] font-semibold text-[#0B6670]">
-            Prasad from ShreenathJi Temple
-          </h2>
+            <h2 className="font-cormorant text-[24px] leading-tight font-semibold text-[#0B6670] md:text-[28px]">
+              Prasad from
+              <br className="md:hidden" /> ShreenathJi Temple
+            </h2>
 
-          <Image src="/images/lotus.png" alt="" width={48} height={48} />
+            <Image src="/images/lotus.png" alt="" width={40} height={40} />
+          </div>
         </div>
 
         <div
@@ -146,26 +149,26 @@ export default function TemplePrasad({ templeId }: TemplePrasadProps) {
           </div>
 
           {/* Benefits */}
-          <div className="flex flex-col justify-center gap-4">
-            <div className="flex items-center gap-3 text-[#5B524A]">
-              <Gift size={18} className="text-[#D18400]" />
+          <div className="flex flex-col items-center justify-center gap-4 md:items-start">
+            <div className="flex items-center justify-center gap-3 text-center text-[#5B524A] md:justify-start md:text-left">
+              <Gift size={18} className="shrink-0 text-[#D18400]" />
               <span className="text-[14px]">
                 Prepared with devotion in Temple
               </span>
             </div>
 
-            <div className="flex items-center gap-3 text-[#5B524A]">
-              <Package size={18} className="text-[#D18400]" />
+            <div className="flex items-center justify-center gap-3 text-center text-[#5B524A] md:justify-start md:text-left">
+              <Package size={18} className="shrink-0 text-[#D18400]" />
               <span className="text-[14px]">Fresh & Hygienically packed</span>
             </div>
 
-            <div className="flex items-center gap-3 text-[#5B524A]">
-              <Truck size={18} className="text-[#D18400]" />
+            <div className="flex items-center justify-center gap-3 text-center text-[#5B524A] md:justify-start md:text-left">
+              <Truck size={18} className="shrink-0 text-[#D18400]" />
               <span className="text-[14px]">Delivered across India</span>
             </div>
 
-            <div className="flex items-center gap-3 text-[#5B524A]">
-              <Clock3 size={18} className="text-[#D18400]" />
+            <div className="flex items-center justify-center gap-3 text-center text-[#5B524A] md:justify-start md:text-left">
+              <Clock3 size={18} className="shrink-0 text-[#D18400]" />
               <span className="text-[14px]">Delivery in 3-5 working days</span>
             </div>
           </div>

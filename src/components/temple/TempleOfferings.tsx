@@ -53,15 +53,15 @@ export default function TempleOfferings({ templeId }: TempleOfferingsProps) {
           className="mb-4 flex items-center justify-center gap-3"
           style={{ marginBottom: "10px", marginTop: "10px" }}
         >
-          <Image src="/images/lotus.png" alt="" width={48} height={48} />
+          <Image src="/images/lotus.png" alt="" width={40} height={40} />
 
-          <h2 className="font-cormorant text-[28px] font-semibold text-[#0B6670] md:text-[px28]">
-            Take Home Divine Blessings
+          <h2 className="font-cormorant text-center text-[24px] leading-tight font-semibold text-[#0B6670] md:text-[28px]">
+            Take Home
+            <br className="md:hidden" /> Divine Blessings
           </h2>
 
-          <Image src="/images/lotus.png" alt="" width={48} height={48} />
+          <Image src="/images/lotus.png" alt="" width={40} height={40} />
         </div>
-
         {/* Cards */}
         <div className="relative min-w-0" style={{ marginBottom: "15px" }}>
           <div
@@ -71,7 +71,8 @@ export default function TempleOfferings({ templeId }: TempleOfferingsProps) {
             {offerings.map((item) => (
               <div
                 key={item.id}
-                className="group relative flex min-w-[190px] items-center gap-3 rounded-[18px] border border-[#E3C58A] bg-[#FFFDF8] p-2.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(217,176,108,0.15)]"
+                className="group relative flex min-h-[160px] min-w-[250px] items-center gap-3 rounded-[18px] border border-[#E3C58A] bg-[#FFFDF8] p-2.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(217,176,108,0.15)]"
+                style={{ marginBottom: "10px" }}
               >
                 {/* Card Pattern */}
                 <div
@@ -84,7 +85,10 @@ export default function TempleOfferings({ templeId }: TempleOfferingsProps) {
                 />
 
                 {/* Image */}
-                <div className="relative z-10 h-[100px] w-[85px] flex-shrink-0 overflow-hidden rounded-[10px] border border-[#D9B06C]">
+                <div
+                  className="relative z-10 h-[100px] w-[85px] flex-shrink-0 overflow-hidden rounded-[10px] border border-[#D9B06C]"
+                  style={{ marginLeft: "10px" }}
+                >
                   <Image
                     src={item.image_url || "/images2/default.png"}
                     alt={item.name}

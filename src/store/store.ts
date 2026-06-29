@@ -10,6 +10,9 @@ import templeTimingsReducer from "./slices/templeTimingsSlice";
 import sevaReducer from "./slices/sevaSlice";
 import prasadReducer from "./slices/prasadSlice";
 import offeringReducer from "./slices/offeringSlice";
+import popularSearchReducer from "./slices/popularSearchSlice";
+import templeGalleryReducer from "./slices/templeGallerySlice";
+import templeLocationReducer from "./slices/templeLocationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +27,9 @@ export const store = configureStore({
     sevas: sevaReducer,
     prasad: prasadReducer,
     offerings: offeringReducer,
+    popularSearches: popularSearchReducer,
+    templeGallery: templeGalleryReducer,
+    templeLocation: templeLocationReducer,
   },
 });
 
