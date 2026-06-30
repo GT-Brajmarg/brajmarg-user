@@ -11,6 +11,13 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import {
+  getTempleRequestAccessOptions,
+  submitTempleRequest,
+  resetTempleRequest,
+} from "@/store/slices/requestTempleSlice";
 // import { headers } from "next/headers";
 
 interface Props {
@@ -59,16 +66,6 @@ function TempleGlyph({
 const ICON_ORANGE = "#C76A24";
 const GOLD = "#D89A3D";
 
-const ACCESS_OPTIONS = [
-  "Prasad",
-  "Seva Booking",
-  "Darshan Updates",
-  "Puja / Havan",
-  "Temple Yatra",
-  "Frames & Photos",
-  "Poshak / Temple items",
-];
-
 const NEXT_STEPS = [
   { icon: Search, title: "Our team reviews your request" },
   { icon: ShieldCheck, title: "Temple authenticity is verified" },
@@ -77,12 +74,6 @@ const NEXT_STEPS = [
 ];
 
 export default function RequestTempleModal({ open, onClose }: Props) {
-  const [address, setAddress] = useState("");
-  const [selectedAccess, setSelectedAccess] = useState<string[]>([
-    "Seva Booking",
-    "Frames & Photos",
-  ]);
-
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "auto";
     return () => {
@@ -90,15 +81,63 @@ export default function RequestTempleModal({ open, onClose }: Props) {
     };
   }, [open]);
 
-  if (!open) return null;
+  const dispatch = useAppDispatch();
+
+  const { accessOptions, loading, submitting, success } = useAppSelector(
+    (state) => state.requestTemple,
+  );
+
+  const initialForm = {
+    temple_name: "",
+    city: "",
+    state: "",
+    address: "",
+    requester_name: "",
+    requester_email: "",
+    requested_access: [] as string[],
+  };
+
+  const [form, setForm] = useState(initialForm);
+
+  useEffect(() => {
+    if (open) {
+      dispatch(getTempleRequestAccessOptions());
+    }
+  }, [dispatch, open]);
+
+  useEffect(() => {
+    if (success) {
+      setForm(initialForm);
+      dispatch(resetTempleRequest());
+      onClose();
+    }
+  }, [success, dispatch, onClose]);
+
+  useEffect(() => {
+    dispatch(getTempleRequestAccessOptions());
+  }, [dispatch]);
+
+  const updateField = (field: keyof typeof form, value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
   const toggleAccess = (option: string) => {
-    setSelectedAccess((prev) =>
-      prev.includes(option)
-        ? prev.filter((item) => item !== option)
-        : [...prev, option],
-    );
+    setForm((prev) => ({
+      ...prev,
+      requested_access: prev.requested_access.includes(option)
+        ? prev.requested_access.filter((item) => item !== option)
+        : [...prev.requested_access, option],
+    }));
   };
+
+  const handleSubmit = () => {
+    dispatch(submitTempleRequest(form));
+  };
+
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
@@ -136,7 +175,7 @@ export default function RequestTempleModal({ open, onClose }: Props) {
                 alt=""
                 width={275}
                 height={335}
-                className="pointer-events-none absolute top-4 right-8 h-[155px] w-[275px] object-contain opacity-90"
+                className="pointer-events-none absolute top-4 right-8 h-[155px] w-[275px] object-contain opacity-30"
                 aria-hidden="true"
               />
             </div>
@@ -207,6 +246,10 @@ export default function RequestTempleModal({ open, onClose }: Props) {
                       Temple Name <span className="text-[#C76A24]">*</span>
                     </label>
                     <input
+                      value={form.temple_name}
+                      onChange={(e) =>
+                        updateField("temple_name", e.target.value)
+                      }
                       placeholder="Enter Temple Name"
                       className="h-8 w-full rounded-xl border border-[#E5D7C2] bg-white p-3.5 text-sm text-[#3F362B] placeholder-[#A89A86] outline-none focus:border-[#D89A3D]"
                     />
@@ -216,6 +259,8 @@ export default function RequestTempleModal({ open, onClose }: Props) {
                       City / Town <span className="text-[#C76A24]">*</span>
                     </label>
                     <input
+                      value={form.city}
+                      onChange={(e) => updateField("city", e.target.value)}
                       placeholder="Enter City"
                       className="h-8 w-full rounded-xl border border-[#E5D7C2] bg-white p-2.5 text-sm text-[#3F362B] placeholder-[#A89A86] outline-none focus:border-[#D89A3D]"
                     />
@@ -225,7 +270,11 @@ export default function RequestTempleModal({ open, onClose }: Props) {
                       State <span className="text-[#C76A24]">*</span>
                     </label>
                     <div className="relative">
-                      <select className="h-8 w-full appearance-none rounded-xl border border-[#E5D7C2] bg-white p-2.5 text-sm text-[#A89A86] outline-none focus:border-[#D89A3D]">
+                      <select
+                        value={form.state}
+                        onChange={(e) => updateField("state", e.target.value)}
+                        className="h-8 w-full appearance-none rounded-xl border border-[#E5D7C2] bg-white p-2.5 text-sm text-[#A89A86] outline-none focus:border-[#D89A3D]"
+                      >
                         <option>Select State</option>
                       </select>
                       <svg
@@ -263,13 +312,13 @@ export default function RequestTempleModal({ open, onClose }: Props) {
                     <textarea
                       rows={3}
                       maxLength={300}
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
+                      value={form.address}
+                      onChange={(e) => updateField("address", e.target.value)}
                       placeholder="Enter complete address of the temple"
                       className="w-full resize-none rounded-xl border border-[#E5D7C2] bg-white p-2.5 pb-6 text-sm text-[#3F362B] placeholder-[#A89A86] outline-none focus:border-[#D89A3D]"
                     />
                     <span className="absolute right-3 bottom-2 text-[11px] text-[#A89A86]">
-                      {address.length}/300
+                      {form.address.length}/300
                     </span>
                   </div>
                 </div>
@@ -299,13 +348,15 @@ export default function RequestTempleModal({ open, onClose }: Props) {
                     className="flex flex-wrap gap-2"
                     style={{ marginTop: "10px" }}
                   >
-                    {ACCESS_OPTIONS.map((option) => {
-                      const checked = selectedAccess.includes(option);
+                    {accessOptions.map((option) => {
+                      const checked = form.requested_access.includes(
+                        option.name,
+                      );
                       return (
                         <button
-                          key={option}
+                          key={option.name}
                           type="button"
-                          onClick={() => toggleAccess(option)}
+                          onClick={() => toggleAccess(option.name)}
                           className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-2 text-xs whitespace-nowrap transition ${
                             checked
                               ? "border-[#D9A75C] bg-[#F7E8C9] text-[#6D5E4C]"
@@ -317,7 +368,7 @@ export default function RequestTempleModal({ open, onClose }: Props) {
                               checked ? "border-[#D89A3D]" : "border-[#C9BBA3]"
                             }`}
                           />
-                          {option}
+                          {option.name}
                         </button>
                       );
                     })}
@@ -399,6 +450,10 @@ export default function RequestTempleModal({ open, onClose }: Props) {
                       Full Name <span className="text-[#C76A24]">*</span>
                     </label>
                     <input
+                      value={form.requester_name}
+                      onChange={(e) =>
+                        updateField("requester_name", e.target.value)
+                      }
                       placeholder="Enter your full name"
                       className="h-8 w-full rounded-xl border border-[#E5D7C2] bg-white p-2.5 text-sm text-[#3F362B] placeholder-[#A89A86] outline-none focus:border-[#D89A3D]"
                     />
@@ -408,6 +463,10 @@ export default function RequestTempleModal({ open, onClose }: Props) {
                       Email Address <span className="text-[#C76A24]">*</span>
                     </label>
                     <input
+                      value={form.requester_email}
+                      onChange={(e) =>
+                        updateField("requester_email", e.target.value)
+                      }
                       placeholder="Enter your email address"
                       className="h-8 w-full rounded-xl border border-[#E5D7C2] bg-white p-2.5 text-sm text-[#3F362B] placeholder-[#A89A86] outline-none focus:border-[#D89A3D]"
                     />
@@ -472,10 +531,12 @@ export default function RequestTempleModal({ open, onClose }: Props) {
               Cancel
             </button>
             <button
+              onClick={handleSubmit}
+              disabled={submitting}
               className="rounded-xl bg-[#0D6B73] px-6 py-2.5 text-sm font-medium text-white transition hover:bg-[#09565D]"
               style={{ height: "35px", width: "150px", marginRight: "20px" }}
             >
-              Submit Request →
+              {submitting ? "Submitting..." : "Submit Request →"}
             </button>
           </div>
         </div>

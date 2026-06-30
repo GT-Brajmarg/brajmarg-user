@@ -12,12 +12,17 @@ import {
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchTemplePrasad } from "@/store/slices/prasadSlice";
+import Link from "next/link";
 
 interface TemplePrasadProps {
   templeId: string;
+  templeSlug: string;
 }
 
-export default function TemplePrasad({ templeId }: TemplePrasadProps) {
+export default function TemplePrasad({
+  templeId,
+  templeSlug,
+}: TemplePrasadProps) {
   const dispatch = useAppDispatch();
 
   const { items, loading } = useAppSelector((state) => state.prasad);
@@ -120,12 +125,23 @@ export default function TemplePrasad({ templeId }: TemplePrasadProps) {
                     </p>
 
                     {/* Button */}
-                    <button
-                      disabled={!item.in_stock || !item.allow_direct_payment}
-                      className="mt-auto flex h-[32px] w-full items-center justify-center rounded-[8px] bg-[#0B6670] text-[12px] font-medium text-white transition hover:bg-[#084F57]"
-                    >
-                      {item.in_stock ? "Order Now" : "Out of Stock"}
-                    </button>
+                    {item.in_stock && item.allow_direct_payment ? (
+                      <Link
+                        href={`/temples/${templeSlug}/prasad/${item.id}`}
+                        className="mt-auto"
+                      >
+                        <button className="flex h-[32px] w-full items-center justify-center rounded-[8px] bg-[#0B6670] text-[12px] font-medium text-white transition hover:bg-[#084F57]">
+                          Order Now
+                        </button>
+                      </Link>
+                    ) : (
+                      <button
+                        disabled
+                        className="mt-auto flex h-[32px] w-full items-center justify-center rounded-[8px] bg-gray-300 text-[12px] font-medium text-white"
+                      >
+                        Out of Stock
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

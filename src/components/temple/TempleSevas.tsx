@@ -6,12 +6,18 @@ import { Clock3, ChevronRight, ChevronLeft } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchTempleSevas } from "@/store/slices/sevaSlice";
+import Link from "next/link";
 
 interface TempleSevasProps {
   templeId: string;
+
+  templeSlug: string;
 }
 
-export default function TempleSevas({ templeId }: TempleSevasProps) {
+export default function TempleSevas({
+  templeId,
+  templeSlug,
+}: TempleSevasProps) {
   const dispatch = useAppDispatch();
 
   const { sevas, loading } = useAppSelector((state) => state.sevas);
@@ -121,12 +127,21 @@ export default function TempleSevas({ templeId }: TempleSevasProps) {
                     </div> */}
                   </div>
 
-                  <button
-                    disabled={!seva.allow_direct_payment}
-                    className="mt-2 h-[28px] w-full rounded-[8px] bg-[#0B6670] text-[11px] font-medium text-white"
-                  >
-                    {seva.allow_direct_payment ? "Book Seva" : "Unavailable"}
-                  </button>
+                  {seva.allow_direct_payment ? (
+                    <Link
+                      href={`/temples/${templeSlug}/sevas/${seva.id}`}
+                      className="mt-2 flex h-[28px] w-full items-center justify-center rounded-[8px] bg-[#0B6670] text-[11px] font-medium !text-white hover:bg-[#09545b] hover:!text-white"
+                    >
+                      Book Seva
+                    </Link>
+                  ) : (
+                    <button
+                      disabled
+                      className="mt-2 h-[28px] w-full rounded-[8px] bg-gray-300 text-[11px] font-medium text-gray-600"
+                    >
+                      Unavailable
+                    </button>
+                  )}
                 </div>
               </div>
             ))}

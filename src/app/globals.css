@@ -65,3 +65,15 @@ a {
     transform: translateY(0) scale(1);
   }
 }
+
+@keyframes popup {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

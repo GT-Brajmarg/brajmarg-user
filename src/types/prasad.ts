@@ -13,3 +13,15 @@ export interface PrasadItem {
   allow_direct_payment: boolean;
   allow_cod: boolean;
 }
+export interface PrasadOrderPayload {
+  user_id: string;
+  prasad_item_id: string;
+  quantity_option_id: string;
+
+  devotee_name: string;
+  devotee_phone: string;
+  devotee_gotra?: string;
+
+  quantity: number;
+  amount: number;
+}
