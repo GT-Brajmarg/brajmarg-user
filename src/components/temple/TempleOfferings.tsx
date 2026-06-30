@@ -5,21 +5,36 @@ import { ChevronRight, ChevronLeft } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchTempleOfferings } from "@/store/slices/offeringSlice";
+import { fetchTempleFrames } from "@/store/slices/frameSlice";
+import { fetchTempleCloths } from "@/store/slices/clothSlice";
+import Link from "next/link";
 
 interface TempleOfferingsProps {
   templeId: string;
 }
 
-export default function TempleOfferings({ templeId }: TempleOfferingsProps) {
+interface TempleOfferingsProps {
+  templeId: string;
+  templeSlug: string;
+}
+
+export default function TempleOfferings({
+  templeId,
+  templeSlug,
+}: TempleOfferingsProps) {
   const dispatch = useAppDispatch();
 
-  const { offerings } = useAppSelector((state) => state.offerings);
+  const { items: frames } = useAppSelector((state) => state.frames);
+
+  const { items: cloths } = useAppSelector((state) => state.cloths);
 
   useEffect(() => {
-    if (templeId) {
-      dispatch(fetchTempleOfferings(templeId));
-    }
+    if (!templeId) return;
+
+    dispatch(fetchTempleFrames(templeId));
+    dispatch(fetchTempleCloths(templeId));
   }, [dispatch, templeId]);
+
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollRight = () => {
@@ -34,6 +49,18 @@ export default function TempleOfferings({ templeId }: TempleOfferingsProps) {
       behavior: "smooth",
     });
   };
+
+  const offerings = [
+    ...frames.map((item) => ({
+      ...item,
+      type: "frame",
+    })),
+
+    ...cloths.map((item) => ({
+      ...item,
+      type: "cloth",
+    })),
+  ];
 
   return (
     <section className="relative overflow-hidden rounded-[24px] border border-[#D89A3D] bg-[#FBF6EE] p-4 md:p-5">
@@ -110,13 +137,20 @@ export default function TempleOfferings({ templeId }: TempleOfferingsProps) {
                     ₹{item.price}
                   </p>
 
-                  <button
-                    className="mt-3 h-[25px] w-[90px] rounded-[8px] bg-[#0B6670] text-[12px] font-medium text-white transition hover:bg-[#084F57]"
-                    style={{ marginTop: "5px" }}
-                    disabled={!item.in_stock || !item.allow_direct_payment}
+                  <Link
+                    href={
+                      item.type === "frame"
+                        ? `/temples/${templeSlug}/frames/${item.id}`
+                        : `/temples/${templeSlug}/cloth/${item.id}`
+                    }
                   >
-                    Shop Now
-                  </button>
+                    <button
+                      className="mt-3 h-[25px] w-[90px] rounded-[8px] bg-[#0B6670] text-[12px] font-medium text-white transition hover:bg-[#084F57]"
+                      disabled={!item.in_stock || !item.allow_direct_payment}
+                    >
+                      Shop Now
+                    </button>
+                  </Link>
                 </div>
               </div>
             ))}

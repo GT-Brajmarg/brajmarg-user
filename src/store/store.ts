@@ -13,6 +13,14 @@ import offeringReducer from "./slices/offeringSlice";
 import popularSearchReducer from "./slices/popularSearchSlice";
 import templeGalleryReducer from "./slices/templeGallerySlice";
 import templeLocationReducer from "./slices/templeLocationSlice";
+import requestTempleReducer from "./slices/requestTempleSlice";
+import sevaDetailsReducer from "./slices/sevaDetailsSlice";
+import sevaBookingReducer from "./slices/sevaBookingSlice";
+import prasadBookingReducer from "./slices/prasadBookingSlice";
+import frameReducer from "./slices/frameSlice";
+import frameBookingReducer from "./slices/frameBookingSlice";
+import clothReducer from "./slices/clothSlice";
+import clothBookingReducer from "./slices/clothBookingSlice";
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +38,14 @@ export const store = configureStore({
     popularSearches: popularSearchReducer,
     templeGallery: templeGalleryReducer,
     templeLocation: templeLocationReducer,
+    requestTemple: requestTempleReducer,
+    sevaDetails: sevaDetailsReducer,
+    sevaBooking: sevaBookingReducer,
+    prasadBooking: prasadBookingReducer,
+    frames: frameReducer,
+    frameBooking: frameBookingReducer,
+    cloths: clothReducer,
+    clothBooking: clothBookingReducer,
   },
 });
 

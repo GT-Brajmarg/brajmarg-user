@@ -20,9 +20,7 @@ export default function TempleDetailsPage() {
 
   const dispatch = useAppDispatch();
 
-  const { temple, loading, error } = useAppSelector(
-    (state) => state.templeDetails,
-  );
+  const { temple, loading } = useAppSelector((state) => state.templeDetails);
   //   useEffect(() => {
   //     if (temple) {
   //       console.log("Temple Details:", temple);
@@ -67,15 +65,15 @@ export default function TempleDetailsPage() {
             <DarshanTimings templeId={temple.id} />
           </div>
           <div style={{ marginTop: isMobile ? "90px" : "40px" }}>
-            <TempleSevas templeId={temple.id} />
+            <TempleSevas templeId={temple.id} templeSlug={slug as string} />
           </div>
 
           <div style={{ marginTop: isMobile ? "90px" : "40px" }}>
-            <TemplePrasad templeId={temple.id} />
+            <TemplePrasad templeId={temple.id} templeSlug={slug as string} />
           </div>
 
           <div style={{ marginTop: isMobile ? "90px" : "40px" }}>
-            <TempleOfferings templeId={temple.id} />
+            <TempleOfferings templeId={temple.id} templeSlug={slug as string} />
           </div>
 
           <div style={{ marginTop: isMobile ? "90px" : "40px" }}>

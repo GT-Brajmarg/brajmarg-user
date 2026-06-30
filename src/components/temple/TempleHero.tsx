@@ -21,7 +21,7 @@ interface TempleHeroProps {
 
 export default function TempleHero({ temple }: TempleHeroProps) {
   return (
-    <section className="relative overflow-hidden bg-[#F8F2E8] pt-28">
+    <section className="relative h-[600px] overflow-hidden bg-[#F8F2E8] pt-28">
       {/* Mandala */}
       {/* <div className="absolute bottom-[-260px] left-1/2 h-[760px] w-[760px] -translate-x-1/2 rounded-full border border-[#D9C7A3]/20" /> */}
 

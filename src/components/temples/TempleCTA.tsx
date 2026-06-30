@@ -96,11 +96,18 @@ export default function TempleCTA() {
             </div>
           </div>
 
-          <button
+          {/* <button
             onClick={() => setOpen(true)}
             className="rounded-lg bg-[#0D6B73] px-6 py-3 text-white"
           >
             Request a Temple →
+          </button> */}
+          <button
+            onClick={() => setOpen(true)}
+            className="ml-auto hidden h-[42px] min-w-[185px] items-center justify-center rounded-[8px] bg-[#0D6B73] px-6 text-[15px] font-medium text-white transition hover:bg-[#0A5960] md:flex"
+            style={{ marginRight: "55px" }}
+          >
+            <p className="font-cormorant text-[16px]">Request a Temple →</p>
           </button>
         </div>
       </section>
