@@ -69,30 +69,6 @@ export default function PrasadBookingPage({ slug, prasadId }: Props) {
           </div>
         </div>
       </main>
-      {/* <PrasadHero
-        templeSlug={slug}
-        temple={prasad.temples}
-        prasad={prasad}
-      />
-      
-
-      <div className="mt-8">
-        <Booking
-          prasad={prasad}
-          quantities={quantities}
-        />
-      </div>
-
-      <div className="mt-8">
-        <ImportantNotes />
-      </div>
-
-      <div className="my-8">
-        <BookingSummary
-          temple={prasad.temples}
-          prasad={prasad}
-        />
-      </div> */}
     </>
   );
 }

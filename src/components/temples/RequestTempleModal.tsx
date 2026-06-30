@@ -74,12 +74,6 @@ const NEXT_STEPS = [
 ];
 
 export default function RequestTempleModal({ open, onClose }: Props) {
-  //   const [address, setAddress] = useState("");
-  //   const [selectedAccess, setSelectedAccess] = useState<string[]>([
-  //     "Seva Booking",
-  //     "Frames & Photos",
-  //   ]);
-
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "auto";
     return () => {

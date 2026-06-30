@@ -80,13 +80,6 @@ export default function SignupForm() {
 
           <div className="flex h-[52px] overflow-hidden rounded-xl border border-[#DCC6A5] bg-[#FBF5EA]">
             <div className="flex w-[82px] items-center justify-center gap-2 border-r border-[#E6D7BF]">
-              {/* <Image
-                src="/images/india.png"
-                alt="India"
-                width={22}
-                height={16}
-              /> */}
-
               <span className="text-sm font-medium">+91</span>
             </div>
 
@@ -99,21 +92,6 @@ export default function SignupForm() {
             />
           </div>
         </div>
-
-        {/* Email */}
-        {/* <div>
-          <label className="mb-2 block text-[13px] font-medium text-[#5D4E3F]">
-            Email Address
-          </label>
-
-          <input
-            type="email"
-            placeholder="Enter Email Address"
-            value={form.email}
-            onChange={(e) => updateField("email", e.target.value)}
-            className="h-[52px] w-full rounded-xl border border-[#DCC6A5] bg-[#FBF5EA] px-4 text-[14px] outline-none placeholder:pl-1 placeholder:text-[#A59684] focus:border-[#0B6971]"
-          />
-        </div> */}
 
         {/* Password */}
         <div>

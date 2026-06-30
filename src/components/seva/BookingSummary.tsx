@@ -25,9 +25,6 @@ export default function BookingSummary({
 }: BookingSummaryProps) {
   return (
     <section className="relative mt-14 overflow-hidden rounded-[26px] border border-[#D89A3D] bg-[#FCF8F1] px-8 py-6">
-      {/* Background Glow */}
-      {/* <div className="absolute top-1/2 -left-24 h-[280px] w-[280px] -translate-y-1/2 rounded-full bg-[#0B6670]/10 blur-[90px]" /> */}
-
       <div
         className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between"
         style={{ marginTop: "20px", marginBottom: "20px" }}

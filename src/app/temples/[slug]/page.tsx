@@ -21,15 +21,6 @@ export default function TempleDetailsPage() {
   const dispatch = useAppDispatch();
 
   const { temple, loading } = useAppSelector((state) => state.templeDetails);
-  //   useEffect(() => {
-  //     if (temple) {
-  //       console.log("Temple Details:", temple);
-  //     }
-  //   }, [temple]);
-
-  //   console.log("Temple:", temple);
-  //   console.log("Loading:", loading);
-  //   console.log("Error:", error);
 
   useEffect(() => {
     if (slug) {

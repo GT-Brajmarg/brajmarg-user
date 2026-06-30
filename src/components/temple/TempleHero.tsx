@@ -22,33 +22,6 @@ interface TempleHeroProps {
 export default function TempleHero({ temple }: TempleHeroProps) {
   return (
     <section className="relative h-[600px] overflow-hidden bg-[#F8F2E8] pt-28">
-      {/* Mandala */}
-      {/* <div className="absolute bottom-[-260px] left-1/2 h-[760px] w-[760px] -translate-x-1/2 rounded-full border border-[#D9C7A3]/20" /> */}
-
-      {/* Temple outline */}
-      {/* <Image
-        src="/images2/temple-outline_1.png"
-        alt=""
-        width={320}
-        height={320}
-        className="absolute top-[120px] right-[120px] opacity-[0.05]"
-      /> */}
-
-      {/* Back Button */}
-      {/* <div className="flex w-full px-12">
-        <div className="flex w-fit">
-          <Link
-            href="/temples"
-            className="mb-14 inline-flex h-11 items-center gap-2 rounded-lg border border-[#C18426] px-5"
-          >
-            <ArrowLeft className="h-4 w-4 text-[#1F3A44]" />
-            <span className="font-cormorant text-xl text-[#1F3A44]">
-              Back to Temples
-            </span>
-          </Link>
-        </div>
-      </div> */}
-
       <Link
         href="/temples"
         className="absolute top-5 left-4 z-20 inline-flex h-10 items-center gap-2 rounded-lg border border-[#C18426] bg-[#F8F2E8] px-4 lg:hidden"
