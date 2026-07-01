@@ -91,24 +91,34 @@ export default function ServicesSection() {
           <img
             src="/images3/image-Photoroom%20(10)%205.png"
             alt=""
-            style={{ width: "36px", height: "36px", objectFit: "contain", flexShrink: 0 }}
+            style={{
+              width: "50px",
+              height: "50px",
+              objectFit: "contain",
+              flexShrink: 0,
+            }}
           />
 
-          <h2 className={styles.title}>
-            Our Devotional Services
-          </h2>
+          <h2 className={styles.title}>Our Devotional Services</h2>
 
           {/* Right lotus (mirrored) */}
           <img
             src="/images3/image-Photoroom%20(10)%205.png"
             alt=""
-            style={{ width: "36px", height: "36px", objectFit: "contain", flexShrink: 0, transform: "scaleX(-1)" }}
+            style={{
+              width: "50px",
+              height: "50px",
+              objectFit: "contain",
+              flexShrink: 0,
+              transform: "scaleX(-1)",
+            }}
           />
         </div>
 
         {/* Subtitle — narrower max-width so it wraps to 2 lines */}
         <p className={styles.subtitle}>
-          From prasad delivery to yatra packages — everything you need to stay connected with the divine.
+          From prasad delivery to yatra packages — everything you need to stay
+          connected with the divine.
         </p>
 
         {/* 6-Card Services Grid */}
@@ -117,9 +127,9 @@ export default function ServicesSection() {
             <div
               key={service.id}
               className={styles.card}
-              style={{
-                backgroundImage: 'url("/images3/Rectangle%2046.png")',
-              }}
+              // style={{
+              //   backgroundImage: 'url("/images3/Rectangle%2046.png")',
+              // }}
             >
               <div className={styles.cardContent}>
                 {/* Icon wrapper */}
@@ -127,27 +137,24 @@ export default function ServicesSection() {
                   <img
                     src={service.iconSrc}
                     alt={service.title}
-                    style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",
+                    }}
                   />
                 </div>
 
                 {/* Service Card Title */}
-                <h3 className={styles.cardTitle}>
-                  {service.title}
-                </h3>
+                <h3 className={styles.cardTitle}>{service.title}</h3>
 
                 {/* Service Card Description */}
-                <p className={styles.cardDesc}>
-                  {service.desc}
-                </p>
+                <p className={styles.cardDesc}>{service.desc}</p>
               </div>
 
               {/* Rounded pill CTA button — centered with horizontal margin */}
               <div className={styles.btnWrap}>
-                <Link
-                  href={service.href}
-                  className={styles.btn}
-                >
+                <Link href={service.href} className={styles.btn}>
                   {service.btnText}
                 </Link>
               </div>

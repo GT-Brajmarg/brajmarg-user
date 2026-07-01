@@ -9,47 +9,80 @@ import {
   Circle,
 } from "lucide-react";
 
-const dates = [
-  { day: 20, month: "June", week: "Sat" },
-  { day: 21, month: "June", week: "Sun" },
-  { day: 22, month: "June", week: "Mon", active: true },
-  { day: 23, month: "June", week: "Tue" },
-  { day: 24, month: "June", week: "Wed" },
-  { day: 25, month: "June", week: "Thu" },
-  { day: 26, month: "June", week: "Fri" },
-  { day: 27, month: "June", week: "Sat" },
-];
+// const dates = [
+//   { day: 20, month: "June", week: "Sat" },
+//   { day: 21, month: "June", week: "Sun" },
+//   { day: 22, month: "June", week: "Mon", active: true },
+//   { day: 23, month: "June", week: "Tue" },
+//   { day: 24, month: "June", week: "Wed" },
+//   { day: 25, month: "June", week: "Thu" },
+//   { day: 26, month: "June", week: "Fri" },
+//   { day: 27, month: "June", week: "Sat" },
+// ];
 
-const slots = [
-  {
-    time: "12:30 PM",
-    status: "2 Slots Available",
-    color: "text-[#22A547]",
-  },
-  {
-    time: "1:00 PM",
-    status: "2 Slots Available",
-    color: "text-[#22A547]",
-    active: true,
-  },
-  {
-    time: "1:30 PM",
-    status: "Only 1 Slot Left",
-    color: "text-[#D98200]",
-  },
-  {
-    time: "2:00 PM",
-    status: "2 Slots Available",
-    color: "text-[#22A547]",
-  },
-  {
-    time: "2:30 PM",
-    status: "Only 1 Slot Left",
-    color: "text-[#D98200]",
-  },
-];
+// const slots = [
+//   {
+//     time: "12:30 PM",
+//     status: "2 Slots Available",
+//     color: "text-[#22A547]",
+//   },
+//   {
+//     time: "1:00 PM",
 
-export default function Booking() {
+//     status: "2 Slots Available",
+//     color: "text-[#22A547]",
+//     active: true,
+//   },
+//   {
+//     time: "1:30 PM",
+//     status: "Only 1 Slot Left",
+//     color: "text-[#D98200]",
+//   },
+//   {
+//     time: "2:00 PM",
+//     status: "2 Slots Available",
+//     color: "text-[#22A547]",
+//   },
+//   {
+//     time: "2:30 PM",
+//     status: "Only 1 Slot Left",
+//     color: "text-[#D98200]",
+//   },
+// ];
+
+interface AvailableDate {
+  id: string;
+  available_date: string;
+}
+
+interface Slot {
+  id: string;
+  slot_time: string;
+  capacity: number;
+  booked_count: number;
+}
+
+interface BookingProps {
+  dates: AvailableDate[];
+  slots: Slot[];
+
+  selectedDate: string;
+  selectedSlot: string;
+
+  onDateChange: (id: string) => void;
+  onSlotChange: (id: string) => void;
+}
+
+export default function Booking({
+  dates,
+  slots,
+  selectedDate,
+  selectedSlot,
+  onDateChange,
+  onSlotChange,
+}: BookingProps) {
+  console.log("DATES:", dates);
+  console.log("SLOTS:", slots);
   return (
     <section className="mt-16 rounded-[28px] border border-[#D89A3D] bg-[#FCF8F1] p-8 shadow-sm lg:p-10">
       {/* ================= Date Selection ================= */}
@@ -87,26 +120,38 @@ export default function Booking() {
             className="flex flex-1 justify-between gap-3"
             style={{ marginTop: "10px" }}
           >
-            {dates.map((date) => (
-              <div
-                key={date.day}
-                className={`flex h-[106px] w-[106px] cursor-pointer flex-col items-center justify-center rounded-xl border transition ${
-                  date.active
-                    ? "border-[#0B6670] bg-[#0B6670] text-white"
-                    : "border-[#E5C48A] bg-white text-[#0B6670] hover:border-[#D89A3D]"
-                }`}
-              >
-                <span className="text-[22px] leading-none font-bold">
-                  {date.day}
-                </span>
+            {dates.map((date) => {
+              const d = new Date(date.available_date);
+              const active = selectedDate === date.available_date;
 
-                <span className="font-cormorant mt-1 text-[22px]">
-                  {date.month}
-                </span>
+              return (
+                <div
+                  key={date.id}
+                  onClick={() => onDateChange(date.available_date)}
+                  className={`flex h-[106px] w-[106px] cursor-pointer flex-col items-center justify-center rounded-xl border transition ${
+                    active
+                      ? "border-[#0B6670] bg-[#0B6670] text-white"
+                      : "border-[#E5C48A] bg-white text-[#0B6670] hover:border-[#D89A3D]"
+                  }`}
+                >
+                  <span className="text-[22px] leading-none font-bold">
+                    {d.getDate()}
+                  </span>
 
-                <span className="text-xs opacity-80">{date.week}</span>
-              </div>
-            ))}
+                  <span className="font-cormorant mt-1 text-[22px]">
+                    {d.toLocaleString("en-IN", {
+                      month: "long",
+                    })}
+                  </span>
+
+                  <span className="text-xs opacity-80">
+                    {d.toLocaleString("en-IN", {
+                      weekday: "short",
+                    })}
+                  </span>
+                </div>
+              );
+            })}
           </div>
 
           <button
@@ -143,22 +188,42 @@ export default function Booking() {
           className="grid grid-cols-5 gap-4"
           style={{ marginLeft: "40px", marginRight: "40px", marginTop: "10px" }}
         >
-          {slots.map((slot) => (
-            <div
-              key={slot.time}
-              className={`h-[60px] w-[200px] cursor-pointer rounded-xl border bg-white px-5 py-4 text-center transition ${
-                slot.active
-                  ? "border-2 border-[#0B6670] shadow-sm"
-                  : "border-[#E5C48A] hover:border-[#D89A3D]"
-              }`}
-            >
-              <p className="text-[18px] font-semibold text-[#0B6670]">
-                {slot.time}
-              </p>
+          {slots.map((slot) => {
+            const available = slot.capacity - slot.booked_count;
+            const active = selectedSlot === slot.id;
 
-              <p className={`mt-1 text-sm ${slot.color}`}>{slot.status}</p>
-            </div>
-          ))}
+            return (
+              <div
+                key={slot.id}
+                onClick={() => onSlotChange(slot.id)}
+                className={`h-[60px] w-[200px] cursor-pointer rounded-xl border bg-white px-5 py-4 text-center transition ${
+                  active
+                    ? "border-2 border-[#0B6670] shadow-sm"
+                    : "border-[#E5C48A] hover:border-[#D89A3D]"
+                }`}
+              >
+                <p className="text-[18px] font-semibold text-[#0B6670]">
+                  {new Date(`1970-01-01T${slot.slot_time}`).toLocaleTimeString(
+                    "en-IN",
+                    {
+                      hour: "numeric",
+                      minute: "2-digit",
+                    },
+                  )}
+                </p>
+
+                <p
+                  className={`mt-1 text-sm ${
+                    available <= 1 ? "text-[#D98200]" : "text-[#22A547]"
+                  }`}
+                >
+                  {available <= 1
+                    ? "Only 1 Slot Left"
+                    : `${available} Slots Available`}
+                </p>
+              </div>
+            );
+          })}
         </div>
 
         {/* Info */}

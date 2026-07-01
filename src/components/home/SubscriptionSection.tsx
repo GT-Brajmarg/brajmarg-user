@@ -50,7 +50,7 @@ export default function SubscriptionSection() {
             height={48}
             style={{ objectFit: "contain" }}
           />
-          <h2 className={styles.title}>Never Miss a Festival Update</h2>
+          <h2 className={`${styles.title}`}>Never Miss a Festival Update</h2>
           <Image
             src="/images4/image-Photoroom (11) 3.png"
             alt="lotus"
@@ -107,7 +107,7 @@ export default function SubscriptionSection() {
                       height={16}
                       className={styles.tickIcon}
                     />
-                    <span>{f}</span>
+                    <span className={styles.featureTextMonthly}>{f}</span>
                   </li>
                 ))}
               </ul>
@@ -128,7 +128,7 @@ export default function SubscriptionSection() {
             <div className={styles.bestValueBadge}>
               {yearlyPlan.badge_text && (
                 <div className={styles.bestValueBadge}>
-                  <span>{yearlyPlan.badge_text}</span>
+                  {yearlyPlan.badge_text}
                 </div>
               )}
             </div>
@@ -183,7 +183,7 @@ export default function SubscriptionSection() {
                       className={styles.tickIconGold}
                       style={{ objectFit: "contain" }}
                     />
-                    <span className={styles.featureTextGold}>{f}</span>
+                    <span className={styles.featureTextYearly}>{f}</span>
                   </li>
                 ))}
               </ul>

@@ -222,11 +222,14 @@ export default function TemplesSection() {
                           .toLowerCase()
                           .replace(/\s+/g, "-")
                           .replace(/[^\w-]/g, "")}`}
-                        className="font-cormorant absolute left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 items-center justify-center rounded-full border border-[#D7B36A] bg-[#2B8182] text-[18px] font-semibold text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)] transition-all hover:bg-[#236f70]"
-                        style={{ top: "315px" }}
+                        className="font-cormorant absolute left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 items-center justify-center rounded-full border border-[#D7B36A] bg-[#2B8182]/80 text-[18px] font-semibold text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)] transition-all hover:bg-[#236f70]"
+                        style={{ top: "315px", color: "#EFDEC7" }}
                       >
                         <span className="absolute -left-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
-                        <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3]" />
+                        <span
+                          className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3] text-[#EFDEC7]"
+                          style={{ color: "#EFDEC7" }}
+                        />
                         Visit Temple
                         <span className="absolute -right-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
                       </Link>

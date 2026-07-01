@@ -88,14 +88,15 @@ export default function HeroSection() {
             >
               <Link
                 href="/shop"
-                className="font-cormorant flex h-12 w-[150px] items-center justify-center rounded-[10px] bg-[#0B7285] text-[20px] text-white"
+                style={{ color: "#EFDEC7" }}
+                className="font-cormorant flex h-12 w-[150px] items-center justify-center rounded-[10px] bg-[#0B7285] text-[20px]"
               >
                 Browse Shop →
               </Link>
-
               <Link
                 href="/yatra"
                 className="font-cormorant flex h-12 w-[125px] items-center justify-center rounded-[10px] bg-[#C77B00] text-[20px] text-white"
+                style={{ color: "#EFDEC7" }}
               >
                 Book Yatra
               </Link>
@@ -112,13 +113,16 @@ export default function HeroSection() {
               className="relative h-[522px] w-full rounded-[24px] bg-[#EFDEC7] sm:max-w-[491px]"
             >
               {/* Header */}
-              <h3 className="absolute top-[10px] left-[24px] text-[17px] font-bold text-[#C77700] uppercase">
+              <h3 className="absolute top-[18px] left-[24px] text-[17px] font-bold text-[#C77700] uppercase">
                 LIVE DARSHAN UPDATE
               </h3>
 
               <div className="absolute top-[18px] right-[22px] flex h-[24px] items-center gap-1 rounded-full border border-[#0B7285] px-[10px] text-[13px] font-semibold text-[#0B7285]">
-                <span className="h-[6px] w-[6px] rounded-full bg-[#0B7285]" />
-                LIVE
+                <span
+                  className="h-[6px] w-[6px] rounded-full bg-[#0B7285]"
+                  style={{ marginLeft: "5px" }}
+                />
+                <span style={{ marginRight: "5px" }}> LIVE</span>
               </div>
 
               {/* Lotus */}
@@ -199,7 +203,7 @@ export default function HeroSection() {
               <div className="absolute top-[390px] left-0 h-px w-full bg-[#D4BC99]" />
 
               {/* Darshan Type */}
-              <div className="absolute top-[410px] left-[24px] flex items-center gap-3">
+              <div className="absolute top-[410px] left-[40px] flex items-center gap-3">
                 <div className="flex h-[36px] w-[36px] items-center justify-center rounded-full bg-[#D1A455]">
                   <HandHelping size={16} />
                 </div>
@@ -207,13 +211,18 @@ export default function HeroSection() {
                 <div>
                   <p className="text-[11px] text-[#7C7063]">Darshan Type</p>
                   <p className="text-[15px] font-semibold text-[#3D352F]">
-                    Rajbhog
+                    {darshan.label
+                      .split("/")
+                      .pop()
+                      ?.replace(/\s*Begins In$/, "")
+                      .trim()}
                   </p>
                 </div>
               </div>
+              <div className="absolute top-[408px] left-1/2 h-[42px] w-px -translate-x-1/2 bg-[#D49A2A]/40" />
 
               {/* Today */}
-              <div className="absolute top-[410px] right-[24px] flex items-center gap-3">
+              <div className="absolute top-[410px] right-[50px] flex items-center gap-3">
                 <div className="flex h-[36px] w-[36px] items-center justify-center rounded-full bg-[#D1A455]">
                   <Calendar size={16} />
                 </div>
@@ -229,7 +238,8 @@ export default function HeroSection() {
               {/* Button */}
               <Link
                 href="/darshan"
-                className="font-cormorant absolute bottom-[12px] left-1/2 flex h-[40px] w-[260px] -translate-x-1/2 items-center justify-center gap-2 rounded-[10px] bg-[#0B7285] text-[18px] font-semibold text-[#F8F2E8]"
+                className="font-cormorant absolute bottom-[12px] left-1/2 flex h-[40px] w-[260px] -translate-x-1/2 items-center justify-center gap-2 rounded-[10px] bg-[#0B7285] text-[18px] font-semibold text-[#EFDEC7]"
+                style={{ color: "#EFDEC7" }}
               >
                 View All Darshan Timings
                 <span>→</span>
@@ -264,6 +274,7 @@ export default function HeroSection() {
             >
               <Link
                 href="/shop"
+                style={{ color: "#EFDEC7" }}
                 className="font-cormorant flex h-12 w-[150px] items-center justify-center gap-2 rounded-[10px] bg-[#0B7285] text-[20px]"
               >
                 Browse Shop
@@ -272,6 +283,7 @@ export default function HeroSection() {
 
               <Link
                 href="/yatra"
+                style={{ color: "#EFDEC7" }}
                 className="font-cormorant flex h-12 w-[125px] items-center justify-center rounded-[10px] bg-[#C77B00] text-[20px] font-medium text-[#F8F2E8]"
               >
                 Book Yatra
@@ -287,13 +299,16 @@ export default function HeroSection() {
             className="relative h-[522px] w-[491px] rounded-[24px] bg-[#EFDEC7]"
           >
             {/* Header */}
-            <h3 className="absolute top-[10px] left-[24px] text-[17px] font-bold text-[#C77700] uppercase">
+            <h3 className="absolute top-[18px] left-[24px] text-[17px] font-bold text-[#C77700] uppercase">
               LIVE DARSHAN UPDATE
             </h3>
 
             <div className="absolute top-[18px] right-[22px] flex h-[24px] items-center gap-1 rounded-full border border-[#0B7285] px-[10px] text-[13px] font-semibold text-[#0B7285]">
-              <span className="h-[6px] w-[6px] rounded-full bg-[#0B7285]" />
-              LIVE
+              <span
+                className="h-[6px] w-[6px] rounded-full bg-[#0B7285]"
+                style={{ marginLeft: "5px" }}
+              />
+              <span style={{ marginRight: "5px" }}>LIVE</span>
             </div>
 
             {/* Lotus */}
@@ -328,7 +343,7 @@ export default function HeroSection() {
             <div className="absolute top-[228px] left-0 h-px w-full bg-[#D4BC99]" />
 
             {/* Label */}
-            <p className="absolute top-[238px] left-1/2 w-[85%] -translate-x-1/2 text-center text-[15px] leading-[1.4] font-semibold text-[#443B33] sm:text-[16px]">
+            <p className="absolute top-[240px] left-1/2 w-[85%] -translate-x-1/2 text-center text-[15px] leading-[1.4] font-semibold text-[#443B33] sm:text-[16px]">
               {darshan.label}
             </p>
 
@@ -378,7 +393,7 @@ export default function HeroSection() {
             <div className="absolute top-[390px] left-0 h-px w-full bg-[#D4BC99]" />
 
             {/* Darshan Type */}
-            <div className="absolute top-[410px] left-[24px] flex items-center gap-3">
+            <div className="absolute top-[410px] left-[80px] flex items-center gap-3">
               <div className="flex h-[36px] w-[36px] items-center justify-center rounded-full bg-[#D1A455]">
                 <HandHelping size={16} />
               </div>
@@ -386,13 +401,18 @@ export default function HeroSection() {
               <div>
                 <p className="text-[11px] text-[#7C7063]">Darshan Type</p>
                 <p className="text-[15px] font-semibold text-[#3D352F]">
-                  Rajbhog
+                  {darshan.label
+                    .split("/")
+                    .pop()
+                    ?.replace(/\s*Begins In$/, "")
+                    .trim()}
                 </p>
               </div>
             </div>
+            <div className="absolute top-[408px] left-1/2 h-[42px] w-px -translate-x-1/2 bg-[#D49A2A]/40" />
 
             {/* Today */}
-            <div className="absolute top-[410px] right-[24px] flex items-center gap-3">
+            <div className="absolute top-[410px] right-[80px] flex items-center gap-3">
               <div className="flex h-[36px] w-[36px] items-center justify-center rounded-full bg-[#D1A455]">
                 <Calendar size={16} />
               </div>
@@ -409,6 +429,7 @@ export default function HeroSection() {
             <Link
               href="/darshan"
               className="font-cormorant absolute bottom-[12px] left-1/2 flex h-[40px] w-[260px] -translate-x-1/2 items-center justify-center gap-2 rounded-[10px] bg-[#0B7285] text-[18px] font-semibold text-[#F8F2E8]"
+              style={{ color: "#EFDEC7" }}
             >
               View All Darshan Timings
               <span>→</span>
