@@ -137,22 +137,33 @@ export default function Footer() {
               <h4 className={styles.linksTitle}>Quick Links</h4>
               <div className={styles.linksGrid}>
                 <Link href="/" className={styles.linksItem}>
-                  Home
+                  <span className={styles.arrow}>&gt;</span>
+                  <span>Home</span>
                 </Link>
+
                 <Link href="/services/seva" className={styles.linksItem}>
-                  Seva
+                  <span className={styles.arrow}>&gt;</span>
+                  <span>Seva</span>
                 </Link>
+
                 <Link href="/temples" className={styles.linksItem}>
-                  Temples
+                  <span className={styles.arrow}>&gt;</span>
+                  <span>Temples</span>
                 </Link>
+
                 <Link href="/services/yatra" className={styles.linksItem}>
-                  Yatra
+                  <span className={styles.arrow}>&gt;</span>
+                  <span>Yatra</span>
                 </Link>
+
                 <Link href="/shop" className={styles.linksItem}>
-                  Shop
+                  <span className={styles.arrow}>&gt;</span>
+                  <span>Shop</span>
                 </Link>
+
                 <Link href="/about" className={styles.linksItem}>
-                  About Us
+                  <span className={styles.arrow}>&gt;</span>
+                  <span>About Us</span>
                 </Link>
               </div>
             </div>

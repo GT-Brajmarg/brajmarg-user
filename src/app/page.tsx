@@ -5,7 +5,7 @@ import SubscriptionSection from "@/components/home/SubscriptionSection";
 import HowItWorksSection from "@/components/home/HowItWorksSection";
 import HomePageClient from "@/components/home/HomePageClient";
 
-export default function HomePage() {
+export default async function HomePage() {
   return (
     <HomePageClient>
       <main>

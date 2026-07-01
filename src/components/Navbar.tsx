@@ -4,12 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 // import styles from "./Navbar.module.css";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setActiveLink, toggleMenu, closeMenu } from "@/store/slices/navSlice";
+import { toggleMenu, closeMenu } from "@/store/slices/navSlice";
 import { useEffect, useState } from "react";
 import { fetchAlerts } from "@/store/slices/alertsSlice";
 import { Cormorant_Garamond } from "next/font/google";
 import { Bell, User, Menu, X } from "lucide-react";
 import LoginModal from "@/components/auth/LoginModal";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -28,7 +29,7 @@ export default function Navbar() {
   const [loginOpen, setLoginOpen] = useState(false);
   const menuOpen = useAppSelector((state) => state.nav.menuOpen);
   const dispatch = useAppDispatch();
-  const activeLink = useAppSelector((state) => state.nav.activeLink);
+  const pathname = usePathname();
 
   const [showAlerts, setShowAlerts] = useState(false);
 
@@ -87,11 +88,14 @@ export default function Navbar() {
                       <Link
                         href={link.href}
                         onClick={() => {
-                          dispatch(setActiveLink(link.label));
                           dispatch(closeMenu());
                         }}
                         className={`text-[20px] font-semibold ${
-                          activeLink === link.label
+                          (
+                            link.href === "/"
+                              ? pathname === "/"
+                              : pathname.startsWith(link.href)
+                          )
                             ? "text-[#C88A2A]"
                             : "text-[#2D2924]"
                         }`}
@@ -125,11 +129,12 @@ export default function Navbar() {
                       setLoginOpen(true);
                     }}
                     className="flex h-[44px] w-[280px] items-center justify-center gap-2 rounded-[10px] border border-[#005D63]"
+                    style={{ color: "#0F5C66" }}
                   >
-                    <User size={18} className="text-[#2D2924]" />
+                    <User size={18} className="text-[#0F5C66]" />
 
                     <span
-                      className={`${cormorant.className} text-[15px] font-medium text-[#2D2924]`}
+                      className={`${cormorant.className} text-[15px] font-medium text-[#0F5C66]`}
                     >
                       Login
                     </span>
@@ -163,35 +168,39 @@ export default function Navbar() {
               <ul
                 className={`${cormorant.className} flex items-center justify-center gap-14`}
               >
-                {navLinks.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      onClick={() => dispatch(setActiveLink(link.label))}
-                      className="relative flex flex-col items-center"
-                    >
-                      <span
-                        className={`text-[18px] font-semibold ${
-                          activeLink === link.label
-                            ? "text-[#C88A2A]"
-                            : "text-[#2D2924]"
-                        }`}
-                      >
-                        {link.label}
-                      </span>
+                {navLinks.map((link) => {
+                  const isActive =
+                    link.href === "/"
+                      ? pathname === "/"
+                      : pathname.startsWith(link.href);
 
-                      {activeLink === link.label && (
-                        <Image
-                          src="/images/lotus 2.png"
-                          alt=""
-                          width={26}
-                          height={6}
-                          className="absolute top-[24px]"
-                        />
-                      )}
-                    </Link>
-                  </li>
-                ))}
+                  return (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="relative flex flex-col items-center"
+                      >
+                        <span
+                          className={`text-[18px] font-semibold transition-colors ${
+                            isActive ? "text-[#C88A2A]" : "text-[#2D2924]"
+                          }`}
+                        >
+                          {link.label}
+                        </span>
+
+                        {isActive && (
+                          <Image
+                            src="/images/lotus 2.png"
+                            alt=""
+                            width={26}
+                            height={6}
+                            className="absolute top-[28px] left-1/2 -translate-x-1/2"
+                          />
+                        )}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
 
               {/* Right Side */}
@@ -216,10 +225,10 @@ export default function Navbar() {
                   onClick={() => setLoginOpen(true)}
                   className="flex h-[38px] w-[92px] items-center justify-center gap-2 rounded-[10px] border border-[#005D63]"
                 >
-                  <User size={16} strokeWidth={2} className="text-[#2D2924]" />
+                  <User size={16} strokeWidth={2} className="text-[#0F5C66]" />
 
                   <span
-                    className={`${cormorant.className} text-[14px] font-medium text-[#2D2924]`}
+                    className={`${cormorant.className} text-[14px] font-medium text-[#0F5C66]`}
                   >
                     Login
                   </span>

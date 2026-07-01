@@ -8,19 +8,23 @@ interface BookingSummaryProps {
   prasad: {
     name: string;
     image_url: string;
-    price: number;
   };
+
   temple: {
     name: string;
     location: string;
   };
+
   selectedQuantity?: string;
+
+  finalPrice: number;
 }
 
 export default function BookingSummary({
   prasad,
   temple,
-  selectedQuantity = "100 gm",
+  selectedQuantity = "",
+  finalPrice,
 }: BookingSummaryProps) {
   const [quantity, setQuantity] = useState(1);
 
@@ -87,7 +91,7 @@ export default function BookingSummary({
             <p className="text-[16px] text-[#5C564F]">Price</p>
 
             <h3 className="mt-1 text-[30px] leading-none font-bold text-[#0B6670]">
-              ₹ {prasad.price}
+              ₹ {finalPrice * quantity}
             </h3>
           </div>
 

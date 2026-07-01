@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-import { fetchSevaDetailsService } from "@/lib/services/seva.service";
+import { NextResponse } from "next/server";
+import { fetchAvailableDatesService } from "@/lib/services/seva.service";
 
 type RouteParams = {
   params: Promise<{
@@ -8,15 +8,15 @@ type RouteParams = {
   }>;
 };
 
-export async function GET(_request: NextRequest, { params }: RouteParams) {
+export async function GET(_request: Request, { params }: RouteParams) {
   try {
     const { sevaId } = await params;
 
-    const seva = await fetchSevaDetailsService(sevaId);
+    const dates = await fetchAvailableDatesService(sevaId);
 
     return NextResponse.json({
       success: true,
-      data: seva,
+      data: dates,
     });
   } catch (error) {
     console.error(error);
@@ -24,7 +24,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
     return NextResponse.json(
       {
         success: false,
-        message: "Failed to fetch seva details",
+        message: "Failed to fetch available dates",
       },
       {
         status: 500,

@@ -42,7 +42,21 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
   }, [dispatch]);
 
   if (loading) {
-    return <div className="py-20 text-center">Loading temples...</div>;
+    return (
+      <section className="flex min-h-[60vh] items-center justify-center bg-[#F8F2E8]">
+        <div className="flex flex-col items-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#D8C7A6] border-t-[#0F5C66]" />
+
+          <h3 className="font-cormorant mt-6 text-3xl font-semibold text-[#0F5C66]">
+            Loading Temples
+          </h3>
+
+          <p className="mt-2 text-sm text-[#6B7280]">
+            Please wait while we prepare your spiritual journey...
+          </p>
+        </div>
+      </section>
+    );
   }
 
   if (error) {
@@ -51,6 +65,15 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
 
   return (
     <section className="relative w-full px-4 pt-[180px] pb-12">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <Image
+          src="/images/mandala_bg_1.png"
+          alt=""
+          width={1050}
+          height={1050}
+          className="opacity-[0.04]"
+        />
+      </div>
       <div className="flex w-full justify-center">
         {filteredTemples.length === 0 ? (
           <div className="py-20 text-center">

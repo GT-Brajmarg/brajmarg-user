@@ -55,7 +55,7 @@ export default function ClothBookingPage({ slug, clothId }: Props) {
   const selectedColorObj = colors.find((c) => c.id === selectedColor);
 
   const finalPrice =
-    (selectedSizeObj?.price ?? 0) + (selectedColorObj?.price ?? 0);
+    (selectedSizeObj?.price ?? 0) + (selectedColorObj?.extra_price ?? 0);
 
   if (loading) {
     return (
@@ -76,7 +76,14 @@ export default function ClothBookingPage({ slug, clothId }: Props) {
       <ClothHero templeSlug={slug} temple={cloth.temples} cloth={cloth} />
 
       <div className="mt-8">
-        <Booking />
+        <Booking
+          sizes={sizes}
+          colors={colors}
+          selectedSize={selectedSize}
+          selectedColor={selectedColor}
+          onSizeChange={setSelectedSize}
+          onColorChange={setSelectedColor}
+        />
       </div>
 
       <div className="mt-8" style={{ marginTop: "20px" }}>
@@ -94,7 +101,7 @@ export default function ClothBookingPage({ slug, clothId }: Props) {
           cloth={cloth}
           temple={cloth.temples}
           selectedSize={selectedSizeObj?.label}
-          selectedColor={selectedColorObj?.name}
+          selectedColor={selectedColorObj?.color_name}
           finalPrice={finalPrice}
         />
       </div>

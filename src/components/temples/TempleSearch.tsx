@@ -34,7 +34,13 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
   }, [dispatch]);
 
   return (
-    <div className="w-full rounded-[16px] border border-[#D49A2A] bg-[#F8F1E6] px-6 py-4">
+    <div
+      className="w-full rounded-[18px] border border-white/40 bg-white/20 px-6 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.15)] backdrop-blur-2xl"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(255,255,255,0.35), rgba(248,241,230,0.65))",
+      }}
+    >
       {/* ================= Desktop ================= */}
       <div
         className="hidden md:grid"
@@ -52,6 +58,7 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
             size={16}
             style={{
               position: "absolute",
+
               left: "16px",
               top: "50%",
               transform: "translateY(-50%)",
@@ -70,6 +77,7 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
               height: "42px",
               paddingLeft: "48px",
               paddingRight: "16px",
+              fontFamily: "font-cormonant",
               border: "1px solid #C88A1A",
               borderRadius: "8px",
               background: "transparent",
@@ -99,6 +107,7 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
             style={{
               width: "100%",
               height: "42px",
+              fontFamily: "font-cormonant",
               paddingLeft: "42px",
               paddingRight: "36px",
               border: "1px solid #C88A1A",
@@ -131,10 +140,11 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
           onClick={handleSearch}
           style={{
             height: "42px",
+            fontFamily: "font-cormonant",
             borderRadius: "8px",
             background: "#0D6B73",
             color: "#FFFFFF",
-            fontSize: "14px",
+            fontSize: "16px",
             fontWeight: 500,
             border: "none",
             cursor: "pointer",
@@ -158,6 +168,7 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
             size={16}
             style={{
               position: "absolute",
+
               left: "16px",
               top: "50%",
               transform: "translateY(-50%)",
@@ -174,7 +185,8 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
             style={{
               width: "100%",
               height: "42px",
-              paddingLeft: "48px",
+              fontFamily: "var(--font-cormorant)",
+              paddingLeft: "40px",
               paddingRight: "16px",
               border: "1px solid #C88A1A",
               borderRadius: "8px",
@@ -184,6 +196,12 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
               outline: "none",
             }}
           />
+          {/* <input
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            placeholder="Search Temple by name or Diety..."
+            className="font-cormorant placeholder:font-cormorant h-[42px] w-full rounded-[8px] border border-[#C88A1A] bg-transparent pr-4 pl-12 text-[14px] text-[#7A5A2D] outline-none placeholder:text-[16px] placeholder:text-[#7A5A2D] placeholder:opacity-100"
+          /> */}
         </div>
 
         {/* City / State */}
@@ -207,6 +225,7 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
               height: "42px",
               paddingLeft: "42px",
               paddingRight: "36px",
+              fontFamily: "font-cormonant",
               border: "1px solid #C88A1A",
               borderRadius: "8px",
               background: "transparent",
@@ -239,9 +258,10 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
             width: "100%",
             height: "42px",
             borderRadius: "8px",
+            fontFamily: "font-cormonant",
             background: "#0D6B73",
             color: "#FFFFFF",
-            fontSize: "14px",
+            fontSize: "20px",
             fontWeight: 500,
             border: "none",
             cursor: "pointer",
@@ -258,14 +278,16 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
           alignItems: "center",
           height: "28px",
           marginTop: "12px",
-          paddingLeft: "8px",
+          paddingLeft: "10px",
           marginBottom: "12px",
         }}
       >
         <span
           style={{
-            fontSize: "14px",
+            fontSize: "16px",
+            // fontFamily: "font-cormonant",
             color: "#5D4B33",
+            fontFamily: "font-cormonant",
             whiteSpace: "nowrap",
           }}
         >
@@ -288,14 +310,15 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
                 onSearch(item.name);
               }}
               style={{
-                height: "22px",
-                padding: "0 12px",
+                height: "25px",
+                padding: "0 20px",
                 border: "1px solid #C88A1A",
                 borderRadius: "999px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "11px",
+                fontSize: "15px",
+                fontFamily: "font-cormonant",
                 color: "#5D4B33",
                 whiteSpace: "nowrap",
                 background: "transparent",
@@ -312,8 +335,10 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
       <div className="mt-4 mb-2 text-center md:hidden">
         <span
           style={{
-            fontSize: "13px",
+            fontSize: "16px",
             color: "#5D4B33",
+            fontFamily: "font-cormonant",
+            marginTop: "30px",
           }}
         >
           Popular Searches :
@@ -326,6 +351,7 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
             justifyContent: "center",
             gap: "8px",
             marginTop: "8px",
+            marginBottom: "10px",
           }}
         >
           {searches.map((item) => (
@@ -336,14 +362,15 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
               }}
               key={item.id}
               style={{
-                height: "22px",
-                padding: "0 12px",
+                height: "26px",
+                padding: "0 20px",
                 border: "1px solid #C88A1A",
+                fontFamily: "font-cormonant",
                 borderRadius: "999px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "11px",
+                fontSize: "14px",
                 color: "#5D4B33",
                 whiteSpace: "nowrap",
               }}

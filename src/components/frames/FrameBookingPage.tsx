@@ -38,22 +38,22 @@ export default function FrameBookingPage({ slug, frameId }: Props) {
   }, [dispatch, frameId]);
 
   useEffect(() => {
-    if (sizes.length && !selectedSize) {
+    if (sizes.length > 0 && !selectedSize) {
       setSelectedSize(sizes[0].id);
     }
-  }, [sizes]);
+  }, [sizes, selectedSize]);
 
   useEffect(() => {
-    if (materials.length && !selectedMaterial) {
+    if (materials.length > 0 && !selectedMaterial) {
       setSelectedMaterial(materials[0].id);
     }
-  }, [materials]);
+  }, [materials, selectedMaterial]);
   const selectedSizeObj = sizes.find((s) => s.id === selectedSize);
 
   const selectedMaterialObj = materials.find((m) => m.id === selectedMaterial);
 
   const finalPrice =
-    (selectedSizeObj?.price ?? 0) + (selectedMaterialObj?.extraPrice ?? 0);
+    (selectedSizeObj?.price ?? 0) + (selectedMaterialObj?.extra_price ?? 0);
 
   if (loading) {
     return (
@@ -74,7 +74,14 @@ export default function FrameBookingPage({ slug, frameId }: Props) {
       <FrameHero templeSlug={slug} temple={frame.temples} frame={frame} />
 
       <div className="mt-8">
-        <Booking />
+        <Booking
+          sizes={sizes}
+          materials={materials}
+          selectedSize={selectedSize}
+          selectedMaterial={selectedMaterial}
+          onSizeChange={setSelectedSize}
+          onMaterialChange={setSelectedMaterial}
+        />
       </div>
 
       <div className="mt-8" style={{ marginTop: "20px" }}>
@@ -85,8 +92,8 @@ export default function FrameBookingPage({ slug, frameId }: Props) {
         <BookingSummary
           frame={frame}
           temple={frame.temples}
-          selectedSize={selectedSizeObj?.label}
-          selectedMaterial={selectedMaterialObj?.name}
+          selectedSize={selectedSizeObj?.size_label}
+          selectedMaterial={selectedMaterialObj?.material_name}
           finalPrice={finalPrice}
         />
       </div>

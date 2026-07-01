@@ -76,19 +76,63 @@ export async function registerSevaRepository(payload: RegistrationPayload) {
   return data;
 }
 
+// export async function getAvailableDatesRepository(sevaId: string) {
+//   const supabase = await createClient();
+
+//   const { data, error } = await supabase
+//     .from("seva_slots")
+//     .select("slot_date")
+//     .eq("seva_item_id", sevaId)
+//     .eq("is_active", true)
+//     .order("slot_date");
+
+//   if (error) throw error;
+
+//   return [...new Set(data.map((d) => d.slot_date))];
+// }
+
+// export async function getAvailableDatesRepository(sevaId: string) {
+//   const supabase = await createClient();
+
+//   const { data, error } = await supabase
+//     .from("seva_slots")
+//     .select("slot_date")
+//     .eq("seva_item_id", sevaId)
+//     .eq("is_active", true)
+//     .order("slot_date");
+
+//   if (error) throw error;
+
+//   const uniqueDates = [...new Set(data.map((d) => d.slot_date))];
+
+//   return uniqueDates.map((date) => ({
+//     id: date,
+//     available_date: date,
+//   }));
+// }
+
 export async function getAvailableDatesRepository(sevaId: string) {
+  // console.log("Repository sevaId:", sevaId);
+
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from("seva_slots")
-    .select("slot_date")
+    .select("*")
     .eq("seva_item_id", sevaId)
-    .eq("is_active", true)
-    .order("slot_date");
+    .eq("is_active", true);
+
+  // console.log("Repository data:", data);
+  // console.log("Repository error:", error);
 
   if (error) throw error;
 
-  return [...new Set(data.map((d) => d.slot_date))];
+  const uniqueDates = [...new Set((data ?? []).map((d) => d.slot_date))];
+
+  return uniqueDates.map((date) => ({
+    id: date,
+    available_date: date,
+  }));
 }
 
 export async function incrementBookedCountRepository(slotId: string) {

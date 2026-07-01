@@ -151,6 +151,7 @@ export default function TemplePrasad({
             <button
               onClick={scrollLeft}
               className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
+              style={{ marginLeft: "12px" }}
             >
               <ChevronLeft size={18} className="text-[#A06A15]" />
             </button>
