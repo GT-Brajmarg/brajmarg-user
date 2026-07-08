@@ -48,15 +48,15 @@ export default function TemplePrasad({
     });
   };
   return (
-    <section className="relative overflow-hidden rounded-[22px] border border-[#D89A3D] bg-[#FBF6EE] p-4">
+    <section className="relative z-20 -translate-y-6 overflow-hidden rounded-[22px] border border-[#D89A3D] bg-transparent p-4 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       {/* Background Pattern */}
       <div
         className="absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
-          backgroundSize: "22px 22px",
-        }}
+        // style={{
+        //   backgroundImage:
+        //     "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
+        //   backgroundSize: "22px 22px",
+        // }}
       />
 
       <div className="relative">
@@ -82,7 +82,7 @@ export default function TemplePrasad({
           style={{ marginBottom: "15px" }}
         >
           {/* Cards */}
-          <div className="relative min-w-0">
+          <div className="relative min-w-0" style={{ marginLeft: "20px" }}>
             <div
               ref={scrollRef}
               className="scrollbar-hide flex gap-3 overflow-x-auto scroll-smooth pb-2"
@@ -90,16 +90,16 @@ export default function TemplePrasad({
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="group relative min-w-[195px] overflow-hidden rounded-[18px] border border-[#D9B06C] bg-[#FFFDF8] shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1"
+                  className="group relative min-w-[195px] overflow-hidden rounded-[18px] border border-[#D9B06C] bg-transparent shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1"
                 >
                   {/* Pattern */}
                   <div
                     className="absolute inset-0 opacity-[0.06]"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
-                      backgroundSize: "12px 12px",
-                    }}
+                    // style={{
+                    //   backgroundImage:
+                    //     "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
+                    //   backgroundSize: "12px 12px",
+                    // }}
                   />
 
                   {/* Image */}
@@ -120,7 +120,10 @@ export default function TemplePrasad({
                     </h3>
 
                     {/* Price */}
-                    <p className="mt-2 text-center text-[14px] font-bold text-[#D18400]">
+                    <p
+                      className="mt-2 text-center text-[14px] font-bold text-[#D18400]"
+                      style={{ marginBottom: "19px" }}
+                    >
                       ₹{item.price}
                     </p>
 
@@ -129,8 +132,12 @@ export default function TemplePrasad({
                       <Link
                         href={`/temples/${templeSlug}/prasad/${item.id}`}
                         className="mt-auto"
+                        // style={{ marginBottom: "-20px" }}
                       >
-                        <button className="flex h-[32px] w-full items-center justify-center rounded-[8px] bg-[#0B6670] text-[12px] font-medium text-white transition hover:bg-[#084F57]">
+                        <button
+                          className="flex h-[32px] w-full items-center justify-center rounded-[8px] bg-[#0B6670] text-[12px] font-medium text-white transition hover:bg-[#084F57]"
+                          // style={{ marginBottom: "-20px" }}
+                        >
                           Order Now
                         </button>
                       </Link>
@@ -153,7 +160,7 @@ export default function TemplePrasad({
               className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
               style={{ marginLeft: "12px" }}
             >
-              <ChevronLeft size={18} className="text-[#A06A15]" />
+              <ChevronLeft size={18} className="text-[#0F5C66]" />
             </button>
 
             {/* Right Arrow */}
@@ -161,32 +168,38 @@ export default function TemplePrasad({
               onClick={scrollRight}
               className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
             >
-              <ChevronRight size={18} className="text-[#A06A15]" />
+              <ChevronRight size={18} className="text-[#0F5C66]" />
             </button>
           </div>
 
           {/* Benefits */}
-          <div className="flex flex-col items-center justify-center gap-4 md:items-start">
+          <div className="flex flex-col items-center justify-center gap-4 bg-transparent md:items-start">
             <div className="flex items-center justify-center gap-3 text-center text-[#5B524A] md:justify-start md:text-left">
               <Gift size={18} className="shrink-0 text-[#D18400]" />
-              <span className="text-[14px]">
+              <span className="font-cormorant text-[16px]">
                 Prepared with devotion in Temple
               </span>
             </div>
 
             <div className="flex items-center justify-center gap-3 text-center text-[#5B524A] md:justify-start md:text-left">
               <Package size={18} className="shrink-0 text-[#D18400]" />
-              <span className="text-[14px]">Fresh & Hygienically packed</span>
+              <span className="font-cormorant text-[16px]">
+                Fresh & Hygienically packed
+              </span>
             </div>
 
             <div className="flex items-center justify-center gap-3 text-center text-[#5B524A] md:justify-start md:text-left">
               <Truck size={18} className="shrink-0 text-[#D18400]" />
-              <span className="text-[14px]">Delivered across India</span>
+              <span className="font-cormorant text-[16px]">
+                Delivered across India
+              </span>
             </div>
 
             <div className="flex items-center justify-center gap-3 text-center text-[#5B524A] md:justify-start md:text-left">
               <Clock3 size={18} className="shrink-0 text-[#D18400]" />
-              <span className="text-[14px]">Delivery in 3-5 working days</span>
+              <span className="font-cormorant text-[16px]">
+                Delivery in 3-5 working days
+              </span>
             </div>
           </div>
         </div>

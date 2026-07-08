@@ -5,6 +5,7 @@ import Booking from "@/components/seva/Booking";
 import ImportantNotes from "@/components/seva/ImportantNotes";
 import BookingSummary from "@/components/seva/BookingSummary";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import Image from "next/image";
 
 import {
   fetchSevaDetails,
@@ -38,45 +39,6 @@ export default function Page() {
 
   const slug = params.slug as string;
   const sevaId = params.sevaId as string;
-
-  // const seva = await fetchSevaDetailsService(sevaId);
-  // const [seva, setSeva] = useState<any>(null);
-
-  // const [loading, setLoading] = useState(true);
-  // useEffect(() => {
-  //   async function loadSeva() {
-  //     try {
-  //       const data = await fetchSevaDetailsService(sevaId);
-
-  //       setSeva(data);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
-
-  //   if (sevaId) {
-  //     loadSeva();
-  //   }
-  // }, [sevaId]);
-
-  // if (loading) {
-  //   return <div className="py-20 text-center">Loading...</div>;
-  // }
-
-  // if (!seva) {
-  //   return <div className="py-20 text-center">Seva not found</div>;
-  // }
-
-  // console.log("Params:", {
-  //   slug,
-  //   sevaId,
-  // });
-
-  // console.log("Redux:", {
-  //   seva,
-  //   loading,
-  //   error,
-  // });
 
   const [selectedDate, setSelectedDate] = useState("");
 
@@ -150,22 +112,71 @@ export default function Page() {
   const temple = seva.temples;
 
   return (
-    <main className="bg-[#F8F2E8]">
-      <div className="mx-auto flex justify-center">
+    <main className="relative overflow-hidden bg-[#F8F2E8]">
+      {/* Background: 3 paper-texture sections + 3 centered mandalas */}
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        {/* Full-page paper texture */}
+        <Image
+          src="/images/temple-paper-texture.png"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-[0.24]"
+        />
+
+        {/* Mandalas aligned with max-w-[1200px] content */}
+        <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+          <Image
+            src="/images/mandala_bg_1.png"
+            alt=""
+            width={1050}
+            height={1050}
+            className="absolute top-[360px] left-1/2 w-[1050px] -translate-x-1/2 opacity-[0.04]"
+          />
+
+          <Image
+            src="/images/mandala_bg_1.png"
+            alt=""
+            width={900}
+            height={900}
+            className="absolute top-[1450px] left-1/2 w-[1050px] -translate-x-1/2 opacity-[0.04]"
+          />
+
+          <Image
+            src="/images/mandala_bg_1.png"
+            alt=""
+            width={900}
+            height={900}
+            className="absolute top-[2550px] left-1/2 w-[900px] -translate-x-1/2 opacity-[0.030]"
+          />
+        </div>
+      </div>
+
+      {/* Foreground page content */}
+      <div className="relative z-10 mx-auto flex justify-center">
         <div className="w-full max-w-[1200px] px-4 py-10">
           <SevaHero templeSlug={slug} temple={temple} seva={seva} />
-          <Booking
-            dates={dates}
-            slots={slots}
-            selectedDate={selectedDate}
-            selectedSlot={selectedSlot}
-            onDateChange={setSelectedDate}
-            onSlotChange={setSelectedSlot}
-          />
-          <div style={{ marginTop: "30px" }}>
+
+          <div className="mt-[30px]">
+            <Booking
+              dates={dates}
+              slots={slots}
+              selectedDate={selectedDate}
+              selectedSlot={selectedSlot}
+              onDateChange={setSelectedDate}
+              onSlotChange={setSelectedSlot}
+            />
+          </div>
+
+          <div className="mt-[30px]" style={{ marginTop: "30px" }}>
             <ImportantNotes />
           </div>
-          <div style={{ marginTop: "30px", marginBottom: "30px" }}>
+
+          <div
+            className="mt-[30px] mb-[30px]"
+            style={{ marginTop: "30px", marginBottom: "30px" }}
+          >
             <BookingSummary
               seva={seva}
               temple={temple}
@@ -173,7 +184,7 @@ export default function Page() {
               selectedTime={selectedSlot}
             />
           </div>
-        </div>{" "}
+        </div>
       </div>
     </main>
   );

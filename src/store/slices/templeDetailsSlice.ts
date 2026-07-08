@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import type { RootState } from "@/store/store";
 
 export const getTempleDetails = createAsyncThunk(
   "templeDetails/fetch",
-  async (templeId: string) => {
-    const response = await fetch(`/api/temples/${templeId}`);
+  async (slug: string) => {
+    const response = await fetch(`/api/temples/${slug}`);
 
     if (!response.ok) {
       throw new Error("Failed to fetch temple details");
@@ -13,6 +14,19 @@ export const getTempleDetails = createAsyncThunk(
 
     return result.data;
   },
+  {
+    condition: (slug, { getState }) => {
+      const state = getState() as RootState;
+      const { currentSlug, loading, temple } = state.templeDetails;
+
+      // Do not call the API again for the currently cached temple.
+      if (loading || (currentSlug === slug && temple)) {
+        return false;
+      }
+
+      return true;
+    },
+  },
 );
 
 interface TempleDetailsState {
@@ -21,6 +35,7 @@ interface TempleDetailsState {
   alerts: any[];
   loading: boolean;
   error: string | null;
+  currentSlug: string | null;
 }
 
 const initialState: TempleDetailsState = {
@@ -29,6 +44,7 @@ const initialState: TempleDetailsState = {
   alerts: [],
   loading: false,
   error: null,
+  currentSlug: null,
 };
 
 const templeDetailsSlice = createSlice({
@@ -39,17 +55,21 @@ const templeDetailsSlice = createSlice({
     builder
       .addCase(getTempleDetails.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(getTempleDetails.fulfilled, (state, action) => {
         state.loading = false;
 
         state.temple = action.payload.temple;
-        state.timings = action.payload.timings;
-        state.alerts = action.payload.alerts;
+        state.timings = action.payload.timings ?? [];
+        state.alerts = action.payload.alerts ?? [];
+
+        // Save the slug used for this API request.
+        state.currentSlug = action.meta.arg;
       })
       .addCase(getTempleDetails.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Failed";
+        state.error = action.error.message ?? "Failed to fetch temple details";
       });
   },
 });

@@ -11,6 +11,14 @@ import {
   Sparkles,
 } from "lucide-react";
 
+const ingredients = [
+  {
+    name: "Pure Sugar Crystals",
+    description:
+      "Blessed Mishri Prasad offered at the lotus feet of Shreenathji. Made from pure sugar crystals and offered with devotion during daily bhog.",
+  },
+];
+
 interface Prasad {
   id: string;
   name: string;
@@ -33,7 +41,7 @@ interface Props {
 
 export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
   return (
-    <section className="relative h-[650px] overflow-hidden bg-[#F8F2E8] pt-20">
+    <section className="bg-tranparent relative h-[650px] overflow-hidden pt-20">
       {/* ================= Breadcrumb ================= */}
       <div
         className="flex items-center gap-2 pt-6"
@@ -43,9 +51,15 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
           href={`/temples/${templeSlug}`}
           className="inline-flex h-11 items-center gap-2 rounded-lg border border-[#C18426] bg-transparent px-5 transition hover:bg-[#FCF5E9]"
         >
-          <ArrowLeft className="h-4 w-4 text-[#1F3A44]" />
+          <ArrowLeft
+            className="h-5 w-5 text-[#0F5C66]"
+            style={{ marginLeft: "5px" }}
+          />
 
-          <span className="font-cormorant text-[22px] leading-none text-[#1F3A44]">
+          <span
+            className="font-cormorant text-[22px] leading-none text-[#0F5C66]"
+            style={{ marginRight: "5px" }}
+          >
             Back to Temples
           </span>
         </Link>
@@ -96,7 +110,7 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
               {/* Badge */}
 
               <div
-                className="mb-5 inline-flex h-8 w-fit items-center gap-2 rounded-full border border-[#D89A3D] bg-[#FCF6EA] px-3.5"
+                className="mb-5 inline-flex h-8 w-fit items-center gap-2 rounded-full border border-[#D89A3D] bg-transparent px-3.5"
                 // style={{ marginTop: "30px" }}
               >
                 <Gift
@@ -129,10 +143,10 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
               </p>
               {/* Description */}
               <p
-                className="font-cormorant mt-7 max-w-[560px] text-[18px] leading-8 text-[#5D534B]"
+                className="font-inter mt-7 max-w-[560px] text-[16px] leading-8 text-[#5D534B]"
                 style={{ marginTop: "20px" }}
               >
-                {prasad.ingredients}
+                {ingredients[0].description}
               </p>
               {/* ================= Features ================= */}
               <div
@@ -202,7 +216,7 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
               {/* Part 2 continues with the price card */}
               {/* ================= Price Card ================= */}
               <div
-                className="mt-10 max-w-[520px] rounded-[20px] border border-[#D89A3D] bg-white/90 px-7 py-5 shadow-[0_8px_25px_rgba(216,154,61,0.08)]"
+                className="mt-10 max-w-[520px] rounded-[20px] border border-[#D89A3D] bg-[#EFDEC7]/40 px-7 py-5 shadow-[0_8px_25px_rgba(216,154,61,0.08)]"
                 style={{ marginTop: "40px" }}
               >
                 <p

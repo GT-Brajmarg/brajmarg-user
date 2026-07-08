@@ -9,47 +9,6 @@ import {
   Circle,
 } from "lucide-react";
 
-// const dates = [
-//   { day: 20, month: "June", week: "Sat" },
-//   { day: 21, month: "June", week: "Sun" },
-//   { day: 22, month: "June", week: "Mon", active: true },
-//   { day: 23, month: "June", week: "Tue" },
-//   { day: 24, month: "June", week: "Wed" },
-//   { day: 25, month: "June", week: "Thu" },
-//   { day: 26, month: "June", week: "Fri" },
-//   { day: 27, month: "June", week: "Sat" },
-// ];
-
-// const slots = [
-//   {
-//     time: "12:30 PM",
-//     status: "2 Slots Available",
-//     color: "text-[#22A547]",
-//   },
-//   {
-//     time: "1:00 PM",
-
-//     status: "2 Slots Available",
-//     color: "text-[#22A547]",
-//     active: true,
-//   },
-//   {
-//     time: "1:30 PM",
-//     status: "Only 1 Slot Left",
-//     color: "text-[#D98200]",
-//   },
-//   {
-//     time: "2:00 PM",
-//     status: "2 Slots Available",
-//     color: "text-[#22A547]",
-//   },
-//   {
-//     time: "2:30 PM",
-//     status: "Only 1 Slot Left",
-//     color: "text-[#D98200]",
-//   },
-// ];
-
 interface AvailableDate {
   id: string;
   available_date: string;
@@ -84,7 +43,7 @@ export default function Booking({
   console.log("DATES:", dates);
   console.log("SLOTS:", slots);
   return (
-    <section className="mt-16 rounded-[28px] border border-[#D89A3D] bg-[#FCF8F1] p-8 shadow-sm lg:p-10">
+    <section className="relative mt-16 overflow-hidden rounded-[28px] border border-[#D89A3D] bg-transparent p-8 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)] lg:p-10">
       {/* ================= Date Selection ================= */}
       <div>
         <div
@@ -131,7 +90,7 @@ export default function Booking({
                   className={`flex h-[106px] w-[106px] cursor-pointer flex-col items-center justify-center rounded-xl border transition ${
                     active
                       ? "border-[#0B6670] bg-[#0B6670] text-white"
-                      : "border-[#E5C48A] bg-white text-[#0B6670] hover:border-[#D89A3D]"
+                      : "border-[#E5C48A] bg-[#EFDEC7]/20 text-[#0B6670] hover:border-[#D89A3D]"
                   }`}
                 >
                   <span className="text-[22px] leading-none font-bold">
@@ -196,7 +155,7 @@ export default function Booking({
               <div
                 key={slot.id}
                 onClick={() => onSlotChange(slot.id)}
-                className={`h-[60px] w-[200px] cursor-pointer rounded-xl border bg-white px-5 py-4 text-center transition ${
+                className={`h-[60px] w-[200px] cursor-pointer rounded-xl border bg-[#EFDEC7]/20 px-5 py-4 text-center transition ${
                   active
                     ? "border-2 border-[#0B6670] shadow-sm"
                     : "border-[#E5C48A] hover:border-[#D89A3D]"
@@ -276,7 +235,7 @@ export default function Booking({
           style={{ marginLeft: "50px", marginTop: "20px", marginRight: "50px" }}
         >
           {/* Myself */}
-          <button className="flex items-start gap-4 rounded-2xl border-2 border-[#0B6670] bg-white px-6 py-5 transition">
+          <button className="flex items-start gap-4 rounded-2xl border-2 border-[#0B6670] bg-transparent px-6 py-5 transition">
             <div
               className="mt-1 flex h-6 w-6 items-center justify-center rounded-full border border-[#0B6670]"
               style={{ marginTop: "10px", marginLeft: "10px" }}
@@ -296,7 +255,7 @@ export default function Booking({
           </button>
 
           {/* Someone Else */}
-          <button className="flex items-start gap-4 rounded-2xl border border-[#D89A3D] bg-white px-6 py-5 transition hover:border-[#0B6670]">
+          <button className="flex items-start gap-4 rounded-2xl border border-[#D89A3D] bg-transparent px-6 py-5 transition hover:border-[#0B6670]">
             <div
               className="mt-1 h-6 w-6 rounded-full border border-[#D89A3D]"
               style={{ marginTop: "10px", marginLeft: "10px" }}
@@ -328,7 +287,7 @@ export default function Booking({
             <input
               type="text"
               placeholder="Enter Full Name"
-              className="h-12 w-full rounded-xl border border-[#D89A3D] bg-white px-5 text-[#4F4941] outline-none placeholder:pl-2 placeholder:text-[#9B948B] focus:border-[#0B6670]"
+              className="h-12 w-full rounded-xl border border-[#D89A3D] bg-transparent px-5 text-[#4F4941] outline-none placeholder:pl-2 placeholder:text-[#9B948B] focus:border-[#0B6670]"
             />
           </div>
 
@@ -341,7 +300,7 @@ export default function Booking({
             <input
               type="text"
               placeholder="Enter Gotra"
-              className="h-12 w-full rounded-xl border border-[#D89A3D] bg-white px-5 text-[#4F4941] outline-none placeholder:pl-3 placeholder:text-[#9B948B] focus:border-[#0B6670]"
+              className="h-12 w-full rounded-xl border border-[#D89A3D] bg-transparent px-5 text-[#4F4941] outline-none placeholder:pl-3 placeholder:text-[#9B948B] focus:border-[#0B6670]"
             />
           </div>
 
@@ -351,7 +310,7 @@ export default function Booking({
               Mobile Number <span className="text-[#D89A3D]">*</span>
             </label>
 
-            <div className="flex h-12 overflow-hidden rounded-xl border border-[#D89A3D] bg-white">
+            <div className="flex h-12 overflow-hidden rounded-xl border border-[#D89A3D] bg-transparent">
               <div className="flex w-[50px] items-center gap-2 border-r border-[#E7D5B5] px-4">
                 {/* <span className="text-lg">🇮🇳</span> */}
                 <span className="text-[#4F4941]">+91</span>
@@ -377,7 +336,7 @@ export default function Booking({
         >
           <input
             type="checkbox"
-            className="mt-1 h-5 w-5 rounded border-[#D89A3D] accent-[#0B6670]"
+            className="mt-1 h-5 w-5 rounded border-[#D89A3D]"
             style={{ marginTop: "15px" }}
           />
 

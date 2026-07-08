@@ -31,7 +31,7 @@ export default function BookingSummary({
   const [quantity, setQuantity] = useState(1);
 
   return (
-    <section className="mt-10 rounded-[24px] border border-[#D89A3D] bg-[#FCF8F1] px-7 py-6">
+    <section className="relative mt-10 overflow-hidden rounded-[24px] border border-[#D89A3D] bg-transparent px-7 py-6 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       <div className="flex flex-col items-center justify-between gap-8 lg:flex-row">
         {/* LEFT */}
 
@@ -41,7 +41,7 @@ export default function BookingSummary({
             style={{ marginLeft: "40px" }}
           >
             <Image
-              src={cloth.image_url}
+              src={cloth.image_url || "/images2/default.png"}
               alt={cloth.name}
               fill
               className="object-contain"
@@ -61,7 +61,7 @@ export default function BookingSummary({
               Size -
               <span className="font-semibold text-[#D18400]">
                 {" "}
-                {selectedSize}
+                {selectedSize || "5'' x 7'' "}
               </span>
               {" | "}
               Color -
@@ -93,7 +93,7 @@ export default function BookingSummary({
             {/* Quantity */}
 
             <div
-              className="flex h-[45px] w-[150px] items-center justify-between rounded-xl border border-[#E5C48A] bg-[#FFF9EF] px-4"
+              className="flex h-[45px] w-[150px] items-center justify-between rounded-xl border border-[#E5C48A] bg-transparent px-4"
               style={{ marginTop: "20px" }}
             >
               <button onClick={() => setQuantity((q) => Math.max(1, q - 1))}>
@@ -110,7 +110,7 @@ export default function BookingSummary({
             {/* Button */}
 
             <button
-              className="flex h-[56px] items-center gap-3 rounded-xl bg-[#0B6670] px-8 text-[24px] font-semibold text-white transition hover:bg-[#09565D]"
+              className="flex h-[56px] items-center gap-3 rounded-xl bg-[#0B6670] px-8 text-[24px] text-[#EFDEC7] transition hover:bg-[#09565D]"
               style={{
                 marginBottom: "20px",
                 marginRight: "-20px",
@@ -118,7 +118,11 @@ export default function BookingSummary({
             >
               <ShoppingCart size={22} style={{ marginLeft: "10px" }} />
 
-              <span style={{ marginRight: "10px" }}>Add to Cart</span>
+              <span
+                style={{ marginRight: "10px", fontFamily: "font-cormorant" }}
+              >
+                Add to Cart
+              </span>
             </button>
           </div>
         </div>

@@ -10,10 +10,10 @@ export default function ImportantNotes() {
   ];
 
   return (
-    <section className="relative mt-14 overflow-hidden rounded-[26px] border border-[#0B6670] bg-[#FCF8F1] px-10 py-8">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_40%,rgba(12,107,115,0.18),transparent_65%)]" />
+    <section className="relative mt-14 overflow-hidden rounded-[26px] border border-[#0B6670] bg-[#0F5C66]/20 px-10 py-8 shadow-[0_24px_60px_rgba(11,102,112,0.22),0_8px_18px_rgba(11,102,112,0.12)]">
+      {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_40%,rgba(12,107,115,0.18),transparent_65%)]" />
 
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(12,107,115,0.06),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(12,107,115,0.06),transparent_50%)]" /> */}
       <div
         className="relative z-10 grid items-center gap-10 lg:grid-cols-[1fr_290px]"
         style={{ marginBottom: "20px" }}
@@ -47,7 +47,7 @@ export default function ImportantNotes() {
 
         {/* Right */}
         <div
-          className="rounded-[18px] border border-[#0B6670]/70 bg-[#FCF8F1] px-8 py-7"
+          className="rounded-[18px] border border-[#0B6670]/70 bg-[#0F5C66]/10 px-8 py-7"
           style={{ marginRight: "50px", marginTop: "20px" }}
         >
           <h3

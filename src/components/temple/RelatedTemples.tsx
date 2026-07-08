@@ -67,7 +67,7 @@ export default function RelatedTemples({
   }
 
   return (
-    <section className="py-10">
+    <section className="z-999 py-10">
       <div className="mb-8 flex items-center justify-center gap-3">
         <Image src="/images/lotus.png" alt="" width={42} height={42} />
 
@@ -83,7 +83,7 @@ export default function RelatedTemples({
             <div
               key={temple.id}
               className={`relative h-[360px] w-[220px] ${
-                temple.is_coming_soon ? "opacity-50" : ""
+                temple.is_coming_soon ? "opacity-100" : ""
               }`}
             >
               {/* Scroll Frame */}
@@ -219,7 +219,7 @@ export default function RelatedTemples({
               <div
                 key={temple.id}
                 className={`relative mx-auto h-[420px] w-[260px] transition-all duration-300 hover:-translate-y-2 ${
-                  temple.is_coming_soon ? "opacity-40 grayscale-[20%]" : ""
+                  temple.is_coming_soon ? "opacity-100 grayscale-[20%]" : ""
                 }`}
                 style={{ marginLeft: "15px" }}
               >
@@ -344,7 +344,7 @@ export default function RelatedTemples({
             onClick={scrollLeft}
             className="absolute top-1/2 left-[-18px] z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-md transition hover:scale-105"
           >
-            <ChevronLeft size={20} className="text-[#A06A15]" />
+            <ChevronLeft size={20} className="text-[#0F5C66]" />
           </button>
 
           {/* RIGHT BUTTON */}
@@ -352,7 +352,7 @@ export default function RelatedTemples({
             onClick={scrollRight}
             className="absolute top-1/2 right-[-18px] z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-md transition hover:scale-105"
           >
-            <ChevronRight size={20} className="text-[#A06A15]" />
+            <ChevronRight size={20} className="text-[#0F5C66]" />
           </button>
         </div>
       </div>

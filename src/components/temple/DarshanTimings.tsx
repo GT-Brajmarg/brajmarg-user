@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Clock3, ChevronDown, ChevronRight } from "lucide-react";
+import { Clock3, ChevronDown, ChevronRight, CalendarDays } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchTempleTimings } from "@/store/slices/templeTimingsSlice";
 import { useEffect, useState } from "react";
@@ -116,15 +116,15 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
   }
 
   return (
-    <section className="relative overflow-hidden rounded-[30px] border-[1.5px] border-[#D89A3D] bg-[#FBF8F2] shadow-[0_8px_25px_rgba(191,145,73,0.08)]">
+    <section className="relative -translate-y-6 overflow-hidden rounded-[30px] border-[1.5px] border-[#D89A3D] bg-transparent shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       <div className="hidden lg:block">
         <div
           className="absolute inset-0 opacity-[0.05]"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
-            backgroundSize: "22px 22px",
-          }}
+          // style={{
+          //   backgroundImage:
+          //     "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
+          //   backgroundSize: "22px 22px",
+          // }}
         />
 
         <div className="relative">
@@ -136,16 +136,16 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
             {/* Date */}
             <div>
               <div className="relative w-[240px]">
-                {/* Calendar Icon */}
-                {/* <CalendarDays
-                size={18}
-                className="pointer-events-none absolute top-1/2 left-4 z-10 -translate-y-1/2 text-[#0B6670]"
-              /> */}
+                <CalendarDays
+                  size={18}
+                  className="pointer-events-none absolute top-1/2 left-4 z-10 -translate-y-1/2 text-[#0B6670]"
+                />
 
                 <select
                   value={selectedDay}
                   onChange={(e) => setSelectedDay(e.target.value)}
-                  className="h-[45px] w-full cursor-pointer appearance-none rounded-[12px] border border-[#D89A3D] bg-white pr-10 pl-12 text-[15px] font-medium text-[#0B6670] shadow-sm transition outline-none focus:border-[#C9821E] focus:ring-2 focus:ring-[#F3D7A7]"
+                  className="font-cormorant h-[45px] w-full cursor-pointer appearance-none rounded-[12px] border border-[#D89A3D] bg-transparent py-0 pr-10 pl-[52px] text-[18px] font-medium text-[#0B6670] shadow-sm transition outline-none focus:border-[#C9821E] focus:ring-2 focus:ring-[#F3D7A7]"
+                  style={{ paddingLeft: "50px" }}
                 >
                   {weekDates.map((day) => (
                     <option key={day.value} value={day.value}>
@@ -154,7 +154,6 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
                   ))}
                 </select>
 
-                {/* Dropdown Arrow */}
                 <ChevronDown
                   size={18}
                   className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-[#0B6670]"
@@ -224,7 +223,7 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
               className="pl-4"
               style={{ marginRight: "20px", marginBottom: "30px" }}
             >
-              <div className="h-full rounded-[18px] border border-[#D89A3D] bg-[#F9F2E7] px-4 py-3">
+              <div className="h-full rounded-[18px] border border-[#D89A3D] bg-transparent px-4 py-3">
                 <p className="text-center text-[13px] text-[#C18426]">
                   Next Darshan
                 </p>
@@ -290,17 +289,17 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
 
       <div className="block lg:hidden">
         <div
-          className="relative overflow-hidden rounded-[28px] bg-[#FFFDF9] p-5"
-          style={{ marginTop: "10px" }}
+          className="relative overflow-hidden rounded-[28px] bg-transparent p-5"
+          // style={{ marginTop: "50px" }}
         >
           {/* Background Pattern */}
           <div
             className="absolute inset-0 opacity-[0.04]"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle,#D89A3D 1px,transparent 1px)",
-              backgroundSize: "18px 18px",
-            }}
+            // style={{
+            //   backgroundImage:
+            //     "radial-gradient(circle,#D89A3D 1px,transparent 1px)",
+            //   backgroundSize: "18px 18px",
+            // }}
           />
 
           <div className="relative">
@@ -327,7 +326,8 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
                 <select
                   value={selectedDay}
                   onChange={(e) => setSelectedDay(e.target.value)}
-                  className="h-12 w-full rounded-2xl border border-[#E8DAC6] bg-white px-4 pr-10 text-[15px] font-medium shadow-sm"
+                  className="h-12 w-full rounded-2xl border border-[#E8DAC6] bg-transparent px-4 pr-10 text-[15px] font-medium shadow-sm"
+                  style={{ color: "#0B6670" }}
                 >
                   {weekDates.map((day) => (
                     <option key={day.value} value={day.value}>
@@ -336,10 +336,10 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
                   ))}
                 </select>
 
-                <ChevronDown
+                {/* <ChevronDown
                   size={18}
                   className="pointer-events-none absolute top-1/2 right-5 -translate-y-1/2 text-[#C18426]"
-                />
+                /> */}
               </div>
             </div>
 
@@ -355,13 +355,13 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
                     className={`group relative min-h-[75px] overflow-hidden rounded-[22px] border transition-all duration-300 ${
                       isActive
                         ? "border-[#D89A3D] bg-gradient-to-r from-[#FFF8ED] to-white shadow-[0_10px_30px_rgba(216,154,61,0.18)]"
-                        : "border-[#EFE7DB] bg-white shadow-[0_3px_12px_rgba(0,0,0,0.05)]"
+                        : "border-[#EFE7DB] bg-transparent shadow-[0_3px_12px_rgba(0,0,0,0.05)]"
                     }`}
                   >
                     {/* Active Gold Line */}
 
                     {isActive && (
-                      <div className="absolute top-0 left-0 h-full w-[5px] bg-[#D89A3D]" />
+                      <div className="absolute top-0 left-0 h-full w-[5px] bg-transparent" />
                     )}
 
                     <div className="p-5">
@@ -369,7 +369,7 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
 
                       <div className="p-5">
                         {isActive && (
-                          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-[#0B8A4A]/10 px-3 py-1">
+                          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-transparent px-3 py-1">
                             <span className="h-2 w-2 animate-pulse rounded-full bg-[#0B8A4A]" />
                             <span className="text-[11px] font-semibold tracking-wider text-[#0B8A4A] uppercase">
                               Live Darshan
@@ -431,7 +431,7 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
 
             {/* Next Darshan */}
 
-            <div className="mt-8 overflow-hidden rounded-[30px] border border-[#EFD4A7] bg-gradient-to-br from-[#FFF7EB] to-[#FDF1DD] p-6 shadow-lg">
+            <div className="mt-8 overflow-hidden rounded-[30px] border border-[#EFD4A7] bg-transparent p-6 shadow-lg">
               <p className="text-center text-[12px] font-medium tracking-[2px] text-[#C18426] uppercase">
                 Next Darshan
               </p>
@@ -487,7 +487,7 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
               )}
 
               <div className="mt-6 flex justify-center">
-                <div className="flex items-center gap-2 rounded-full bg-white px-5 py-2 shadow-sm">
+                <div className="flex items-center gap-2 rounded-full bg-transparent px-5 py-2 shadow-sm">
                   <Clock3 size={14} className="text-[#D89A3D]" />
 
                   <span className="text-[12px] font-medium text-[#6E675F]">
