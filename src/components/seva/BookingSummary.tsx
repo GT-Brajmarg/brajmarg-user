@@ -24,7 +24,7 @@ export default function BookingSummary({
   selectedTime = "1:00 PM",
 }: BookingSummaryProps) {
   return (
-    <section className="relative mt-14 overflow-hidden rounded-[26px] border border-[#D89A3D] bg-[#FCF8F1] px-8 py-6">
+    <section className="relative mt-14 overflow-hidden rounded-[26px] border border-[#D89A3D] bg-transparent px-8 py-6 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       <div
         className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between"
         style={{ marginTop: "20px", marginBottom: "20px" }}
@@ -37,7 +37,7 @@ export default function BookingSummary({
             style={{ marginLeft: "50px" }}
           >
             <Image
-              src={seva.image_url}
+              src={seva.image_url || "/images2/default.png"}
               alt={seva.name}
               fill
               className="object-contain"
@@ -57,9 +57,7 @@ export default function BookingSummary({
             <div className="mt-4 flex items-center gap-3 text-[#D89A3D]">
               <CalendarDays size={20} />
 
-              <span className="text-[18px] font-semibold">
-                {selectedDate}, {selectedTime}
-              </span>
+              <span className="text-[18px] font-semibold">{selectedDate}</span>
             </div>
           </div>
         </div>
@@ -74,20 +72,27 @@ export default function BookingSummary({
             <p className="text-[16px] text-[#5C564F]">Seva Amount</p>
 
             <h3 className="mt-1 text-[35px] leading-none font-bold text-[#0B6670]">
-              ₹ {seva.price}
+              ₹{seva.price}
             </h3>
           </div>
 
           {/* Button */}
           <button
-            className="flex h-14 items-center gap-3 rounded-xl bg-[#0B6670] px-8 text-[22px] font-semibold text-white transition hover:bg-[#09565D]"
+            className="flex h-14 items-center gap-3 rounded-xl bg-[#0B6670] px-8 text-[22px] font-semibold whitespace-nowrap text-white transition hover:bg-[#09565D]"
             style={{ marginRight: "40px" }}
           >
             <ShoppingCart
-              size={22}
-              style={{ marginLeft: "10PX", marginRight: "10px" }}
+              size={30}
+              className="mr-[10px] ml-[10px] shrink-0"
+              style={{ marginLeft: "10px", color: "#EFDEC7" }}
             />
-            <p style={{ marginRight: "20px" }}>Add to Cart</p>
+
+            <p
+              className="font-cormorant mr-5 text-[25px] whitespace-nowrap"
+              style={{ marginRight: "10px", color: "#EFDEC7" }}
+            >
+              Add to Cart
+            </p>
           </button>
         </div>
       </div>

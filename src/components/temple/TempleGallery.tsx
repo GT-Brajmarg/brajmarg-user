@@ -52,15 +52,15 @@ export default function TempleGallery({ templeId }: TempleGalleryProps) {
   }
 
   return (
-    <section className="relative overflow-hidden rounded-[22px] border border-[#D89A3D] bg-[#FBF6EE] p-4">
+    <section className="relative overflow-hidden rounded-[22px] border border-[#D89A3D] bg-transparent p-4 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       {/* Background Pattern */}
       <div
         className="absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
-          backgroundSize: "22px 22px",
-        }}
+        // style={{
+        //   backgroundImage:
+        //     "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
+        //   backgroundSize: "22px 22px",
+        // }}
       />
 
       <div className="relative">
@@ -81,7 +81,12 @@ export default function TempleGallery({ templeId }: TempleGalleryProps) {
         {/* Gallery */}
         <div
           className="relative"
-          style={{ marginBottom: "20px", marginTop: "15px" }}
+          style={{
+            marginBottom: "20px",
+            marginTop: "15px",
+            marginLeft: "20px",
+            marginRight: "20px",
+          }}
         >
           <div
             ref={scrollRef}
@@ -109,7 +114,7 @@ export default function TempleGallery({ templeId }: TempleGalleryProps) {
                 className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-sm transition hover:scale-105"
                 style={{ marginLeft: "12px" }}
               >
-                <ChevronLeft size={18} className="text-[#A06A15]" />
+                <ChevronLeft size={18} className="text-[#0F5C66]" />
               </button>
 
               <button
@@ -117,7 +122,7 @@ export default function TempleGallery({ templeId }: TempleGalleryProps) {
                 className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-sm transition hover:scale-105"
                 style={{ marginRight: "12px" }}
               >
-                <ChevronRight size={18} className="text-[#A06A15]" />
+                <ChevronRight size={18} className="text-[#0F5C66]" />
               </button>
             </>
           )}

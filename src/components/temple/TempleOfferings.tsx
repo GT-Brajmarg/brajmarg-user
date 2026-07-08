@@ -63,15 +63,15 @@ export default function TempleOfferings({
   ];
 
   return (
-    <section className="relative overflow-hidden rounded-[24px] border border-[#D89A3D] bg-[#FBF6EE] p-4 md:p-5">
+    <section className="relative overflow-hidden rounded-[24px] border border-[#D89A3D] bg-transparent p-4 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)] md:p-5">
       {/* Background Pattern */}
       <div
         className="absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
-          backgroundSize: "22px 22px",
-        }}
+        // style={{
+        //   backgroundImage:
+        //     "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
+        //   backgroundSize: "22px 22px",
+        // }}
       />
 
       <div className="relative">
@@ -90,7 +90,14 @@ export default function TempleOfferings({
           <Image src="/images/lotus.png" alt="" width={40} height={40} />
         </div>
         {/* Cards */}
-        <div className="relative min-w-0" style={{ marginBottom: "15px" }}>
+        <div
+          className="relative min-w-0"
+          style={{
+            marginBottom: "15px",
+            marginLeft: "20px",
+            marginRight: "20px",
+          }}
+        >
           <div
             ref={scrollRef}
             className="scrollbar-hide flex gap-4 overflow-x-auto scroll-smooth pb-2"
@@ -98,17 +105,17 @@ export default function TempleOfferings({
             {offerings.map((item) => (
               <div
                 key={item.id}
-                className="group relative flex min-h-[160px] min-w-[250px] items-center gap-3 rounded-[18px] border border-[#E3C58A] bg-[#FFFDF8] p-2.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(217,176,108,0.15)]"
+                className="group relative flex min-h-[160px] min-w-[250px] items-center gap-3 rounded-[18px] border border-[#E3C58A] bg-transparent p-2.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(217,176,108,0.15)]"
                 style={{ marginBottom: "10px" }}
               >
                 {/* Card Pattern */}
                 <div
                   className="absolute inset-0 opacity-[0.04]"
-                  style={{
-                    backgroundImage:
-                      "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
-                    backgroundSize: "10px 10px",
-                  }}
+                  // style={{
+                  //   backgroundImage:
+                  //     "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
+                  //   backgroundSize: "10px 10px",
+                  // }}
                 />
 
                 {/* Image */}
@@ -162,7 +169,7 @@ export default function TempleOfferings({
             className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
             style={{ marginLeft: "12px" }}
           >
-            <ChevronLeft size={18} className="text-[#A06A15]" />
+            <ChevronLeft size={18} className="text-[#0F5C66]" />
           </button>
 
           {/* Right Arrow */}
@@ -171,7 +178,7 @@ export default function TempleOfferings({
             className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
             style={{ marginRight: "12px" }}
           >
-            <ChevronRight size={18} className="text-[#A06A15]" />
+            <ChevronRight size={18} className="text-[#0F5C66]" />
           </button>
         </div>
       </div>

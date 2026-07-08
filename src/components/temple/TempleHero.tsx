@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 interface TempleHeroProps {
+  loading: boolean;
   temple: {
     id: string;
     name: string;
@@ -19,15 +20,43 @@ interface TempleHeroProps {
   };
 }
 
-export default function TempleHero({ temple }: TempleHeroProps) {
+const templeInfo = {
+  deity: "Shreenathji",
+  established: "1672",
+  timings: "5:30 AM - 9:00 PM",
+};
+
+export default function TempleHero({ temple, loading }: TempleHeroProps) {
+  if (loading) {
+    return (
+      <section className="flex min-h-[60vh] items-center justify-center bg-[#F8F2E8]">
+        <div className="flex flex-col items-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#D8C7A6] border-t-[#0F5C66]" />
+
+          <h3 className="font-cormorant mt-6 text-3xl font-semibold text-[#0F5C66]">
+            Loading Temple
+          </h3>
+
+          <p className="mt-2 text-sm text-[#6B7280]">
+            Please wait while we prepare your spiritual journey...
+          </p>
+        </div>
+      </section>
+    );
+  }
   return (
-    <section className="relative h-[600px] overflow-hidden bg-[#F8F2E8] pt-28">
+    <section className="relative h-[600px] overflow-visible bg-transparent pt-28">
       <Link
         href="/temples"
         className="absolute top-5 left-4 z-20 inline-flex h-10 items-center gap-2 rounded-lg border border-[#C18426] bg-[#F8F2E8] px-4 lg:hidden"
       >
         <ArrowLeft className="h-4 w-4 text-[#1F3A44]" />
-        <span className="font-cormorant text-lg text-[#1F3A44]">Back</span>
+        <span
+          className="font-cormorant text-lg text-[#1F3A44]"
+          // style={{ marginLeft: "50px", marginTop: "20px" }}
+        >
+          Back
+        </span>
       </Link>
 
       {/* ================= MOBILE ================= */}
@@ -75,7 +104,7 @@ export default function TempleHero({ temple }: TempleHeroProps) {
           </div>
 
           {/* Description */}
-          <p className="line-clamp-5 text-center text-[15px] leading-7 text-[#4F4941]">
+          <p className="line-clamp-3 text-center text-[15px] leading-7 text-[#4F4941]">
             {temple.description}
           </p>
         </div>
@@ -86,8 +115,14 @@ export default function TempleHero({ temple }: TempleHeroProps) {
           href="/temples"
           className="absolute top-8 left-20 z-20 inline-flex h-11 items-center gap-2 rounded-lg border border-[#C18426] px-5"
         >
-          <ArrowLeft className="h-4 w-4 text-[#1F3A44]" />
-          <span className="font-cormorant text-xl text-[#1F3A44]">
+          <ArrowLeft
+            className="h-4 w-4 text-[#0F5C66]"
+            style={{ marginLeft: "8px" }}
+          />
+          <span
+            className="font-cormorant text-xl text-[#0F5C66]"
+            style={{ marginRight: "8px" }}
+          >
             Back to Temples
           </span>
         </Link>
@@ -105,7 +140,7 @@ export default function TempleHero({ temple }: TempleHeroProps) {
             </Link>
           </div>
         </div> */}
-          <div className="flex w-fit items-center gap-24">
+          <div className="flex w-fit items-center gap-5">
             {/* LEFT */}
             <div className="w-[520px] shrink-0">
               <div className="relative h-[560px] w-[480px]">
@@ -132,44 +167,122 @@ export default function TempleHero({ temple }: TempleHeroProps) {
             </div>
 
             {/* RIGHT */}
-            <div className="relative w-[620px] shrink-0">
-              <Image
-                src="/images2/temple-outline_1.png"
+            <div className="relative w-[620px] shrink-0 overflow-visible">
+              {/* Temple outline background */}
+              {/* <Image
+                src="/images2/temple-outline_2.png"
                 alt=""
-                width={280}
-                height={280}
-                className="absolute top-16 right-0 hidden opacity-[0.05] lg:block"
+                width={420}
+                height={420}
+                className="pointer-events-none absolute -top-10 -right-24 z-0 hidden h-[420px] w-[420px] object-contain opacity-[0.10] lg:block"
+              /> */}
+              <Image
+                src="/images2/temple-outline_2.png"
+                alt=""
+                width={320}
+                height={320}
+                priority
+                className="pointer-events-none absolute top-[-180px] right-[-200px] z-[1] h-[320px] w-[320px] object-contain opacity-44"
               />
 
-              <div className="mb-3 flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-[#C18426]" />
-                <span className="font-cormorant text-[22px] text-[#554B44]">
-                  {temple.location}
-                </span>
-              </div>
+              <div className="relative z-10">
+                <div className="mb-3 flex items-center gap-2">
+                  <MapPin className="h-5 w-5 text-[#C18426]" />
+                  <span className="font-cormorant text-[22px] text-[#554B44]">
+                    {temple.location}
+                  </span>
+                </div>
 
-              <h1
-                className="font-cormorant text-[58px] leading-[0.95] font-semibold text-[#0B6670]"
-                style={{ marginBottom: "10px", marginTop: "10px" }}
-              >
-                {temple.name}
-              </h1>
+                <h1
+                  className="font-cormorant text-[58px] leading-[0.95] font-semibold text-[#0B6670]"
+                  style={{ marginBottom: "10px", marginTop: "10px" }}
+                >
+                  {temple.name}
+                </h1>
 
-              <div className="my-5 flex items-center gap-3">
-                <div className="h-px w-16 bg-[#D4B06A]" />
-                <Image src="/images/lotus.png" alt="" width={36} height={36} />
-                <div className="h-px w-16 bg-[#D4B06A]" />
-              </div>
+                <div className="my-5 flex items-center gap-3">
+                  <div className="h-px w-16 bg-[#D4B06A]" />
+                  <Image
+                    src="/images/lotus.png"
+                    alt=""
+                    width={36}
+                    height={36}
+                  />
+                  <div className="h-px w-16 bg-[#D4B06A]" />
+                </div>
 
-              <p
-                className="line-clamp-6 max-w-[560px] text-[18px] leading-8 text-[#4F4941]"
-                style={{ marginTop: "10px" }}
-              >
-                {temple.description}
-              </p>
+                <p
+                  className="line-clamp-4 max-w-[560px] text-[16px] leading-8 text-[#4F4941]"
+                  style={{ marginTop: "10px" }}
+                >
+                  {temple.description}
+                </p>
 
-              <div className="mt-8 border-t border-[#E4D7BE] pt-6">
-                {/* Stats */}
+                <div
+                  className="grid grid-cols-[150px_170px_1fr]"
+                  style={{ marginTop: "40px" }}
+                >
+                  {/* Deity */}
+                  <div className="flex items-start gap-3 border-r border-[#D8A65A]/70 pr-12">
+                    <Flower2
+                      className="mt-0.5 h-7 w-7 shrink-0 text-[#C97800]"
+                      strokeWidth={2}
+                      style={{ marginTop: "5px" }}
+                    />
+
+                    <div>
+                      <p className="font-cormorant text-[18px] leading-none text-[#4A403A]">
+                        Deity
+                      </p>
+                      <p
+                        className="font-latin mt-2 text-[16px] leading-none font-semibold text-[#3C3531]"
+                        style={{ marginTop: "2px" }}
+                      >
+                        {templeInfo.deity}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Established */}
+                  <div
+                    className="flex items-start gap-3 border-r border-[#D8A65A]/70 px-9"
+                    style={{ marginLeft: "15px" }}
+                  >
+                    <CalendarDays
+                      className="mt-0.5 h-6 w-6 shrink-0 text-[#C97800]"
+                      strokeWidth={2}
+                    />
+
+                    <div>
+                      <p className="font-cormorant text-[19px] leading-none text-[#4A403A]">
+                        Established
+                      </p>
+                      <p className="font-latin mt-2 text-[16px] leading-none font-semibold text-[#3C3531]">
+                        {templeInfo.established}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Timings */}
+                  <div
+                    className="flex items-start gap-3 pl-9"
+                    style={{ marginLeft: "15px" }}
+                  >
+                    <Clock3
+                      className="mt-0.5 h-7 w-7 shrink-0 text-[#C97800]"
+                      strokeWidth={2}
+                    />
+
+                    <div>
+                      <p className="font-cormorant text-[19px] leading-none text-[#4A403A]">
+                        Timings
+                      </p>
+                      <p className="font-latin mt-2 text-[16px] leading-none font-semibold whitespace-nowrap text-[#3C3531]">
+                        {templeInfo.timings}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

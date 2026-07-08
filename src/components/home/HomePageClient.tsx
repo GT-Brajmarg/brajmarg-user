@@ -14,14 +14,28 @@ export default function HomePageClient({
   const dispatch = useAppDispatch();
 
   const heroLoading = useAppSelector((state) => state.hero.loading);
+  const darshan = useAppSelector((state) => state.hero.darshan);
+
   const templesLoading = useAppSelector((state) => state.temples.loading);
+  const temples = useAppSelector((state) => state.temples.temples);
+
+  const hasDarshanData = Boolean(darshan.templeName);
+  const hasTemplesData = temples.length > 0;
 
   useEffect(() => {
-    dispatch(fetchLiveDarshan());
-    dispatch(fetchTemples());
-  }, [dispatch]);
+    if (!hasDarshanData && !heroLoading) {
+      dispatch(fetchLiveDarshan());
+    }
 
-  if (heroLoading || templesLoading) {
+    if (!hasTemplesData && !templesLoading) {
+      dispatch(fetchTemples());
+    }
+  }, [dispatch, hasDarshanData, hasTemplesData, heroLoading, templesLoading]);
+
+  const isInitialLoading =
+    (heroLoading && !hasDarshanData) || (templesLoading && !hasTemplesData);
+
+  if (isInitialLoading) {
     return <HomePageLoader />;
   }
 

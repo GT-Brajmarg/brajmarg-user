@@ -11,6 +11,9 @@ import {
   Handshake,
 } from "lucide-react";
 
+const sevaDetails =
+  "Offered during the afternoon Rajbhog, this seva includes bhog, vastra, and special prayers for the well-being and prosperity of you and your family.";
+
 interface Temple {
   id: string;
   name: string;
@@ -33,7 +36,7 @@ interface Props {
 
 export default function SevaHero({ templeSlug, temple, seva }: Props) {
   return (
-    <section className="relative h-[650px] overflow-hidden bg-[#F8F2E8] pt-20">
+    <section className="relative h-[650px] overflow-hidden bg-transparent pt-20">
       {/* ================= Breadcrumb ================= */}
       <div
         className="flex items-center gap-2 pt-6"
@@ -43,9 +46,12 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
           href={`/temples/${templeSlug}`}
           className="inline-flex h-11 items-center gap-2 rounded-lg border border-[#C18426] bg-transparent px-5 transition hover:bg-[#FCF5E9]"
         >
-          <ArrowLeft className="h-4 w-4 text-[#1F3A44]" />
+          <ArrowLeft className="h-4 w-4 text-[#0F5C66]" />
 
-          <span className="font-cormorant text-[22px] leading-none text-[#1F3A44]">
+          <span
+            className="font-cormorant text-[22px] leading-none text-[#0F5C66]"
+            style={{ marginRight: "10px" }}
+          >
             Back to Temples
           </span>
         </Link>
@@ -96,16 +102,20 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
               {/* Badge */}
 
               <div
-                className="mb-5 inline-flex h-8 w-fit items-center gap-2 rounded-full border border-[#D89A3D] bg-[#FCF6EA] px-3.5"
+                className="mb-5 inline-flex h-8 w-fit items-center gap-2 rounded-full border border-[#D89A3D] bg-[#EFDEC7]/20 px-3.5"
                 // style={{ marginTop: "30px" }}
               >
                 <Handshake
                   size={15}
                   strokeWidth={1.8}
                   className="text-[#0B6670]"
+                  style={{ marginLeft: "10px" }}
                 />
 
-                <span className="font-cormorant text-[18px] leading-none text-[#5B4631]">
+                <span
+                  className="font-cormorant text-[18px] leading-none text-[#5B4631]"
+                  style={{ marginRight: "10px" }}
+                >
                   Temple Seva
                 </span>
               </div>
@@ -125,10 +135,10 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
               </p>
               {/* Description */}
               <p
-                className="font-cormorant mt-7 max-w-[560px] text-[18px] leading-8 text-[#5D534B]"
+                className="font-inter mt-7 max-w-[560px] text-[16px] leading-8 text-[#3D352F]"
                 style={{ marginTop: "20px" }}
               >
-                {seva.details}
+                {sevaDetails}
               </p>
               {/* ================= Features ================= */}
               <div
@@ -206,7 +216,7 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
               {/* Part 2 continues with the price card */}
               {/* ================= Price Card ================= */}
               <div
-                className="mt-10 max-w-[520px] rounded-[20px] border border-[#D89A3D] bg-white/90 px-7 py-5 shadow-[0_8px_25px_rgba(216,154,61,0.08)]"
+                className="mt-10 max-w-[520px] rounded-[20px] border border-[#D89A3D] bg-[#EFDEC766]/40 px-7 py-5 shadow-[0_8px_25px_rgba(216,154,61,0.08)]"
                 style={{ marginTop: "40px" }}
               >
                 <p
@@ -236,7 +246,7 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
           <div className="mt-10 flex flex-col lg:hidden">
             <div className="relative mx-auto h-[340px] w-[340px]">
               <Image
-                src={seva.image_url}
+                src={seva.image_url || "/images2/default.png"}
                 alt={seva.name}
                 fill
                 className="object-contain"

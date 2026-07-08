@@ -6,6 +6,8 @@ import ContinueButton from "./delivery/ContinueButton";
 import DeliveryDetails from "./delivery/DeliveryDetails";
 import DeliveryForm from "./delivery/DeliveryForm";
 import DeliveryOptions from "./delivery/DeliveryOptions";
+import OrderSummary from "./OrderSummary";
+import TrustFeatures from "./TrustFeatures";
 import { CheckoutProps } from "./types";
 
 export default function CheckoutPage({ items }: CheckoutProps) {
@@ -60,18 +62,12 @@ export default function CheckoutPage({ items }: CheckoutProps) {
           </div>
 
           {/* Right Side */}
-          <div className="space-y-6">
-            <div className="rounded-3xl border border-dashed border-[#C67A00] bg-white/40 p-10">
-              <h2 className="font-cormorant text-4xl text-[#0B6670]">
-                Order Summary
-              </h2>
+          <div className="grid gap-6 lg:grid-rows-[1fr_auto]">
+            {/* This automatically matches Delivery Details height */}
+            <OrderSummary items={items} />
 
-              <p className="mt-3">Total Items: {items.length}</p>
-            </div>
-
-            <div className="rounded-3xl border border-dashed border-[#C67A00] bg-white/40 p-10">
-              Trust Features
-            </div>
+            {/* This automatically matches Delivery Options + Continue Button height */}
+            <TrustFeatures />
           </div>
         </div>
       </div>

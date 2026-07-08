@@ -32,7 +32,7 @@ export default function TempleLocation({ templeId }: TempleLocationProps) {
   }
 
   return (
-    <section className="relative overflow-hidden rounded-[18px] border border-[#D89A3D] bg-[#FBF6EE]">
+    <section className="relative overflow-hidden rounded-[18px] border border-[#D89A3D] bg-transparent shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       {/* Pattern */}
       <div
         className="absolute inset-0 opacity-[0.06]"
@@ -53,7 +53,7 @@ export default function TempleLocation({ templeId }: TempleLocationProps) {
             </h3>
 
             <div
-              className="mt-3 text-[14px] leading-[1.5] text-[#4D433B]"
+              className="font-cormorant mt-3 text-[15px] leading-[1.5] text-[#4D433B]"
               style={{ marginTop: "10px" }}
             >
               <p>{location.temple_name}</p>
@@ -72,11 +72,16 @@ export default function TempleLocation({ templeId }: TempleLocationProps) {
               href={location.google_maps_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex h-[34px] items-center gap-2 rounded-[8px] border border-[#0B6670] bg-white px-3 text-[13px] font-medium text-[#0B6670] transition hover:bg-[#F5EEE2]"
+              className="font-cormorant bg-transoarent mt-6 inline-flex h-[34px] items-center gap-2 rounded-[8px] border border-[#0F5C66] px-3 text-[13px] font-medium text-[#0F5C66] transition hover:bg-[#F5EEE2]"
               style={{ marginTop: "10px" }}
             >
-              Open in Google Maps
-              <Navigation size={14} />
+              <span style={{ marginLeft: "5px", color: "#0F5C66" }}>
+                Open in Google Maps
+              </span>
+              <Navigation
+                size={14}
+                style={{ marginRight: "5px", color: "#0F5C66" }}
+              />
             </a>
           </div>
         </div>
@@ -101,12 +106,15 @@ export default function TempleLocation({ templeId }: TempleLocationProps) {
             </h3>
 
             <div className="mt-3 space-y-1">
-              {nearbyPlaces.map((place) => (
+              {nearbyPlaces.slice(0, 6).map((place) => (
                 <div
                   key={place.id}
                   className="flex justify-between text-[13px] text-[#4D433B]"
+                  style={{ marginTop: "5px" }}
                 >
-                  <span>{place.place_name}</span>
+                  <span className="font-cormorant text-[15px]">
+                    {place.place_name}
+                  </span>
                   <span className="text-[#7A6E5F]">~{place.distance}</span>
                 </div>
               ))}
@@ -140,7 +148,7 @@ export default function TempleLocation({ templeId }: TempleLocationProps) {
             href={location.google_maps_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#0B6670] bg-white px-5 text-[14px] font-medium text-[#0B6670] transition hover:bg-[#F5EEE2]"
+            className="mt-5 inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-[#0F5C66] bg-transparent px-5 text-[14px] font-medium text-[#0F5C66] transition hover:bg-[#F5EEE2]"
             style={{ marginTop: "10px", marginBottom: "20px" }}
           >
             Open in Google Maps
@@ -170,7 +178,7 @@ export default function TempleLocation({ templeId }: TempleLocationProps) {
             {nearbyPlaces.map((place) => (
               <div
                 key={place.id}
-                className="flex items-center justify-between rounded-xl border border-[#E6D5B6] bg-white px-4 py-3"
+                className="flex items-center justify-between rounded-xl border border-[#E6D5B6] bg-transparent px-4 py-3"
               >
                 <span className="text-[15px] font-medium text-[#3E342D]">
                   {place.place_name}
