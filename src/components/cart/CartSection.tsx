@@ -1,47 +1,53 @@
+"use client";
+
 import { ShoppingCart } from "lucide-react";
+import Link from "next/link";
 import CartItem from "./CartItem";
 import OrderSummary from "./OrderSummary";
-import { CartItemType } from "././../../types/types";
-
-const items: CartItemType[] = [
-  {
-    id: 1,
-    type: "SEVA",
-    title: "Rajbhog Seva",
-    temple: "Shreenathji Temple, Nathdwara",
-    date: "22 June 2026, 1:00 PM",
-    price: 751,
-    quantity: 1,
-    image: "/images/cart/seva.jpg",
-  },
-  {
-    id: 2,
-    type: "PRASAD",
-    title: "Mishri Prasad",
-    temple: "Shreenathji Temple, Nathdwara",
-    extra: "250 gms",
-    price: 251,
-    quantity: 1,
-    image: "/images/cart/prasad.jpg",
-  },
-  {
-    id: 3,
-    type: "SHOP",
-    title: "Shreenathji Pichwai Frame",
-    temple: "Shreenathji Temple, Nathdwara",
-    extra: "12×16 inch • Teak wood finish",
-    price: 2300,
-    quantity: 1,
-    image: "/images/cart/frame.jpg",
-  },
-];
+import { useAppSelector } from "@/store/hooks";
 
 export default function CartSection() {
+  const items = useAppSelector((state) => state.cart.items);
+
+  if (items.length === 0) {
+    return (
+      <section className="py-10">
+        <div className="mx-auto flex min-h-[360px] max-w-7xl flex-col items-center justify-center rounded-3xl border border-[#D79B32] bg-[#FFF9F0] px-6 text-center">
+          <ShoppingCart size={46} className="text-[#C67A00]" />
+
+          <h2 className="font-cormorant mt-5 text-[32px] font-semibold text-[#0B6670]">
+            Your Cart is Empty
+          </h2>
+
+          <p className="mt-2 max-w-md text-[14px] text-[#6B5A49]">
+            Add seva, prasad, sacred frames, or other offerings to your cart.
+          </p>
+
+          <Link
+            href="/shop"
+            className="font-cormorant mt-6 flex h-[48px] items-center justify-center rounded-xl bg-[#0B6670] px-7 text-[19px] font-semibold transition hover:bg-[#095A61]"
+            style={{ color: "#EFDEC7 !important", marginTop: "20px" }}
+          >
+            <span
+              style={{
+                color: "#EFDEC7 !important",
+                marginLeft: "5px",
+                marginRight: "5px",
+              }}
+            >
+              Explore Shop
+            </span>
+          </Link>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-10">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
-        <div className="rounded-3xl border border-[#D79B32] bg-[#FFF9F0]">
-          <div className="flex items-center gap-3 border-b p-6">
+        <div className="bg-[#C37000]/04 rounded-3xl border border-[#D79B32]">
+          <div className="flex items-center gap-3 border-b border-[#D79B32] p-6">
             <ShoppingCart
               className="text-[#C67A00]"
               style={{ marginLeft: "20px" }}
@@ -55,9 +61,12 @@ export default function CartSection() {
             </h2>
           </div>
 
-          <div className="px-6">
+          <div className="cart-items-scroll h-[560px] overflow-y-auto px-6 pr-3">
             {items.map((item) => (
-              <CartItem key={item.id} item={item} />
+              <CartItem
+                key={`${item.id}-${item.selectedDate ?? ""}-${item.selectedSlot ?? ""}-${item.variant ?? ""}`}
+                item={item}
+              />
             ))}
           </div>
         </div>

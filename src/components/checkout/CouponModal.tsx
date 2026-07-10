@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CheckCircle2, ChevronDown, TicketPercent, X } from "lucide-react";
+import Image from "next/image";
 
 type Coupon = {
   code: string;
@@ -58,28 +59,32 @@ export default function CouponModal({
 
   if (!isOpen) return null;
 
-  const applyCoupon = (code?: string) => {
-    const finalCode = code || couponCode.trim().toUpperCase();
+  const applyCoupon = () => {
+    const finalCode = selectedCoupon || couponCode.trim().toUpperCase();
 
     if (!finalCode) return;
 
     onApplyCoupon(finalCode);
     onClose();
   };
-
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#201A14]/70 px-4 py-6 backdrop-blur-[2px]">
-      <div className="relative max-h-[92vh] w-full max-w-[560px] overflow-y-auto rounded-[18px] border border-[#D79A43] bg-[#FFF9F0] p-5 shadow-[0_20px_60px_rgba(38,25,12,0.35)] sm:p-7">
-        {/* <div
-          className="pointer-events-none absolute inset-0 opacity-[0.05]"
-          style={{
-            backgroundImage: "url('/images/mandala-pattern.svg')",
-            backgroundRepeat: "repeat",
-            backgroundSize: "230px",
-          }}
-        /> */}
+    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-[#201A14]/70 px-4 py-6 backdrop-blur-[2px]">
+      <div className="relative w-full max-w-[560px] overflow-hidden rounded-[18px] border border-[#D79A43] bg-[#FFF9F0] shadow-[0_20px_60px_rgba(38,25,12,0.35)]">
+        {/* Fixed background inside modal */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0"
+        >
+          <Image
+            src="/images/temple-paper-texture.png"
+            alt=""
+            fill
+            sizes="560px"
+            className="object-cover opacity-[0.35]"
+          />
+        </div>
 
-        <div className="relative">
+        <div className="relative z-10 max-h-[92vh] overflow-y-auto p-5 sm:p-7">
           <button
             type="button"
             onClick={onClose}
@@ -92,7 +97,7 @@ export default function CouponModal({
 
           <div className="flex flex-col items-center text-center">
             <div
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D79A43] bg-[#FFF2DB] text-[#C67A00]"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D79A43] bg-[#C37000]/10 text-[#C67A00]"
               style={{ marginTop: "40px" }}
             >
               <TicketPercent size={22} strokeWidth={1.7} />
@@ -106,7 +111,7 @@ export default function CouponModal({
             </h2>
 
             <p
-              className="font-cormorant mt-1 text-[15px] text-[#5E4A35]"
+              className="font-cormorant mt-1 text-[15px] text-[#3D352F]"
               style={{ marginBottom: "20px" }}
             >
               Save more on your seva and prasad orders
@@ -114,14 +119,14 @@ export default function CouponModal({
           </div>
 
           <div
-            className="mt-5 flex h-12 items-center overflow-hidden rounded-[9px] border border-[#D79A43] bg-[#FFFDF8]"
+            className="mt-5 flex h-12 items-center overflow-hidden rounded-[9px] border border-[#D79A43]"
             style={{ marginLeft: "40px", marginRight: "40px" }}
           >
             <input
               value={couponCode}
               onChange={(event) => setCouponCode(event.target.value)}
               placeholder="Enter Coupon Code"
-              className="font-cormorant h-full min-w-0 flex-1 bg-transparent px-4 text-[16px] uppercase outline-none placeholder:text-[#806A55]"
+              className="font-cormorant h-full min-w-0 flex-1 bg-transparent px-4 text-[16px] outline-none placeholder:text-[#3D352F]"
             />
 
             <button
@@ -151,7 +156,7 @@ export default function CouponModal({
               return (
                 <div
                   key={coupon.code}
-                  className="overflow-hidden rounded-[10px] border border-[#D79A43] bg-[#FFF7E9]"
+                  className="overflow-hidden rounded-[10px] border border-[#D79A43]"
                   style={{
                     marginLeft: "40px",
                     marginRight: "40px",
@@ -167,7 +172,7 @@ export default function CouponModal({
                     }}
                     className="flex w-full items-stretch text-left"
                   >
-                    <div className="flex w-[112px] shrink-0 items-center justify-center border-r border-b border-[#D79A43] bg-[#FBE8C5] px-3 text-center text-[20px] leading-tight font-semibold whitespace-pre-line text-[#0B6670]">
+                    <div className="flex w-[112px] shrink-0 items-center justify-center border-r border-[#D79A43] bg-[#C37000]/10 px-3 text-center text-[20px] leading-tight font-semibold whitespace-pre-line text-[#0B6670]">
                       {coupon.discountLabel}
                     </div>
 
@@ -239,6 +244,7 @@ export default function CouponModal({
                           <li
                             key={detail}
                             className="font-cormorant flex items-center gap-2 text-[13px] text-[#503A27]"
+                            style={{ marginLeft: "10px" }}
                           >
                             <CheckCircle2
                               size={15}

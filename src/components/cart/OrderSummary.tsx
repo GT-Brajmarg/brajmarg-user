@@ -14,9 +14,9 @@ export default function OrderSummary({ items }: Props) {
   );
 
   return (
-    <div className="rounded-3xl border border-[#D79B32] bg-[#FFF9F0] p-8">
+    <div className="relative min-h-[615px] flex-col rounded-3xl border border-[#D79B32] bg-[transparent] p-8">
       <h2
-        className="font-cormorant text-3xl font-semibold text-[#0B6670]"
+        className="font-cormorant text-2xl font-semibold text-[#0B6670]"
         style={{ marginLeft: "10px", marginTop: "10px" }}
       >
         Order Summary
@@ -28,15 +28,17 @@ export default function OrderSummary({ items }: Props) {
       >
         {items.map((item) => (
           <div key={item.id} className="flex justify-between text-lg">
-            <span className="font-cormorant">{item.title}</span>
+            <span className="font-cormorant text-[16px] text-[#3D352F]">
+              {item.title}
+            </span>
 
-            <span>₹{item.price}</span>
+            <span className="text-[15px] text-[#3D352F]">₹{item.price}</span>
           </div>
         ))}
       </div>
 
       <div
-        className="my-8 border-t border-dashed pt-6"
+        className="my-8 border-t border-dashed border-[#C37000] pt-6"
         style={{ marginTop: "10px" }}
       >
         <div
@@ -63,9 +65,9 @@ export default function OrderSummary({ items }: Props) {
         </div>
       </div>
 
-      <div className="border-t border-dashed pt-6">
+      <div className="mt-auto border-t border-dashed border-[#C37000] px-[10px] pt-6">
         <p
-          className="text-lg"
+          className="font-cormorant text-[20px]"
           style={{ marginTop: "20px", marginLeft: "10px" }}
         >
           Estimated Total
@@ -78,29 +80,32 @@ export default function OrderSummary({ items }: Props) {
           ₹{subtotal}
         </h3>
 
-        <p className="text-[#0B6670]" style={{ marginLeft: "10px" }}>
+        <p
+          className="font-cormorant text-xl text-[#0B6670]"
+          style={{ marginLeft: "10px" }}
+        >
           + Shipping Charges
         </p>
 
         <p
-          className="mt-1 text-sm"
+          className="font-cormorant mt-1 text-sm"
           style={{ marginLeft: "10px", marginTop: "10px" }}
         >
           (Inclusive of all Taxes)
         </p>
       </div>
-      <div style={{ marginTop: "60px", marginLeft: "30px" }}>
-        <Link href="/checkout">
-          <button className="font-cormorant mt-10 flex h-15 w-80 items-center justify-center gap-3 rounded-xl bg-[#0B6670] text-3xl font-semibold text-white transition hover:bg-[#09545B]">
+      <div className="absolute right-8 bottom-8 left-8 items-center px-4">
+        <Link href="/checkout" className="w-full max-w-[300px]">
+          <button className="font-cormorant flex h-[50px] w-full items-center justify-center gap-3 rounded-xl bg-[#0B6670] text-[24px] font-semibold text-[#EFDEC7] transition hover:bg-[#09545B]">
             Proceed to Checkout
-            <ArrowRight size={28} />
+            <ArrowRight size={26} />
           </button>
         </Link>
-      </div>
 
-      <p className="mt-3 text-center text-xs text-[#6D665B]">
-        Secure Payments. Easy Returns. 100% Satisfaction.
-      </p>
+        <p className="mt-3 w-full max-w-[320px] text-center text-xs text-[#0F5C66]">
+          Secure Payments. Easy Returns. 100% Satisfaction.
+        </p>
+      </div>
     </div>
   );
 }

@@ -8,21 +8,15 @@ import DeliveryForm from "./delivery/DeliveryForm";
 import DeliveryOptions from "./delivery/DeliveryOptions";
 import OrderSummary from "./OrderSummary";
 import TrustFeatures from "./TrustFeatures";
-import { CheckoutProps } from "./types";
+// import { CheckoutProps } from "./types";
+import { useAppSelector } from "@/store/hooks";
 
-export default function CheckoutPage({ items }: CheckoutProps) {
+export default function CheckoutPage() {
+  const items = useAppSelector((state) => state.cart.items);
   return (
-    <section className="relative overflow-hidden bg-[#FBF5EB]">
+    <section className="relative overflow-hidden bg-[transparent]">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.05]">
-        <div
-          className="h-full w-full bg-center bg-repeat"
-          style={{
-            backgroundImage: "url('/images/mandala-pattern.svg')",
-            backgroundSize: "700px",
-          }}
-        />
-      </div>
+      <div className="absolute inset-0 opacity-[0.05]"></div>
 
       <div className="relative mx-auto max-w-7xl px-6 py-10">
         {/* Header */}
@@ -38,14 +32,14 @@ export default function CheckoutPage({ items }: CheckoutProps) {
         >
           {/* Left Side */}
           <div className="space-y-6">
-            <div className="rounded-3xl border border-dashed border-[#C67A00] bg-white/40 p-10">
+            <div className="rounded-3xl border-[#C67A00] bg-transparent p-10">
               <h2 className="font-cormorant text-4xl text-[#0B6670]">
                 <DeliveryDetails />
               </h2>
             </div>
 
             <div
-              className="rounded-3xl border border-dashed border-[#C67A00] bg-white/40 p-10"
+              className="rounded-3xl bg-transparent p-10"
               style={{ marginTop: "10px" }}
             >
               <h2 className="font-cormorant text-4xl text-[#0B6670]">
@@ -54,7 +48,7 @@ export default function CheckoutPage({ items }: CheckoutProps) {
             </div>
 
             <div
-              className="rounded-3xl border border-dashed border-[#C67A00] bg-white/40 p-10"
+              className="rounded-3xl bg-transparent p-10"
               style={{ marginTop: "10px" }}
             >
               <ContinueButton />
@@ -62,7 +56,10 @@ export default function CheckoutPage({ items }: CheckoutProps) {
           </div>
 
           {/* Right Side */}
-          <div className="grid gap-6 lg:grid-rows-[1fr_auto]">
+          <div
+            className="grid gap-6 lg:grid-rows-[1fr_auto]"
+            style={{ marginBottom: "40px" }}
+          >
             {/* This automatically matches Delivery Details height */}
             <OrderSummary items={items} />
 

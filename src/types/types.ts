@@ -1,11 +1,17 @@
-export interface CartItemType {
-  id: number;
-  type: "SEVA" | "PRASAD" | "SHOP";
+export type CartItemType = {
+  id: string | number;
+  type: "PRODUCT" | "SEVA" | "CLOTH" | "FRAME" | "YATRA" | "PRASAD" | "SHOP";
   title: string;
-  temple: string;
-  extra?: string;
-  date?: string;
   price: number;
   quantity: number;
-  image: string;
-}
+  image?: string;
+
+  temple?: string;
+  extra?: string;
+  date?: string;
+
+  slug?: string;
+  selectedDate?: string;
+  selectedSlot?: string;
+  variant?: string;
+};

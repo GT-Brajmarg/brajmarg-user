@@ -15,13 +15,6 @@ import {
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
-// interface Props {
-//   params: Promise<{
-//     slug: string;
-//     sevaId: string;
-//   }>;
-// }
-
 export default function Page() {
   const params = useParams();
 
@@ -30,12 +23,6 @@ export default function Page() {
   const { seva, dates, slots, loading, error } = useAppSelector(
     (state) => state.sevaBooking,
   );
-
-  // console.log({
-  //   seva,
-  //   loading,
-  //   error,
-  // });
 
   const slug = params.slug as string;
   const sevaId = params.sevaId as string;
@@ -52,9 +39,14 @@ export default function Page() {
   useEffect(() => {
     if (!slug || !sevaId) return;
 
-    // console.log("Dispatching fetchSevaDetails", { slug, sevaId });
-
     dispatch(fetchSevaDetails({ slug, sevaId }));
+
+    dispatch(
+      fetchAvailableDates({
+        templeId: slug,
+        sevaId,
+      }),
+    );
   }, [dispatch, slug, sevaId]);
 
   useEffect(() => {
@@ -83,18 +75,6 @@ export default function Page() {
 
   const selectedSlotObj = slots.find((slot) => slot.id === selectedSlot);
 
-  useEffect(() => {
-    if (!slug || !sevaId) return;
-
-    dispatch(fetchSevaDetails({ slug, sevaId }));
-
-    dispatch(
-      fetchAvailableDates({
-        templeId: slug,
-        sevaId,
-      }),
-    );
-  }, [dispatch, slug, sevaId]);
   if (loading) {
     return (
       <div className="py-20 text-center text-[#0B6670]">Loading Seva...</div>
@@ -178,10 +158,23 @@ export default function Page() {
             style={{ marginTop: "30px", marginBottom: "30px" }}
           >
             <BookingSummary
-              seva={seva}
-              temple={temple}
+              seva={{
+                id: seva.id || seva.seva_id || sevaId,
+                name: seva.name,
+                image_url: seva.image_url,
+                price: seva.price,
+              }}
+              temple={{
+                name: temple.name,
+                location: temple.location,
+              }}
               selectedDate={selectedDate}
-              selectedTime={selectedSlot}
+              selectedTime={
+                selectedSlotObj?.start_time ||
+                selectedSlotObj?.slot_time ||
+                selectedSlotObj?.time ||
+                selectedSlot
+              }
             />
           </div>
         </div>

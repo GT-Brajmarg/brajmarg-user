@@ -79,17 +79,19 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
                 className="absolute inset-0 -translate-y-8"
                 style={{ marginTop: "-40px" }}
               >
-                <div className="absolute top-1/2 left-1/2 z-10 h-[200px] w-[300px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full">
+                {/* Photo layer */}
+                <div className="absolute top-1/2 left-1/2 z-10 h-[450px] w-[515px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[70px]">
                   <Image
                     src={seva.image_url || "/images2/default.png"}
                     alt={seva.name}
                     fill
-                    className="object-cover"
+                    className="object-cover object-center"
                   />
                 </div>
 
+                {/* Frame overlay */}
                 <Image
-                  src="/images/frame.png"
+                  src="/images/frame_1.png"
                   alt=""
                   fill
                   className="pointer-events-none z-20 object-contain"

@@ -27,7 +27,7 @@ export default function CartBenefits() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-[#FBF5EB] py-8">
+    <section className="relative overflow-hidden py-8">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div
@@ -47,7 +47,10 @@ export default function CartBenefits() {
           style={{ marginTop: "20px" }}
         >
           <ArrowLeft className="h-4 w-4 shrink-0 text-[#0F5C66]" />
-          <span className="flex h-8 items-center text-[#0F5C66]">
+          <span
+            className="flex h-8 items-center text-[#0F5C66]"
+            style={{ marginRight: "10px" }}
+          >
             Continue Shopping
           </span>
         </Link>
@@ -68,7 +71,7 @@ export default function CartBenefits() {
 
         {/* Benefits */}
         <div
-          className="mt-10 rounded-2xl border border-[#D99B36] bg-[#FFF9F0] px-8 py-7"
+          className="bg-[#C37000]/05 mt-10 rounded-2xl border border-[#D99B36] bg-[#C37000]/5 px-8 py-7"
           style={{ marginTop: "20px" }}
         >
           <div
