@@ -26,7 +26,7 @@ const features = [
 export default function TrustFeatures() {
   return (
     <aside
-      className="relative overflow-hidden rounded-[18px] border border-[#D79A43] bg-[#FFF9F0] p-5 shadow-[0_8px_22px_rgba(173,111,30,0.10)]"
+      className="relative overflow-hidden rounded-[18px] border border-[#D79A43] bg-transparent p-5 shadow-[0_8px_22px_rgba(173,111,30,0.10)]"
       style={{ marginBottom: "20px" }}
     >
       <div

@@ -1,68 +1,3 @@
-// "use client";
-
-// import { Truck } from "lucide-react";
-// import { useState } from "react";
-
-// export default function DeliveryOptions() {
-//   const [selected, setSelected] = useState("standard");
-
-//   const options = [
-//     {
-//       id: "standard",
-//       title: "Standard Delivery",
-//       duration: "4–7 Business Days",
-//       price: "FREE",
-//     },
-//     {
-//       id: "express",
-//       title: "Express Delivery",
-//       duration: "1–3 Business Days",
-//       price: "₹149",
-//     },
-//   ];
-
-//   return (
-//     <div className="rounded-3xl border border-[#D79B32] bg-[#FFF9F0] p-8">
-//       <h2 className="font-cormorant text-4xl font-semibold text-[#0B6670]">
-//         Delivery Method
-//       </h2>
-
-//       <div className="mt-6 space-y-4">
-//         {options.map((option) => {
-//           const active = selected === option.id;
-
-//           return (
-//             <button
-//               key={option.id}
-//               onClick={() => setSelected(option.id)}
-//               className={`flex w-full items-center justify-between rounded-2xl border p-5 text-left transition ${
-//                 active
-//                   ? "border-[#0B6670] bg-[#F2FBFA]"
-//                   : "border-[#E4D3B3] bg-white"
-//               }`}
-//             >
-//               <div className="flex items-center gap-4">
-//                 <Truck className="text-[#C67A00]" />
-
-//                 <div>
-//                   <h3 className="font-semibold text-[#0B6670]">
-//                     {option.title}
-//                   </h3>
-
-//                   <p className="text-sm text-[#666]">{option.duration}</p>
-//                 </div>
-//               </div>
-
-//               <span className="font-semibold text-[#0B6670]">
-//                 {option.price}
-//               </span>
-//             </button>
-//           );
-//         })}
-//       </div>
-//     </div>
-//   );
-// }
 "use client";
 
 import { Truck } from "lucide-react";
@@ -87,7 +22,7 @@ export default function DeliveryOptions() {
   ];
 
   return (
-    <section className="mt-5 rounded-2xl border border-[#D59A33] bg-[#FFF9F0]/80 p-5">
+    <section className="mt-5 rounded-2xl border border-[#D59A33] bg-transparent p-5">
       <div className="mb-5 flex items-center gap-2">
         <Truck
           size={18}

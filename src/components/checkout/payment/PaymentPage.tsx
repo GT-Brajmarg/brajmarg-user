@@ -7,25 +7,19 @@ import OrderSummary from "../OrderSummary";
 import TrustFeatures from "../TrustFeatures";
 import PaymentMethod from "./PaymentMethod";
 import PlaceOrderButton from "./PlaceOrderButton";
-import { CheckoutProps } from "../types";
+import { useAppSelector } from "@/store/hooks";
 
-export default function PaymentPage({ items }: CheckoutProps) {
+export default function PaymentPage() {
   const [paymentMethod, setPaymentMethod] = useState<"razorpay" | "cod">(
     "razorpay",
   );
 
+  const items = useAppSelector((state) => state.cart.items);
+
   return (
-    <section className="relative overflow-hidden bg-[#FBF5EB]">
+    <section className="relative overflow-hidden">
       {/* Background Pattern */}
-      <div className="pointer-events-none absolute inset-0 opacity-[0.05]">
-        <div
-          className="h-full w-full bg-center bg-repeat"
-          style={{
-            backgroundImage: "url('/images/mandala-pattern.svg')",
-            backgroundSize: "700px",
-          }}
-        />
-      </div>
+      <div className="pointer-events-none absolute inset-0 opacity-[0.05]"></div>
 
       <div className="relative mx-auto max-w-7xl px-6 py-10">
         <CheckoutHeader
@@ -41,7 +35,6 @@ export default function PaymentPage({ items }: CheckoutProps) {
           className="mt-10 grid gap-8 lg:grid-cols-[2fr_1fr]"
           style={{ marginTop: "40px" }}
         >
-          {/* Left Side */}
           <div className="flex flex-col gap-6">
             <PaymentMethod
               paymentMethod={paymentMethod}
@@ -51,7 +44,6 @@ export default function PaymentPage({ items }: CheckoutProps) {
             <PlaceOrderButton paymentMethod={paymentMethod} />
           </div>
 
-          {/* Right Side */}
           <div className="flex flex-col gap-6">
             <OrderSummary items={items} />
             <TrustFeatures />

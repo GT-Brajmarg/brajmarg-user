@@ -4,7 +4,7 @@ export default function CartSupportSection() {
   return (
     <section className="mt-12 space-y-8">
       {/* Contact Card */}
-      <div className="rounded-2xl border border-[#D28B15] bg-[#FFF9F0] px-8 py-7">
+      <div className="bg-[#C37000]/05 rounded-2xl border border-[#D28B15] bg-[#C37000]/5 px-8 py-7">
         <div
           className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4"
           style={{ marginTop: "10px", marginBottom: "10px" }}
@@ -20,7 +20,7 @@ export default function CartSupportSection() {
                 Need Help?
               </h3>
 
-              <p className="mt-2 text-[18px] leading-7 text-[#3F3125]">
+              <p className="mt-2 text-[14px] leading-7 text-[#3F3125]">
                 We are here to assist you.
               </p>
             </div>
@@ -37,7 +37,7 @@ export default function CartSupportSection() {
                 Call / Whatsapp
               </h3>
 
-              <p className="mt-2 text-[18px] text-[#3F3125]">+91 73564 89660</p>
+              <p className="mt-2 text-[14px] text-[#3F3125]">+91 73564 89660</p>
             </div>
           </div>
 
@@ -52,7 +52,7 @@ export default function CartSupportSection() {
                 Email Us
               </h3>
 
-              <p className="mt-2 text-[18px] text-[#3F3125]">
+              <p className="mt-2 text-[14px] text-[#3F3125]">
                 support@brajmarg.com
               </p>
             </div>
@@ -79,7 +79,7 @@ export default function CartSupportSection() {
 
       {/* Temple Support Banner */}
       <div
-        className="relative overflow-hidden rounded-2xl border border-[#0B6670] bg-[#F3FBFA] px-8 py-8"
+        className="relative overflow-hidden rounded-2xl border border-[#0B6670] bg-[#0F5C66]/10 px-8 py-8"
         style={{ marginTop: "30px", marginBottom: "20px" }}
       >
         <div
@@ -101,13 +101,6 @@ export default function CartSupportSection() {
             spiritual heritage.
           </p>
         </div>
-
-        {/* Temple Illustration */}
-        {/* <img
-          src="/images/temple-outline.png"
-          alt="Temple"
-          className="absolute right-6 bottom-0 h-28 opacity-20"
-        /> */}
       </div>
     </section>
   );

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
 import { Cormorant_Garamond } from "next/font/google";
+import { useRouter } from "next/navigation";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -12,17 +13,64 @@ const cormorant = Cormorant_Garamond({
 });
 
 export default function LoginForm() {
+  const router = useRouter();
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log({
-      phone,
-      password,
-    });
+    setError("");
+
+    if (phone.replace(/\D/g, "").length !== 10) {
+      setError("Please enter a valid 10-digit mobile number.");
+      return;
+    }
+
+    if (!password.trim()) {
+      setError("Please enter your password.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          phone,
+          password,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        setError(result.message || "Login failed. Please try again.");
+        return;
+      }
+
+      localStorage.setItem("brajmarg_temp_user", JSON.stringify(result.user));
+      localStorage.setItem("brajmarg_is_logged_in", "true");
+
+      const redirectPath =
+        localStorage.getItem("brajmarg_login_redirect") || "/";
+
+      localStorage.removeItem("brajmarg_login_redirect");
+
+      window.location.assign(redirectPath);
+    } catch (error) {
+      setError("Unable to login right now. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -109,18 +157,29 @@ export default function LoginForm() {
             </div>
           </div>
 
+          {error && (
+            <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-center text-[12px] text-red-600">
+              {error}
+            </div>
+          )}
+
           {/* Login */}
           <button
             type="submit"
-            className="group flex h-[54px] w-full items-center justify-center rounded-xl bg-[#0B6971] text-white transition hover:bg-[#095A61]"
+            disabled={loading}
+            className="group flex h-[54px] w-full items-center justify-center rounded-xl bg-[#0B6971] text-white transition hover:bg-[#095A61] disabled:cursor-not-allowed disabled:opacity-70"
             style={{ marginTop: "20px" }}
           >
-            <span className={`${cormorant.className} text-[20px]`}>Login</span>
+            <span className={`${cormorant.className} text-[20px]`}>
+              {loading ? "Logging in..." : "Login"}
+            </span>
 
-            <ArrowRight
-              size={18}
-              className="ml-3 transition group-hover:translate-x-1"
-            />
+            {!loading && (
+              <ArrowRight
+                size={18}
+                className="ml-3 transition group-hover:translate-x-1"
+              />
+            )}
           </button>
         </form>
 
@@ -137,10 +196,10 @@ export default function LoginForm() {
         </div>
 
         {/* Social Login */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1">
           <button
             type="button"
-            className="flex h-[50px] items-center justify-center gap-3 rounded-xl border border-[#DCC6A5] bg-[#FFF8EF] transition hover:bg-white"
+            className="flex h-[50px] w-full items-center justify-center gap-3 rounded-xl border border-[#DCC6A5] bg-[#FFF8EF] transition hover:bg-white"
           >
             {/* <Image
               src="/images/google.png"
@@ -152,20 +211,18 @@ export default function LoginForm() {
             <span className="text-[14px] font-medium text-[#333]">Google</span>
           </button>
 
-          <button
+          {/* <button
             type="button"
             className="flex h-[50px] items-center justify-center gap-3 rounded-xl border border-[#DCC6A5] bg-[#FFF8EF] transition hover:bg-white"
           >
-            {/* <Image src="/images/apple.png" alt="Apple" width={18} height={22} /> */}
-
             <span className="text-[14px] font-medium text-[#333]">Apple</span>
-          </button>
+          </button> */}
         </div>
 
         {/* Terms */}
         <p
           className="mt-8 text-center text-[11px] leading-5 text-[#8B7A66]"
-          style={{ marginTop: "10px" }}
+          style={{ marginTop: "0px" }}
         >
           By continuing, you agree to{" "}
           <span className="font-medium text-[#5F4A2D]">Brajmarg's</span>{" "}

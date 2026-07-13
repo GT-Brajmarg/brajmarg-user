@@ -77,3 +77,49 @@ a {
     transform: translateY(0) scale(1);
   }
 }
+
+.cart-items-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #c37000 #f8f2e8;
+}
+
+.cart-items-scroll::-webkit-scrollbar {
+  width: 7px;
+}
+
+.cart-items-scroll::-webkit-scrollbar-track {
+  background: #f8f2e8;
+  border-radius: 999px;
+}
+
+.cart-items-scroll::-webkit-scrollbar-thumb {
+  background: #c37000;
+  border-radius: 999px;
+}
+
+.cart-items-scroll::-webkit-scrollbar-thumb:hover {
+  background: #0b6670;
+}
+
+.cart-items-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #c37000 #f8f2e8;
+}
+
+.cart-items-scroll::-webkit-scrollbar {
+  width: 7px;
+}
+
+.cart-items-scroll::-webkit-scrollbar-track {
+  background: #f8f2e8;
+  border-radius: 999px;
+}
+
+.cart-items-scroll::-webkit-scrollbar-thumb {
+  background: #c37000;
+  border-radius: 999px;
+}
+
+.cart-items-scroll::-webkit-scrollbar-thumb:hover {
+  background: #0b6670;
+}

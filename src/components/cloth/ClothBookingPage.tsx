@@ -52,6 +52,8 @@ export default function ClothBookingPage({ slug, clothId }: Props) {
 
   const selectedSizeObj = sizes.find((s) => s.id === selectedSize);
 
+  console.log("SELECTED SIZE OBJECT:", selectedSizeObj);
+
   const selectedColorObj = colors.find((c) => c.id === selectedColor);
 
   const finalPrice =
@@ -98,9 +100,13 @@ export default function ClothBookingPage({ slug, clothId }: Props) {
         }}
       >
         <BookingSummary
-          cloth={cloth}
+          cloth={{
+            id: cloth.id,
+            name: cloth.name,
+            image_url: cloth.image_url,
+          }}
           temple={cloth.temples}
-          selectedSize={selectedSizeObj?.label}
+          selectedSize={selectedSizeObj?.size_label || ""}
           selectedColor={selectedColorObj?.color_name}
           finalPrice={finalPrice}
         />

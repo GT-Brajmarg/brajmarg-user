@@ -8,7 +8,8 @@ import { toggleMenu, closeMenu } from "@/store/slices/navSlice";
 import { useEffect, useState } from "react";
 import { fetchAlerts } from "@/store/slices/alertsSlice";
 import { Cormorant_Garamond } from "next/font/google";
-import { Bell, User, Menu, X } from "lucide-react";
+import { Bell, User, Menu, X, ShoppingCart } from "lucide-react";
+import { useRouter } from "next/navigation";
 import LoginModal from "@/components/auth/LoginModal";
 import { usePathname } from "next/navigation";
 
@@ -34,10 +35,44 @@ export default function Navbar() {
   const [showAlerts, setShowAlerts] = useState(false);
 
   const alerts = useAppSelector((state) => state.alerts.alerts);
+  const cartItems = useAppSelector((state) => state.cart.items);
+
+  const cartItemCount = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0,
+  );
 
   const alertCount = alerts.length;
 
   const latestAlerts = alerts.slice(0, 3);
+
+  const router = useRouter();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const checkLogin = () => {
+      const loggedIn = localStorage.getItem("brajmarg_is_logged_in") === "true";
+      setIsLoggedIn(loggedIn);
+    };
+
+    checkLogin();
+
+    window.addEventListener("storage", checkLogin);
+
+    return () => {
+      window.removeEventListener("storage", checkLogin);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("brajmarg_temp_user");
+    localStorage.removeItem("brajmarg_is_logged_in");
+
+    setIsLoggedIn(false);
+    dispatch(closeMenu());
+    router.push("/");
+  };
 
   useEffect(() => {
     dispatch(fetchAlerts());
@@ -123,22 +158,49 @@ export default function Navbar() {
                     </span>
                   </button>
 
-                  <button
-                    onClick={() => {
-                      dispatch(closeMenu());
-                      setLoginOpen(true);
-                    }}
-                    className="flex h-[44px] w-[280px] items-center justify-center gap-2 rounded-[10px] border border-[#005D63]"
-                    style={{ color: "#0F5C66" }}
-                  >
-                    <User size={18} className="text-[#0F5C66]" />
+                  {isLoggedIn ? (
+                    <div className="flex w-[280px] gap-3">
+                      <Link
+                        href="/cart"
+                        onClick={() => dispatch(closeMenu())}
+                        className="flex h-[44px] flex-1 items-center justify-center gap-2 rounded-[10px] border border-[#005D63] bg-[#FFF8EF]"
+                      >
+                        <ShoppingCart size={18} className="text-[#0F5C66]" />
 
-                    <span
-                      className={`${cormorant.className} text-[15px] font-medium text-[#0F5C66]`}
+                        <span
+                          className={`${cormorant.className} text-[15px] font-medium text-[#0F5C66]`}
+                        >
+                          Cart
+                        </span>
+                      </Link>
+
+                      <Link
+                        href="/profile"
+                        onClick={() => dispatch(closeMenu())}
+                        className="flex h-[44px] w-[52px] items-center justify-center rounded-[10px] border border-[#005D63]"
+                        aria-label="Profile"
+                      >
+                        <User size={19} className="text-[#0F5C66]" />
+                      </Link>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        dispatch(closeMenu());
+                        setLoginOpen(true);
+                      }}
+                      className="flex h-[44px] w-[280px] items-center justify-center gap-2 rounded-[10px] border border-[#005D63]"
+                      style={{ color: "#0F5C66" }}
                     >
-                      Login
-                    </span>
-                  </button>
+                      <User size={18} className="text-[#0F5C66]" />
+
+                      <span
+                        className={`${cormorant.className} text-[15px] font-medium text-[#0F5C66]`}
+                      >
+                        Login
+                      </span>
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -221,18 +283,64 @@ export default function Navbar() {
                   </span>
                 </button>
 
-                <button
-                  onClick={() => setLoginOpen(true)}
-                  className="flex h-[38px] w-[92px] items-center justify-center gap-2 rounded-[10px] border border-[#005D63]"
-                >
-                  <User size={16} strokeWidth={2} className="text-[#0F5C66]" />
+                {isLoggedIn ? (
+                  <>
+                    <Link
+                      href="/cart"
+                      className="relative flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border border-[#005D63] bg-[#FFF8EF] transition hover:bg-[#F3E5D2]"
+                      aria-label={`Cart with ${cartItemCount} items`}
+                    >
+                      <ShoppingCart
+                        size={18}
+                        strokeWidth={2}
+                        className="text-[#0F5C66]"
+                      />
 
-                  <span
-                    className={`${cormorant.className} text-[14px] font-medium text-[#0F5C66]`}
+                      {cartItemCount > 0 && (
+                        <span className="absolute -top-2 -right-2 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#C67A00] px-1 text-[10px] font-bold text-white">
+                          {cartItemCount > 99 ? "99+" : cartItemCount}
+                        </span>
+                      )}
+                    </Link>
+
+                    <Link
+                      href="/profile"
+                      className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border border-[#005D63] bg-[#FFF8EF] transition hover:bg-[#F3E5D2]"
+                      aria-label="Profile"
+                    >
+                      <User
+                        size={18}
+                        strokeWidth={2}
+                        className="text-[#0F5C66]"
+                      />
+                    </Link>
+
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className={`${cormorant.className} flex h-[38px] items-center justify-center rounded-[10px] border border-[#B85C38] px-3 text-[14px] font-medium text-[#B85C38] transition hover:bg-[#FBE5DA]`}
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => setLoginOpen(true)}
+                    className="flex h-[38px] w-[92px] items-center justify-center gap-2 rounded-[10px] border border-[#005D63] bg-[#EFDEC7]"
                   >
-                    Login
-                  </span>
-                </button>
+                    <User
+                      size={16}
+                      strokeWidth={2}
+                      className="text-[#0F5C66]"
+                    />
+
+                    <span
+                      className={`${cormorant.className} bg-[#EFDEC7] text-[14px] font-medium text-[#0F5C66]`}
+                    >
+                      Login
+                    </span>
+                  </button>
+                )}
               </div>
             </div>
           </div>

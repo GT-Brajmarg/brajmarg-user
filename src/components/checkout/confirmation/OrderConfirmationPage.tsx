@@ -10,6 +10,7 @@ import {
   PackageCheck,
   ShieldCheck,
   Truck,
+  Package,
 } from "lucide-react";
 import CheckoutHeader from "../CheckoutHeader";
 import OrderSummary from "../OrderSummary";
@@ -24,6 +25,49 @@ type OrderConfirmationPageProps = CheckoutProps & {
   customerPhone?: string;
   paymentMethod?: string;
 };
+
+type StatusItemData = {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  large?: boolean;
+};
+
+const orderStatusItems: StatusItemData[] = [
+  {
+    icon: (
+      <Image
+        src="/images/devotion-icon.png"
+        alt=""
+        width={62}
+        height={62}
+        className="h-[120px] w-[120px] object-contain"
+      />
+    ),
+    title: "Your devotion is our priority.",
+    description: "We are preparing your order with care and blessings.",
+    large: true,
+  },
+  {
+    icon: (
+      <span className="font-serif text-[30px] leading-none text-[#F6C15B]">
+        ॐ
+      </span>
+    ),
+    title: "Authentic",
+    description: "from Temples",
+  },
+  {
+    icon: <Package size={27} />,
+    title: "Packed",
+    description: "with Care",
+  },
+  {
+    icon: <Truck size={27} />,
+    title: "Delivered",
+    description: "with Blessings",
+  },
+];
 
 export default function OrderConfirmationPage({
   items,
@@ -48,7 +92,7 @@ export default function OrderConfirmationPage({
   };
 
   return (
-    <section className="relative overflow-hidden bg-[#FBF5EB]">
+    <section className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 opacity-[0.055]">
         {/* <div
           className="h-full w-full bg-center bg-repeat"
@@ -119,7 +163,7 @@ export default function OrderConfirmationPage({
                 <div className="h-px w-16 bg-[#D7B06B]" />
               </div>
 
-              <div className="mt-5 flex w-full max-w-[280px] flex-col items-center rounded-[10px] border border-[#D79A43] bg-[#FFF2DB] px-4 py-3 text-center">
+              <div className="mt-5 flex w-full max-w-[280px] flex-col items-center rounded-[10px] border border-[#D79A43] bg-[#C37000]/20 px-4 py-3 text-center">
                 <p className="font-cormorant text-[14px] text-[#5E4A35]">
                   Order ID
                 </p>
@@ -154,45 +198,39 @@ export default function OrderConfirmationPage({
             </div>
           </section>
 
-          <section className="mt-4 grid overflow-hidden rounded-[12px] bg-[#0B6670] text-white sm:grid-cols-4">
-            <StatusItem
-              icon={<Gem size={25} />}
-              title="Your devotion is our priority."
-              description="We are preparing your order with care and blessings."
-              large
-            />
-            <StatusItem
-              icon={<ShieldCheck size={22} />}
-              title="Authentic"
-              description="from Temples"
-            />
-            <StatusItem
-              icon={<PackageCheck size={22} />}
-              title="Packed"
-              description="with Care"
-            />
-            <StatusItem
-              icon={<Truck size={22} />}
-              title="Delivered"
-              description="with Blessings"
-            />
+          <section className="mt-4 overflow-hidden rounded-[12px] bg-[#0B6670] text-white">
+            <div className="grid min-h-[76px] grid-cols-1 items-center sm:grid-cols-[2.15fr_1fr_1fr_1fr]">
+              {orderStatusItems.map((item, index) => (
+                <div
+                  key={item.title}
+                  className={`flex h-full items-center ${index > 0 ? "" : ""}`}
+                >
+                  <StatusItem
+                    icon={item.icon}
+                    title={item.title}
+                    description={item.description}
+                    large={item.large}
+                  />
+                </div>
+              ))}
+            </div>
           </section>
 
           <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_1fr]">
             {/* Order Summary */}
             <div
-              className="rounded-[16px] bg-[#FFF9F0] p-1 shadow-[0_8px_22px_rgba(173,111,30,0.10)]"
+              className="rounded-[16px] p-1 shadow-[0_8px_22px_rgba(173,111,30,0.10)]"
               style={{ marginTop: "20px", marginBottom: "10px" }}
             >
               <OrderSummary items={items} showCoupon={false} />
-              <button
+              {/* <button
                 type="button"
                 className="font-cormorant flex h-[52px] w-full items-center justify-center gap-2 rounded-[10px] bg-[#0B6670] px-4 text-[16px] font-semibold text-white transition hover:bg-[#084F57]"
                 style={{ marginTop: "10px" }}
               >
                 <Download size={15} />
                 Download Invoice
-              </button>
+              </button> */}
 
               {/* <div className="mx-5 mb-4 flex justify-end"></div> */}
             </div>
@@ -215,19 +253,32 @@ export default function OrderConfirmationPage({
               <InfoCard
                 icon={<Check size={19} />}
                 title="Payment Details"
+                variant="payment"
                 content={
-                  <>
-                    <p>Paid using {paymentMethod}</p>
-                    <p className="font-cormorant text-[24px] font-semibold text-[#0B6670]">
-                      ₹{total}
-                    </p>
-                  </>
+                  <div className="flex items-end justify-between gap-3">
+                    <div>
+                      <p>Paid using {paymentMethod}</p>
+
+                      <p className="font-cormorant text-[24px] font-semibold text-[#0B6670]">
+                        ₹{total}
+                      </p>
+                    </div>
+
+                    <Image
+                      src="/images/razorpay-logo.png"
+                      alt="Razorpay"
+                      width={118}
+                      height={34}
+                      className="mb-1 h-[28px] w-auto object-contain"
+                    />
+                  </div>
                 }
               />
 
               <InfoCard
                 icon={<Gem size={19} />}
                 title="A small note of gratitude"
+                variant="gratitude"
                 content={
                   <p style={{ fontSize: "14px" }}>
                     Every order you place supports temple seva, preserves our
@@ -238,7 +289,7 @@ export default function OrderConfirmationPage({
                 }
               />
 
-              <div className="rounded-[14px] border border-[#D79A43] bg-[#FFF9F0] p-4">
+              <div className="rounded-[14px] border border-[#D79A43] p-4">
                 <h3
                   className="font-cormorant text-[18px] font-semibold text-[#0B6670]"
                   style={{ marginLeft: "20px", marginTop: "10px" }}
@@ -265,7 +316,8 @@ export default function OrderConfirmationPage({
                 >
                   <Link
                     href="/orders"
-                    className="font-cormorant flex h-[50px] w-full items-center justify-center rounded-md border border-[#0B6670] px-4 text-[16px] font-semibold text-[#0B6670] transition hover:bg-[#EAF5F0]"
+                    className="font-cormorant flex h-[50px] w-full items-center justify-center rounded-md border border-[#0F5C66] px-4 text-[16px] font-semibold transition hover:bg-[#EAF5F0]"
+                    style={{ color: "#0F5C66 !important" }}
                   >
                     Track Order
                   </Link>
@@ -273,6 +325,7 @@ export default function OrderConfirmationPage({
                   <Link
                     href="/shop"
                     className="font-cormorant flex h-[50px] w-full items-center justify-center gap-2 rounded-md bg-[#0B6670] px-4 text-[16px] font-semibold text-white transition hover:bg-[#084F57]"
+                    style={{ color: "#EFDEC7" }}
                   >
                     Continue Shopping
                     <span>→</span>
@@ -281,11 +334,19 @@ export default function OrderConfirmationPage({
               </div>
             </div>
           </div>
+          <button
+            type="button"
+            className="font-cormorant flex h-[52px] w-full items-center justify-center gap-2 rounded-[10px] bg-[#0B6670] px-4 text-[16px] font-semibold text-white transition hover:bg-[#084F57]"
+            style={{ marginTop: "10px", color: "#EFDEC7" }}
+          >
+            <Download size={15} />
+            Download Invoice
+          </button>
 
           {/* Bottom blessing */}
           <section
-            className="mt-[60px] grid min-h-[88px] grid-cols-[130px_1fr_130px] items-center overflow-hidden rounded-[14px] border border-[#E4C58C] bg-[#FCE8C6] text-center"
-            style={{ marginBottom: "20px", marginTop: "60px" }}
+            className="mt-[60px] grid min-h-[88px] grid-cols-[130px_1fr_130px] items-center overflow-hidden rounded-[14px] border border-[#E4C58C] bg-[#C37000]/10 text-center"
+            style={{ marginBottom: "20px", marginTop: "20px" }}
           >
             <div className="flex h-full items-end justify-center px-6">
               <Image
@@ -333,24 +394,35 @@ function StatusItem({
   title,
   description,
   large = false,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  large?: boolean;
-}) {
+}: StatusItemData) {
   return (
     <div
-      className={`flex items-center gap-2 px-4 py-3 ${
-        large ? "sm:col-span-1" : ""
-      }`}
-      style={{ marginTop: "20px", marginBottom: "20px", marginLeft: "40px" }}
+      className={`flex items-center ${
+        large ? "gap-3 px-4" : "gap-2 px-3"
+      } py-2`}
     >
-      <div className="shrink-0 text-[#F6C15B]">{icon}</div>
+      <div
+        className={`flex shrink-0 items-center justify-center text-[#F6C15B] ${
+          large ? "h-[62px] w-[62px]" : "h-8 w-8"
+        }`}
+      >
+        {icon}
+      </div>
 
-      <div>
-        <p className="font-cormorant text-[13px] font-semibold">{title}</p>
-        <p className="font-cormorant text-[10px] leading-tight text-[#E3F1EB]">
+      <div className="min-w-0">
+        <p
+          className={`font-cormorant font-semibold text-[#FFF4DF] ${
+            large ? "text-[14px]" : "text-[12px]"
+          }`}
+        >
+          {title}
+        </p>
+
+        <p
+          className={`font-cormorant leading-tight text-[#E3F1EB] ${
+            large ? "text-[11px]" : "text-[10px]"
+          }`}
+        >
           {description}
         </p>
       </div>
@@ -362,15 +434,24 @@ function InfoCard({
   icon,
   title,
   content,
+  variant = "address",
 }: {
   icon: React.ReactNode;
   title: string;
   content: React.ReactNode;
+  variant?: "address" | "payment" | "gratitude" | "tracking";
 }) {
+  const variantStyles = {
+    address: "border-[#C37000] bg-transparent",
+    payment: "border-[#0F5C66] bg-[#0F5C66]/[0.08]",
+    gratitude: "border-[#C37000] bg-[#C370001A]",
+    tracking: "border-[#C37000] ",
+  };
+
   return (
     <section
-      className="rounded-[14px] border border-[#D79A43] bg-[#FFF9F0] p-4"
-      style={{ marginBottom: "20px" }}
+      className={`rounded-[14px] border p-4 ${variantStyles[variant]}`}
+      style={{ marginBottom: "25px" }}
     >
       <h3
         className="font-cormorant flex items-center gap-2 text-[18px] font-semibold text-[#0B6670]"
@@ -381,7 +462,7 @@ function InfoCard({
       </h3>
 
       <div
-        className="font-cormorant mt-2 text-[13px] leading-tight text-[#5E4A35]"
+        className="font-cormorant mt-2 ml-7 text-[13px] leading-tight text-[#5E4A35]"
         style={{ marginLeft: "40px", marginBottom: "10px" }}
       >
         {content}

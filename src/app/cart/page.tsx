@@ -1,41 +1,54 @@
-// import CartHero from "@/components/cart/CartHero";
-// import CartFeatures from "@/components/cart/CartFeatures";
-// import CartItems from "@/components/cart/CartItems";
-// import OrderSummary from "@/components/cart/OrderSummary";
-// import CartSupport from "@/components/cart/CartSupport";
-// import PurchaseBanner from "@/components/cart/PurchaseBanner";
-
-// export default function CartPage() {
-//   return (
-//     <main className="bg-[#FBF4E8]">
-//       <CartHero />
-
-//       <div className="mx-auto max-w-7xl px-6">
-
-//         <CartFeatures />
-
-//         <section className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1.6fr_1fr]">
-//           <CartItems />
-//           <OrderSummary />
-//         </section>
-
-//         <CartSupport />
-
-//         <PurchaseBanner />
-//       </div>
-//     </main>
-//   );
-// }
-
 import CartBenefits from "@/components/cart/CartBenefits";
 import CartSection from "@/components/cart/CartSection";
 import CartSupportSection from "@/components/cart/CartSupportSection";
+import Image from "next/image";
 
 export default function CartPage() {
   return (
     <>
-      <main className="bg-[#F8F2E8]">
-        {/* <TempleHero temple={temple} /> */}
+      <main className="relative isolate min-h-screen overflow-hidden bg-[#F8F2E8]">
+        {/* Background layers */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+        >
+          {/* Paper texture across the entire cart page */}
+          <Image
+            src="/images/temple-paper-texture.png"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-[0.22]"
+          />
+
+          {/* Mandala 1 — behind Cart Benefits */}
+          <Image
+            src="/images/mandala_bg_1.png"
+            alt=""
+            width={1050}
+            height={1050}
+            className="absolute top-[80px] left-1/2 w-[900px] max-w-none -translate-x-1/2 opacity-[0.045] md:w-[1050px]"
+          />
+
+          {/* Mandala 2 — behind Cart Section */}
+          <Image
+            src="/images/mandala_bg_1.png"
+            alt=""
+            width={1050}
+            height={1050}
+            className="absolute top-[1050px] left-1/2 w-[850px] max-w-none -translate-x-1/2 opacity-[0.04] md:w-[1050px]"
+          />
+
+          {/* Mandala 3 — behind Support Section */}
+          <Image
+            src="/images/mandala_bg_1.png"
+            alt=""
+            width={900}
+            height={900}
+            className="absolute top-[2050px] left-1/2 w-[700px] max-w-none -translate-x-1/2 opacity-[0.035] md:w-[900px]"
+          />
+        </div>
 
         <div className="mx-auto flex justify-center">
           <div className="w-full max-w-[1200px]">
@@ -46,7 +59,6 @@ export default function CartPage() {
             <div style={{ marginTop: "30px" }}>
               <CartSupportSection />
             </div>
-            {/* Cart Items */}
           </div>
         </div>
       </main>

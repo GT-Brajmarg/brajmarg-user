@@ -1,13 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { Package, ShoppingCart, Minus, Plus } from "lucide-react";
+import { Package, ShoppingCart, Minus, Plus, Check } from "lucide-react";
 import { useState } from "react";
+import { useAppDispatch } from "@/store/hooks";
+import { addToCart } from "@/store/slices/cartSlice";
+import LoginModal from "@/components/auth/LoginModal";
 
 interface BookingSummaryProps {
   prasad: {
+    id: string | number;
     name: string;
     image_url: string;
+    price?: number;
   };
 
   temple: {
@@ -27,6 +32,44 @@ export default function BookingSummary({
   finalPrice,
 }: BookingSummaryProps) {
   const [quantity, setQuantity] = useState(1);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [cartMessage, setCartMessage] = useState(false);
+
+  const dispatch = useAppDispatch();
+
+  const handleAddToCart = () => {
+    const isLoggedIn = localStorage.getItem("brajmarg_is_logged_in") === "true";
+
+    if (!isLoggedIn) {
+      // Saves the exact current prasad page so login returns here.
+      localStorage.setItem(
+        "brajmarg_login_redirect",
+        `${window.location.pathname}${window.location.search}`,
+      );
+
+      setLoginOpen(true);
+      return;
+    }
+
+    dispatch(
+      addToCart({
+        id: prasad.id,
+        type: "PRASAD",
+        title: prasad.name,
+        price: finalPrice,
+        quantity,
+        image: prasad.image_url || "/images2/default.png",
+        temple: `${temple.name}, ${temple.location}`,
+        extra: `Pack Size: ${selectedQuantity}`,
+        variant: selectedQuantity,
+      }),
+    );
+    setCartMessage(true);
+
+    setTimeout(() => {
+      setCartMessage(false);
+    }, 2500);
+  };
 
   const decrease = () => {
     if (quantity > 1) {
@@ -47,15 +90,28 @@ export default function BookingSummary({
         <div className="flex items-center gap-6">
           {/* Image */}
           <div
-            className="relative h-[95px] w-[120px] shrink-0"
-            style={{ marginLeft: "50px" }}
+            className="relative h-[150px] w-[180px] shrink-0"
+            style={{ marginLeft: "40px" }}
           >
-            <Image
-              src={prasad.image_url}
-              alt={prasad.name}
-              fill
-              className="object-contain"
-            />
+            <div className="absolute inset-0">
+              {/* Cloth photo */}
+              <div className="absolute top-1/2 left-1/2 z-10 h-[118px] w-[132px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[22px]">
+                <Image
+                  src={prasad.image_url || "/images2/default.png"}
+                  alt={prasad.name}
+                  fill
+                  className="object-cover object-center"
+                />
+              </div>
+
+              {/* Frame overlay */}
+              <Image
+                src="/images/frame_1.png"
+                alt=""
+                fill
+                className="pointer-events-none z-20 object-contain"
+              />
+            </div>
           </div>
 
           {/* Info */}
@@ -119,7 +175,8 @@ export default function BookingSummary({
             </div>
 
             {/* Add to Cart */}
-            <button
+            {/* <button
+              onClick={handleAddToCart}
               className="s flex h-14 items-center gap-3 rounded-xl bg-[#0B6670] px-8 text-[22px] text-white transition hover:bg-[#09565D]"
               style={{ width: "180px" }}
             >
@@ -131,10 +188,45 @@ export default function BookingSummary({
               <span style={{ color: "#EFDEC7", fontFamily: "font-cormorant" }}>
                 Add to Cart
               </span>
-            </button>
+            </button> */}
+            <div className="relative">
+              {cartMessage && (
+                <div className="animate-in fade-in slide-in-from-bottom-3 fixed right-6 bottom-6 z-[100] flex min-w-[290px] items-center gap-3 rounded-xl border border-black/10 bg-white px-4 py-3 shadow-[0_12px_32px_rgba(0,0,0,0.16)] duration-300">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0B6670]">
+                    <Check size={17} strokeWidth={3} className="text-white" />
+                  </div>
+
+                  <div>
+                    <p className="text-[14px] font-semibold text-[#111111]">
+                      Added to cart
+                    </p>
+
+                    <p className="mt-0.5 text-[12px] text-[#6B7280]">
+                      {prasad.name} has been added successfully.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                className="flex h-[56px] cursor-pointer items-center gap-3 rounded-xl bg-[#0B6670] px-8 text-[24px] text-[#EFDEC7] transition hover:bg-[#09565D]"
+                style={{ marginBottom: "20px" }}
+              >
+                <ShoppingCart size={22} style={{ marginLeft: "10px" }} />
+
+                <span
+                  style={{ marginRight: "10px", fontFamily: "font-cormorant" }}
+                >
+                  Add to Cart
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
     </section>
   );
 }

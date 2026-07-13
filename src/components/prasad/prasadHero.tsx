@@ -87,7 +87,7 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
                 className="absolute inset-0 -translate-y-8"
                 style={{ marginTop: "-40px" }}
               >
-                <div className="absolute top-1/2 left-1/2 z-10 h-[300px] w-[450px] -translate-x-1/2 -translate-y-1/2 overflow-hidden">
+                <div className="absolute top-1/2 left-1/2 z-10 h-[450px] w-[515px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[70px]">
                   <Image
                     src={prasad.image_url || "/images2/default.png"}
                     alt={prasad.name}
@@ -97,7 +97,7 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
                 </div>
 
                 <Image
-                  src="/images/frame.png"
+                  src="/images/frame_1.png"
                   alt=""
                   fill
                   className="pointer-events-none z-20 object-contain"

@@ -21,6 +21,8 @@ import frameReducer from "./slices/frameSlice";
 import frameBookingReducer from "./slices/frameBookingSlice";
 import clothReducer from "./slices/clothSlice";
 import clothBookingReducer from "./slices/clothBookingSlice";
+import cartReducer from "./slices/cartSlice";
+import addressReducer from "./slices/addressSlice";
 
 export const store = configureStore({
   reducer: {
@@ -46,6 +48,8 @@ export const store = configureStore({
     frameBooking: frameBookingReducer,
     cloths: clothReducer,
     clothBooking: clothBookingReducer,
+    cart: cartReducer,
+    addresses: addressReducer,
   },
 });
 
