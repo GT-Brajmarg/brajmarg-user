@@ -163,7 +163,7 @@ export default function Navbar() {
                       <Link
                         href="/cart"
                         onClick={() => dispatch(closeMenu())}
-                        className="flex h-[44px] flex-1 items-center justify-center gap-2 rounded-[10px] border border-[#005D63] bg-[#FFF8EF]"
+                        className="flex h-[44px] flex-1 items-center justify-center gap-2 rounded-[10px] border border-[#005D63] bg-[#EFDEC7]"
                       >
                         <ShoppingCart size={18} className="text-[#0F5C66]" />
 
@@ -177,7 +177,7 @@ export default function Navbar() {
                       <Link
                         href="/profile"
                         onClick={() => dispatch(closeMenu())}
-                        className="flex h-[44px] w-[52px] items-center justify-center rounded-[10px] border border-[#005D63]"
+                        className="flex h-[44px] w-[52px] items-center justify-center rounded-[10px] border border-[#005D63] bg-[#EFDEC7]"
                         aria-label="Profile"
                       >
                         <User size={19} className="text-[#0F5C66]" />
@@ -287,7 +287,7 @@ export default function Navbar() {
                   <>
                     <Link
                       href="/cart"
-                      className="relative flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border border-[#005D63] bg-[#FFF8EF] transition hover:bg-[#F3E5D2]"
+                      className="relative flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border border-[#005D63] bg-[#EFDEC7] transition hover:bg-[#F3E5D2]"
                       aria-label={`Cart with ${cartItemCount} items`}
                     >
                       <ShoppingCart
@@ -297,7 +297,7 @@ export default function Navbar() {
                       />
 
                       {cartItemCount > 0 && (
-                        <span className="absolute -top-2 -right-2 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#C67A00] px-1 text-[10px] font-bold text-white">
+                        <span className="absolute -top-2 -right-2 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#EFDEC7] px-1 text-[10px] font-bold text-white">
                           {cartItemCount > 99 ? "99+" : cartItemCount}
                         </span>
                       )}
@@ -305,7 +305,7 @@ export default function Navbar() {
 
                     <Link
                       href="/profile"
-                      className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border border-[#005D63] bg-[#FFF8EF] transition hover:bg-[#F3E5D2]"
+                      className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border border-[#005D63] bg-[#EFDEC7] transition hover:bg-[#F3E5D2]"
                       aria-label="Profile"
                     >
                       <User
