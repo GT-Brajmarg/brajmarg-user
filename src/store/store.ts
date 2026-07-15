@@ -23,6 +23,8 @@ import clothReducer from "./slices/clothSlice";
 import clothBookingReducer from "./slices/clothBookingSlice";
 import cartReducer from "./slices/cartSlice";
 import addressReducer from "./slices/addressSlice";
+import shopReducer from "./slices/shopSlice";
+import shopFilterReducer from "./slices/shopFilterSlice";
 
 export const store = configureStore({
   reducer: {
@@ -50,6 +52,8 @@ export const store = configureStore({
     clothBooking: clothBookingReducer,
     cart: cartReducer,
     addresses: addressReducer,
+    shop: shopReducer,
+    shopFilters: shopFilterReducer,
   },
 });
 
