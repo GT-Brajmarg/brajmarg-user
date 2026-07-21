@@ -9,7 +9,7 @@ import {
   Clock3,
   ChevronLeft,
 } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchTemplePrasad } from "@/store/slices/prasadSlice";
 import Link from "next/link";
@@ -32,23 +32,39 @@ export default function TemplePrasad({
       dispatch(fetchTemplePrasad(templeId));
     }
   }, [dispatch, templeId]);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  // const scrollRef = useRef<HTMLDivElement>(null);
 
-  const scrollRight = () => {
-    scrollRef.current?.scrollBy({
-      left: 400,
-      behavior: "smooth",
-    });
+  // const scrollRight = () => {
+  //   scrollRef.current?.scrollBy({
+  //     left: 400,
+  //     behavior: "smooth",
+  //   });
+  // };
+
+  // const scrollLeft = () => {
+  //   scrollRef.current?.scrollBy({
+  //     left: -320,
+  //     behavior: "smooth",
+  //   });
+  // };
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const visibleCount = 4;
+
+  const visibleItems = items.slice(currentIndex, currentIndex + visibleCount);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(prev - visibleCount, 0));
   };
 
-  const scrollLeft = () => {
-    scrollRef.current?.scrollBy({
-      left: -320,
-      behavior: "smooth",
-    });
+  const handleNext = () => {
+    setCurrentIndex((prev) =>
+      Math.min(prev + visibleCount, Math.max(items.length - visibleCount, 0)),
+    );
   };
   return (
-    <section className="relative z-20 -translate-y-6 overflow-hidden rounded-[22px] border border-[#D89A3D] bg-transparent p-4 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
+    <section className="relative z-20 -translate-y-6 overflow-hidden rounded-[22px] border-[2px] border-[#C37000] bg-transparent p-4 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       {/* Background Pattern */}
       <div
         className="absolute inset-0 opacity-[0.06]"
@@ -82,15 +98,15 @@ export default function TemplePrasad({
           style={{ marginBottom: "15px" }}
         >
           {/* Cards */}
-          <div className="relative min-w-0" style={{ marginLeft: "20px" }}>
+          <div className="relative min-w-0" style={{ marginLeft: "14px" }}>
             <div
-              ref={scrollRef}
               className="scrollbar-hide flex gap-3 overflow-x-auto scroll-smooth pb-2"
+              style={{ marginLeft: "40px" }}
             >
-              {items.map((item) => (
+              {visibleItems.map((item) => (
                 <div
                   key={item.id}
-                  className="group relative min-w-[195px] overflow-hidden rounded-[18px] border border-[#D9B06C] bg-transparent shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1"
+                  className="group relative min-w-[195px] overflow-hidden rounded-[18px] border border-[#C37000] bg-transparent shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1"
                 >
                   {/* Pattern */}
                   <div
@@ -113,16 +129,19 @@ export default function TemplePrasad({
                   </div>
 
                   {/* Content */}
-                  <div className="relative z-10 flex min-h-[110px] flex-col p-2.5">
+                  <div className="relative z-10 flex min-h-[110px] flex-col">
                     {/* Name */}
-                    <h3 className="line-clamp-2 h-[38px] text-center text-[14px] leading-[1.2] font-medium text-[#24535D]">
+                    <h3
+                      className="line-clamp-2 h-[32px] text-center leading-[1.2] font-medium text-[#24535D] text-[16x]"
+                      style={{ marginTop: "14px" }}
+                    >
                       {item.name}
                     </h3>
 
                     {/* Price */}
                     <p
-                      className="mt-2 text-center text-[14px] font-bold text-[#D18400]"
-                      style={{ marginBottom: "19px" }}
+                      className="mt-2 text-center text-[18px] font-bold text-[#D18400]"
+                      style={{ marginBottom: "10px", marginTop: "-2px" }}
                     >
                       ₹{item.price}
                     </p>
@@ -135,7 +154,7 @@ export default function TemplePrasad({
                         // style={{ marginBottom: "-20px" }}
                       >
                         <button
-                          className="flex h-[32px] w-full items-center justify-center rounded-[8px] bg-[#0B6670] text-[12px] font-medium text-white transition hover:bg-[#084F57]"
+                          className="font-cormorant flex h-[32px] w-full items-center justify-center rounded-[8px] bg-[#0B6670] text-[15px] font-medium text-[#EFDEC7] transition hover:bg-[#084F57]"
                           // style={{ marginBottom: "-20px" }}
                         >
                           Order Now
@@ -144,7 +163,7 @@ export default function TemplePrasad({
                     ) : (
                       <button
                         disabled
-                        className="mt-auto flex h-[32px] w-full items-center justify-center rounded-[8px] bg-gray-300 text-[12px] font-medium text-white"
+                        className="font-cormorant mt-auto flex h-[32px] w-full items-center justify-center rounded-[8px] bg-gray-300 text-[15px] font-medium text-[#EFDEC7]"
                       >
                         Out of Stock
                       </button>
@@ -156,16 +175,18 @@ export default function TemplePrasad({
 
             {/* Arrow */}
             <button
-              onClick={scrollLeft}
+              onClick={handlePrev}
+              disabled={currentIndex === 0}
               className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
-              style={{ marginLeft: "12px" }}
+              style={{ marginLeft: "6px" }}
             >
               <ChevronLeft size={18} className="text-[#0F5C66]" />
             </button>
 
             {/* Right Arrow */}
             <button
-              onClick={scrollRight}
+              onClick={handleNext}
+              disabled={currentIndex >= items.length - visibleCount}
               className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
             >
               <ChevronRight size={18} className="text-[#0F5C66]" />

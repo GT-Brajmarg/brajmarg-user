@@ -71,10 +71,10 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
           alt=""
           width={1050}
           height={1050}
-          className="opacity-[0.04]"
+          className="opacity-[0.05]"
         />
       </div>
-      <div className="flex w-full justify-center">
+      <div className="z-10 flex w-full justify-center">
         {filteredTemples.length === 0 ? (
           <div className="py-20 text-center">
             <h3 className="font-cormorant text-[32px] font-semibold text-[#0D5560]">
@@ -111,13 +111,18 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
                   className={`absolute top-[75px] left-[30px] z-50 inline-flex h-[30px] items-center rounded-full px-[20px] text-[12px] font-bold text-white shadow-sm ${
                     temple.is_coming_soon
                       ? "w-[95px] bg-[#D8A24A]"
-                      : "w-[42px] bg-[#15A44D]"
+                      : "w-[52px] bg-[#15A44D]"
                   }`}
                 >
                   {!temple.is_coming_soon && (
-                    <span className="mr-[6px] h-[8px] w-[8px] rounded-full bg-white" />
+                    <span
+                      className="mr-[6px] h-[8px] w-[8px] rounded-full bg-white"
+                      style={{ marginLeft: "5px" }}
+                    />
                   )}
-                  {temple.is_coming_soon ? "COMING SOON" : "LIVE"}
+                  <span style={{ marginLeft: "5px" }}>
+                    {temple.is_coming_soon ? "COMING SOON" : "LIVE"}
+                  </span>
                 </span>
 
                 {/* Temple Image */}
@@ -198,10 +203,10 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
                       .toLowerCase()
                       .replace(/\s+/g, "-")
                       .replace(/[^\w-]/g, "")}`}
-                    className="font-cormorant absolute top-[315px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 items-center justify-center rounded-full border border-[#D7B36A] bg-[#2B8182] text-[18px] font-semibold text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)] transition-all hover:bg-[#236f70]"
+                    className="font-cormorant absolute top-[315px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 items-center justify-center rounded-full border border-[#D7B36A] bg-[#2B8182] text-[18px] font-semibold !text-[#EFDEC7]"
                   >
                     <span className="absolute -left-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
-                    <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3]" />
+                    <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3] text-[#EFDEC7]" />
                     Visit Temple
                     <span className="absolute -right-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
                   </Link>

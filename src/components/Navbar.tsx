@@ -79,8 +79,16 @@ export default function Navbar() {
   }, [dispatch]);
   return (
     <>
-      <header className="w-full border-t-[3px] border-[#2F2A24] bg-[#EFDEC7]">
-        <nav className="w-full border-b">
+      <header className="relative w-full overflow-hidden border-[#2F2A24] bg-[#FBF8F3]">
+        <Image
+          src="/images/temple-paper-texture.png" // your texture image
+          alt=""
+          fill
+          priority
+          aria-hidden
+          className="pointer-events-none object-cover opacity-40"
+        />
+        <nav className="relative z-10 w-full border-b-[1px] border-[#EFDEC7] shadow-[0px_4px_4px_0px_#00000040]">
           <div className="w-full px-8 lg:px-20">
             {/* Mobile Navbar */}
             <div className="flex h-[72px] items-center justify-between md:hidden">

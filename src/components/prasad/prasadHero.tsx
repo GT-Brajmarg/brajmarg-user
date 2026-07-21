@@ -11,6 +11,13 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import { Cormorant_Infant } from "next/font/google";
+
+const cormorantInfant = Cormorant_Infant({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 const ingredients = [
   {
     name: "Pure Sugar Crystals",
@@ -113,10 +120,12 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
                 className="mb-5 inline-flex h-8 w-fit items-center gap-2 rounded-full border border-[#D89A3D] bg-transparent px-3.5"
                 // style={{ marginTop: "30px" }}
               >
-                <Gift
-                  size={15}
-                  strokeWidth={1.8}
-                  className="text-[#0B6670]"
+                <Image
+                  src="/images/handshake-icon.svg" // replace with your image path
+                  alt="Handshake"
+                  width={15}
+                  height={15}
+                  className="ml-[10px] h-[20px] w-[20px] shrink-0 object-contain"
                   style={{ marginLeft: "10px" }}
                 />
 
@@ -136,14 +145,14 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
               </h1>
               {/* Temple */}
               <p
-                className="font-cormorant mt-4 text-[24px] font-medium text-[#4B392B]"
+                className={`${cormorantInfant.className} mt-4 text-[24px] font-bold text-[#3D352F]`}
                 style={{ marginTop: "20px" }}
               >
                 {temple.name}, {temple.location}
               </p>
               {/* Description */}
               <p
-                className="font-inter mt-7 max-w-[560px] text-[16px] leading-8 text-[#5D534B]"
+                className="font-inter mt-7 max-w-[560px] text-[16px] leading-8 text-[#3D352F]"
                 style={{ marginTop: "20px" }}
               >
                 {ingredients[0].description}
@@ -155,13 +164,16 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
               >
                 {/* Feature 1 */}
                 <div className="flex flex-col items-center px-5 text-center">
-                  <Gift
-                    className="mb-3 text-[#D89A3D]"
-                    size={24}
-                    strokeWidth={1.8}
+                  <Image
+                    src="/images/hand-heart-icon.svg" // replace with your image path
+                    alt="Hand Heart"
+                    width={24}
+                    height={24}
+                    className="mb-3 h-6 w-6 object-contain"
                   />
-
-                  <p className="font-cormorant text-[15px] leading-5 text-[#5B5146]">
+                  <p
+                    className={`${cormorantInfant.className} text-[15px] leading-5 font-bold text-[#3D352F]`}
+                  >
                     Offered in
                     <br />
                     daily Bhog
@@ -170,13 +182,16 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
 
                 {/* Divider */}
                 <div className="relative flex flex-col items-center px-5 text-center before:absolute before:top-2 before:left-0 before:h-14 before:w-px before:bg-[#E7D3AF]">
-                  <Sparkles
-                    className="mb-3 text-[#D89A3D]"
-                    size={24}
-                    strokeWidth={1.8}
+                  <Image
+                    src="/images/sparkles-icon.svg" // replace with your image path
+                    alt="Sparkles"
+                    width={24}
+                    height={24}
+                    className="mb-3 h-6 w-6 object-contain"
                   />
-
-                  <p className="font-cormorant text-[15px] leading-5 text-[#5B5146]">
+                  <p
+                    className={`${cormorantInfant.className} text-[15px] leading-5 font-bold text-[#3D352F]`}
+                  >
                     Temple
                     <br />
                     authentic
@@ -185,13 +200,17 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
 
                 {/* Divider */}
                 <div className="relative flex flex-col items-center px-5 text-center before:absolute before:top-2 before:left-0 before:h-14 before:w-px before:bg-[#E7D3AF]">
-                  <Package
-                    className="mb-3 text-[#D89A3D]"
-                    size={24}
-                    strokeWidth={1.8}
+                  <Image
+                    src="/images/package-icon.svg" // replace with your image path
+                    alt="Package"
+                    width={24}
+                    height={24}
+                    className="mb-3 h-6 w-6 object-contain"
                   />
 
-                  <p className="font-cormorant text-[15px] leading-5 text-[#5B5146]">
+                  <p
+                    className={`${cormorantInfant.className} text-[15px] leading-5 font-bold text-[#3D352F]`}
+                  >
                     Pure and
                     <br />
                     Traditional
@@ -206,7 +225,9 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
                     strokeWidth={1.8}
                   />
 
-                  <p className="text-[15px] leading-5 text-[#5B5146]">
+                  <p
+                    className={`${cormorantInfant.className} text-[15px] leading-5 font-bold text-[#3D352F]`}
+                  >
                     Securely
                     <br />
                     Packaged
@@ -220,10 +241,10 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
                 style={{ marginTop: "40px" }}
               >
                 <p
-                  className="text-[14px] font-medium text-[#75624C]"
+                  className={`${cormorantInfant.className} text-[14px] font-bold text-[#3D352F]`}
                   style={{ marginLeft: "10px", marginTop: "10px" }}
                 >
-                  Prasad Price
+                  Prasad Amount
                 </p>
 
                 <div
@@ -234,7 +255,9 @@ export default function PrasadHero({ templeSlug, temple, prasad }: Props) {
                     ₹{prasad.price}
                   </span>
 
-                  <span className="mb-2 text-[14px] text-[#7A6A58]">
+                  <span
+                    className={`${cormorantInfant.className} mb-2 text-[14px] font-bold text-[#3D352F]`}
+                  >
                     Including Taxes
                   </span>
                 </div>

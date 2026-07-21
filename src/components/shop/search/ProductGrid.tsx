@@ -6,15 +6,6 @@ import ProductCard from "./ProductCard";
 import { fetchShopProducts } from "@/store/slices/shopSlice";
 import { priceRanges } from "../shopFilters";
 
-// const products = Array.from({ length: 9 }).map((_, i) => ({
-//   id: i + 1,
-//   name: "Shreenath Ji Wooden Frame",
-//   temple: "Shreenath Ji Temple, Nathdwara",
-//   price: 1499,
-//   oldPrice: 1899,
-//   image: "/images2/default.png", // Replace with your image
-// }));
-
 interface ProductGridProps {
   selectedCategories: string[];
   selectedPriceRanges: string[];
@@ -61,9 +52,23 @@ export default function ProductGrid({
   }, [dispatch, selectedCategories, collection, isComingSoon]);
 
   if (loading) {
-    return <div>Loading...</div>;
-  }
+    return (
+      <section className="flex min-h-[60vh] items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#D8C7A6] border-t-[#0F5C66]" />
 
+          <h3 className="font-cormorant mt-6 text-3xl font-semibold text-[#0F5C66]">
+            Loading Shop
+          </h3>
+
+          <p className="mt-2 text-center text-sm text-[#6B7280]">
+            Please wait while we prepare the available sevas for your spiritual
+            journey...
+          </p>
+        </div>
+      </section>
+    );
+  }
   if (error) {
     return <div>{error}</div>;
   }

@@ -1,4 +1,5 @@
 import { Headphones, Phone, Mail, Clock3, ShieldCheck } from "lucide-react";
+import Image from "next/image";
 
 export default function CartSupportSection() {
   return (
@@ -12,7 +13,13 @@ export default function CartSupportSection() {
           {/* Need Help */}
           <div className="flex items-center gap-4">
             <div className="flex h-14 w-14 items-center justify-center text-[#C67A00]">
-              <Headphones size={35} strokeWidth={1.8} />
+              <Image
+                src="/images/headphones-icon-1.svg" // replace with your image path
+                alt="Customer Support"
+                width={35}
+                height={35}
+                className="h-[35px] w-[35px] object-contain"
+              />
             </div>
 
             <div>
@@ -27,9 +34,15 @@ export default function CartSupportSection() {
           </div>
 
           {/* Phone */}
-          <div className="flex items-center gap-4 lg:border-l lg:border-[#E8C995] lg:pl-8">
+          <div className="flex items-center gap-4 lg:pl-8">
             <div className="flex h-14 w-14 items-center justify-center text-[#C67A00]">
-              <Phone size={35} strokeWidth={1.8} />
+              <Image
+                src="/images/phone-icon.svg" // replace with your image path
+                alt="Phone"
+                width={35}
+                height={35}
+                className="h-[35px] w-[35px] object-contain"
+              />
             </div>
 
             <div>
@@ -42,9 +55,15 @@ export default function CartSupportSection() {
           </div>
 
           {/* Email */}
-          <div className="flex items-center gap-4 lg:border-l lg:border-[#E8C995] lg:pl-8">
+          <div className="flex items-center gap-4 lg:pl-8">
             <div className="flex h-14 w-14 items-center justify-center text-[#C67A00]">
-              <Mail size={35} strokeWidth={1.8} />
+              <Image
+                src="/images/mail-icon.svg" // replace with your image path
+                alt="Mail"
+                width={35}
+                height={35}
+                className="h-[35px] w-[35px] object-contain"
+              />
             </div>
 
             <div>
@@ -59,7 +78,7 @@ export default function CartSupportSection() {
           </div>
 
           {/* Timings */}
-          <div className="flex items-center gap-4 lg:border-l lg:border-[#E8C995] lg:pl-8">
+          <div className="flex items-center gap-4 lg:pl-8">
             <div className="flex h-14 w-14 items-center justify-center text-[#C67A00]">
               <Clock3 size={35} strokeWidth={1.8} />
             </div>

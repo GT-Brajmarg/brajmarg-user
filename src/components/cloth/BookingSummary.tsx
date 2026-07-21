@@ -6,6 +6,12 @@ import { useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
 import LoginModal from "@/components/auth/LoginModal";
+import { Cormorant_Infant } from "next/font/google";
+
+const cormorantInfant = Cormorant_Infant({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 interface BookingSummaryProps {
   cloth: {
@@ -72,7 +78,7 @@ export default function BookingSummary({
   };
 
   return (
-    <section className="relative mt-10 overflow-hidden rounded-[24px] border border-[#D89A3D] bg-transparent px-7 py-6 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
+    <section className="relative mt-10 overflow-hidden rounded-[24px] border-[2px] border-[#C37000] bg-transparent px-7 py-6 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       <div className="flex flex-col items-center justify-between gap-8 lg:flex-row">
         {/* LEFT */}
 
@@ -103,23 +109,30 @@ export default function BookingSummary({
           </div>
 
           <div>
-            <h2 className="font-cormorant text-[30px] font-semibold text-[#0B6670]">
+            <h2 className="font-cormorant text-[30px] font-bold text-[#0B6670]">
               {cloth.name}
             </h2>
 
-            <p className="font-cormorant mt-2 text-[20px] text-[#4F4941]">
+            <p
+              className={`${cormorantInfant.className} mt-2 text-[20px] font-bold text-[#3D352F]`}
+              style={{ marginBottom: "5px" }}
+            >
               {temple?.name}, {temple?.location}
             </p>
 
             <p className="mt-3 text-[18px] text-[#4F4941]">
               Size -
-              <span className="font-semibold text-[#D18400]">
+              <span
+                className={`${cormorantInfant.className} text-[25px] font-semibold text-[#C37000]`}
+              >
                 {" "}
                 {selectedSize || "5'' x 7'' "}
               </span>
               {" | "}
               Color -
-              <span className="font-semibold text-[#D18400]">
+              <span
+                className={`${cormorantInfant.className} text-[25px] font-semibold text-[#C37000]`}
+              >
                 {" "}
                 {selectedColor}
               </span>
@@ -136,7 +149,11 @@ export default function BookingSummary({
           <div className="hidden h-20 w-px bg-[#D89A3D] lg:block" />
 
           <div>
-            <p className="text-[16px] text-[#5C564F]">Price</p>
+            <p
+              className={`${cormorantInfant.className} text-[20px] font-bold text-[#3D352F]`}
+            >
+              Price
+            </p>
 
             <h3 className="mt-1 text-[40px] leading-none font-bold text-[#0B6670]">
               ₹ {finalPrice * quantity}

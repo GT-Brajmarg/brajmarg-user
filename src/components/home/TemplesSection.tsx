@@ -39,28 +39,16 @@ export default function TemplesSection() {
           {/* Centered Title */}
           <div className="flex translate-y-4 flex-col items-center px-4 text-center md:translate-y-10">
             <div className="flex items-center">
-              <Image
-                src="/images/lotus.png"
-                alt=""
-                width={44}
-                height={44}
-                className="h-6 w-6 md:h-11 md:w-11"
-              />
+              <Image src="/images/lotus.png" alt="" width={54} height={36} />
 
-              <h2 className="font-cormorant text-[22px] leading-tight font-semibold text-[#0C6D72] sm:text-[26px] md:text-[38px]">
+              <h2 className="font-cormorant text-[36px] leading-tight font-semibold text-[#0C6D72] sm:text-[26px] md:text-[38px]">
                 Explore Sacred Temples
               </h2>
 
-              <Image
-                src="/images/lotus.png"
-                alt=""
-                width={44}
-                height={44}
-                className="h-6 w-6 md:h-11 md:w-11"
-              />
+              <Image src="/images/lotus.png" alt="" width={54} height={36} />
             </div>
 
-            <p className="font-cormorant mt-2 px-4 text-center text-[16px] text-[#6C5E4B] md:text-[20px]">
+            <p className="font-cormorant mt-2 px-4 text-center text-[16px] text-[#3D352F] md:text-[20px]">
               Search and discover temples across India
             </p>
           </div>
@@ -113,18 +101,23 @@ export default function TemplesSection() {
                   {/* Image Area with Arch mask */}
                   {/* Badge */}
                   <span
-                    className={`absolute top-[75px] z-50 inline-flex h-[30px] items-center rounded-full px-[20px] text-[12px] font-bold text-white shadow-sm ${
+                    className={`absolute top-[75px] z-50 inline-flex h-[30px] items-center rounded-full px-[25px] text-[12px] font-bold text-white shadow-sm ${
                       temple.is_coming_soon
                         ? "w-[95px] bg-[#D8A24A]"
-                        : "w-[42px] bg-[#15A44D]"
+                        : "w-[50px] bg-[#15A44D]"
                     }`}
                     style={{ marginLeft: "30px" }}
                   >
                     {!temple.is_coming_soon && (
-                      <span className="mr-[6px] h-[8px] w-[8px] rounded-full bg-white" />
+                      <span
+                        className="mr-[6px] h-[8px] w-[8px] rounded-full bg-white"
+                        style={{ marginLeft: "5px" }}
+                      />
                     )}
 
-                    {temple.is_coming_soon ? "COMING SOON" : "LIVE"}
+                    <span style={{ marginLeft: "5px" }}>
+                      {temple.is_coming_soon ? "COMING SOON" : "LIVE"}
+                    </span>
                   </span>
 
                   <div

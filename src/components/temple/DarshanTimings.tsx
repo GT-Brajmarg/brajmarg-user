@@ -107,16 +107,8 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
     };
   });
 
-  if (loading) {
-    return (
-      <div className="rounded-[20px] border border-[#D89A3D] bg-[#FBF6EE] p-6">
-        Loading...
-      </div>
-    );
-  }
-
   return (
-    <section className="relative -translate-y-6 overflow-hidden rounded-[30px] border-[1.5px] border-[#D89A3D] bg-transparent shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
+    <section className="relative -translate-y-6 overflow-hidden rounded-[30px] border-[2px] border-[#C37000] bg-transparent shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       <div className="hidden lg:block">
         <div
           className="absolute inset-0 opacity-[0.05]"
@@ -138,13 +130,13 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
               <div className="relative w-[240px]">
                 <CalendarDays
                   size={18}
-                  className="pointer-events-none absolute top-1/2 left-4 z-10 -translate-y-1/2 text-[#0B6670]"
+                  className="pointer-events-none absolute top-1/2 left-4 z-10 -translate-y-1/2 text-[#0F5C66]"
                 />
 
                 <select
                   value={selectedDay}
                   onChange={(e) => setSelectedDay(e.target.value)}
-                  className="font-cormorant h-[45px] w-full cursor-pointer appearance-none rounded-[12px] border border-[#D89A3D] bg-transparent py-0 pr-10 pl-[52px] text-[18px] font-medium text-[#0B6670] shadow-sm transition outline-none focus:border-[#C9821E] focus:ring-2 focus:ring-[#F3D7A7]"
+                  className="font-cormorant h-[45px] w-full cursor-pointer appearance-none rounded-[12px] border border-[#C37000] bg-[#EFDEC7]/40 py-0 pr-10 pl-[52px] text-[18px] font-bold text-[#0F5C66] shadow-sm transition outline-none focus:border-[#C9821E] focus:ring-2 focus:ring-[#F3D7A7]"
                   style={{ paddingLeft: "50px" }}
                 >
                   {weekDates.map((day) => (
@@ -156,7 +148,7 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
 
                 <ChevronDown
                   size={18}
-                  className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-[#0B6670]"
+                  className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-[#0F5C66]"
                 />
               </div>
             </div>
@@ -186,55 +178,62 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
                     key={timing.id}
                     className={`flex flex-1 items-center justify-center ${
                       !isActive
-                        ? "border-r border-[#E6D9C5] last:border-r-0"
-                        : ""
+                        ? "border-r border-[#C37000]/60 last:border-r-0"
+                        : "border-r border-[#C37000]/60 last:border-r-0"
                     }`}
                   >
-                    {isActive ? (
-                      <div className="relative flex h-[72px] w-[78px] flex-col items-center justify-center rounded-[12px] border border-[#D89A3D] bg-[#FFF8ED]">
-                        <p className="font-cormorant text-center text-[13px] leading-[1.1] text-[#B87418]">
-                          {timing.label}
-                        </p>
+                    <div className="flex h-[50px] w-full items-center justify-center border-r border-[#C37000]/60 last:border-r-0">
+                      {isActive ? (
+                        <div className="relative flex h-[72px] w-[78px] flex-col items-center justify-center rounded-[12px] border border-[#C37000] bg-[#EFDEC7]/20">
+                          <p className="font-cormorant text-center text-[13px] leading-[1.1] text-[#C37000]">
+                            {timing.label}
+                          </p>
 
-                        <p className="mt-1 text-[14px] font-semibold text-[#D18400]">
-                          {timing.opening_time}
-                        </p>
+                          <p className="mt-1 text-[14px] font-semibold text-[#C37000]">
+                            {timing.opening_time}
+                          </p>
 
-                        <div className="absolute -bottom-[9px] rounded-full bg-[#D18400] px-2 py-[1px] text-[8px] font-semibold text-white">
-                          ONGOING
+                          <div className="absolute -bottom-[9px] rounded-full bg-[#D18400] px-2 py-[1px] text-[8px] font-semibold text-white">
+                            <span
+                              style={{ marginLeft: "5px", marginRight: "5px" }}
+                            >
+                              ONGOING
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div className="text-center">
-                        <p className="font-cormorant mx-auto max-w-[90px] text-center text-[14px] leading-[1.1] break-words text-[#4D433B]">
-                          {timing.label}
-                        </p>
+                      ) : (
+                        <div className="text-center">
+                          <p className="font-cormorant mx-auto max-w-[90px] text-center text-[14px] leading-[1.1] break-words text-[#4D433B]">
+                            {timing.label}
+                          </p>
 
-                        <p className="mt-1 text-[15px] font-semibold text-[#4D433B]">
-                          {timing.opening_time}
-                        </p>
-                      </div>
-                    )}
+                          <p className="mt-1 text-[15px] font-semibold text-[#4D433B]">
+                            {timing.opening_time}
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 );
               })}
             </div>
+
             <div
               className="pl-4"
               style={{ marginRight: "20px", marginBottom: "30px" }}
             >
-              <div className="h-full rounded-[18px] border border-[#D89A3D] bg-transparent px-4 py-3">
-                <p className="text-center text-[13px] text-[#C18426]">
+              <div className="h-full rounded-[18px] border border-[#C37000] bg-[#EFDEC7]/40 px-4 py-3">
+                <p className="font-cormorant text-center text-[16px] text-[#C37000]">
                   Next Darshan
                 </p>
 
-                <h3 className="font-cormorant text-center text-[24px] leading-[1.05] font-semibold text-[#4D433B]">
+                <h3 className="font-cormorant text-center text-[20px] leading-[1.05] font-bold text-[#3D352F]">
                   {allDarshansCompleted
                     ? "All Darshans Completed"
                     : nextDarshan?.label || "No Upcoming Darshan"}
                 </h3>
 
-                <p className="mt-1 text-center text-[12px] text-[#8B7D6A]">
+                <p className="font-cormorant mt-1 text-center text-[12px] text-[#3D352F]">
                   {allDarshansCompleted
                     ? "Today's Schedule Finished"
                     : "Starts In"}
@@ -243,42 +242,48 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
                 {!allDarshansCompleted && (
                   <div className="mt-1 flex items-center justify-center gap-1">
                     <div className="text-center">
-                      <div className="text-[18px] font-bold text-[#D18400]">
+                      <div className="text-[18px] font-bold text-[#C37000]">
                         {String(hours).padStart(2, "0")}
                       </div>
-                      <div className="text-[8px] text-[#8B7D6A]">HRS</div>
+                      <div className="text-[8px] text-[#3D352F]">HRS</div>
                     </div>
 
-                    <span className="text-[18px] font-bold text-[#D18400]">
+                    <span className="text-[18px] font-bold text-[#C37000]">
                       :
                     </span>
 
                     <div className="text-center">
-                      <div className="text-[18px] font-bold text-[#D18400]">
+                      <div className="text-[18px] font-bold text-[#C37000]">
                         {String(minutes).padStart(2, "0")}
                       </div>
-                      <div className="text-[8px] text-[#8B7D6A]">MINS</div>
+                      <div className="text-[8px] text-[#3D352F]">MINS</div>
                     </div>
 
-                    <span className="text-[18px] font-bold text-[#D18400]">
+                    <span className="text-[18px] font-bold text-[#C37000]">
                       :
                     </span>
 
                     <div className="text-center">
-                      <div className="text-[18px] font-bold text-[#D18400]">
+                      <div className="text-[18px] font-bold text-[#C37000]">
                         {String(seconds).padStart(2, "0")}
                       </div>
-                      <div className="text-[8px] text-[#8B7D6A]">SECS</div>
+                      <div className="text-[8px] text-[#3D352F]">SECS</div>
                     </div>
                   </div>
                 )}
 
-                <div className="mt-1 flex items-center justify-center gap-1 text-[11px] text-[#6F675F]">
-                  <Clock3 size={10} />
+                <div className="font-cormorant mt-1 flex items-center justify-center gap-1 border-t border-[#C37000]/60 text-[14px] text-[#3D352F]">
+                  <Image
+                    src="/images/calendar-icon.svg" // replace with your image
+                    alt="Clock"
+                    width={10}
+                    height={10}
+                    className="h-[10px] w-[10px] shrink-0 object-contain"
+                  />
                   <span>
                     {allDarshansCompleted
                       ? "Please check tomorrow's timings"
-                      : `Today • ${nextDarshan?.opening_time}`}
+                      : `Today • ${nextDarshan?.opening_time || ""}`}
                   </span>
                 </div>
               </div>

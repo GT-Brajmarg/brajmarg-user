@@ -6,6 +6,12 @@ import { useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
 import LoginModal from "@/components/auth/LoginModal";
+import { Cormorant_Infant } from "next/font/google";
+
+const cormorantInfant = Cormorant_Infant({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 interface BookingSummaryProps {
   prasad: {
@@ -81,7 +87,7 @@ export default function BookingSummary({
     setQuantity(quantity + 1);
   };
   return (
-    <section className="relative mt-14 overflow-hidden rounded-[26px] border border-[#D89A3D] bg-transparent px-8 py-6 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
+    <section className="relative mt-14 overflow-hidden rounded-[26px] border-[2px] border-[#C37000] bg-transparent px-8 py-6 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       <div
         className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between"
         style={{ marginTop: "20px", marginBottom: "20px" }}
@@ -120,14 +126,19 @@ export default function BookingSummary({
               {prasad.name}
             </h2>
 
-            <p className="font-cormorant mt-2 text-[22px] text-[#4F4941]">
+            <p
+              className={`${cormorantInfant.className} mt-2 text-[22px] font-bold text-[#3D352F]`}
+              style={{ marginTop: "10px", marginBottom: "10px" }}
+            >
               {temple?.name}, {temple?.location}
             </p>
 
             <div className="mt-4 flex items-center gap-3 text-[#D89A3D]">
               <Package size={20} />
 
-              <span className="text-[18px] font-semibold">
+              <span
+                className={`${cormorantInfant.className} text-[25px] font-semibold`}
+              >
                 Pack Size: {selectedQuantity}
               </span>
             </div>
@@ -144,7 +155,11 @@ export default function BookingSummary({
 
           {/* Price */}
           <div>
-            <p className="text-[16px] text-[#5C564F]">Price</p>
+            <p
+              className={`${cormorantInfant.className} text-[20px] font-bold text-[#3D352F]`}
+            >
+              Price
+            </p>
 
             <h3 className="mt-1 text-[30px] leading-none font-bold text-[#0B6670]">
               ₹ {finalPrice * quantity}
@@ -217,7 +232,8 @@ export default function BookingSummary({
                 <ShoppingCart size={22} style={{ marginLeft: "10px" }} />
 
                 <span
-                  style={{ marginRight: "10px", fontFamily: "font-cormorant" }}
+                  className={`${cormorantInfant.className} text-[25px] font-bold`}
+                  style={{ marginRight: "10px" }}
                 >
                   Add to Cart
                 </span>

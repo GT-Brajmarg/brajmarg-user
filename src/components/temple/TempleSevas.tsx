@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Clock3, ChevronRight, ChevronLeft } from "lucide-react";
 
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchTempleSevas } from "@/store/slices/sevaSlice";
 import Link from "next/link";
@@ -27,23 +27,25 @@ export default function TempleSevas({
       dispatch(fetchTempleSevas(templeId));
     }
   }, [dispatch, templeId]);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  // const scrollRef = useRef<HTMLDivElement>(null);
 
-  const scrollLeft = () => {
-    scrollRef.current?.scrollBy({
-      left: -320,
-      behavior: "smooth",
-    });
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const visibleCount = 5;
+
+  const visibleSevas = sevas.slice(currentIndex, currentIndex + visibleCount);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
 
-  const scrollRight = () => {
-    scrollRef.current?.scrollBy({
-      left: 320,
-      behavior: "smooth",
-    });
+  const handleNext = () => {
+    setCurrentIndex((prev) =>
+      Math.min(prev + 1, Math.max(sevas.length - visibleCount, 0)),
+    );
   };
   return (
-    <section className="relative z-20 -translate-y-4 overflow-hidden rounded-[22px] border border-[#D89A3D] bg-transparent p-4 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
+    <section className="relative z-20 -translate-y-4 overflow-hidden rounded-[22px] border-[2px] border-[#C37000] bg-transparent p-4 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       {/* Background Pattern */}
       <div
         className="absolute inset-0 opacity-[0.05]"
@@ -82,15 +84,18 @@ export default function TempleSevas({
           }}
         >
           <div
-            ref={scrollRef}
-            // className="scrollbar-hide flex gap-5 overflow-x-auto scroll-smooth pb-2"
-            // style={{ marginLeft: "-20px" }}
+
+          // className="scrollbar-hide flex gap-5 overflow-x-auto scroll-smooth pb-2"
+          // style={{ marginLeft: "-20px" }}
           >
-            <div className="scrollbar-hide flex gap-5 overflow-x-auto scroll-smooth pb-2">
-              {sevas.map((seva) => (
+            <div
+              className="scrollbar-hide flex gap-5 overflow-x-auto scroll-smooth pb-2"
+              style={{ marginLeft: "40px", marginRight: "40px" }}
+            >
+              {visibleSevas.map((seva) => (
                 <div
                   key={seva.id}
-                  className="group relative min-w-[195px] overflow-hidden rounded-[18px] border border-[#D9B06C] bg-transparent shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1"
+                  className="group relative min-w-[195px] overflow-hidden rounded-[18px] border border-[#C37000] bg-transparent shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1"
                 >
                   {/* Decorative Pattern */}
                   <div
@@ -120,14 +125,21 @@ export default function TempleSevas({
                   {/* Content */}
                   <div className="relative z-10 p-2.5">
                     <div className="flex h-[78px] flex-col justify-between">
-                      <div className="flex items-start justify-between gap-2">
+                      <div
+                        className="flex items-start justify-between gap-2"
+                        style={{ marginTop: "15px" }}
+                      >
                         <h3 className="min-h-[28px] flex-1 text-[14px] leading-[1.2] font-medium text-[#24535D]">
                           {seva.name}
                         </h3>
-
-                        <span className="shrink-0 text-[13px] font-bold text-[#D18400]">
-                          ₹{seva.price}
-                        </span>
+                        <div className="border-l border-[#C37000]/60">
+                          <span
+                            className="shrink-0 text-[15px] font-bold text-[#D18400]"
+                            style={{ marginLeft: "10px", marginRight: "5px" }}
+                          >
+                            ₹{seva.price}
+                          </span>
+                        </div>
                       </div>
 
                       {/* <div className="flex items-center gap-1 text-[10px] text-[#6A6259]">
@@ -139,14 +151,14 @@ export default function TempleSevas({
                     {seva.allow_direct_payment ? (
                       <Link
                         href={`/temples/${templeSlug}/sevas/${seva.id}`}
-                        className="mt-2 flex h-[28px] w-full items-center justify-center rounded-[8px] bg-[#0B6670] text-[11px] font-medium !text-white hover:bg-[#09545b] hover:!text-white"
+                        className="font-cormorant mt-2 flex h-[28px] w-full items-center justify-center rounded-[8px] bg-[#0B6670] text-[15px] font-medium !text-[#EFDEC7] hover:bg-[#09545b] hover:!text-[#EFDEC7]"
                       >
                         Book Seva
                       </Link>
                     ) : (
                       <button
                         disabled
-                        className="mt-2 h-[28px] w-full rounded-[8px] bg-gray-300 text-[11px] font-medium text-gray-600"
+                        className="font-cormorant mt-2 h-[28px] w-full rounded-[8px] bg-gray-300 text-[15px] font-medium text-[#EFDEC7]"
                       >
                         Unavailable
                       </button>
@@ -159,18 +171,20 @@ export default function TempleSevas({
 
           {/* Navigation Button */}
           <button
-            onClick={scrollLeft}
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
             className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
-            style={{ marginLeft: "12px" }}
+            style={{ marginLeft: "6px" }}
           >
             <ChevronLeft size={18} className="text-[#0F5C66]" />
           </button>
 
           {/* Right Arrow */}
           <button
-            onClick={scrollRight}
+            onClick={handleNext}
+            disabled={currentIndex >= sevas.length - visibleCount}
             className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
-            style={{ marginRight: "12px" }}
+            style={{ marginRight: "6px" }}
           >
             <ChevronRight size={18} className="text-[#0F5C66]" />
           </button>

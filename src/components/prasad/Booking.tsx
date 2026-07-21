@@ -20,7 +20,7 @@ export default function Booking({
   onQuantityChange,
 }: Props) {
   return (
-    <section className="relative mt-10 overflow-hidden rounded-[22px] border border-[#D89A3D] bg-transparent p-8 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
+    <section className="relative mt-10 overflow-hidden rounded-[22px] border-[3px] border-[#C37000] bg-[#EFDEC7]/20 p-8 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       {/* Heading */}
 
       <div className="flex items-start gap-3" style={{ marginTop: "20px" }}>
@@ -35,7 +35,7 @@ export default function Booking({
             Choose Quantity
           </h2>
 
-          <p className="text-[14px] text-[#6B6258]">
+          <p className="text-[14px] font-medium text-[#3D352F]">
             Select the pack size of prasad you wish to order.
           </p>
         </div>

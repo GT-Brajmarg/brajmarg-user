@@ -10,6 +10,12 @@ import {
   Sparkles,
   Handshake,
 } from "lucide-react";
+import { Cormorant_Infant } from "next/font/google";
+
+const cormorantInfant = Cormorant_Infant({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 const sevaDetails =
   "Offered during the afternoon Rajbhog, this seva includes bhog, vastra, and special prayers for the well-being and prosperity of you and your family.";
@@ -104,13 +110,15 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
               {/* Badge */}
 
               <div
-                className="mb-5 inline-flex h-8 w-fit items-center gap-2 rounded-full border border-[#D89A3D] bg-[#EFDEC7]/20 px-3.5"
+                className="mb-5 inline-flex h-8 w-fit items-center gap-2 rounded-full border border-[#C37000] px-3.5"
                 // style={{ marginTop: "30px" }}
               >
-                <Handshake
-                  size={15}
-                  strokeWidth={1.8}
-                  className="text-[#0B6670]"
+                <Image
+                  src="/images/handshake-icon.svg" // replace with your image path
+                  alt="Handshake"
+                  width={15}
+                  height={15}
+                  className="ml-[10px] h-[20px] w-[20px] shrink-0 object-contain"
                   style={{ marginLeft: "10px" }}
                 />
 
@@ -123,14 +131,14 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
               </div>
               {/* Heading */}
               <h1
-                className="font-cormorant text-[32px] leading-[0.95] font-semibold tracking-[-0.02em] text-[#0B6670]"
+                className="font-cormorant text-[32px] leading-[0.95] font-bold tracking-[-0.02em] text-[#0F5C66]"
                 style={{ marginTop: "20px" }}
               >
                 {seva.name}
               </h1>
               {/* Temple */}
               <p
-                className="font-cormorant mt-4 text-[24px] font-medium text-[#4B392B]"
+                className="font-cormorant mt-4 text-[24px] font-bold text-[#3D352F]"
                 style={{ marginTop: "20px" }}
               >
                 {temple.name}, {temple.location}
@@ -144,18 +152,22 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
               </p>
               {/* ================= Features ================= */}
               <div
-                className="mt-10 grid grid-cols-4 border-[#E7D3AF] pt-7"
+                className="mt-10 grid grid-cols-4 border-[#C37000]/60 pt-7"
                 style={{ marginTop: "20px" }}
               >
                 {/* Feature 1 */}
                 <div className="flex flex-col items-center px-5 text-center">
-                  <HandHeart
-                    className="mb-3 text-[#D89A3D]"
-                    size={24}
-                    strokeWidth={1.8}
+                  <Image
+                    src="/images/hand-heart-icon.svg" // replace with your image path
+                    alt="Hand Heart"
+                    width={24}
+                    height={24}
+                    className="mb-3 h-6 w-6 object-contain"
                   />
 
-                  <p className="font-cormorant text-[15px] leading-5 text-[#5B5146]">
+                  <p
+                    className={`${cormorantInfant.className} text-[15px] leading-5 font-bold text-[#3D352F]`}
+                  >
                     Devotional
                     <br />
                     offerings from
@@ -166,13 +178,16 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
 
                 {/* Divider */}
                 <div className="relative flex flex-col items-center px-5 text-center before:absolute before:top-2 before:left-0 before:h-14 before:w-px before:bg-[#E7D3AF]">
-                  <Sparkles
-                    className="mb-3 text-[#D89A3D]"
-                    size={24}
-                    strokeWidth={1.8}
+                  <Image
+                    src="/images/sparkles-icon.svg" // replace with your image path
+                    alt="Sparkles"
+                    width={24}
+                    height={24}
+                    className="mb-3 h-6 w-6 object-contain"
                   />
-
-                  <p className="font-cormorant text-[15px] leading-5 text-[#5B5146]">
+                  <p
+                    className={`${cormorantInfant.className} text-[15px] leading-5 font-bold text-[#3D352F]`}
+                  >
                     Blessings for
                     <br />
                     Prosperity &
@@ -183,13 +198,17 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
 
                 {/* Divider */}
                 <div className="relative flex flex-col items-center px-5 text-center before:absolute before:top-2 before:left-0 before:h-14 before:w-px before:bg-[#E7D3AF]">
-                  <Camera
-                    className="mb-3 text-[#D89A3D]"
-                    size={24}
-                    strokeWidth={1.8}
+                  <Image
+                    src="/images/camera-icon.svg" // replace with your image path
+                    alt="Camera"
+                    width={24}
+                    height={24}
+                    className="mb-3 h-6 w-6 object-contain"
                   />
 
-                  <p className="font-cormorant text-[15px] leading-5 text-[#5B5146]">
+                  <p
+                    className={`${cormorantInfant.className} text-[15px] leading-5 font-bold text-[#3D352F]`}
+                  >
                     Recorded &
                     <br />
                     shared with
@@ -200,13 +219,17 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
 
                 {/* Divider */}
                 <div className="font-cormorant relative flex flex-col items-center px-5 text-center before:absolute before:top-2 before:left-0 before:h-14 before:w-px before:bg-[#E7D3AF]">
-                  <ShieldCheck
-                    className="mb-3 text-[#D89A3D]"
-                    size={24}
-                    strokeWidth={1.8}
+                  <Image
+                    src="/images/shield-check-icon.svg" // replace with your image path
+                    alt="Shield Check"
+                    width={24}
+                    height={24}
+                    className="mb-3 h-6 w-6 object-contain"
                   />
 
-                  <p className="text-[15px] leading-5 text-[#5B5146]">
+                  <p
+                    className={`${cormorantInfant.className} text-[15px] leading-5 font-bold text-[#3D352F]`}
+                  >
                     100%
                     <br />
                     Secured &
@@ -218,7 +241,7 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
               {/* Part 2 continues with the price card */}
               {/* ================= Price Card ================= */}
               <div
-                className="mt-10 max-w-[520px] rounded-[20px] border border-[#D89A3D] bg-[#EFDEC766]/40 px-7 py-5 shadow-[0_8px_25px_rgba(216,154,61,0.08)]"
+                className="mt-10 max-w-[520px] rounded-[20px] border border-[#C37000] bg-[#EFDEC7]/40 px-7 py-5 shadow-[0_8px_25px_rgba(216,154,61,0.08)]"
                 style={{ marginTop: "40px" }}
               >
                 <p

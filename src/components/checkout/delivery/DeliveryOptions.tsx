@@ -2,6 +2,7 @@
 
 import { Truck } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
 
 export default function DeliveryOptions() {
   const [selected, setSelected] = useState("standard");
@@ -22,11 +23,13 @@ export default function DeliveryOptions() {
   ];
 
   return (
-    <section className="mt-5 rounded-2xl border border-[#D59A33] bg-transparent p-5">
+    <section className="mt-5 rounded-2xl border border-[#C37000] bg-[#C37000]/4 p-5">
       <div className="mb-5 flex items-center gap-2">
-        <Truck
-          size={18}
-          className="text-[#C67A00]"
+        <Image
+          src="/images/truck.svg"
+          alt="Truck"
+          width={18}
+          height={18}
           style={{ margin: "10px" }}
         />
 

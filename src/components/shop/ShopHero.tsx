@@ -13,10 +13,26 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const trustItems = [
-  { icon: ShieldCheck, top: "100% Temple", bottom: "Blessed" },
-  { icon: PackageCheck, top: "Secure", bottom: "Packaging" },
-  { icon: Truck, top: "Pan India", bottom: "Delivery" },
-  { icon: HeartHandshake, top: "Loved by", bottom: "Devotees" },
+  {
+    image: "/images/temple-blessed.svg",
+    top: "100% Temple",
+    bottom: "Blessed",
+  },
+  {
+    image: "/images/secure-packaging.svg",
+    top: "Secure",
+    bottom: "Packaging",
+  },
+  {
+    image: "/images/pan-india-delivery.svg",
+    top: "Pan India",
+    bottom: "Delivery",
+  },
+  {
+    image: "/images/loved-by-devotees.svg",
+    top: "Loved by",
+    bottom: "Devotees",
+  },
 ];
 
 export default function ShopHero() {
@@ -80,16 +96,6 @@ export default function ShopHero() {
         }}
       />
 
-      {/* <div className="absolute inset-0 bg-gradient-to-r from-[#FFF4DD]/[0.97] via-[#FFF0D1]/[0.72] to-transparent" />
-
-      <Image
-        src="/images/shop/peacock-feather.png"
-        alt=""
-        width={120}
-        height={180}
-        className="pointer-events-none absolute bottom-4 left-[41%] hidden opacity-80 md:block"
-      /> */}
-
       <div className="relative z-10 mx-auto flex min-h-[500px] max-w-[1240px] items-center px-7 py-12 md:px-12">
         <div className="max-w-[500px] md:translate-x-[200px]">
           <h1 className="font-cormorant text-[45px] leading-[1.12] font-bold text-[#0B6670] md:text-[52px]">
@@ -114,7 +120,7 @@ export default function ShopHero() {
             <div className="h-px w-16 bg-[#D7B06B]" />
           </div>
 
-          <p className="font-cormorant mt-5 max-w-[385px] font-serif text-[18px] leading-relaxed text-[#3D352F]">
+          <p className="font-cormorant mt-5 max-w-[385px] text-[18px] leading-relaxed text-[#3D352F]">
             Explore authentic puja items, sacred gifts and more — blessed by
             temples of India.
           </p>
@@ -151,9 +157,16 @@ export default function ShopHero() {
             className="mt-8 flex flex-wrap gap-x-5 gap-y-4"
             style={{ marginTop: "30px" }}
           >
-            {trustItems.map(({ icon: Icon, top, bottom }) => (
+            {trustItems.map(({ image, top, bottom }) => (
               <div key={top} className="flex items-center gap-2">
-                <Icon className="h-8 w-8 text-[#BD7526]" strokeWidth={1.6} />
+                <Image
+                  src={image}
+                  alt={top}
+                  width={32}
+                  height={32}
+                  className="h-8 w-8 object-contain"
+                />
+
                 <p className="font-cormorant text-[15px] leading-[1.15] text-[#3D352F]">
                   {top}
                   <br />

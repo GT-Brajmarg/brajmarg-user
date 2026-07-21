@@ -7,6 +7,12 @@ import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
 // import { store } from "@/store/store";
 import LoginModal from "@/components/auth/LoginModal";
+import { Cormorant_Infant } from "next/font/google";
+
+const cormorantInfant = Cormorant_Infant({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 interface BookingSummaryProps {
   seva: {
@@ -69,7 +75,7 @@ export default function BookingSummary({
 
   return (
     <>
-      <section className="relative mt-14 overflow-hidden rounded-[26px] border border-[#D89A3D] bg-transparent px-8 py-6 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
+      <section className="relative mt-14 overflow-hidden rounded-[26px] border-[2px] border-[#C37000] bg-transparent px-8 py-6 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
         <div
           className="relative z-10 flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between"
           style={{ marginTop: "20px", marginBottom: "20px" }}
@@ -106,13 +112,16 @@ export default function BookingSummary({
                 {seva.name}
               </h2>
 
-              <p className="font-cormorant mt-2 text-[18px] text-[#4F4941]">
+              <p
+                className={`${cormorantInfant.className} text-[20px] leading-5 font-bold text-[#3D352F]`}
+                style={{ marginTop: "10px", marginBottom: "10px" }}
+              >
                 {temple.name}, {temple.location}
               </p>
 
-              <div className="mt-4 flex items-center gap-3 text-[#D89A3D]">
+              <div className="mt-4 flex items-center gap-3 text-[#C37000]">
                 <CalendarDays size={20} />
-                <span className="text-[18px] font-semibold">
+                <span className="text-[20px] font-semibold">
                   {selectedDate}
                 </span>
               </div>
@@ -124,7 +133,11 @@ export default function BookingSummary({
             <div className="hidden h-20 w-px bg-[#D89A3D] lg:block" />
 
             <div style={{ marginRight: "50px" }}>
-              <p className="text-[16px] text-[#5C564F]">Seva Amount</p>
+              <p
+                className={`${cormorantInfant.className} text-[20px] font-bold text-[#3D352F]`}
+              >
+                Seva Amount
+              </p>
 
               <h3 className="mt-1 text-[35px] leading-none font-bold text-[#0B6670]">
                 ₹{seva.price}

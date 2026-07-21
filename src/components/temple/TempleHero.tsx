@@ -188,13 +188,13 @@ export default function TempleHero({ temple, loading }: TempleHeroProps) {
               <div className="relative z-10">
                 <div className="mb-3 flex items-center gap-2">
                   <MapPin className="h-5 w-5 text-[#C18426]" />
-                  <span className="font-cormorant text-[22px] text-[#554B44]">
+                  <span className="font-cormorant text-[22px] font-bold text-[#3D352F]">
                     {temple.location}
                   </span>
                 </div>
 
                 <h1
-                  className="font-cormorant text-[58px] leading-[0.95] font-semibold text-[#0B6670]"
+                  className="font-cormorant text-[58px] leading-[0.95] font-bold text-[#0F5C66]"
                   style={{ marginBottom: "10px", marginTop: "10px" }}
                 >
                   {temple.name}
@@ -212,8 +212,8 @@ export default function TempleHero({ temple, loading }: TempleHeroProps) {
                 </div>
 
                 <p
-                  className="line-clamp-4 max-w-[560px] text-[16px] leading-8 text-[#4F4941]"
-                  style={{ marginTop: "10px" }}
+                  className="line-clamp-4 max-w-[560px] text-[16px] leading-8 text-[#3D352F]"
+                  style={{ marginTop: "10px", fontWeight: "500" }}
                 >
                   {temple.description}
                 </p>
@@ -224,18 +224,23 @@ export default function TempleHero({ temple, loading }: TempleHeroProps) {
                 >
                   {/* Deity */}
                   <div className="flex items-start gap-3 border-r border-[#D8A65A]/70 pr-12">
-                    <Flower2
-                      className="mt-0.5 h-7 w-7 shrink-0 text-[#C97800]"
-                      strokeWidth={2}
-                      style={{ marginTop: "5px" }}
+                    <Image
+                      src="/images/flower-icon.svg" // change to your image path
+                      alt="Deity"
+                      width={28}
+                      height={28}
+                      className="mt-[5px] h-7 w-7 shrink-0 object-contain"
                     />
 
                     <div>
-                      <p className="font-cormorant text-[18px] leading-none text-[#4A403A]">
+                      <p
+                        className="font-cormorant text-[16px] leading-none text-[#3D352F]"
+                        style={{ fontWeight: "400", marginTop: "-4px" }}
+                      >
                         Deity
                       </p>
                       <p
-                        className="font-latin mt-2 text-[16px] leading-none font-semibold text-[#3C3531]"
+                        className="font-inter mt-2 text-[18px] leading-none font-bold text-[#3D352F]"
                         style={{ marginTop: "2px" }}
                       >
                         {templeInfo.deity}
@@ -248,16 +253,25 @@ export default function TempleHero({ temple, loading }: TempleHeroProps) {
                     className="flex items-start gap-3 border-r border-[#D8A65A]/70 px-9"
                     style={{ marginLeft: "15px" }}
                   >
-                    <CalendarDays
-                      className="mt-0.5 h-6 w-6 shrink-0 text-[#C97800]"
-                      strokeWidth={2}
+                    <Image
+                      src="/images/calendar-icon.svg" // replace with your image path
+                      alt="Calendar"
+                      width={24}
+                      height={24}
+                      className="mt-0.5 h-6 w-6 shrink-0 object-contain"
                     />
 
                     <div>
-                      <p className="font-cormorant text-[19px] leading-none text-[#4A403A]">
+                      <p
+                        className="font-cormorant text-[16px] leading-none text-[#3D352F]"
+                        style={{ fontWeight: "400", marginTop: "-4px" }}
+                      >
                         Established
                       </p>
-                      <p className="font-latin mt-2 text-[16px] leading-none font-semibold text-[#3C3531]">
+                      <p
+                        className="font-inter mt-2 text-[18px] leading-none font-bold text-[#3D352F]"
+                        style={{ marginTop: "2px" }}
+                      >
                         {templeInfo.established}
                       </p>
                     </div>
@@ -268,16 +282,25 @@ export default function TempleHero({ temple, loading }: TempleHeroProps) {
                     className="flex items-start gap-3 pl-9"
                     style={{ marginLeft: "15px" }}
                   >
-                    <Clock3
-                      className="mt-0.5 h-7 w-7 shrink-0 text-[#C97800]"
-                      strokeWidth={2}
+                    <Image
+                      src="/images/clock-icon.svg" // replace with your image path
+                      alt="Clock"
+                      width={28}
+                      height={28}
+                      className="mt-0.5 h-7 w-7 shrink-0 object-contain"
                     />
 
                     <div>
-                      <p className="font-cormorant text-[19px] leading-none text-[#4A403A]">
+                      <p
+                        className="font-cormorant text-[16px] leading-none text-[#3D352F]"
+                        style={{ fontWeight: "400", marginTop: "-4px" }}
+                      >
                         Timings
                       </p>
-                      <p className="font-latin mt-2 text-[16px] leading-none font-semibold whitespace-nowrap text-[#3C3531]">
+                      <p
+                        className="font-inter mt-2 text-[18px] leading-none font-bold text-[#3D352F]"
+                        style={{ marginTop: "2px" }}
+                      >
                         {templeInfo.timings}
                       </p>
                     </div>
