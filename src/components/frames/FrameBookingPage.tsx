@@ -14,6 +14,7 @@ import FrameHero from "./FrameHero";
 import Booking from "./Booking";
 import ImportantNotes from "./ImportantNotes";
 import BookingSummary from "./BookingSummary";
+import FrameLoader from "./FrameLoader";
 
 interface Props {
   slug: string;
@@ -55,22 +56,21 @@ export default function FrameBookingPage({ slug, frameId }: Props) {
   const finalPrice =
     (selectedSizeObj?.price ?? 0) + (selectedMaterialObj?.extra_price ?? 0);
 
-  if (loading) {
-    return (
-      <div className="py-20 text-center text-[#0B6670]">Loading Frame...</div>
-    );
-  }
-
   if (error) {
     return <div className="py-20 text-center text-red-500">{error}</div>;
   }
 
   if (!frame) {
-    return <div className="py-20 text-center">Frame not found.</div>;
+    return loading ? (
+      <FrameLoader />
+    ) : (
+      <div className="py-20 text-center">Frame not found.</div>
+    );
   }
 
   return (
     <>
+      {loading && <FrameLoader />}
       <FrameHero templeSlug={slug} temple={frame.temples} frame={frame} />
 
       <div className="mt-8">

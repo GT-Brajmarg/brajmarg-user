@@ -137,32 +137,68 @@ export default function Footer() {
               <h4 className={styles.linksTitle}>Quick Links</h4>
               <div className={styles.linksGrid}>
                 <Link href="/" className={styles.linksItem}>
-                  <span className={styles.arrow}>&gt;</span>
+                  <Image
+                    src="/images/arrow-icon.svg"
+                    alt=""
+                    width={28}
+                    height={28}
+                    className={styles.arrow}
+                  />
                   <span>Home</span>
                 </Link>
 
                 <Link href="/services/seva" className={styles.linksItem}>
-                  <span className={styles.arrow}>&gt;</span>
+                  <Image
+                    src="/images/arrow-icon.svg"
+                    alt=""
+                    width={28}
+                    height={28}
+                    className={styles.arrow}
+                  />
                   <span>Seva</span>
                 </Link>
 
                 <Link href="/temples" className={styles.linksItem}>
-                  <span className={styles.arrow}>&gt;</span>
+                  <Image
+                    src="/images/arrow-icon.svg"
+                    alt=""
+                    width={28}
+                    height={28}
+                    className={styles.arrow}
+                  />
                   <span>Temples</span>
                 </Link>
 
                 <Link href="/services/yatra" className={styles.linksItem}>
-                  <span className={styles.arrow}>&gt;</span>
+                  <Image
+                    src="/images/arrow-icon.svg"
+                    alt=""
+                    width={28}
+                    height={28}
+                    className={styles.arrow}
+                  />
                   <span>Yatra</span>
                 </Link>
 
                 <Link href="/shop" className={styles.linksItem}>
-                  <span className={styles.arrow}>&gt;</span>
+                  <Image
+                    src="/images/arrow-icon.svg"
+                    alt=""
+                    width={28}
+                    height={28}
+                    className={styles.arrow}
+                  />
                   <span>Shop</span>
                 </Link>
 
                 <Link href="/about" className={styles.linksItem}>
-                  <span className={styles.arrow}>&gt;</span>
+                  <Image
+                    src="/images/arrow-icon.svg"
+                    alt=""
+                    width={28}
+                    height={28}
+                    className={styles.arrow}
+                  />
                   <span>About Us</span>
                 </Link>
               </div>
@@ -183,25 +219,14 @@ export default function Footer() {
                 aria-label="Facebook"
                 className={styles.socialLink}
               >
-                <svg
-                  width="44"
-                  height="44"
-                  viewBox="0 0 44 44"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="22"
-                    cy="22"
-                    r="21"
-                    stroke="#08545e"
-                    strokeWidth="1.5"
+                <span className={styles.socialCircle}>
+                  <Image
+                    src="/images/facebook.svg" // or facebook.svg
+                    alt="Facebook"
+                    width={15}
+                    height={15}
                   />
-                  <path
-                    d="M24.5 15h-2.5a1.5 1.5 0 0 0-1.5 1.5v2.5h-2v3.5h2v8.5h3.5v-8.5h2.3l.7-3.5h-3v-1.5a.5.5 0 0 1 .5-.5h2.5V15Z"
-                    fill="#08545e"
-                  />
-                </svg>
+                </span>
               </Link>
               {/* X (Twitter) */}
               <Link
@@ -210,25 +235,14 @@ export default function Footer() {
                 aria-label="X"
                 className={styles.socialLink}
               >
-                <svg
-                  width="44"
-                  height="44"
-                  viewBox="0 0 44 44"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="22"
-                    cy="22"
-                    r="21"
-                    stroke="#08545e"
-                    strokeWidth="1.5"
+                <span className={styles.socialCircle}>
+                  <Image
+                    src="/images/x.svg" // or /images/x-logo.svg
+                    alt="X"
+                    width={20}
+                    height={18}
                   />
-                  <path
-                    d="M13 14h5.5l3.8 5.2L26.5 14H31l-7 8.5 7.5 8.5H26l-4.2-5.5L17 31h-4.5l7.3-8.5L13 14Z"
-                    fill="#08545e"
-                  />
-                </svg>
+                </span>
               </Link>
               {/* Instagram */}
               <Link
@@ -237,38 +251,14 @@ export default function Footer() {
                 aria-label="Instagram"
                 className={styles.socialLink}
               >
-                <svg
-                  width="44"
-                  height="44"
-                  viewBox="0 0 44 44"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle
-                    cx="22"
-                    cy="22"
-                    r="21"
-                    stroke="#08545e"
-                    strokeWidth="1.5"
+                <span className={styles.socialCircle}>
+                  <Image
+                    src="/images/instagram.svg" // or /images/instagram.svg
+                    alt="Instagram"
+                    width={20}
+                    height={18}
                   />
-                  <rect
-                    x="13"
-                    y="13"
-                    width="18"
-                    height="18"
-                    rx="5"
-                    stroke="#08545e"
-                    strokeWidth="1.5"
-                  />
-                  <circle
-                    cx="22"
-                    cy="22"
-                    r="4.5"
-                    stroke="#08545e"
-                    strokeWidth="1.5"
-                  />
-                  <circle cx="27.5" cy="16.5" r="1.2" fill="#08545e" />
-                </svg>
+                </span>
               </Link>
             </div>
           </div>

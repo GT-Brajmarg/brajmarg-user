@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ChevronRight, ChevronLeft } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchTempleOfferings } from "@/store/slices/offeringSlice";
 import { fetchTempleFrames } from "@/store/slices/frameSlice";
@@ -35,21 +35,6 @@ export default function TempleOfferings({
     dispatch(fetchTempleCloths(templeId));
   }, [dispatch, templeId]);
 
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const scrollRight = () => {
-    scrollRef.current?.scrollBy({
-      left: 350,
-      behavior: "smooth",
-    });
-  };
-  const scrollLeft = () => {
-    scrollRef.current?.scrollBy({
-      left: -320,
-      behavior: "smooth",
-    });
-  };
-
   const offerings = [
     ...frames.map((item) => ({
       ...item,
@@ -62,17 +47,32 @@ export default function TempleOfferings({
     })),
   ];
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const visibleCount = 4;
+
+  const visibleOfferings = offerings.slice(
+    currentIndex,
+    currentIndex + visibleCount,
+  );
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(prev - visibleCount, 0));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) =>
+      Math.min(
+        prev + visibleCount,
+        Math.max(offerings.length - visibleCount, 0),
+      ),
+    );
+  };
+
   return (
-    <section className="relative overflow-hidden rounded-[24px] border border-[#D89A3D] bg-transparent p-4 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)] md:p-5">
+    <section className="relative overflow-hidden rounded-[24px] border-[2px] border-[#C37000] bg-transparent p-4 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)] md:p-5">
       {/* Background Pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.05]"
-        // style={{
-        //   backgroundImage:
-        //     "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
-        //   backgroundSize: "22px 22px",
-        // }}
-      />
+      <div className="absolute inset-0 opacity-[0.05]" />
 
       <div className="relative">
         {/* Header */}
@@ -94,18 +94,18 @@ export default function TempleOfferings({
           className="relative min-w-0"
           style={{
             marginBottom: "15px",
-            marginLeft: "20px",
+            marginLeft: "10px",
             marginRight: "20px",
           }}
         >
           <div
-            ref={scrollRef}
             className="scrollbar-hide flex gap-4 overflow-x-auto scroll-smooth pb-2"
+            style={{ marginLeft: "40px" }}
           >
-            {offerings.map((item) => (
+            {visibleOfferings.map((item) => (
               <div
                 key={item.id}
-                className="group relative flex min-h-[160px] min-w-[250px] items-center gap-3 rounded-[18px] border border-[#E3C58A] bg-transparent p-2.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(217,176,108,0.15)]"
+                className="group relative flex min-h-[160px] min-w-[250px] items-center gap-3 rounded-[18px] border border-[#C37000] bg-transparent p-2.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(217,176,108,0.15)]"
                 style={{ marginBottom: "10px" }}
               >
                 {/* Card Pattern */}
@@ -120,7 +120,7 @@ export default function TempleOfferings({
 
                 {/* Image */}
                 <div
-                  className="relative z-10 h-[100px] w-[85px] flex-shrink-0 overflow-hidden rounded-[10px] border border-[#D9B06C]"
+                  className="relative z-10 h-[100px] w-[75px] flex-shrink-0 overflow-hidden rounded-[12px]"
                   style={{ marginLeft: "10px" }}
                 >
                   <Image
@@ -133,12 +133,12 @@ export default function TempleOfferings({
 
                 {/* Content */}
                 <div className="relative z-10 flex flex-1 flex-col">
-                  <h3 className="font-cormorant text-[16px] leading-[1.15] font-semibold text-[#24535D]">
+                  <h3 className="font-cormorant text-[18px] leading-[1.15] font-bold text-[#24535D]">
                     {item.name}
                   </h3>
 
                   <p
-                    className="mt-1 text-[16px] leading-none font-bold text-[#D18400]"
+                    className="mt-1 text-[18px] leading-none font-bold text-[#C37000]"
                     style={{ marginTop: "5px" }}
                   >
                     ₹{item.price}
@@ -152,8 +152,9 @@ export default function TempleOfferings({
                     }
                   >
                     <button
-                      className="mt-3 h-[25px] w-[90px] rounded-[8px] bg-[#0B6670] text-[12px] font-medium text-white transition hover:bg-[#084F57]"
+                      className="font-cormorant mt-3 h-[25px] w-[90px] rounded-[8px] bg-[#0B6670] text-[15px] font-medium text-[#EFDEC7] transition hover:bg-[#084F57]"
                       disabled={!item.in_stock || !item.allow_direct_payment}
+                      style={{ marginTop: "15px" }}
                     >
                       Shop Now
                     </button>
@@ -165,18 +166,20 @@ export default function TempleOfferings({
 
           {/* Arrow */}
           <button
-            onClick={scrollLeft}
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
             className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
-            style={{ marginLeft: "12px" }}
+            style={{ marginLeft: "6px" }}
           >
             <ChevronLeft size={18} className="text-[#0F5C66]" />
           </button>
 
           {/* Right Arrow */}
           <button
-            onClick={scrollRight}
+            onClick={handleNext}
+            disabled={currentIndex >= offerings.length - visibleCount}
             className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
-            style={{ marginRight: "12px" }}
+            style={{ marginRight: "6px" }}
           >
             <ChevronRight size={18} className="text-[#0F5C66]" />
           </button>

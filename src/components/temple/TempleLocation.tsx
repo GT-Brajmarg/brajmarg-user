@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Image from "next/image";
-import { Navigation } from "lucide-react";
+import { ArrowBigLeft, ArrowRight, Navigation } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getTempleLocation } from "@/store/slices/templeLocationSlice";
 
@@ -32,16 +32,16 @@ export default function TempleLocation({ templeId }: TempleLocationProps) {
   }
 
   return (
-    <section className="relative overflow-hidden rounded-[18px] border border-[#D89A3D] bg-transparent shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
+    <section className="relative overflow-hidden rounded-[18px] border-[2px] border-[#C37000] bg-transparent shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       {/* Pattern */}
-      <div
+      {/* <div
         className="absolute inset-0 opacity-[0.06]"
         style={{
           backgroundImage: "url('/images/mandala-pattern.png')",
           backgroundSize: "280px",
           backgroundRepeat: "repeat",
         }}
-      />
+      /> */}
 
       {/* ========================= Desktop ========================= */}
       <div className="relative hidden h-[270px] lg:flex">
@@ -53,7 +53,7 @@ export default function TempleLocation({ templeId }: TempleLocationProps) {
             </h3>
 
             <div
-              className="font-cormorant mt-3 text-[15px] leading-[1.5] text-[#4D433B]"
+              className="font-cormorant mt-3 text-[18px] leading-[1.5] font-bold text-[#3D352F]"
               style={{ marginTop: "10px" }}
             >
               <p>{location.temple_name}</p>
@@ -78,7 +78,7 @@ export default function TempleLocation({ templeId }: TempleLocationProps) {
               <span style={{ marginLeft: "5px", color: "#0F5C66" }}>
                 Open in Google Maps
               </span>
-              <Navigation
+              <ArrowRight
                 size={14}
                 style={{ marginRight: "5px", color: "#0F5C66" }}
               />
@@ -105,17 +105,22 @@ export default function TempleLocation({ templeId }: TempleLocationProps) {
               Nearby Places
             </h3>
 
-            <div className="mt-3 space-y-1">
+            <div className="mt-3 space-y-1" style={{ marginTop: "20px" }}>
               {nearbyPlaces.slice(0, 6).map((place) => (
                 <div
                   key={place.id}
-                  className="flex justify-between text-[13px] text-[#4D433B]"
+                  className="flex justify-between text-[12px] text-[#3D352F]"
                   style={{ marginTop: "5px" }}
                 >
-                  <span className="font-cormorant text-[15px]">
+                  <span className="font-cormorant text-[16px] font-bold">
                     {place.place_name}
                   </span>
-                  <span className="text-[#7A6E5F]">~{place.distance}</span>
+                  <span
+                    className="text-[#3D352F]"
+                    style={{ marginRight: "-15px" }}
+                  >
+                    ~{place.distance}
+                  </span>
                 </div>
               ))}
             </div>

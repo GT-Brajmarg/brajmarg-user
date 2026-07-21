@@ -61,7 +61,7 @@ export default function DeliveryDetails() {
   }, [dispatch]);
 
   const input =
-    "h-[42px] w-full rounded-lg border border-[#E8C78D] bg-transparent px-4 text-[13px] text-[#4D443B] placeholder:text-[#B59D79] outline-none transition focus:border-[#0B6670]";
+    "h-[42px] w-full rounded-lg border border-[#C37000] bg-[#C37000]/04 px-4 text-[13px] text-[#4D443B] placeholder:text-[#B59D79] outline-none transition focus:border-[#0B6670]";
 
   const updateForm = (
     field: keyof typeof EMPTY_FORM,
@@ -195,7 +195,7 @@ export default function DeliveryDetails() {
   }
 
   return (
-    <section className="min-h-[580px] overflow-hidden rounded-2xl border border-[#D59A33] bg-transparent p-4 sm:p-6">
+    <section className="min-h-[580px] overflow-hidden rounded-2xl border border-[#C37000] bg-[#C37000]/4 p-4 sm:p-6">
       <div
         className="flex items-center gap-2 border-b border-[#F1DFC1] pb-3"
         style={{ marginLeft: "10px", marginTop: "10px", marginBottom: "10px" }}

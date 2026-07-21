@@ -20,12 +20,17 @@ export default function PaymentMethod({
   setPaymentMethod,
 }: PaymentMethodProps) {
   return (
-    <section className="min-h-[660px] rounded-[18px] border border-[#D79A43] p-5 shadow-[0_8px_22px_rgba(173,111,30,0.10)]">
+    <section className="min-h-[760px] rounded-[18px] border border-[#C37000] bg-[#C37000]/4 p-5 shadow-[0_8px_22px_rgba(173,111,30,0.10)]">
       <h2
         className="font-cormorant flex items-center gap-2 text-[25px] font-semibold text-[#0B6670]"
         style={{ marginLeft: "20px", marginTop: "10px" }}
       >
-        <WalletCards size={21} className="text-[#C67A00]" />
+        <Image
+          src="/images/wallet-cards.svg"
+          alt="Wallet Cards"
+          width={21}
+          height={21}
+        />
         Payment Method
       </h2>
 
@@ -35,9 +40,11 @@ export default function PaymentMethod({
         style={{ marginLeft: "20px", marginRight: "20px", marginTop: "10px" }}
       >
         <div className="flex items-center gap-2" style={{ marginTop: "5px" }}>
-          <Earth
-            size={14}
-            className="text-[#0B6670]"
+          <Image
+            src="/images/earth.svg" // or /images/earth.svg
+            alt="Earth"
+            width={24}
+            height={24}
             style={{ marginLeft: "10px" }}
           />
 
@@ -148,9 +155,11 @@ export default function PaymentMethod({
         style={{ marginLeft: "20px", marginRight: "20px", marginTop: "10px" }}
       >
         <div className="flex items-center gap-2" style={{ marginTop: "5px" }}>
-          <CreditCard
-            size={14}
-            className="text-[#0B6670]"
+          <Image
+            src="/images/credit-card.svg" // or /images/credit-card.svg
+            alt="Credit Card"
+            width={24}
+            height={24}
             style={{ marginLeft: "10px" }}
           />
 
@@ -210,9 +219,11 @@ export default function PaymentMethod({
             </div>
           </div>
 
-          <HandCoins
-            size={25}
-            className="text-[#0B6670]"
+          <Image
+            src="/images/hand-coins.svg" // or /images/hand-coins.svg
+            alt="Hand Coins"
+            width={35}
+            height={35}
             style={{
               marginRight: "20px",
             }}

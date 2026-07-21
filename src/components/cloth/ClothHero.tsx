@@ -10,6 +10,12 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
+import { Cormorant_Infant } from "next/font/google";
+
+const cormorantInfant = Cormorant_Infant({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 interface Cloth {
   id: string;
@@ -108,10 +114,12 @@ export default function FrameHero({ templeSlug, temple, cloth }: Props) {
                 className="mb-5 inline-flex h-8 w-fit items-center gap-2 rounded-full border border-[#D89A3D] bg-transparent px-3.5"
                 // style={{ marginTop: "30px" }}
               >
-                <Gift
-                  size={15}
-                  strokeWidth={1.8}
-                  className="text-[#0B6670]"
+                <Image
+                  src="/images/handshake-icon.svg" // replace with your image path
+                  alt="Handshake"
+                  width={15}
+                  height={15}
+                  className="ml-[10px] h-[20px] w-[20px] shrink-0 object-contain"
                   style={{ marginLeft: "10px" }}
                 />
 
@@ -131,7 +139,7 @@ export default function FrameHero({ templeSlug, temple, cloth }: Props) {
               </h1>
               {/* Temple */}
               <p
-                className="font-cormorant mt-4 text-[24px] font-medium text-[#4B392B]"
+                className={`${cormorantInfant.className} mt-4 text-[24px] font-bold text-[#3D352F]`}
                 style={{ marginTop: "20px" }}
               >
                 {temple.name}, {temple.location}
@@ -150,15 +158,16 @@ export default function FrameHero({ templeSlug, temple, cloth }: Props) {
               >
                 {/* Feature 1 */}
                 <div className="flex flex-col items-center px-5 text-center">
-                  <Gift
-                    className="mb-3 text-[#D89A3D]"
-                    size={24}
-                    strokeWidth={1.8}
+                  <Image
+                    src="/images/gift.svg" // your image path
+                    alt="Gift"
+                    width={24}
+                    height={24}
+                    className="mb-3"
                   />
 
                   <p
-                    className="font-cormorant text-[15px] leading-5 text-[#3D352F]"
-                    style={{ marginTop: "5px" }}
+                    className={`${cormorantInfant.className} text-[15px] leading-5 font-bold text-[#3D352F]`}
                   >
                     Offered in
                     <br />
@@ -168,15 +177,16 @@ export default function FrameHero({ templeSlug, temple, cloth }: Props) {
 
                 {/* Divider */}
                 <div className="relative flex flex-col items-center px-5 text-center before:absolute before:top-2 before:left-0 before:h-14 before:w-px before:bg-[#E7D3AF]">
-                  <Sparkles
-                    className="mb-3 text-[#D89A3D]"
-                    size={24}
-                    strokeWidth={1.8}
+                  <Image
+                    src="/images/sparkles.svg" // Replace with your image path
+                    alt="Sparkles"
+                    width={24}
+                    height={24}
+                    className="mb-3"
                   />
 
                   <p
-                    className="font-cormorant text-[15px] leading-5 text-[#3D352F]"
-                    style={{ marginTop: "5px" }}
+                    className={`${cormorantInfant.className} text-[15px] leading-5 font-bold text-[#3D352F]`}
                   >
                     Temple
                     <br />
@@ -186,15 +196,16 @@ export default function FrameHero({ templeSlug, temple, cloth }: Props) {
 
                 {/* Divider */}
                 <div className="relative flex flex-col items-center px-5 text-center before:absolute before:top-2 before:left-0 before:h-14 before:w-px before:bg-[#E7D3AF]">
-                  <Package
-                    className="mb-3 text-[#D89A3D]"
-                    size={24}
-                    strokeWidth={1.8}
+                  <Image
+                    src="/images/sparkles-icon.svg" // replace with your image path
+                    alt="Sparkles"
+                    width={24}
+                    height={24}
+                    className="mb-3 h-6 w-6 object-contain"
                   />
 
                   <p
-                    className="font-cormorant text-[15px] leading-5 text-[#3D352F]"
-                    style={{ marginTop: "5px" }}
+                    className={`${cormorantInfant.className} text-[15px] leading-5 font-bold text-[#3D352F]`}
                   >
                     Pure and
                     <br />
@@ -211,8 +222,7 @@ export default function FrameHero({ templeSlug, temple, cloth }: Props) {
                   />
 
                   <p
-                    className="text-[15px] leading-5 text-[#3D352F]"
-                    style={{ marginTop: "5px" }}
+                    className={`${cormorantInfant.className} text-[15px] leading-5 font-bold text-[#3D352F]`}
                   >
                     Securely
                     <br />

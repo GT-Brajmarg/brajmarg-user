@@ -43,7 +43,7 @@ export default function Booking({
   console.log("DATES:", dates);
   console.log("SLOTS:", slots);
   return (
-    <section className="relative mt-16 overflow-hidden rounded-[28px] border border-[#D89A3D] bg-transparent p-8 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)] lg:p-10">
+    <section className="relative mt-16 overflow-hidden rounded-[28px] border-3 border-[#C37000] bg-[#EFDEC7]/20 p-8 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)] lg:p-10">
       {/* ================= Date Selection ================= */}
       <div>
         <div
@@ -69,8 +69,8 @@ export default function Booking({
         {/* Date Slider */}
         <div className="flex items-center gap-4">
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D89A3D] text-[#D89A3D] transition hover:bg-[#FFF4E8]"
-            style={{ marginLeft: "5px" }}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#C37000] bg-[#C37000]/20 text-[#0F5C66] transition hover:bg-[#FFF4E8]"
+            style={{ marginLeft: "20px" }}
           >
             ❮
           </button>
@@ -79,43 +79,49 @@ export default function Booking({
             className="flex flex-1 justify-between gap-3"
             style={{ marginTop: "10px" }}
           >
-            {dates.map((date) => {
-              const d = new Date(date.available_date);
-              const active = selectedDate === date.available_date;
+            {[...dates]
+              .sort(
+                (a, b) =>
+                  new Date(a.available_date).getTime() -
+                  new Date(b.available_date).getTime(),
+              )
+              .map((date) => {
+                const d = new Date(date.available_date);
+                const active = selectedDate === date.available_date;
 
-              return (
-                <div
-                  key={date.id}
-                  onClick={() => onDateChange(date.available_date)}
-                  className={`flex h-[106px] w-[106px] cursor-pointer flex-col items-center justify-center rounded-xl border transition ${
-                    active
-                      ? "border-[#0B6670] bg-[#0B6670] text-white"
-                      : "border-[#E5C48A] bg-[#EFDEC7]/20 text-[#0B6670] hover:border-[#D89A3D]"
-                  }`}
-                >
-                  <span className="text-[22px] leading-none font-bold">
-                    {d.getDate()}
-                  </span>
+                return (
+                  <div
+                    key={date.id}
+                    onClick={() => onDateChange(date.available_date)}
+                    className={`flex h-[106px] w-[106px] cursor-pointer flex-col items-center justify-center rounded-xl border transition ${
+                      active
+                        ? "border-[#0B6670] bg-[#0B6670] text-[#EFDEC7]"
+                        : "border-[#E5C48A] bg-[#EFDEC7]/20 text-[#0B6670] hover:border-[#D89A3D]"
+                    }`}
+                  >
+                    <span className="text-[22px] leading-none font-bold">
+                      {d.getDate()}
+                    </span>
 
-                  <span className="font-cormorant mt-1 text-[22px]">
-                    {d.toLocaleString("en-IN", {
-                      month: "long",
-                    })}
-                  </span>
+                    <span className="font-cormorant mt-1 text-[22px]">
+                      {d.toLocaleString("en-IN", {
+                        month: "long",
+                      })}
+                    </span>
 
-                  <span className="text-xs opacity-80">
-                    {d.toLocaleString("en-IN", {
-                      weekday: "short",
-                    })}
-                  </span>
-                </div>
-              );
-            })}
+                    <span className="text-xs opacity-80">
+                      {d.toLocaleString("en-IN", {
+                        weekday: "short",
+                      })}
+                    </span>
+                  </div>
+                );
+              })}
           </div>
 
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D89A3D] text-[#D89A3D] transition hover:bg-[#FFF4E8]"
-            style={{ marginRight: "5px" }}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#C37000] bg-[#C37000]/20 text-[#0F5C66] transition hover:bg-[#FFF4E8]"
+            style={{ marginRight: "50px" }}
           >
             ❯
           </button>

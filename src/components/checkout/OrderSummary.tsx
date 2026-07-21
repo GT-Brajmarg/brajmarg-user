@@ -152,7 +152,7 @@ export default function OrderSummary({
   };
 
   return (
-    <aside className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-[18px] border border-[#D79A43] bg-transparent p-5 shadow-[0_8px_22px_rgba(173,111,30,0.10)]">
+    <aside className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-[18px] border border-[#C37000] bg-[#C37000]/4 p-5 shadow-[0_8px_22px_rgba(173,111,30,0.10)]">
       <div className="relative flex h-full flex-col">
         <h2
           className="font-cormorant text-[26px] leading-none font-semibold text-[#0B6670]"

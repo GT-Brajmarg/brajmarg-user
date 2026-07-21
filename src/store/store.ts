@@ -25,6 +25,7 @@ import cartReducer from "./slices/cartSlice";
 import addressReducer from "./slices/addressSlice";
 import shopReducer from "./slices/shopSlice";
 import shopFilterReducer from "./slices/shopFilterSlice";
+import sevaPageReducer from "./slices/sevaPageSlice";
 
 export const store = configureStore({
   reducer: {
@@ -54,6 +55,7 @@ export const store = configureStore({
     addresses: addressReducer,
     shop: shopReducer,
     shopFilters: shopFilterReducer,
+    sevaPage: sevaPageReducer,
   },
 });
 

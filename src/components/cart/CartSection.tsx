@@ -12,7 +12,7 @@ export default function CartSection() {
   if (items.length === 0) {
     return (
       <section className="py-10">
-        <div className="mx-auto flex min-h-[360px] max-w-7xl flex-col items-center justify-center rounded-3xl border border-[#D79B32] bg-[#FFF9F0] px-6 text-center">
+        <div className="mx-auto flex min-h-[360px] max-w-7xl flex-col items-center justify-center rounded-3xl border border-[#C37000] bg-[#C37000]/4 px-6 text-center">
           <ShoppingCart size={46} className="text-[#C67A00]" />
 
           <h2 className="font-cormorant mt-5 text-[32px] font-semibold text-[#0B6670]">
@@ -46,7 +46,7 @@ export default function CartSection() {
   return (
     <section className="py-10">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
-        <div className="bg-[#C37000]/04 rounded-3xl border border-[#D79B32]">
+        <div className="rounded-3xl border border-[#C37000] bg-[#C37000]/4">
           <div className="flex items-center gap-3 border-b border-[#D79B32] p-6">
             <ShoppingCart
               className="text-[#C67A00]"

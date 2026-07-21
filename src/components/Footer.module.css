@@ -198,7 +198,7 @@
 
 .linksTitle {
   font-family: var(--font-cormorant), serif;
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 700;
   color: #08545e;
   margin: 0 0 16px;
@@ -214,12 +214,12 @@
 
 .linksItem {
   font-family: var(--font-cormorant), serif;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 600;
   color: #000000;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   text-decoration: none;
   transition: opacity 0.2s;
   white-space: nowrap;
@@ -250,7 +250,7 @@
 
 .socialTitle {
   font-family: var(--font-cormorant), serif;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
   color: #08545e;
   margin: 0 0 16px;
@@ -258,6 +258,7 @@
 
 .socialIcons {
   display: flex;
+  color: black;
   gap: 12px;
   align-items: center;
 }
@@ -276,6 +277,28 @@
   opacity: 0.75;
 }
 
+.socialCircle {
+  width: 52px;
+  height: 52px;
+  border: 2px solid #08545e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.socialCircle img {
+  object-fit: contain;
+}
+
+.socialCircle:hover {
+  background: #08545e;
+}
+
+.socialCircle:hover img {
+  filter: brightness(0) invert(1); /* Makes a black logo white on hover */
+}
 /* ────────────────────────────────────
    PART 3 · Copyright bar
 ──────────────────────────────────── */

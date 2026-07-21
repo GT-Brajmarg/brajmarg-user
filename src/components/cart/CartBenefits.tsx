@@ -1,26 +1,59 @@
 import { ArrowLeft, Package, Truck, CreditCard, Sparkles } from "lucide-react";
 // import { GiOm } from "react-icons/gi";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function CartBenefits() {
   const benefits = [
     {
-      icon: <Sparkles className="h-8 w-8 text-[#C67A00]" />,
+      icon: (
+        <Image
+          src="/images/sparkles-icon-1.svg"
+          alt="Temple Blessed"
+          width={32}
+          height={32}
+          className="h-8 w-8 object-contain"
+        />
+      ),
       title: "100% Temple Blessed",
       subtitle: "Authentic & Trusted",
     },
     {
-      icon: <Package className="h-8 w-8 text-[#C67A00]" />,
+      icon: (
+        <Image
+          src="/images/package-icon-1.svg"
+          alt="Secure Packaging"
+          width={32}
+          height={32}
+          className="h-8 w-8 object-contain"
+        />
+      ),
       title: "Secure Packaging",
       subtitle: "Packed with Care",
     },
     {
-      icon: <Truck className="h-8 w-8 text-[#C67A00]" />,
+      icon: (
+        <Image
+          src="/images/truck-icon.svg"
+          alt="Pan India Delivery"
+          width={32}
+          height={32}
+          className="h-8 w-8 object-contain"
+        />
+      ),
       title: "Pan India Delivery",
       subtitle: "Safe Delivery to your doorstep",
     },
     {
-      icon: <CreditCard className="h-8 w-8 text-[#C67A00]" />,
+      icon: (
+        <Image
+          src="/images/credit-card-icon.svg"
+          alt="Secure Payments"
+          width={32}
+          height={32}
+          className="h-8 w-8 object-contain"
+        />
+      ),
       title: "Easy & Secure Payments",
       subtitle: "Multiple payment options",
     },
@@ -64,15 +97,15 @@ export default function CartBenefits() {
             Your Cart
           </h1>
 
-          <p className="mt-2 text-lg text-[#555]">
+          <p className="mt-2 text-lg font-medium text-[#3D352F]">
             Review your items before checkout
           </p>
         </div>
 
         {/* Benefits */}
         <div
-          className="bg-[#C37000]/05 mt-10 rounded-2xl border border-[#D99B36] bg-[#C37000]/5 px-8 py-7"
-          style={{ marginTop: "20px" }}
+          className="bg-[#C37000]/05 mt-10 rounded-2xl border border-[#C37000] bg-[#C37000]/4 px-8 py-7"
+          style={{ marginTop: "40px" }}
         >
           <div
             className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4"
@@ -88,11 +121,13 @@ export default function CartBenefits() {
                 <div>{item.icon}</div>
 
                 <div>
-                  <p className="text-lg font-semibold text-[#5A3D1B]">
+                  <p className="font-cormorant text-lg font-semibold text-[#3D352F]">
                     {item.title}
                   </p>
 
-                  <p className="text-base text-[#6F5841]">{item.subtitle}</p>
+                  <p className="font-cormorant text-base text-[#3D352F]">
+                    {item.subtitle}
+                  </p>
                 </div>
               </div>
             ))}

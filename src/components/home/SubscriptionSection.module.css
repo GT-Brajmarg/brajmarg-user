@@ -20,7 +20,7 @@
 .inner {
   position: relative;
   z-index: 1;
-  max-width: 1360px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 0 24px;
   display: flex;
@@ -61,17 +61,17 @@
 /* ── Cards Row ── */
 .cardsRow {
   display: flex;
-  gap: 36px;
+  gap: 60px; /* Increase this */
   justify-content: center;
-  flex-wrap: wrap;
+
   width: 100%;
 }
 
 /* ── Base Card ── */
 .card {
   position: relative;
-  flex: 1 1 420px;
-  max-width: 420px;
+  flex: 0 0 600px;
+  max-width: 600px;
   min-height: 600px;
   border-radius: 16px;
   overflow: visible;

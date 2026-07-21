@@ -6,6 +6,12 @@ import QuantitySelector from "./QuantitySelector";
 import { CartItemType } from "../../types/types";
 import { useAppDispatch } from "@/store/hooks";
 import { removeFromCart, updateQuantity } from "@/store/slices/cartSlice";
+import { Cormorant_Infant } from "next/font/google";
+
+const cormorantInfant = Cormorant_Infant({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 interface Props {
   item: CartItemType;
@@ -90,7 +96,11 @@ export default function CartItem({ item }: Props) {
             {item.title}
           </h3>
 
-          <p className="font-semibold text-[#574C42]">{item.temple}</p>
+          <p
+            className={`${cormorantInfant.className} text-[16px] font-bold text-[#3D352F]`}
+          >
+            {item.temple}
+          </p>
 
           {item.date && (
             <div
@@ -102,7 +112,9 @@ export default function CartItem({ item }: Props) {
             </div>
           )}
 
-          {item.extra && <p className="mt-2 text-[#574C42]">{item.extra}</p>}
+          {item.extra && (
+            <p className="mt-2 text-[14px] text-[#3D352F]">{item.extra}</p>
+          )}
 
           <h4
             className="mt-3 text-3xl text-[#0F5C66]"

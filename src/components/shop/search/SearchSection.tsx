@@ -1,13 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import { SlidersHorizontal, X } from "lucide-react";
+
 import SearchBar from "./SearchBar";
 import SearchResultTitle from "./SearchResultTitle";
 import ActiveFilters from "./ActiveFilters";
 import FilterSidebar from "./FilterSidebar";
 import ProductGrid from "./ProductGrid";
 import Pagination from "./Pagination";
-import Image from "next/image";
+
 import { useAppDispatch } from "@/store/hooks";
 import { fetchShopFilters } from "@/store/slices/shopFilterSlice";
 
@@ -32,14 +35,7 @@ export default function SearchSection({
     "idols-murtis": "Idols & Murtis",
     "gift-hampers": "Gift Hampers",
   };
-  const priceRanges = [
-    { id: "0-250", label: "Under ₹250", min: 0, max: 250 },
-    { id: "251-500", label: "₹251 - ₹500", min: 251, max: 500 },
-    { id: "501-1000", label: "₹501 - ₹1,000", min: 501, max: 1000 },
-    { id: "1001-2500", label: "₹1,001 - ₹2,500", min: 1001, max: 2500 },
-    { id: "2501-5000", label: "₹2,501 - ₹5,000", min: 2501, max: 5000 },
-    { id: "5001+", label: "Above ₹5,000", min: 5001, max: Infinity },
-  ];
+
   const collectionTitles: Record<string, string> = {
     "best-sellers": "Best Sellers",
     "festival-specials": "Festival Specials",
@@ -47,17 +43,21 @@ export default function SearchSection({
     handcrafted: "Handcrafted",
   };
 
+  const dispatch = useAppDispatch();
+
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
   const title = category
     ? (categoryTitles[category] ?? "Shop")
     : (collectionTitles[collection ?? ""] ?? "Shop");
-  const dispatch = useAppDispatch();
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
     category ? [category] : [],
   );
+
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
+
   useEffect(() => {
     if (category) {
       setSelectedCategories([category]);
@@ -69,32 +69,51 @@ export default function SearchSection({
 
     dispatch(fetchShopFilters(selectedCategories));
   }, [dispatch, selectedCategories]);
+
   return (
     <section className="relative">
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
       <SearchResultTitle title={title} total={20} />
 
+      {/* Mobile Filter Button */}
       <div
-        className="mt-6 flex gap-8"
-        style={{ marginTop: "5px", marginBottom: "20px" }}
+        className="mt-4 flex justify-end lg:hidden"
+        style={{ marginBottom: "10px" }}
       >
-        <FilterSidebar
-          category={category ?? ""}
-          selectedCategories={selectedCategories}
-          setSelectedCategories={setSelectedCategories}
-          selectedPriceRanges={selectedPriceRanges}
-          setSelectedPriceRanges={setSelectedPriceRanges}
-        />
-        <div className="flex-1">
+        <button
+          onClick={() => setMobileFiltersOpen(true)}
+          className="flex items-center gap-2 rounded-full border border-[#C37000] px-4 py-2 text-sm font-medium text-[#C37000]"
+        >
+          <SlidersHorizontal size={18} style={{ marginLeft: "5px" }} />
+          <span style={{ marginRight: "5px" }}>Filters</span>
+        </button>
+      </div>
+
+      <div className="mt-4 flex flex-col gap-6 lg:mt-2 lg:flex-row lg:gap-8">
+        {/* Desktop Sidebar */}
+        <div className="hidden lg:block">
+          <FilterSidebar
+            category={category ?? ""}
+            selectedCategories={selectedCategories}
+            setSelectedCategories={setSelectedCategories}
+            selectedPriceRanges={selectedPriceRanges}
+            setSelectedPriceRanges={setSelectedPriceRanges}
+          />
+        </div>
+
+        {/* Product Section */}
+        <div className="relative flex-1">
+          {/* Temple Image */}
           <Image
             src="/images/search-temple.png"
             alt="Temple Illustration"
             width={300}
             height={100}
-            className="absolute top-12 -right-10 z-20 object-contain"
+            className="absolute -top-30 -right-8 hidden xl:block"
           />
-          <div className="flex-1 rounded-[12px] border border-[#C37000] bg-transparent px-3 pt-3 pb-5">
+
+          <div className="rounded-xl border border-[#C37000] bg-transparent p-3 md:p-5">
             <ActiveFilters
               category={category ?? ""}
               selectedCategories={selectedCategories}
@@ -108,11 +127,40 @@ export default function SearchSection({
               searchQuery={searchQuery}
             />
           </div>
+
           <div className="mt-6 flex justify-center">
             <Pagination />
           </div>
         </div>
       </div>
+
+      {/* Mobile Filter Drawer */}
+      {mobileFiltersOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+            onClick={() => setMobileFiltersOpen(false)}
+          />
+
+          <div className="fixed inset-y-0 left-0 z-50 w-[65%] max-w-sm overflow-y-auto bg-white p-5 shadow-xl lg:hidden">
+            <div className="mb-6 flex justify-end">
+              <button onClick={() => setMobileFiltersOpen(false)}>
+                <X size={24} />
+              </button>
+            </div>
+
+            <div style={{ marginLeft: "20px" }}>
+              <FilterSidebar
+                category={category ?? ""}
+                selectedCategories={selectedCategories}
+                setSelectedCategories={setSelectedCategories}
+                selectedPriceRanges={selectedPriceRanges}
+                setSelectedPriceRanges={setSelectedPriceRanges}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </section>
   );
 }

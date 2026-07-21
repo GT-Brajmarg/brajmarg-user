@@ -14,7 +14,7 @@ export default function OrderSummary({ items }: Props) {
   );
 
   return (
-    <div className="relative min-h-[615px] flex-col rounded-3xl border border-[#D79B32] bg-[transparent] p-8">
+    <div className="relative min-h-[615px] flex-col rounded-3xl border border-[#C37000] bg-[#C37000]/4 p-8">
       <h2
         className="font-cormorant text-2xl font-semibold text-[#0B6670]"
         style={{ marginLeft: "10px", marginTop: "10px" }}

@@ -19,15 +19,24 @@ export default function PlaceOrderButton({
   };
 
   return (
-    <div className="rounded-[18px] bg-[#FFF9F0] p-4 shadow-[0_8px_22px_rgba(173,111,30,0.10)]">
+    <section
+      className="mt-5 overflow-hidden rounded-2xl border border-[#C37000] bg-[#C37000]/4 p-5"
+      style={{ marginBottom: "30px" }}
+    >
       <button
         type="button"
         onClick={handlePlaceOrder}
-        className="font-cormorant flex h-[54px] w-full items-center justify-center gap-3 rounded-[8px] bg-[#0B6670] text-[18px] font-semibold text-[#EFDEC7] text-white transition hover:bg-[#084F57]"
+        className="font-cormorant flex h-[54px] w-[720px] items-center justify-center gap-3 rounded-[8px] bg-[#0B6670] text-[18px] font-bold text-[#EFDEC7] transition hover:bg-[#084F57]"
+        style={{
+          marginLeft: "30px",
+          marginTop: "20px",
+          marginRight: "20px, ",
+          marginBottom: "20px",
+        }}
       >
         Place Order
         <ArrowRight size={20} />
       </button>
-    </div>
+    </section>
   );
 }

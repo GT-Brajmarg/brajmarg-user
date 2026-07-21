@@ -35,11 +35,11 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
 
   return (
     <div
-      className="w-full rounded-[18px] border border-white/40 bg-white/20 px-6 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.15)] backdrop-blur-2xl"
-      style={{
-        background:
-          "linear-gradient(135deg, rgba(255,255,255,0.35), rgba(248,241,230,0.65))",
-      }}
+      className="w-full rounded-[18px] border border-white/40 bg-[#EFDEC7]/40 px-6 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.15)] backdrop-blur-2xl"
+      // style={{
+      //   background:
+      //     "linear-gradient(135deg, rgba(255,255,255,0.35), rgba(248,241,230,0.65))",
+      // }}
     >
       {/* ================= Desktop ================= */}
       <div
@@ -49,7 +49,8 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
           gap: "12px",
           alignItems: "center",
           marginTop: "24px",
-          marginLeft: "5px",
+          marginLeft: "30px",
+          marginRight: "30px",
         }}
       >
         {/* Search Input */}
@@ -278,7 +279,7 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
           alignItems: "center",
           height: "28px",
           marginTop: "12px",
-          paddingLeft: "10px",
+          paddingLeft: "30px",
           marginBottom: "12px",
         }}
       >

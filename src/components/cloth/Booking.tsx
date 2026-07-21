@@ -1,6 +1,7 @@
 "use client";
 
 import { Ruler, Tag } from "lucide-react";
+import Image from "next/image";
 
 interface SizeOption {
   id: string;
@@ -34,7 +35,7 @@ export default function Booking({
   onColorChange,
 }: Props) {
   return (
-    <section className="relative mt-10 overflow-hidden rounded-[28px] border border-[#D89A3D] bg-transparent p-8 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
+    <section className="relative mt-10 overflow-hidden rounded-[28px] border-[3px] border-[#C37000] bg-[#EFDEC7]/20 p-8 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       {/* ================= SIZE ================= */}
 
       <div>
@@ -129,9 +130,12 @@ export default function Booking({
         style={{ marginTop: "30px", marginBottom: "20px" }}
       >
         <div className="flex items-start gap-3">
-          <Tag
-            size={22}
-            className="mt-1 text-[#D89A3D]"
+          <Image
+            src="/images/tag.svg" // Replace with your image path
+            alt="Tag"
+            width={22}
+            height={22}
+            className="mt-1"
             style={{ marginTop: "20px", marginLeft: "20px" }}
           />
 

@@ -14,6 +14,7 @@ import ClothHero from "./ClothHero";
 import Booking from "./Booking";
 import ImportantNotes from "./ImportantNotes";
 import BookingSummary from "./BookingSummary";
+import ClothLoader from "./ClothLoader";
 
 interface Props {
   slug: string;
@@ -59,22 +60,20 @@ export default function ClothBookingPage({ slug, clothId }: Props) {
   const finalPrice =
     (selectedSizeObj?.price ?? 0) + (selectedColorObj?.extra_price ?? 0);
 
-  if (loading) {
-    return (
-      <div className="py-20 text-center text-[#0B6670]">Loading Cloth...</div>
-    );
-  }
-
   if (error) {
     return <div className="py-20 text-center text-red-500">{error}</div>;
   }
 
   if (!cloth) {
-    return <div className="py-20 text-center">Cloth not found.</div>;
+    return loading ? (
+      <ClothLoader />
+    ) : (
+      <div className="py-20 text-center">Cloth not found.</div>
+    );
   }
-
   return (
     <>
+      {loading && <ClothLoader />}
       <ClothHero templeSlug={slug} temple={cloth.temples} cloth={cloth} />
 
       <div className="mt-8">
