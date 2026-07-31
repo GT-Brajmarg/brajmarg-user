@@ -1,8 +1,20 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
+
+import { fetchTempleTimings } from "@/store/slices/templeTimingsSlice";
+import { fetchTempleSevas } from "@/store/slices/sevaSlice";
+import { fetchTemplePrasad } from "@/store/slices/prasadSlice";
+import { fetchTempleFrames } from "@/store/slices/frameSlice";
+import { fetchTempleCloths } from "@/store/slices/clothSlice";
+import { getTempleGallery } from "@/store/slices/templeGallerySlice";
+import { getTempleLocation } from "@/store/slices/templeLocationSlice";
+import { fetchTemples } from "@/store/slices/templesSlice";
 
 export default function TempleDetailsLoader() {
+  const [booting, setBooting] = useState(true);
+
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#F8F2E8]">
       {/* Background Mandala */}

@@ -16,6 +16,22 @@ export default function PaymentPage() {
 
   const items = useAppSelector((state) => state.cart.items);
 
+  const amount = items.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0,
+  );
+
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
+
+  const shipping = 49;
+  const handling = 49;
+  const discount = 0;
+
+  const totalAmount = subtotal + shipping + handling - discount;
+
   return (
     <section className="relative overflow-hidden">
       {/* Background Pattern */}
@@ -41,7 +57,10 @@ export default function PaymentPage() {
               setPaymentMethod={setPaymentMethod}
             />
 
-            <PlaceOrderButton paymentMethod={paymentMethod} />
+            <PlaceOrderButton
+              paymentMethod={paymentMethod}
+              amount={totalAmount}
+            />
           </div>
 
           <div className="flex flex-col gap-6">

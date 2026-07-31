@@ -9,25 +9,13 @@ import { fetchTempleSevas } from "@/store/slices/sevaSlice";
 import Link from "next/link";
 
 interface TempleSevasProps {
-  templeId: string;
-
   templeSlug: string;
 }
 
-export default function TempleSevas({
-  templeId,
-  templeSlug,
-}: TempleSevasProps) {
+export default function TempleSevas({ templeSlug }: TempleSevasProps) {
   const dispatch = useAppDispatch();
 
   const { sevas, loading } = useAppSelector((state) => state.sevas);
-
-  useEffect(() => {
-    if (templeId) {
-      dispatch(fetchTempleSevas(templeId));
-    }
-  }, [dispatch, templeId]);
-  // const scrollRef = useRef<HTMLDivElement>(null);
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -90,12 +78,15 @@ export default function TempleSevas({
           >
             <div
               className="scrollbar-hide flex gap-5 overflow-x-auto scroll-smooth pb-2"
-              style={{ marginLeft: "40px", marginRight: "40px" }}
+              style={{
+                marginLeft: "40px",
+                marginRight: "40px",
+              }}
             >
               {visibleSevas.map((seva) => (
                 <div
                   key={seva.id}
-                  className="group relative min-w-[195px] overflow-hidden rounded-[18px] border border-[#C37000] bg-transparent shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1"
+                  className="group relative max-w-[200px] overflow-hidden rounded-[18px] border border-[#C37000] bg-transparent shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300"
                 >
                   {/* Decorative Pattern */}
                   <div
@@ -124,12 +115,15 @@ export default function TempleSevas({
 
                   {/* Content */}
                   <div className="relative z-10 p-2.5">
-                    <div className="flex h-[78px] flex-col justify-between">
+                    <div className="flex h-[80px] flex-col justify-between">
                       <div
                         className="flex items-start justify-between gap-2"
                         style={{ marginTop: "15px" }}
                       >
-                        <h3 className="min-h-[28px] flex-1 text-[14px] leading-[1.2] font-medium text-[#24535D]">
+                        <h3
+                          className="min-h-[28px] flex-1 text-[14px] leading-[1.2] font-medium text-[#24535D]"
+                          style={{ marginLeft: "5px" }}
+                        >
                           {seva.name}
                         </h3>
                         <div className="border-l border-[#C37000]/60">
@@ -151,14 +145,16 @@ export default function TempleSevas({
                     {seva.allow_direct_payment ? (
                       <Link
                         href={`/temples/${templeSlug}/sevas/${seva.id}`}
-                        className="font-cormorant mt-2 flex h-[28px] w-full items-center justify-center rounded-[8px] bg-[#0B6670] text-[15px] font-medium !text-[#EFDEC7] hover:bg-[#09545b] hover:!text-[#EFDEC7]"
+                        className="font-cormorant mt-2 flex h-[28px] w-[120px] items-center justify-center rounded-[8px] bg-[#0B6670] text-[15px] font-medium !text-[#EFDEC7] hover:bg-[#09545b] hover:!text-[#EFDEC7]"
+                        style={{ marginLeft: "40px", marginBottom: "10px" }}
                       >
                         Book Seva
                       </Link>
                     ) : (
                       <button
                         disabled
-                        className="font-cormorant mt-2 h-[28px] w-full rounded-[8px] bg-gray-300 text-[15px] font-medium text-[#EFDEC7]"
+                        className="font-cormorant mt-2 h-[28px] w-[120px] rounded-[8px] bg-gray-300 text-[15px] font-medium text-[#EFDEC7]"
+                        style={{ marginLeft: "40px", marginBottom: "10px" }}
                       >
                         Unavailable
                       </button>
@@ -170,24 +166,26 @@ export default function TempleSevas({
           </div>
 
           {/* Navigation Button */}
-          <button
-            onClick={handlePrev}
-            disabled={currentIndex === 0}
-            className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
-            style={{ marginLeft: "6px" }}
-          >
-            <ChevronLeft size={18} className="text-[#0F5C66]" />
-          </button>
+          {currentIndex > 0 && (
+            <button
+              onClick={handlePrev}
+              className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
+              style={{ marginLeft: "6px" }}
+            >
+              <ChevronLeft size={18} className="text-[#0F5C66]" />
+            </button>
+          )}
 
           {/* Right Arrow */}
-          <button
-            onClick={handleNext}
-            disabled={currentIndex >= sevas.length - visibleCount}
-            className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
-            style={{ marginRight: "6px" }}
-          >
-            <ChevronRight size={18} className="text-[#0F5C66]" />
-          </button>
+          {currentIndex < sevas.length - visibleCount && (
+            <button
+              onClick={handleNext}
+              className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
+              style={{ marginRight: "6px" }}
+            >
+              <ChevronRight size={18} className="text-[#0F5C66]" />
+            </button>
+          )}
         </div>
       </div>
     </section>

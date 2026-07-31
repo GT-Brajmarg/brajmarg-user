@@ -2,19 +2,94 @@
 
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { loadRazorpay } from "@/lib/loadRazorpay";
 
 type PlaceOrderButtonProps = {
   paymentMethod: "razorpay" | "cod";
+  amount: number;
 };
 
 export default function PlaceOrderButton({
   paymentMethod,
+  amount,
 }: PlaceOrderButtonProps) {
   const router = useRouter();
 
-  const handlePlaceOrder = () => {
-    console.log(`Order confirmed using ${paymentMethod}`);
+  const handleRazorpayPayment = async () => {
+    const loaded = await loadRazorpay();
 
+    if (!loaded) {
+      alert("Unable to load Razorpay");
+      return;
+    }
+
+    // TODO: Replace with your actual order total
+
+    const response = await fetch("/api/payment/create-order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        amount, // ← Uses the prop passed from PaymentPage
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      alert("Unable to create Razorpay order");
+      return;
+    }
+
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+
+      amount: data.order.amount,
+
+      currency: data.order.currency,
+
+      name: "Brajmarg",
+
+      description: "Temple Booking",
+
+      order_id: data.order.id,
+
+      handler: async function (response: any) {
+        const verify = await fetch("/api/payment/verify", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(response),
+        });
+
+        const result = await verify.json();
+
+        if (result.success) {
+          router.push("/checkout/confirmation");
+        } else {
+          alert("Payment verification failed");
+        }
+      },
+
+      theme: {
+        color: "#C37000",
+      },
+    };
+
+    const razorpay = new window.Razorpay(options);
+
+    razorpay.open();
+  };
+
+  const handlePlaceOrder = async () => {
+    if (paymentMethod === "razorpay") {
+      await handleRazorpayPayment();
+      return;
+    }
+
+    // COD Flow
     router.push("/checkout/confirmation");
   };
 
@@ -30,7 +105,6 @@ export default function PlaceOrderButton({
         style={{
           marginLeft: "30px",
           marginTop: "20px",
-          marginRight: "20px, ",
           marginBottom: "20px",
         }}
       >

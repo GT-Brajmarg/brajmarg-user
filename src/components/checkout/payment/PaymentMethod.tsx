@@ -9,6 +9,7 @@ import {
   WalletCards,
 } from "lucide-react";
 import Image from "next/image";
+import { loadRazorpay } from "@/lib/loadRazorpay";
 
 type PaymentMethodProps = {
   paymentMethod: "razorpay" | "cod";

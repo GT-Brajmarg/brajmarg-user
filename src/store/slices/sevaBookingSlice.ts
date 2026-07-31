@@ -189,7 +189,8 @@ interface State {
   booking: any | null;
   myBookings: any[];
 
-  loading: boolean;
+  pageLoading: boolean;
+  slotsLoading: boolean;
   bookingLoading: boolean;
 
   error: string | null;
@@ -203,7 +204,8 @@ const initialState: State = {
   booking: null,
   myBookings: [],
 
-  loading: false,
+  pageLoading: false,
+  slotsLoading: false,
   bookingLoading: false,
 
   error: null,
@@ -229,35 +231,28 @@ const sevaBookingSlice = createSlice({
       // Seva Details
       //
       .addCase(fetchSevaDetails.pending, (state) => {
-        state.loading = true;
+        state.pageLoading = true;
         state.error = null;
       })
 
       .addCase(fetchSevaDetails.fulfilled, (state, action) => {
-        // console.log("Redux Payload:", action.payload);
-
-        state.loading = false;
+        state.pageLoading = false;
         state.seva = action.payload;
       })
+
       .addCase(fetchSevaDetails.rejected, (state, action) => {
-        state.loading = false;
+        state.pageLoading = false;
         state.error = action.error.message ?? "Failed to fetch seva details";
       })
 
       //
       // Available Dates
       //
-      .addCase(fetchAvailableDates.pending, (state) => {
-        state.loading = true;
-      })
-
       .addCase(fetchAvailableDates.fulfilled, (state, action) => {
-        state.loading = false;
         state.dates = action.payload;
       })
 
       .addCase(fetchAvailableDates.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.error.message ?? "Failed to fetch available dates";
       })
 
@@ -265,16 +260,16 @@ const sevaBookingSlice = createSlice({
       // Available Slots
       //
       .addCase(fetchAvailableSlots.pending, (state) => {
-        state.loading = true;
+        state.slotsLoading = true;
       })
 
       .addCase(fetchAvailableSlots.fulfilled, (state, action) => {
-        state.loading = false;
+        state.slotsLoading = false;
         state.slots = action.payload;
       })
 
       .addCase(fetchAvailableSlots.rejected, (state, action) => {
-        state.loading = false;
+        state.slotsLoading = false;
         state.error = action.error.message ?? "Failed to fetch available slots";
       })
 
@@ -317,16 +312,16 @@ const sevaBookingSlice = createSlice({
       // My Bookings
       //
       .addCase(fetchMyBookings.pending, (state) => {
-        state.loading = true;
+        state.pageLoading = true;
       })
 
       .addCase(fetchMyBookings.fulfilled, (state, action) => {
-        state.loading = false;
+        state.pageLoading = false;
         state.myBookings = action.payload;
       })
 
       .addCase(fetchMyBookings.rejected, (state, action) => {
-        state.loading = false;
+        state.pageLoading = false;
         state.error = action.error.message ?? "Unable to fetch bookings";
       })
 

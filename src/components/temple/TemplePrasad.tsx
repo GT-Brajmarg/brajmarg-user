@@ -15,23 +15,19 @@ import { fetchTemplePrasad } from "@/store/slices/prasadSlice";
 import Link from "next/link";
 
 interface TemplePrasadProps {
-  templeId: string;
   templeSlug: string;
 }
 
-export default function TemplePrasad({
-  templeId,
-  templeSlug,
-}: TemplePrasadProps) {
+export default function TemplePrasad({ templeSlug }: TemplePrasadProps) {
   const dispatch = useAppDispatch();
 
   const { items, loading } = useAppSelector((state) => state.prasad);
 
-  useEffect(() => {
-    if (templeId) {
-      dispatch(fetchTemplePrasad(templeId));
-    }
-  }, [dispatch, templeId]);
+  // useEffect(() => {
+  //   if (templeId) {
+  //     dispatch(fetchTemplePrasad(templeId));
+  //   }
+  // }, [dispatch, templeId]);
   // const scrollRef = useRef<HTMLDivElement>(null);
 
   // const scrollRight = () => {
@@ -66,14 +62,7 @@ export default function TemplePrasad({
   return (
     <section className="relative z-20 -translate-y-6 overflow-hidden rounded-[22px] border-[2px] border-[#C37000] bg-transparent p-4 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       {/* Background Pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.06]"
-        // style={{
-        //   backgroundImage:
-        //     "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
-        //   backgroundSize: "22px 22px",
-        // }}
-      />
+      <div className="absolute inset-0 opacity-[0.06]" />
 
       <div className="relative">
         {/* Heading */}
@@ -106,7 +95,7 @@ export default function TemplePrasad({
               {visibleItems.map((item) => (
                 <div
                   key={item.id}
-                  className="group relative min-w-[195px] overflow-hidden rounded-[18px] border border-[#C37000] bg-transparent shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1"
+                  className="group relative min-w-[195px] overflow-hidden rounded-[18px] border border-[#C37000] bg-transparent shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300"
                 >
                   {/* Pattern */}
                   <div
@@ -154,8 +143,8 @@ export default function TemplePrasad({
                         // style={{ marginBottom: "-20px" }}
                       >
                         <button
-                          className="font-cormorant flex h-[32px] w-full items-center justify-center rounded-[8px] bg-[#0B6670] text-[15px] font-medium text-[#EFDEC7] transition hover:bg-[#084F57]"
-                          // style={{ marginBottom: "-20px" }}
+                          className="font-cormorant flex h-[28px] w-[120px] items-center justify-center rounded-[8px] bg-[#0B6670] text-[15px] font-medium text-[#EFDEC7] transition hover:bg-[#084F57]"
+                          style={{ marginLeft: "40px", marginBottom: "10px" }}
                         >
                           Order Now
                         </button>
@@ -163,7 +152,8 @@ export default function TemplePrasad({
                     ) : (
                       <button
                         disabled
-                        className="font-cormorant mt-auto flex h-[32px] w-full items-center justify-center rounded-[8px] bg-gray-300 text-[15px] font-medium text-[#EFDEC7]"
+                        className="font-cormorant mt-auto flex h-[28px] w-[120px] items-center justify-center rounded-[8px] bg-gray-300 text-[15px] font-medium text-[#EFDEC7]"
+                        style={{ marginLeft: "40px", marginBottom: "10px" }}
                       >
                         Out of Stock
                       </button>
@@ -174,23 +164,25 @@ export default function TemplePrasad({
             </div>
 
             {/* Arrow */}
-            <button
-              onClick={handlePrev}
-              disabled={currentIndex === 0}
-              className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
-              style={{ marginLeft: "6px" }}
-            >
-              <ChevronLeft size={18} className="text-[#0F5C66]" />
-            </button>
+            {currentIndex > 0 && (
+              <button
+                onClick={handlePrev}
+                className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
+                style={{ marginLeft: "6px" }}
+              >
+                <ChevronLeft size={18} className="text-[#0F5C66]" />
+              </button>
+            )}
 
             {/* Right Arrow */}
-            <button
-              onClick={handleNext}
-              disabled={currentIndex >= items.length - visibleCount}
-              className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
-            >
-              <ChevronRight size={18} className="text-[#0F5C66]" />
-            </button>
+            {currentIndex < items.length - visibleCount && (
+              <button
+                onClick={handleNext}
+                className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
+              >
+                <ChevronRight size={18} className="text-[#0F5C66]" />
+              </button>
+            )}
           </div>
 
           {/* Benefits */}
