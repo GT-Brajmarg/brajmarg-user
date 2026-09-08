@@ -77,16 +77,16 @@ export default function TempleSevas({ templeSlug }: TempleSevasProps) {
           // style={{ marginLeft: "-20px" }}
           >
             <div
-              className="scrollbar-hide flex gap-5 overflow-x-auto scroll-smooth pb-2"
+              className="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-1 pb-2 md:gap-5"
               style={{
-                marginLeft: "40px",
-                marginRight: "40px",
+                marginLeft: window.innerWidth >= 768 ? "40px" : "0px",
+                marginRight: window.innerWidth >= 768 ? "40px" : "0px",
               }}
             >
               {visibleSevas.map((seva) => (
                 <div
                   key={seva.id}
-                  className="group relative max-w-[200px] overflow-hidden rounded-[18px] border border-[#C37000] bg-transparent shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300"
+                  className="group relative w-[calc(100%-24px)] min-w-[calc(100%-24px)] snap-start overflow-hidden rounded-[18px] border border-[#C37000] bg-transparent shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300 md:w-auto md:max-w-[200px] md:min-w-0"
                 >
                   {/* Decorative Pattern */}
                   <div
@@ -145,8 +145,12 @@ export default function TempleSevas({ templeSlug }: TempleSevasProps) {
                     {seva.allow_direct_payment ? (
                       <Link
                         href={`/temples/${templeSlug}/sevas/${seva.id}`}
-                        className="font-cormorant mt-2 flex h-[28px] w-[120px] items-center justify-center rounded-[8px] bg-[#0B6670] text-[15px] font-medium !text-[#EFDEC7] hover:bg-[#09545b] hover:!text-[#EFDEC7]"
-                        style={{ marginLeft: "40px", marginBottom: "10px" }}
+                        className="font-cormorant mt-3 flex h-[34px] w-[120px] items-center justify-center rounded-[8px] bg-[#0B6670] text-[17px] font-medium !text-[#EFDEC7] hover:bg-[#09545b] hover:!text-[#EFDEC7] md:mx-auto md:mt-2 md:h-[28px] md:w-[120px] md:text-[15px]"
+                        style={{
+                          marginLeft:
+                            window.innerWidth < 768 ? "100px" : "40px",
+                          marginBottom: "10px",
+                        }}
                       >
                         Book Seva
                       </Link>
@@ -169,7 +173,7 @@ export default function TempleSevas({ templeSlug }: TempleSevasProps) {
           {currentIndex > 0 && (
             <button
               onClick={handlePrev}
-              className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
+              className="absolute top-1/2 left-[-12px] z-20 flex hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105 md:flex"
               style={{ marginLeft: "6px" }}
             >
               <ChevronLeft size={18} className="text-[#0F5C66]" />
@@ -180,7 +184,7 @@ export default function TempleSevas({ templeSlug }: TempleSevasProps) {
           {currentIndex < sevas.length - visibleCount && (
             <button
               onClick={handleNext}
-              className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
+              className="absolute top-1/2 right-[-12px] z-20 flex hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105 md:flex"
               style={{ marginRight: "6px" }}
             >
               <ChevronRight size={18} className="text-[#0F5C66]" />

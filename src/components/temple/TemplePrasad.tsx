@@ -89,8 +89,17 @@ export default function TemplePrasad({ templeSlug }: TemplePrasadProps) {
           {/* Cards */}
           <div className="relative min-w-0" style={{ marginLeft: "14px" }}>
             <div
-              className="scrollbar-hide flex gap-3 overflow-x-auto scroll-smooth pb-2"
-              style={{ marginLeft: "40px" }}
+              className="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-2 md:ml-10 md:gap-3"
+              style={{
+                marginLeft:
+                  typeof window !== "undefined" && window.innerWidth < 768
+                    ? "0px"
+                    : "40px",
+                marginRight:
+                  typeof window !== "undefined" && window.innerWidth < 768
+                    ? "10px"
+                    : "0px",
+              }}
             >
               {visibleItems.map((item) => (
                 <div
@@ -167,7 +176,7 @@ export default function TemplePrasad({ templeSlug }: TemplePrasadProps) {
             {currentIndex > 0 && (
               <button
                 onClick={handlePrev}
-                className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
+                className="absolute top-1/2 left-[-12px] z-20 flex hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105 md:flex"
                 style={{ marginLeft: "6px" }}
               >
                 <ChevronLeft size={18} className="text-[#0F5C66]" />
@@ -178,7 +187,7 @@ export default function TemplePrasad({ templeSlug }: TemplePrasadProps) {
             {currentIndex < items.length - visibleCount && (
               <button
                 onClick={handleNext}
-                className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
+                className="absolute top-1/2 right-[-12px] z-20 flex hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105 md:flex"
               >
                 <ChevronRight size={18} className="text-[#0F5C66]" />
               </button>
