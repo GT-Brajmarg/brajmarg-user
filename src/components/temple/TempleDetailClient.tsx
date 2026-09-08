@@ -331,6 +331,17 @@ export default function TempleDetailClient({
     return now > end;
   }
 
+  const orderedWeekdays = useMemo(() => {
+    const today = new Date().getDay(); // 0=Sun, 1=Mon ...
+    return Array.from({ length: 7 }, (_, index) => {
+      const dayIndex = (today + index) % 7;
+      return {
+        name: WEEKDAYS[dayIndex],
+        index: dayIndex,
+      };
+    });
+  }, []);
+
   return (
     <div>
       {/* Hero — full-width banner. Tall enough that portrait deity
@@ -516,14 +527,15 @@ export default function TempleDetailClient({
 
             {/* Day selector — pick any weekday to see its slots. */}
             <div className="flex flex-wrap gap-2">
-              {WEEKDAYS.map((name, i) => {
-                const isSelected = i === selectedDay;
-                const hasSlots = daysWithSlots.has(i);
+              {orderedWeekdays.map(({ name, index }) => {
+                const isSelected = index === selectedDay;
+                const hasSlots = daysWithSlots.has(index);
+
                 return (
                   <button
                     key={name}
                     type="button"
-                    onClick={() => setSelectedDay(i)}
+                    onClick={() => setSelectedDay(index)}
                     aria-pressed={isSelected}
                     className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors ${
                       isSelected
