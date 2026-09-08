@@ -37,13 +37,49 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
     startIndex + templesPerPage,
   );
 
+  const getPagination = () => {
+    const pages: (number | "...")[] = [];
+
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    pages.push(1);
+
+    if (currentPage <= 4) {
+      pages.push(2, 3, 4, 5, "...", totalPages);
+    } else if (currentPage >= totalPages - 3) {
+      pages.push(
+        "...",
+        totalPages - 4,
+        totalPages - 3,
+        totalPages - 2,
+        totalPages - 1,
+        totalPages,
+      );
+    } else {
+      pages.push(
+        "...",
+        currentPage - 1,
+        currentPage,
+        currentPage + 1,
+        "...",
+        totalPages,
+      );
+    }
+
+    return pages;
+  };
+
+  const pages = getPagination();
+
   useEffect(() => {
     dispatch(fetchTemples());
   }, [dispatch]);
 
   if (loading) {
     return (
-      <section className="flex min-h-[60vh] items-center justify-center bg-[#F8F2E8]">
+      <section className="flex min-h-[60vh] items-center justify-center">
         <div className="flex flex-col items-center">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#D8C7A6] border-t-[#0F5C66]" />
 
@@ -220,42 +256,28 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
         className="mt- flex justify-center"
         style={{ marginTop: "50px", marginBottom: "50px" }}
       >
-        <div className="flex items-center gap-2">
-          {/* Previous */}
-          <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            className="flex h-[32px] w-[32px] items-center justify-center rounded-[4px] border border-[#C88A1A] text-[#0D6B73] disabled:opacity-40"
-          >
-            ←
-          </button>
-
-          {/* Pages */}
-          {Array.from({ length: totalPages }, (_, i) => (
+        {pages.map((page, index) =>
+          page === "..." ? (
+            <span
+              key={`dots-${index}`}
+              className="flex h-[32px] w-[32px] items-center justify-center text-[#0D6B73]"
+            >
+              ...
+            </span>
+          ) : (
             <button
-              key={i + 1}
-              onClick={() => setCurrentPage(i + 1)}
+              key={page}
+              onClick={() => setCurrentPage(page)}
               className={`flex h-[32px] w-[32px] items-center justify-center rounded-[4px] border text-[18px] font-medium ${
-                currentPage === i + 1
+                currentPage === page
                   ? "border-[#0D6B73] bg-[#0D6B73] text-white"
                   : "border-[#C88A1A] bg-transparent text-[#0D6B73]"
               }`}
             >
-              {i + 1}
+              {page}
             </button>
-          ))}
-
-          {/* Next */}
-          <button
-            disabled={currentPage === totalPages}
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            className="flex h-[32px] w-[32px] items-center justify-center rounded-[4px] border border-[#C88A1A] text-[#0D6B73] disabled:opacity-40"
-          >
-            →
-          </button>
-        </div>
+          ),
+        )}
       </div>
     </section>
   );

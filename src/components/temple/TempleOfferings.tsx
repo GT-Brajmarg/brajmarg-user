@@ -9,31 +9,20 @@ import { fetchTempleFrames } from "@/store/slices/frameSlice";
 import { fetchTempleCloths } from "@/store/slices/clothSlice";
 import Link from "next/link";
 
-interface TempleOfferingsProps {
-  templeId: string;
-}
+// interface TempleOfferingsProps {
+//   templeId: string;
+// }
 
 interface TempleOfferingsProps {
-  templeId: string;
   templeSlug: string;
 }
 
-export default function TempleOfferings({
-  templeId,
-  templeSlug,
-}: TempleOfferingsProps) {
+export default function TempleOfferings({ templeSlug }: TempleOfferingsProps) {
   const dispatch = useAppDispatch();
 
   const { items: frames } = useAppSelector((state) => state.frames);
 
   const { items: cloths } = useAppSelector((state) => state.cloths);
-
-  useEffect(() => {
-    if (!templeId) return;
-
-    dispatch(fetchTempleFrames(templeId));
-    dispatch(fetchTempleCloths(templeId));
-  }, [dispatch, templeId]);
 
   const offerings = [
     ...frames.map((item) => ({
@@ -105,7 +94,7 @@ export default function TempleOfferings({
             {visibleOfferings.map((item) => (
               <div
                 key={item.id}
-                className="group relative flex min-h-[160px] min-w-[250px] items-center gap-3 rounded-[18px] border border-[#C37000] bg-transparent p-2.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(217,176,108,0.15)]"
+                className="group relative flex min-h-[160px] min-w-[250px] items-center gap-3 rounded-[18px] border border-[#C37000] bg-transparent p-2.5 transition-all duration-300 hover:shadow-[0_8px_24px_rgba(217,176,108,0.15)]"
                 style={{ marginBottom: "10px" }}
               >
                 {/* Card Pattern */}
@@ -165,24 +154,26 @@ export default function TempleOfferings({
           </div>
 
           {/* Arrow */}
-          <button
-            onClick={handlePrev}
-            disabled={currentIndex === 0}
-            className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
-            style={{ marginLeft: "6px" }}
-          >
-            <ChevronLeft size={18} className="text-[#0F5C66]" />
-          </button>
+          {currentIndex > 0 && (
+            <button
+              onClick={handlePrev}
+              className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
+              style={{ marginLeft: "6px" }}
+            >
+              <ChevronLeft size={18} className="text-[#0F5C66]" />
+            </button>
+          )}
 
           {/* Right Arrow */}
-          <button
-            onClick={handleNext}
-            disabled={currentIndex >= offerings.length - visibleCount}
-            className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
-            style={{ marginRight: "6px" }}
-          >
-            <ChevronRight size={18} className="text-[#0F5C66]" />
-          </button>
+          {currentIndex < offerings.length - visibleCount && (
+            <button
+              onClick={handleNext}
+              className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105"
+              style={{ marginRight: "6px" }}
+            >
+              <ChevronRight size={18} className="text-[#0F5C66]" />
+            </button>
+          )}
         </div>
       </div>
     </section>

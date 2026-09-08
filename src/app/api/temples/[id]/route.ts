@@ -11,11 +11,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
 
-    // console.log("Slug received:", id);
-
     const data = await fetchTempleDetails(id);
-
-    // console.log("Temple found:", data.temple);
 
     if (!data.temple) {
       return NextResponse.json(

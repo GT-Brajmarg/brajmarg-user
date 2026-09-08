@@ -9,6 +9,8 @@ import { useAppSelector } from "@/store/hooks";
 export default function CartSection() {
   const items = useAppSelector((state) => state.cart.items);
 
+  console.log("Cart items:", items);
+
   if (items.length === 0) {
     return (
       <section className="py-10">

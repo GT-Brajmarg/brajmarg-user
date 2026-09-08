@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchLiveDarshan } from "@/store/slices/heroSlice";
 import { fetchTemples } from "@/store/slices/templesSlice";
@@ -13,29 +13,48 @@ export default function HomePageClient({
 }) {
   const dispatch = useAppDispatch();
 
-  const heroLoading = useAppSelector((state) => state.hero.loading);
   const darshan = useAppSelector((state) => state.hero.darshan);
-
-  const templesLoading = useAppSelector((state) => state.temples.loading);
   const temples = useAppSelector((state) => state.temples.temples);
 
   const hasDarshanData = Boolean(darshan.templeName);
   const hasTemplesData = temples.length > 0;
 
+  // Controls the splash screen during the first app load
+  const [booting, setBooting] = useState(true);
+
   useEffect(() => {
-    if (!hasDarshanData && !heroLoading) {
-      dispatch(fetchLiveDarshan());
+    let isMounted = true;
+
+    async function initialize() {
+      const promises: Promise<unknown>[] = [];
+
+      if (!hasDarshanData) {
+        promises.push(dispatch(fetchLiveDarshan()).unwrap());
+      }
+
+      if (!hasTemplesData) {
+        promises.push(dispatch(fetchTemples()).unwrap());
+      }
+
+      try {
+        await Promise.all(promises);
+      } catch (error) {
+        console.error("Failed to initialize homepage:", error);
+      } finally {
+        if (isMounted) {
+          setBooting(false);
+        }
+      }
     }
 
-    if (!hasTemplesData && !templesLoading) {
-      dispatch(fetchTemples());
-    }
-  }, [dispatch, hasDarshanData, hasTemplesData, heroLoading, templesLoading]);
+    initialize();
 
-  const isInitialLoading =
-    (heroLoading && !hasDarshanData) || (templesLoading && !hasTemplesData);
+    return () => {
+      isMounted = false;
+    };
+  }, [dispatch]);
 
-  if (isInitialLoading) {
+  if (booting) {
     return <HomePageLoader />;
   }
 

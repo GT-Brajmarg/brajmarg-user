@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, Mail } from "lucide-react";
 import { Cormorant_Garamond } from "next/font/google";
 import { useRouter } from "next/navigation";
 
@@ -17,43 +17,85 @@ export default function LoginForm() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [identifier, setIdentifier] = useState("");
+
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const isPhone = /^\d*$/.test(identifier);
+  const handleSendOtp = async () => {
     setError("");
 
-    if (phone.replace(/\D/g, "").length !== 10) {
-      setError("Please enter a valid 10-digit mobile number.");
-      return;
-    }
+    const value = identifier.trim();
 
-    if (!password.trim()) {
-      setError("Please enter your password.");
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    const isPhone = /^[6-9]\d{9}$/.test(value);
+
+    if (!isEmail && !isPhone) {
+      setError("Please enter a valid email or mobile number.");
       return;
     }
 
     try {
       setLoading(true);
 
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch("/api/auth/send-otp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          phone,
-          password,
+          identifier,
         }),
       });
 
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        setError(result.message || "Login failed. Please try again.");
+        setError(result.message || "Unable to send OTP.");
+        return;
+      }
+
+      setOtpSent(true);
+    } catch {
+      setError("Unable to send OTP. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (enteredOtp?: string) => {
+    setError("");
+
+    const otpValue = enteredOtp ?? otp.join("");
+
+    if (otpValue.length !== 6) {
+      setError("Please enter a valid OTP.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch("/api/auth/verify-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          identifier,
+          otp: otpValue,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        setError(result.message || "Invalid OTP.");
         return;
       }
 
@@ -66,10 +108,62 @@ export default function LoginForm() {
       localStorage.removeItem("brajmarg_login_redirect");
 
       window.location.assign(redirectPath);
-    } catch (error) {
-      setError("Unable to login right now. Please try again.");
+    } catch {
+      setError("Unable to login. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleOtpChange = (value: string, index: number) => {
+    if (!/^\d?$/.test(value)) return;
+
+    const updatedOtp = [...otp];
+    updatedOtp[index] = value;
+    setOtp(updatedOtp);
+
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+
+    const otpValue = updatedOtp.join("");
+
+    if (otpValue.length === 6 && !updatedOtp.includes("")) {
+      handleVerifyOtp(otpValue);
+    }
+  };
+
+  const handleOtpKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleOtpPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    const pasted = e.clipboardData
+      .getData("text")
+      .replace(/\D/g, "")
+      .slice(0, 6);
+
+    if (!pasted) return;
+
+    const updatedOtp = [...otp];
+
+    pasted.split("").forEach((digit, index) => {
+      updatedOtp[index] = digit;
+    });
+
+    setOtp(updatedOtp);
+
+    if (pasted.length === 6) {
+      handleVerifyOtp(updatedOtp.join(""));
+    } else {
+      inputRefs.current[pasted.length]?.focus();
     }
   };
 
@@ -86,76 +180,90 @@ export default function LoginForm() {
           Welcome Back!
         </h2>
 
-        <p className="mt-2 text-[14px] text-[#6B5A49]">
+        {/* <p className="mt-2 text-[14px] text-[#6B5A49]">
           Login to your account to continue
+        </p> */}
+        <p className="mt-2 text-[14px] text-[#6B5A49]">
+          {otpSent
+            ? `Enter the OTP sent to ${identifier}`
+            : "Enter your email or mobile number to receive an OTP"}
         </p>
 
         <form
-          onSubmit={handleSubmit}
+          onSubmit={(e) => {
+            e.preventDefault();
+
+            if (otpSent) {
+              handleVerifyOtp();
+            } else {
+              handleSendOtp();
+            }
+          }}
           className="mt-8 space-y-5"
           style={{ marginTop: "20px" }}
         >
           {/* Phone */}
           <div>
             <label className="mb-2 block text-[13px] font-medium text-[#5D4E3F]">
-              Mobile Number
+              Email or Mobile Number
             </label>
 
             <div className="flex h-[52px] overflow-hidden rounded-xl border border-[#DCC6A5] bg-[#FBF5EA]">
-              <div className="flex w-[82px] items-center justify-center gap-2 border-r border-[#E6D7BF]">
-                {/* <Image
-                  src="/images/india.png"
-                  alt="India"
-                  width={22}
-                  height={16}
-                /> */}
-
-                <span className="text-sm font-medium">+91</span>
-              </div>
+              {isPhone ? (
+                <div className="flex w-[82px] items-center justify-center gap-2 border-r border-[#E6D7BF]">
+                  <span className="text-sm font-medium">+91</span>
+                </div>
+              ) : (
+                <div className="flex w-[82px] items-center justify-center border-r border-[#E6D7BF]">
+                  <Mail size={18} className="text-[#6B5A49]" />
+                </div>
+              )}
 
               <input
-                type="tel"
-                placeholder="Enter Mobile Number"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="flex-1 bg-transparent text-[14px] outline-none placeholder:pl-1 placeholder:text-[#A59684]"
+                type="text"
+                placeholder="Enter Email or Mobile Number"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
+                style={{ paddingLeft: "10px" }}
+                className="flex-1 bg-transparent px-4 text-[14px] outline-none placeholder:text-[#A59684]"
               />
             </div>
           </div>
 
-          {/* Password */}
-          <div style={{ marginTop: "8px" }}>
-            <label className="mb-2 block text-[13px] font-medium text-[#5D4E3F]">
-              Password
-            </label>
+          {otpSent && (
+            <div style={{ marginTop: "8px" }}>
+              <label className="mb-2 block text-[13px] font-medium text-[#5D4E3F]">
+                OTP
+              </label>
 
-            <div className="flex h-[52px] items-center rounded-xl border border-[#DCC6A5] bg-[#FBF5EA] px-4">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="flex-1 bg-transparent text-[14px] outline-none placeholder:pl-1 placeholder:text-[#A59684]"
-              />
+              <div className="flex justify-between gap-3">
+                {otp.map((digit, index) => (
+                  <input
+                    key={index}
+                    ref={(el) => {
+                      inputRefs.current[index] = el;
+                    }}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={(e) => handleOtpChange(e.target.value, index)}
+                    onKeyDown={(e) => handleOtpKeyDown(e, index)}
+                    onPaste={handleOtpPaste}
+                    className="h-14 w-12 rounded-xl border border-[#DCC6A5] bg-[#FBF5EA] text-center text-xl font-semibold transition outline-none focus:border-[#C37000] focus:ring-2 focus:ring-[#F6D9AA]"
+                  />
+                ))}
+              </div>
 
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="text-[#6B5A49]"
+                onClick={handleSendOtp}
+                className="mt-3 text-[13px] text-[#C37000] hover:underline"
               >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                Resend OTP
               </button>
             </div>
-
-            <div className="mt-2 flex justify-end" style={{ marginTop: "8px" }}>
-              <Link
-                href="/forgot-password"
-                className="text-[12px] text-[#C37000]/60 transition hover:underline"
-              >
-                Forgot Password?
-              </Link>
-            </div>
-          </div>
+          )}
 
           {error && (
             <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-center text-[12px] text-red-600">
@@ -164,23 +272,25 @@ export default function LoginForm() {
           )}
 
           {/* Login */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="group flex h-[54px] w-full items-center justify-center rounded-xl bg-[#0B6971] text-white transition hover:bg-[#095A61] disabled:cursor-not-allowed disabled:opacity-70"
-            style={{ marginTop: "20px" }}
-          >
-            <span className={`${cormorant.className} text-[20px]`}>
-              {loading ? "Logging in..." : "Login"}
-            </span>
+          {!otpSent && (
+            <button
+              type="submit"
+              disabled={loading}
+              className="group flex h-[54px] w-full items-center justify-center rounded-xl bg-[#0B6971] text-white transition hover:bg-[#095A61] disabled:cursor-not-allowed disabled:opacity-70"
+              style={{ marginTop: "20px" }}
+            >
+              <span className={`${cormorant.className} text-[20px]`}>
+                {loading ? "Sending OTP..." : "Send OTP"}
+              </span>
 
-            {!loading && (
-              <ArrowRight
-                size={18}
-                className="ml-3 transition group-hover:translate-x-1"
-              />
-            )}
-          </button>
+              {!loading && (
+                <ArrowRight
+                  size={18}
+                  className="ml-3 transition group-hover:translate-x-1"
+                />
+              )}
+            </button>
+          )}
         </form>
 
         {/* Divider */}

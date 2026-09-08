@@ -137,14 +137,14 @@ export default function ShopHero() {
                   handleSearch();
                 }
               }}
+              style={{ marginLeft: "10px" }}
               placeholder="Search for products, categories..."
               className="font-cormorant h-full min-w-0 flex-1 bg-transparent font-serif text-[15px] text-[#5E513E] outline-none placeholder:text-[#9C8D78]"
             />
             <button
               type="button"
               onClick={handleSearch}
-              disabled={!search.trim()}
-              className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+              className={`${search.trim() ? "visible" : "invisible"} cursor-pointer`}
             >
               <Search
                 className="h-4 w-4 text-[#C77824]"

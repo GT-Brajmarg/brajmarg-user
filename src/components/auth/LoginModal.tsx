@@ -79,7 +79,7 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
             </div>
 
             {/* Tabs */}
-            <div
+            {/* <div
               className="flex justify-center px-6 pt-8 lg:px-10"
               style={{ marginTop: "50px" }}
             >
@@ -108,12 +108,12 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
                   <span className="font-medium">Sign Up</span>
                 </button>
               </div>
-            </div>
+            </div> */}
 
             {/* Forms */}
             <div
               className="flex-1 px-6 py-8 lg:px-10"
-              style={{ marginTop: "20px" }}
+              style={{ marginTop: "100px" }}
             >
               {activeTab === "login" ? <LoginForm /> : <SignupForm />}
             </div>

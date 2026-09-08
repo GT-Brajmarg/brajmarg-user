@@ -59,5 +59,14 @@ export const store = configureStore({
   },
 });
 
+if (typeof window !== "undefined") {
+  store.subscribe(() => {
+    localStorage.setItem(
+      "brajmarg_cart",
+      JSON.stringify(store.getState().cart),
+    );
+  });
+}
+
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

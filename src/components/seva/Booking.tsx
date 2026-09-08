@@ -8,6 +8,7 @@ import {
   Info,
   Circle,
 } from "lucide-react";
+import { useState } from "react";
 
 interface AvailableDate {
   id: string;
@@ -25,6 +26,8 @@ interface BookingProps {
   dates: AvailableDate[];
   slots: Slot[];
 
+  slotsLoading: boolean;
+
   selectedDate: string;
   selectedSlot: string;
 
@@ -37,11 +40,13 @@ export default function Booking({
   slots,
   selectedDate,
   selectedSlot,
+  slotsLoading,
   onDateChange,
   onSlotChange,
 }: BookingProps) {
-  console.log("DATES:", dates);
-  console.log("SLOTS:", slots);
+  // console.log("DATES:", dates);
+  // console.log("SLOTS:", slots);
+  const [bookingFor, setBookingFor] = useState<"self" | "other">("self");
   return (
     <section className="relative mt-16 overflow-hidden rounded-[28px] border-3 border-[#C37000] bg-[#EFDEC7]/20 p-8 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)] lg:p-10">
       {/* ================= Date Selection ================= */}
@@ -149,47 +154,56 @@ export default function Booking({
         </div>
 
         {/* Time Slots */}
-        <div
-          className="grid grid-cols-5 gap-4"
-          style={{ marginLeft: "40px", marginRight: "40px", marginTop: "10px" }}
-        >
-          {slots.map((slot) => {
-            const available = slot.capacity - slot.booked_count;
-            const active = selectedSlot === slot.id;
+        {slotsLoading ? (
+          <div className="flex h-[120px] items-center justify-center">
+            Loading available slots...
+          </div>
+        ) : (
+          <div
+            className="grid grid-cols-5 gap-4"
+            style={{
+              marginLeft: "40px",
+              marginRight: "40px",
+              marginTop: "10px",
+            }}
+          >
+            {slots.map((slot) => {
+              const available = slot.capacity - slot.booked_count;
+              const active = selectedSlot === slot.id;
 
-            return (
-              <div
-                key={slot.id}
-                onClick={() => onSlotChange(slot.id)}
-                className={`h-[60px] w-[200px] cursor-pointer rounded-xl border bg-[#EFDEC7]/20 px-5 py-4 text-center transition ${
-                  active
-                    ? "border-2 border-[#0B6670] shadow-sm"
-                    : "border-[#E5C48A] hover:border-[#D89A3D]"
-                }`}
-              >
-                <p className="text-[18px] font-semibold text-[#0B6670]">
-                  {new Date(`1970-01-01T${slot.slot_time}`).toLocaleTimeString(
-                    "en-IN",
-                    {
-                      hour: "numeric",
-                      minute: "2-digit",
-                    },
-                  )}
-                </p>
-
-                <p
-                  className={`mt-1 text-sm ${
-                    available <= 1 ? "text-[#D98200]" : "text-[#22A547]"
+              return (
+                <div
+                  key={slot.id}
+                  onClick={() => onSlotChange(slot.id)}
+                  className={`h-[60px] w-[200px] cursor-pointer rounded-xl border bg-[#EFDEC7]/20 px-5 py-4 text-center transition ${
+                    active
+                      ? "border-2 border-[#0B6670] shadow-sm"
+                      : "border-[#E5C48A] hover:border-[#D89A3D]"
                   }`}
                 >
-                  {available <= 1
-                    ? "Only 1 Slot Left"
-                    : `${available} Slots Available`}
-                </p>
-              </div>
-            );
-          })}
-        </div>
+                  <p className="text-[18px] font-semibold text-[#0B6670]">
+                    {new Date(
+                      `1970-01-01T${slot.slot_time}`,
+                    ).toLocaleTimeString("en-IN", {
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })}
+                  </p>
+
+                  <p
+                    className={`mt-1 text-sm ${
+                      available <= 1 ? "text-[#D98200]" : "text-[#22A547]"
+                    }`}
+                  >
+                    {available <= 1
+                      ? "Only 1 Slot Left"
+                      : `${available} Slots Available`}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         {/* Info */}
         <div
@@ -241,39 +255,79 @@ export default function Booking({
           style={{ marginLeft: "50px", marginTop: "20px", marginRight: "50px" }}
         >
           {/* Myself */}
-          <button className="flex items-start gap-4 rounded-2xl border-2 border-[#0B6670] bg-transparent px-6 py-5 transition">
+
+          {/* For Myself */}
+          <button
+            type="button"
+            onClick={() => setBookingFor("self")}
+            className={`flex items-start gap-4 rounded-2xl border bg-transparent px-6 py-5 transition-all ${
+              bookingFor === "self"
+                ? "border-[#0B6670] shadow-md"
+                : "border-[#D89A3D] hover:border-[#0B6670]"
+            }`}
+          >
             <div
-              className="mt-1 flex h-6 w-6 items-center justify-center rounded-full border border-[#0B6670]"
-              style={{ marginTop: "10px", marginLeft: "10px" }}
+              className={`mt-[10px] ml-[10px] flex h-6 w-6 items-center justify-center rounded-full border-2 ${
+                bookingFor === "self" ? "border-[#0B6670]" : "border-[#D89A3D]"
+              }`}
+              style={{ marginTop: "20px", marginLeft: "10px" }}
             >
-              <div className="h-3.5 w-3.5 rounded-full bg-[#0B6670]" />
+              {bookingFor === "self" && (
+                <div className="h-3 w-3 rounded-full bg-[#0B6670]" />
+              )}
             </div>
 
             <div className="text-left">
-              <h3 className="font-cormorant text-[22px] font-semibold text-[#0B6670]">
-                For Myself / My Family
+              <h3
+                className="font-cormorant text-[22px] font-semibold text-[#0B6670]"
+                style={{ marginTop: "10px" }}
+              >
+                For Myself
               </h3>
 
-              <p className="mt-1 text-sm text-[#6D6259]">
-                Seva will be performed in your name
+              <p
+                className="mt-1 text-sm text-[#6D6259]"
+                style={{ marginBottom: "10px" }}
+              >
+                Seva will be performed in your own name.
               </p>
             </div>
           </button>
 
-          {/* Someone Else */}
-          <button className="flex items-start gap-4 rounded-2xl border border-[#D89A3D] bg-transparent px-6 py-5 transition hover:border-[#0B6670]">
+          {/* For Someone Else */}
+          <button
+            type="button"
+            onClick={() => setBookingFor("other")}
+            className={`flex items-start gap-4 rounded-2xl border bg-transparent px-6 py-5 transition-all ${
+              bookingFor === "other"
+                ? "border-[#0B6670] shadow-md"
+                : "border-[#D89A3D] hover:border-[#0B6670]"
+            }`}
+          >
             <div
-              className="mt-1 h-6 w-6 rounded-full border border-[#D89A3D]"
-              style={{ marginTop: "10px", marginLeft: "10px" }}
-            />
+              className={`mt-[10px] ml-[10px] flex h-6 w-6 items-center justify-center rounded-full border-2 ${
+                bookingFor === "other" ? "border-[#0B6670]" : "border-[#D89A3D]"
+              }`}
+              style={{ marginTop: "20px", marginLeft: "10px" }}
+            >
+              {bookingFor === "other" && (
+                <div className="h-3 w-3 rounded-full bg-[#0B6670]" />
+              )}
+            </div>
 
             <div className="text-left">
-              <h3 className="font-cormorant text-[22px] font-semibold text-[#0B6670]">
+              <h3
+                className="font-cormorant text-[22px] font-semibold text-[#0B6670]"
+                style={{ marginTop: "10px" }}
+              >
                 For Someone Else
               </h3>
 
-              <p className="mt-1 text-sm text-[#6D6259]">
-                Seva will be performed on behalf of others
+              <p
+                className="mt-1 text-sm text-[#6D6259]"
+                style={{ marginBottom: "10px" }}
+              >
+                Seva will be performed on behalf of another devotee.
               </p>
             </div>
           </button>
@@ -293,7 +347,8 @@ export default function Booking({
             <input
               type="text"
               placeholder="Enter Full Name"
-              className="h-12 w-full rounded-xl border border-[#D89A3D] bg-transparent px-5 text-[#4F4941] outline-none placeholder:pl-2 placeholder:text-[#9B948B] focus:border-[#0B6670]"
+              style={{ paddingLeft: "10px" }}
+              className="h-12 w-full rounded-xl border border-[#D89A3D] bg-transparent text-[#4F4941] outline-none"
             />
           </div>
 
@@ -306,7 +361,8 @@ export default function Booking({
             <input
               type="text"
               placeholder="Enter Gotra"
-              className="h-12 w-full rounded-xl border border-[#D89A3D] bg-transparent px-5 text-[#4F4941] outline-none placeholder:pl-3 placeholder:text-[#9B948B] focus:border-[#0B6670]"
+              style={{ paddingLeft: "10px" }}
+              className="h-12 w-full rounded-xl border border-[#D89A3D] bg-transparent px-5 text-[#4F4941] outline-none placeholder:text-[#9B948B] focus:border-[#0B6670]"
             />
           </div>
 
@@ -319,13 +375,19 @@ export default function Booking({
             <div className="flex h-12 overflow-hidden rounded-xl border border-[#D89A3D] bg-transparent">
               <div className="flex w-[50px] items-center gap-2 border-r border-[#E7D5B5] px-4">
                 {/* <span className="text-lg">🇮🇳</span> */}
-                <span className="text-[#4F4941]">+91</span>
+                <span
+                  className="text-[#4F4941]"
+                  style={{ paddingLeft: "10px" }}
+                >
+                  +91
+                </span>
               </div>
 
               <input
                 type="tel"
                 placeholder="Enter Mobile Number"
-                className="flex-1 px-4 outline-none placeholder:pl-3 placeholder:text-[#9B948B]"
+                style={{ paddingLeft: "10px" }}
+                className="flex-1 px-4 outline-none placeholder:text-[#9B948B]"
               />
             </div>
           </div>

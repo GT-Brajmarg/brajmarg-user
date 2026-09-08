@@ -210,7 +210,7 @@ export default function RequestTempleModal({ open, onClose }: Props) {
                   alt=""
                   width={305}
                   height={335}
-                  className="pointer-events-none absolute top-9 right-8 h-[155px] w-[290px] object-contain"
+                  className="pointer-events-none absolute top-9 right-8 h-[155px] w-[290px] object-contain opacity-30 md:opacity-100"
                   aria-hidden="true"
                 />
               </div>
@@ -448,7 +448,8 @@ export default function RequestTempleModal({ open, onClose }: Props) {
                   <div
                     className="space-y-3"
                     style={{
-                      marginRight: "20px",
+                      marginRight: "10px",
+                      marginLeft: "10px",
 
                       marginTop: "10px",
                       marginBottom: "20px",
@@ -641,21 +642,20 @@ export default function RequestTempleModal({ open, onClose }: Props) {
 
             {/* Footer */}
             <div
-              className="sticky bottom-0 flex items-center justify-end gap-3 px-8 py-8"
-              style={{ marginTop: "10px", height: "50px" }}
+              className="mt-6 flex items-center justify-center gap-3 px-8 pb-8"
+              style={{ marginTop: "20px", marginBottom: "30px" }}
             >
               <button
                 onClick={onClose}
-                className="font-cormorant rounded-xl border border-[#0F5C66] px-6 py-4 text-sm font-medium text-[#0F5C66]"
-                style={{ height: "35px", width: "60px" }}
+                className="font-cormorant flex h-[40px] min-w-[170px] items-center justify-center rounded-xl border border-[#0F5C66] px-6 text-sm font-medium text-[#0F5C66]"
               >
                 Cancel
               </button>
+
               <button
                 onClick={handleSubmit}
                 disabled={submitting}
-                className="font-cormorant rounded-xl bg-[#0D6B73] px-6 py-2.5 text-sm font-medium text-[#EFDEC7] transition hover:bg-[#09565D]"
-                style={{ height: "35px", width: "150px", marginRight: "20px" }}
+                className="font-cormorant flex h-[40px] min-w-[170px] items-center justify-center rounded-xl bg-[#0D6B73] px-6 text-sm font-medium text-[#EFDEC7] transition hover:bg-[#09565D] disabled:opacity-50"
               >
                 {submitting ? "Submitting..." : "Submit Request →"}
               </button>
