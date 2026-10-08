@@ -214,7 +214,7 @@ export default function Footer() {
             <div className={styles.socialIcons}>
               {/* Facebook */}
               <Link
-                href="https://facebook.com"
+                href="https://www.facebook.com/share/18rkd8ebbH/"
                 target="_blank"
                 aria-label="Facebook"
                 className={styles.socialLink}
@@ -230,7 +230,7 @@ export default function Footer() {
               </Link>
               {/* X (Twitter) */}
               <Link
-                href="https://x.com"
+                href="https://x.com/Brajmarg"
                 target="_blank"
                 aria-label="X"
                 className={styles.socialLink}
@@ -246,7 +246,7 @@ export default function Footer() {
               </Link>
               {/* Instagram */}
               <Link
-                href="https://instagram.com"
+                href="https://www.instagram.com/shreebrajmarg"
                 target="_blank"
                 aria-label="Instagram"
                 className={styles.socialLink}

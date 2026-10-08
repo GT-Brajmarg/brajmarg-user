@@ -19,7 +19,10 @@ export default function SearchBar({
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         placeholder="Search Products"
-        className="font-cormorant h-[36px] w-full rounded-[4px] border border-[#A86000] bg-transparent pr-10 pl-3 text-[15px] text-[#5C3B14] transition outline-none placeholder:text-[#9B8A75] focus:border-[#B78628] focus:ring-1 focus:ring-[#E2B86D]"
+        className="font-cormorant h-[36px] w-full rounded-[4px] border border-[#A86000] bg-transparent pr-10 text-[15px] text-[#5C3B14] outline-none"
+        style={{
+          paddingLeft: "10px",
+        }}
       />
 
       <Search

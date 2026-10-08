@@ -114,7 +114,7 @@ export default function SubscriptionSection() {
 
               {/* CTA */}
               <Link
-                href="/subscribe?plan=monthly"
+                href="/subscribe-alerts/temples?plan=monthly"
                 className={styles.btnMonthly}
               >
                 {monthlyPlan.button_text} →
@@ -189,7 +189,10 @@ export default function SubscriptionSection() {
               </ul>
 
               {/* CTA */}
-              <Link href="/subscribe?plan=yearly" className={styles.btnYearly}>
+              <Link
+                href="/subscribe-alerts/temples?plan=yearly"
+                className={styles.btnYearly}
+              >
                 {yearlyPlan.button_text} →
               </Link>
             </div>

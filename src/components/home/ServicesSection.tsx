@@ -18,7 +18,7 @@ const services: ServiceItem[] = [
     title: "Prasad",
     desc: "Receive blessed prasad from your chosen temple, offered to the deity and delivered to your home.",
     btnText: "Order Prasad",
-    href: "/services/prasad",
+    href: "/shop/prasad",
     iconSrc: "/images3/image%2061.png",
   },
   {
@@ -26,7 +26,7 @@ const services: ServiceItem[] = [
     title: "Seva",
     desc: "Book special sevas — Abhishek, Shringar, Bhog offering — at temples across Braj.",
     btnText: "Book Seva",
-    href: "/services/seva",
+    href: "/seva",
     iconSrc: "/images3/image%2064.png",
   },
   {
@@ -34,7 +34,7 @@ const services: ServiceItem[] = [
     title: "Frames",
     desc: "Premium deity frames and divine portraits crafted with devotion for your home altar.",
     btnText: "Shop Frames",
-    href: "/services/frames",
+    href: "/shop/frames",
     iconSrc: "/images3/image%2063.png",
   },
   {
@@ -42,7 +42,7 @@ const services: ServiceItem[] = [
     title: "Poshak",
     desc: "Divine garments for deities, handcrafted by skilled artisans following ancient traditions.",
     btnText: "Shop Poshak",
-    href: "/services/poshak",
+    href: "/shop/poshak",
     iconSrc: "/images3/image%2065.png",
   },
   {
@@ -58,7 +58,7 @@ const services: ServiceItem[] = [
     title: "Yatra",
     desc: "Curated pilgrimage packages to the sacred Dham sites of Braj and across India.",
     btnText: "Book Yatra",
-    href: "/services/yatra",
+    href: "/yatra",
     iconSrc: "/images3/image%2062.png",
   },
 ];

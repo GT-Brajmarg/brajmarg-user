@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchTemples } from "@/store/slices/templesSlice";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { styleText } from "util";
 
@@ -19,6 +19,17 @@ export default function RelatedTemples({
   const dispatch = useAppDispatch();
   const scrollRef = useRef<HTMLDivElement>(null);
   const { temples, loading, error } = useAppSelector((state) => state.temples);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollButtons = () => {
+    if (!scrollRef.current) return;
+
+    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+  };
 
   const scrollLeft = () => {
     scrollRef.current?.scrollBy({
@@ -33,6 +44,7 @@ export default function RelatedTemples({
       behavior: "smooth",
     });
   };
+
   useEffect(() => {
     dispatch(fetchTemples());
   }, [dispatch]);
@@ -40,6 +52,21 @@ export default function RelatedTemples({
   const relatedTemples = temples
     .filter((temple) => temple.id !== currentTempleId)
     .slice(0, 4);
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    updateScrollButtons();
+
+    container.addEventListener("scroll", updateScrollButtons);
+    window.addEventListener("resize", updateScrollButtons);
+
+    return () => {
+      container.removeEventListener("scroll", updateScrollButtons);
+      window.removeEventListener("resize", updateScrollButtons);
+    };
+  }, [relatedTemples]);
 
   if (loading) {
     return <div>Loading related temples...</div>;
@@ -333,20 +360,23 @@ export default function RelatedTemples({
             ))}
           </div>
 
-          <button
-            onClick={scrollLeft}
-            className="absolute top-1/2 left-[-18px] z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-md transition hover:scale-105"
-          >
-            <ChevronLeft size={20} className="text-[#0F5C66]" />
-          </button>
+          {canScrollLeft && (
+            <button
+              onClick={scrollLeft}
+              className="absolute top-1/2 left-[-18px] z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-md transition hover:scale-105"
+            >
+              <ChevronLeft size={20} className="text-[#0F5C66]" />
+            </button>
+          )}
 
-          {/* RIGHT BUTTON */}
-          <button
-            onClick={scrollRight}
-            className="absolute top-1/2 right-[-18px] z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-md transition hover:scale-105"
-          >
-            <ChevronRight size={20} className="text-[#0F5C66]" />
-          </button>
+          {canScrollRight && (
+            <button
+              onClick={scrollRight}
+              className="absolute top-1/2 right-[-18px] z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-md transition hover:scale-105"
+            >
+              <ChevronRight size={20} className="text-[#0F5C66]" />
+            </button>
+          )}
         </div>
       </div>
     </section>

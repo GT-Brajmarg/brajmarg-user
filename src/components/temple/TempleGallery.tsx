@@ -6,23 +6,16 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getTempleGallery } from "@/store/slices/templeGallerySlice";
 
-interface TempleGalleryProps {
-  templeId: string;
-}
+// interface TempleGalleryProps {
+//   templeId: string;
+// }
 
-export default function TempleGallery({ templeId }: TempleGalleryProps) {
+export default function TempleGallery() {
   const dispatch = useAppDispatch();
 
   const { gallery, loading } = useAppSelector((state) => state.templeGallery);
 
   // const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // console.log("Temple ID:", templeId);
-    if (templeId) {
-      dispatch(getTempleGallery(templeId));
-    }
-  }, [dispatch, templeId]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -42,15 +35,6 @@ export default function TempleGallery({ templeId }: TempleGalleryProps) {
       Math.min(prev + visibleCount, Math.max(gallery.length - visibleCount, 0)),
     );
   };
-
-  // console.log({
-  //   loading,
-  //   gallery,
-  // });
-
-  if (loading) {
-    return <div>Loading gallery...</div>;
-  }
 
   if (!gallery.length) {
     return <div>No gallery images</div>;
@@ -107,23 +91,25 @@ export default function TempleGallery({ templeId }: TempleGalleryProps) {
 
           {gallery.length > 5 && (
             <>
-              <button
-                onClick={handlePrev}
-                disabled={currentIndex === 0}
-                className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-sm transition hover:scale-105"
-                style={{ marginLeft: "6px" }}
-              >
-                <ChevronLeft size={18} className="text-[#0F5C66]" />
-              </button>
+              {currentIndex > 0 && (
+                <button
+                  onClick={handlePrev}
+                  className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-sm transition hover:scale-105"
+                  style={{ marginLeft: "6px" }}
+                >
+                  <ChevronLeft size={18} className="text-[#0F5C66]" />
+                </button>
+              )}
 
-              <button
-                onClick={handleNext}
-                disabled={currentIndex >= gallery.length - visibleCount}
-                className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-sm transition hover:scale-105"
-                style={{ marginRight: "6px" }}
-              >
-                <ChevronRight size={18} className="text-[#0F5C66]" />
-              </button>
+              {currentIndex < gallery.length - visibleCount && (
+                <button
+                  onClick={handleNext}
+                  className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-sm transition hover:scale-105"
+                  style={{ marginRight: "6px" }}
+                >
+                  <ChevronRight size={18} className="text-[#0F5C66]" />
+                </button>
+              )}
             </>
           )}
         </div>
