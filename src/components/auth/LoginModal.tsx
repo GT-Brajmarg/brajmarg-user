@@ -16,11 +16,21 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "auto";
+    if (open) {
+      const originalBodyOverflow = document.body.style.overflow;
+      const originalHtmlOverflow = document.documentElement.style.overflow;
+      const originalBodyTouchAction = document.body.style.touchAction;
 
-    return () => {
-      document.body.style.overflow = "auto";
-    };
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+
+      return () => {
+        document.body.style.overflow = originalBodyOverflow || "";
+        document.documentElement.style.overflow = originalHtmlOverflow || "";
+        document.body.style.touchAction = originalBodyTouchAction || "";
+      };
+    }
   }, [open]);
 
   useEffect(() => {
@@ -32,12 +42,23 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md">
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md"
+      style={{ touchAction: "none" }}
+    >
       {/* Backdrop */}
-      <div className="absolute inset-0" onClick={onClose} />
+      <div
+        className="absolute inset-0"
+        onClick={onClose}
+        onTouchMove={(e) => e.preventDefault()}
+        style={{ touchAction: "none" }}
+      />
 
       {/* Modal */}
-      <div className="relative z-10 w-full max-w-[980px] overflow-hidden rounded-[26px] bg-[#F7ECD9] shadow-[0_35px_120px_rgba(0,0,0,.35)] transition-all duration-300">
+      <div
+        className="relative z-10 w-full max-w-[980px] overflow-hidden rounded-[26px] bg-[#F7ECD9] shadow-[0_35px_120px_rgba(0,0,0,.35)] transition-all duration-300"
+        style={{ overscrollBehavior: "contain", touchAction: "auto" }}
+      >
         {/* Close */}
         <button
           onClick={onClose}

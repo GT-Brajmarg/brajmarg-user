@@ -140,6 +140,7 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
                           src={temple.image_url || ""}
                           alt={temple.name}
                           fill
+                          unoptimized
                           className="object-cover"
                         />
                       </div>

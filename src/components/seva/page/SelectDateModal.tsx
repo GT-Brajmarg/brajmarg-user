@@ -83,11 +83,38 @@ export default function SelectDateModal({ open, onClose }: Props) {
     return new Set(dates.map((d) => d.available_date));
   }, [dates]);
 
+  useEffect(() => {
+    if (open) {
+      const originalBodyOverflow = document.body.style.overflow;
+      const originalHtmlOverflow = document.documentElement.style.overflow;
+      const originalBodyTouchAction = document.body.style.touchAction;
+
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+
+      return () => {
+        document.body.style.overflow = originalBodyOverflow || "";
+        document.documentElement.style.overflow = originalHtmlOverflow || "";
+        document.body.style.touchAction = originalBodyTouchAction || "";
+      };
+    }
+  }, [open]);
+
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="relative w-[560px] overflow-hidden rounded-[22px] border border-[#D89A3D] bg-[#F8EEDC] shadow-2xl">
+    <div
+      className="fixed inset-0 z-[999] flex items-center justify-center bg-black/40 backdrop-blur-sm"
+      style={{ touchAction: "none" }}
+      onTouchMove={(e) => {
+        if (e.target === e.currentTarget) e.preventDefault();
+      }}
+    >
+      <div
+        className="relative w-[560px] overflow-hidden rounded-[22px] border border-[#D89A3D] bg-[#F8EEDC] shadow-2xl"
+        style={{ overscrollBehavior: "contain", touchAction: "auto" }}
+      >
         <Image
           src="/images/temple-paper-texture.png"
           alt=""

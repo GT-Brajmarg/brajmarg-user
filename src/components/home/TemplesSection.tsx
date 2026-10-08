@@ -23,32 +23,34 @@ export default function TemplesSection() {
   // console.log("Loading:", loading);
   // console.log("Error:", error);
   return (
-    <section className="relative mt-16 bg-[#F8F2E8] pt-8 pb-20 md:mt-32 md:pt-12 md:pb-32">
-      <div className="relative">
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <Image
-            src="/images/mandala_bg_1.png"
-            alt=""
-            width={1050}
-            height={1050}
-            className="opacity-[0.04]"
-          />
-        </div>
+    <section className="relative mt-16 overflow-hidden bg-[#F8F2E8] pt-8 pb-20 md:mt-32 md:pt-12 md:pb-32">
+      {/* lite-lotus-bg full section background */}
+      <div className="pointer-events-none absolute top-[-60px] inset-0 z-0 overflow-hidden">
+        <Image
+          src="/images/lite-lotus-bg.png"
+          alt=""
+          // fill
+          width={1500}
+          height={100}
+          className="object-cover opacity-60"
+        />
+      </div>
+      <div className="relative z-10">
         {/* Background Mandala */}
         <div className="relative z-20 min-h-[120px] pb-[80px] md:min-h-[150px] md:pb-[60px]">
           {/* Centered Title */}
           <div className="flex translate-y-4 flex-col items-center px-4 text-center md:translate-y-10">
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               <Image src="/images/lotus.png" alt="" width={54} height={36} />
 
-              <h2 className="font-cormorant text-[36px] leading-tight font-semibold text-[#0C6D72] sm:text-[26px] md:text-[38px]">
+              <h2 className="font-cormorant text-[20px] leading-tight font-semibold text-[#0C6D72] sm:text-[26px] md:text-[34px]">
                 Explore Sacred Temples
               </h2>
 
               <Image src="/images/lotus.png" alt="" width={54} height={36} />
             </div>
 
-            <p className="font-cormorant mt-2 px-4 text-center text-[16px] text-[#3D352F] md:text-[20px]">
+            <p className="font-cormorant mt-2 px-4 text-center text-[14px] text-[#3D352F] md:text-[18px]">
               Search and discover temples across India
             </p>
           </div>
@@ -60,7 +62,7 @@ export default function TemplesSection() {
               href="/temples"
               className="flex h-[47px] w-[212px] items-center justify-center rounded-[14px] border-2 border-[#0C6D72]"
             >
-              <span className="font-cormorant text-[#0F5C66]">
+              <span className="font-cormorant text-[#0F5C66] font-medium">
                 View All Temples →
               </span>
             </Link>
@@ -73,9 +75,8 @@ export default function TemplesSection() {
             {temples.map((temple) => (
               <div
                 key={temple.id}
-                className={`relative mx-auto -mb-4 h-[420px] w-[260px] transition-all duration-300 hover:-translate-y-2 ${
-                  temple.is_coming_soon ? "opacity-40 grayscale-[20%]" : ""
-                }`}
+                className={`relative mx-auto -mb-4 h-[420px] w-[260px] transition-all duration-300 hover:-translate-y-2 ${temple.is_coming_soon ? "opacity-40 grayscale-[20%]" : ""
+                  }`}
                 // className="relative mx-auto h-[420px] w-[290px]"
                 // style={{
                 //   border: "4px solid red",
@@ -101,11 +102,10 @@ export default function TemplesSection() {
                   {/* Image Area with Arch mask */}
                   {/* Badge */}
                   <span
-                    className={`absolute top-[75px] z-50 inline-flex h-[30px] items-center rounded-full px-[25px] text-[12px] font-bold text-white shadow-sm ${
-                      temple.is_coming_soon
-                        ? "w-[95px] bg-[#D8A24A]"
-                        : "w-[50px] bg-[#15A44D]"
-                    }`}
+                    className={`absolute top-[75px] z-50 inline-flex h-[30px] items-center rounded-full px-[25px] text-[12px] font-bold text-white shadow-sm ${temple.is_coming_soon
+                      ? "w-[95px] bg-[#D8A24A]"
+                      : "w-[50px] bg-[#15A44D]"
+                      }`}
                     style={{ marginLeft: "30px" }}
                   >
                     {!temple.is_coming_soon && (
@@ -138,6 +138,7 @@ export default function TemplesSection() {
                             src={temple.image_url || ""}
                             alt={temple.name}
                             fill
+                            unoptimized
                             className="object-cover"
                             style={{
                               objectPosition: "center center",
@@ -239,9 +240,8 @@ export default function TemplesSection() {
             {temples.slice(0, 4).map((temple) => (
               <div
                 key={temple.id}
-                className={`relative h-[360px] w-[220px] ${
-                  temple.is_coming_soon ? "opacity-50" : ""
-                }`}
+                className={`relative h-[360px] w-[220px] ${temple.is_coming_soon ? "opacity-50" : ""
+                  }`}
               >
                 {/* Scroll Frame */}
                 <div className="absolute inset-0">
@@ -255,9 +255,8 @@ export default function TemplesSection() {
 
                 {/* Badge */}
                 <span
-                  className={`absolute top-[65px] left-[25px] z-50 inline-flex h-[26px] items-center rounded-full px-3 text-[10px] font-bold text-white ${
-                    temple.is_coming_soon ? "bg-[#D8A24A]" : "bg-[#15A44D]"
-                  }`}
+                  className={`absolute top-[65px] left-[25px] z-50 inline-flex h-[26px] items-center rounded-full px-3 text-[10px] font-bold text-white ${temple.is_coming_soon ? "bg-[#D8A24A]" : "bg-[#15A44D]"
+                    }`}
                 >
                   {!temple.is_coming_soon && (
                     <span className="mr-1 h-[6px] w-[6px] rounded-full bg-white" />
@@ -284,6 +283,7 @@ export default function TemplesSection() {
                           src={temple.image_url || ""}
                           alt={temple.name}
                           fill
+                          unoptimized
                           className="object-cover"
                           style={{
                             objectPosition: "center center",

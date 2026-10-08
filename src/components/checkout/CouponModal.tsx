@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle2, ChevronDown, TicketPercent, X } from "lucide-react";
 import Image from "next/image";
 
@@ -57,6 +57,24 @@ export default function CouponModal({
     "BRAJMARG30",
   );
 
+  useEffect(() => {
+    if (isOpen) {
+      const originalBodyOverflow = document.body.style.overflow;
+      const originalHtmlOverflow = document.documentElement.style.overflow;
+      const originalBodyTouchAction = document.body.style.touchAction;
+
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+
+      return () => {
+        document.body.style.overflow = originalBodyOverflow || "";
+        document.documentElement.style.overflow = originalHtmlOverflow || "";
+        document.body.style.touchAction = originalBodyTouchAction || "";
+      };
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const applyCoupon = () => {
@@ -68,8 +86,17 @@ export default function CouponModal({
     onClose();
   };
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-[#201A14]/70 px-4 py-6 backdrop-blur-[2px]">
-      <div className="relative w-full max-w-[560px] overflow-hidden rounded-[18px] border border-[#D79A43] bg-[#FFF9F0] shadow-[0_20px_60px_rgba(38,25,12,0.35)]">
+    <div
+      className="fixed inset-0 z-[999] flex items-center justify-center bg-[#201A14]/70 px-4 py-6 backdrop-blur-[2px]"
+      style={{ touchAction: "none" }}
+      onTouchMove={(e) => {
+        if (e.target === e.currentTarget) e.preventDefault();
+      }}
+    >
+      <div
+        className="relative w-full max-w-[560px] overflow-hidden rounded-[18px] border border-[#D79A43] bg-[#FFF9F0] shadow-[0_20px_60px_rgba(38,25,12,0.35)]"
+        style={{ overscrollBehavior: "contain", touchAction: "auto" }}
+      >
         {/* Fixed background inside modal */}
         <div
           aria-hidden="true"

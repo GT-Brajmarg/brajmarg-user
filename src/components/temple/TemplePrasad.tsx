@@ -121,9 +121,10 @@ export default function TemplePrasad({
                   {/* Image */}
                   <div className="relative h-[105px] overflow-hidden">
                     <Image
-                      src={item.image_url || "/images2/default.png"}
+                      src={item.image_url || ""}
                       alt={item.name}
                       fill
+                      unoptimized
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>

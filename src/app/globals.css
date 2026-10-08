@@ -3,7 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-primary: var(--font-lato), "Lato", Arial, Helvetica, sans-serif;
+  --font-primary: var(--font-cormorant), serif;
 }
 .font-cormorant {
   font-family: var(--font-cormorant);
@@ -32,6 +32,12 @@ body {
   font-family: var(--font-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body *,
+body *::before,
+body *::after {
+  font-family: var(--font-primary) !important;
 }
 
 * {

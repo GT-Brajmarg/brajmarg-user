@@ -127,6 +127,7 @@ export default function TempleOfferings({
                     src={item.image_url || "/images2/default.png"}
                     alt={item.name}
                     fill
+                    unoptimized
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
