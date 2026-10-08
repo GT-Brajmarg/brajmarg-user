@@ -6,20 +6,10 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchTempleTimings } from "@/store/slices/templeTimingsSlice";
 import { useEffect, useState } from "react";
 
-interface DarshanTimingsProps {
-  templeId: string;
-}
-
-export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
+export default function DarshanTimings() {
   const dispatch = useAppDispatch();
-  const { darshan } = useAppSelector((state) => state.hero);
-  const { timings, loading } = useAppSelector((state) => state.templeTimings);
 
-  useEffect(() => {
-    if (templeId) {
-      dispatch(fetchTempleTimings(templeId));
-    }
-  }, [dispatch, templeId]);
+  const { timings, loading } = useAppSelector((state) => state.templeTimings);
 
   const today = new Date();
 
@@ -52,46 +42,62 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
 
     return hours * 3600 + minutes * 60 + seconds;
   };
-  const currentDarshan =
-    selectedDayTimings.find((timing) => {
-      const start = timeToSeconds(timing.opening_time);
-      const end = timeToSeconds(timing.closing_time);
 
-      return currentTimeInSeconds >= start && currentTimeInSeconds <= end;
-    }) || null;
+  const isToday = selectedDay === String(today.getDay());
 
-  const nextDarshan =
-    selectedDayTimings.find((timing) => {
-      const start = timeToSeconds(timing.opening_time);
+  const currentDarshan = isToday
+    ? selectedDayTimings.find((timing) => {
+        const start = timeToSeconds(timing.opening_time);
+        const end = timeToSeconds(timing.closing_time);
 
-      return start > currentTimeInSeconds;
-    }) || null;
+        return currentTimeInSeconds >= start && currentTimeInSeconds <= end;
+      }) || null
+    : null;
+
+  const nextDarshan = isToday
+    ? selectedDayTimings
+        .filter(
+          (timing) => timeToSeconds(timing.opening_time) > currentTimeInSeconds,
+        )
+        .sort(
+          (a, b) =>
+            timeToSeconds(a.opening_time) - timeToSeconds(b.opening_time),
+        )[0] || null
+    : selectedDayTimings.sort(
+        (a, b) => timeToSeconds(a.opening_time) - timeToSeconds(b.opening_time),
+      )[0] || null;
 
   //   const activeDarshan = currentDarshan || nextDarshan;
 
+  const lastDarshan =
+    selectedDayTimings.length > 0
+      ? selectedDayTimings.reduce((latest, current) =>
+          timeToSeconds(current.closing_time) >
+          timeToSeconds(latest.closing_time)
+            ? current
+            : latest,
+        )
+      : null;
   const allDarshansCompleted =
-    selectedDayTimings.length > 0 &&
-    currentTimeInSeconds >
-      timeToSeconds(
-        selectedDayTimings[selectedDayTimings.length - 1].closing_time,
-      );
+    isToday &&
+    lastDarshan !== null &&
+    currentTimeInSeconds > timeToSeconds(lastDarshan.closing_time);
 
-  let hours = 0;
-  let minutes = 0;
-  let seconds = 0;
+  // let hours = 0;
+  // let minutes = 0;
+  // let seconds = 0;
 
-  if (nextDarshan) {
-    const startSeconds = timeToSeconds(nextDarshan.opening_time);
+  // if (nextDarshan) {
+  //   const startSeconds = timeToSeconds(nextDarshan.opening_time);
 
-    const remainingSeconds = startSeconds - currentTimeInSeconds;
+  //   const remainingSeconds = startSeconds - currentTimeInSeconds;
 
-    hours = Math.floor(remainingSeconds / 3600);
+  //   hours = Math.floor(remainingSeconds / 3600);
 
-    minutes = Math.floor((remainingSeconds % 3600) / 60);
+  //   minutes = Math.floor((remainingSeconds % 3600) / 60);
 
-    seconds = remainingSeconds % 60;
-  }
-
+  //   seconds = remainingSeconds % 60;
+  // }
   const weekDates = Array.from({ length: 7 }, (_, index) => {
     const date = new Date(today);
 
@@ -104,9 +110,76 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
         month: "short",
       }),
       value: String(date.getDay()),
+      date, // <-- keep the actual Date object
     };
   });
 
+  let hours = 0;
+  let minutes = 0;
+  let seconds = 0;
+
+  if (nextDarshan) {
+    const now = new Date();
+
+    if (isToday) {
+      const startSeconds = timeToSeconds(nextDarshan.opening_time);
+      const remainingSeconds = Math.max(0, startSeconds - currentTimeInSeconds);
+
+      hours = Math.floor(remainingSeconds / 3600);
+      minutes = Math.floor((remainingSeconds % 3600) / 60);
+      seconds = remainingSeconds % 60;
+    } else {
+      // Find the actual selected date
+      const selectedDate = weekDates.find(
+        (day) => day.value === selectedDay,
+      )?.date;
+
+      if (selectedDate) {
+        const target = new Date(selectedDate);
+
+        const [h, m, s] = nextDarshan.opening_time.split(":").map(Number);
+
+        target.setHours(h, m, s, 0);
+
+        const remainingSeconds = Math.max(
+          0,
+          Math.floor((target.getTime() - now.getTime()) / 1000),
+        );
+
+        hours = Math.floor(remainingSeconds / 3600);
+        minutes = Math.floor((remainingSeconds % 3600) / 60);
+        seconds = remainingSeconds % 60;
+      }
+    }
+  }
+
+  const showCompleted =
+    isToday && selectedDayTimings.length > 0 && !currentDarshan && !nextDarshan;
+
+  const selectedDateLabel =
+    weekDates.find((day) => day.value === selectedDay)?.label ?? "";
+  const selectedDayName =
+    weekDates.find((day) => day.value === selectedDay)?.label.split(",")[0] ??
+    "";
+
+  // console.log({
+  //   isToday,
+  //   currentTimeInSeconds,
+  //   currentTime: new Date().toLocaleTimeString(),
+  //   allDarshansCompleted,
+  //   nextDarshan,
+  //   selectedDayTimings,
+  //   lastDarshan,
+  //   lastClosingTime: lastDarshan?.closing_time,
+  // });
+
+  // console.table(
+  //   selectedDayTimings.map((t) => ({
+  //     label: t.label,
+  //     opening: t.opening_time,
+  //     closing: t.closing_time,
+  //   })),
+  // );
   return (
     <section className="relative -translate-y-6 overflow-hidden rounded-[30px] border-[2px] border-[#C37000] bg-transparent shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
       <div className="hidden lg:block">
@@ -227,7 +300,10 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
                   Next Darshan
                 </p>
 
-                <h3 className="font-cormorant text-center text-[20px] leading-[1.05] font-bold text-[#3D352F]">
+                <h3
+                  className="font-cormorant text-center text-[20px] leading-[1.05] font-bold text-[#3D352F]"
+                  style={{ marginTop: "10px" }}
+                >
                   {allDarshansCompleted
                     ? "All Darshans Completed"
                     : nextDarshan?.label || "No Upcoming Darshan"}
@@ -280,10 +356,12 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
                     height={10}
                     className="h-[10px] w-[10px] shrink-0 object-contain"
                   />
-                  <span>
-                    {allDarshansCompleted
-                      ? "Please check tomorrow's timings"
-                      : `Today • ${nextDarshan?.opening_time || ""}`}
+                  <span className="text-[12px] font-medium text-[#6E675F]">
+                    {allDarshansCompleted && isToday
+                      ? "Today's schedule finished"
+                      : `${isToday ? "Today" : selectedDayName} • ${
+                          nextDarshan?.opening_time || ""
+                        }`}
                   </span>
                 </div>
               </div>
@@ -494,11 +572,10 @@ export default function DarshanTimings({ templeId }: DarshanTimingsProps) {
               <div className="mt-6 flex justify-center">
                 <div className="flex items-center gap-2 rounded-full bg-transparent px-5 py-2 shadow-sm">
                   <Clock3 size={14} className="text-[#D89A3D]" />
-
                   <span className="text-[12px] font-medium text-[#6E675F]">
-                    {allDarshansCompleted
+                    {allDarshansCompleted && isToday
                       ? "Today's schedule finished"
-                      : `Today • ${nextDarshan?.opening_time}`}
+                      : `${selectedDateLabel} • ${nextDarshan?.opening_time || ""}`}
                   </span>
                 </div>
               </div>

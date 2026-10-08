@@ -1,6 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+import { fetchTempleTimings } from "@/store/slices/templeTimingsSlice";
+import { fetchTempleSevas } from "@/store/slices/sevaSlice";
+import { fetchTemplePrasad } from "@/store/slices/prasadSlice";
+import { fetchTempleFrames } from "@/store/slices/frameSlice";
+import { fetchTempleCloths } from "@/store/slices/clothSlice";
+import { getTempleGallery } from "@/store/slices/templeGallerySlice";
+import { getTempleLocation } from "@/store/slices/templeLocationSlice";
+import { fetchTemples } from "@/store/slices/templesSlice";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 
@@ -20,6 +29,7 @@ import { fetchLiveDarshan } from "@/store/slices/heroSlice";
 
 export default function TempleDetailsPage() {
   const { slug } = useParams<{ slug: string }>();
+  const [booting, setBooting] = useState(true);
 
   const dispatch = useAppDispatch();
 
@@ -29,37 +39,53 @@ export default function TempleDetailsPage() {
 
   const hasCurrentTemple = Boolean(temple) && currentSlug === slug;
 
-  useEffect(() => {
-    if (slug && !hasCurrentTemple && !loading) {
-      dispatch(getTempleDetails(slug));
-    }
-  }, [dispatch, slug, hasCurrentTemple, loading]);
-
   const heroLoading = useAppSelector((state) => state.hero.loading);
   const darshan = useAppSelector((state) => state.hero.darshan);
 
   const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
 
-  // const hasCurrentTemple = Boolean(temple) && temple?.slug === slug;
-
   const hasDarshanData = Boolean(darshan.templeName);
 
   useEffect(() => {
-    if (slug && !hasCurrentTemple && !loading) {
-      dispatch(getTempleDetails(slug));
+    if (!slug) return;
+
+    let mounted = true;
+
+    async function initialize() {
+      try {
+        // Temple Details first
+        const result = await dispatch(getTempleDetails(slug)).unwrap();
+
+        const templeId = result.temple.id;
+
+        await Promise.all([
+          dispatch(fetchLiveDarshan()).unwrap(),
+          dispatch(fetchTempleTimings(templeId)).unwrap(),
+          dispatch(fetchTempleSevas(templeId)).unwrap(),
+          dispatch(fetchTemplePrasad(templeId)).unwrap(),
+          dispatch(fetchTempleFrames(templeId)).unwrap(),
+          dispatch(fetchTempleCloths(templeId)).unwrap(),
+          dispatch(getTempleGallery(templeId)).unwrap(),
+          dispatch(getTempleLocation(templeId)).unwrap(),
+          dispatch(fetchTemples()).unwrap(),
+        ]);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        if (mounted) {
+          setBooting(false);
+        }
+      }
     }
-  }, [dispatch, slug, hasCurrentTemple, loading]);
 
-  useEffect(() => {
-    if (!hasDarshanData && !heroLoading) {
-      dispatch(fetchLiveDarshan());
-    }
-  }, [dispatch, hasDarshanData, heroLoading]);
+    initialize();
 
-  const isInitialLoading =
-    (loading && !hasCurrentTemple) || (heroLoading && !hasDarshanData);
+    return () => {
+      mounted = false;
+    };
+  }, [dispatch, slug]);
 
-  if (isInitialLoading) {
+  if (booting) {
     return <TempleDetailsLoader />;
   }
 
@@ -110,26 +136,26 @@ export default function TempleDetailsPage() {
         <div className="w-full max-w-[1200px]">
           <TempleHero temple={temple} loading={loading} />
 
-          <DarshanTimings templeId={temple.id} />
+          <DarshanTimings />
 
           <div style={{ marginTop: isMobile ? "90px" : "30px" }}>
-            <TempleSevas templeId={temple.id} templeSlug={slug} />
+            <TempleSevas templeSlug={slug} />
           </div>
 
           <div style={{ marginTop: isMobile ? "90px" : "40px" }}>
-            <TemplePrasad templeId={temple.id} templeSlug={slug} />
+            <TemplePrasad templeSlug={slug} />
           </div>
 
           <div style={{ marginTop: isMobile ? "90px" : "10px" }}>
-            <TempleOfferings templeId={temple.id} templeSlug={slug} />
+            <TempleOfferings templeSlug={slug} />
           </div>
 
           <div style={{ marginTop: isMobile ? "90px" : "30px" }}>
-            <TempleGallery templeId={temple.id} />
+            <TempleGallery />
           </div>
 
           <div style={{ marginTop: isMobile ? "90px" : "30px" }}>
-            <TempleLocation templeId={temple.id} />
+            <TempleLocation />
           </div>
 
           <div

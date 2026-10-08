@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 export const fetchPlans = createAsyncThunk(
   "subscriptions/fetchPlans",
@@ -15,19 +15,81 @@ interface SubscriptionState {
   plans: any[];
   loading: boolean;
   error: string | null;
+
+  selectedPlan: string;
+
+  selectedTemples: string[];
+
+  updateTypes: string[];
+
+  frequency: string;
+
+  language: string;
+
+  notificationMethod: string;
 }
 
 const initialState: SubscriptionState = {
   plans: [],
   loading: false,
   error: null,
+
+  selectedPlan: "",
+
+  selectedTemples: [],
+
+  updateTypes: [],
+
+  frequency: "",
+
+  language: "",
+
+  notificationMethod: "",
 };
 
 const subscriptionSlice = createSlice({
   name: "subscriptions",
   initialState,
 
-  reducers: {},
+  reducers: {
+    setSelectedPlan(state, action: PayloadAction<string>) {
+      state.selectedPlan = action.payload;
+    },
+
+    setSelectedTemples(state, action: PayloadAction<string[]>) {
+      state.selectedTemples = action.payload;
+    },
+
+    setUpdateTypes(state, action: PayloadAction<string[]>) {
+      state.updateTypes = action.payload;
+    },
+    removeSelectedTemple(state, action: PayloadAction<string>) {
+      state.selectedTemples = state.selectedTemples.filter(
+        (temple) => temple !== action.payload,
+      );
+    },
+
+    setFrequency(state, action: PayloadAction<string>) {
+      state.frequency = action.payload;
+    },
+
+    setLanguage(state, action: PayloadAction<string>) {
+      state.language = action.payload;
+    },
+
+    setNotificationMethod(state, action: PayloadAction<string>) {
+      state.notificationMethod = action.payload;
+    },
+
+    resetSubscription(state) {
+      state.selectedPlan = "";
+      state.selectedTemples = [];
+      state.updateTypes = [];
+      state.frequency = "";
+      state.language = "";
+      state.notificationMethod = "";
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -45,5 +107,16 @@ const subscriptionSlice = createSlice({
       });
   },
 });
+
+export const {
+  setSelectedPlan,
+  setSelectedTemples,
+  setUpdateTypes,
+  setFrequency,
+  setLanguage,
+  setNotificationMethod,
+  resetSubscription,
+  removeSelectedTemple,
+} = subscriptionSlice.actions;
 
 export default subscriptionSlice.reducer;

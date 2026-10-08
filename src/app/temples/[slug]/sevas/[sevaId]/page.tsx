@@ -21,9 +21,8 @@ export default function Page() {
 
   const dispatch = useAppDispatch();
 
-  const { seva, dates, slots, loading, error } = useAppSelector(
-    (state) => state.sevaBooking,
-  );
+  const { seva, dates, slots, pageLoading, slotsLoading, error } =
+    useAppSelector((state) => state.sevaBooking);
 
   const slug = params.slug as string;
   const sevaId = params.sevaId as string;
@@ -31,11 +30,6 @@ export default function Page() {
   const [selectedDate, setSelectedDate] = useState("");
 
   const [selectedSlot, setSelectedSlot] = useState("");
-
-  console.log("Params:", {
-    slug,
-    sevaId,
-  });
 
   useEffect(() => {
     if (!slug || !sevaId) return;
@@ -81,7 +75,7 @@ export default function Page() {
   }
 
   if (!seva) {
-    return loading ? (
+    return pageLoading ? (
       <SevaLoader />
     ) : (
       <div className="py-20 text-center">Seva not found.</div>
@@ -92,7 +86,6 @@ export default function Page() {
 
   return (
     <>
-      {loading && <SevaLoader />}
       <main className="relative overflow-hidden bg-[#F8F2E8]">
         {/* Background: 3 paper-texture sections + 3 centered mandalas */}
         <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
@@ -143,6 +136,7 @@ export default function Page() {
               <Booking
                 dates={dates}
                 slots={slots}
+                slotsLoading={slotsLoading}
                 selectedDate={selectedDate}
                 selectedSlot={selectedSlot}
                 onDateChange={setSelectedDate}

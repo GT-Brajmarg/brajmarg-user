@@ -1,8 +1,7 @@
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import ReduxProvider from "@/components/ReduxProvider";
-import { Cormorant_Garamond } from "next/font/google";
+import LayoutContent from "@/components/LayoutContent";
+import { Cormorant_Garamond, Cormorant_Infant } from "next/font/google";
 import type { Metadata, Viewport } from "next";
 
 export const viewport: Viewport = {
@@ -16,6 +15,12 @@ const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
 });
 
+const cormorantInfant = Cormorant_Infant({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-cormorant-infant",
+});
+
 export const metadata: Metadata = {
   title: "Brajmarg – Discover Sacred Temples & Pilgrimages",
   description:
@@ -24,16 +29,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className={cormorant.variable}>
+      <body className={`${cormorant.variable} ${cormorantInfant.variable}`}>
         <ReduxProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <LayoutContent>{children}</LayoutContent>
         </ReduxProvider>
       </body>
     </html>

@@ -6,22 +6,16 @@ import { ArrowBigLeft, ArrowRight, Navigation } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getTempleLocation } from "@/store/slices/templeLocationSlice";
 
-interface TempleLocationProps {
-  templeId: string;
-}
+// interface TempleLocationProps {
+//   templeId: string;
+// }
 
-export default function TempleLocation({ templeId }: TempleLocationProps) {
+export default function TempleLocation() {
   const dispatch = useAppDispatch();
 
   const { location, nearbyPlaces, loading } = useAppSelector(
     (state) => state.templeLocation,
   );
-
-  useEffect(() => {
-    if (templeId) {
-      dispatch(getTempleLocation(templeId));
-    }
-  }, [dispatch, templeId]);
 
   if (loading) {
     return null;

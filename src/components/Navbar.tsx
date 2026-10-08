@@ -24,6 +24,9 @@ export default function Navbar() {
   const menuOpen = useAppSelector((state) => state.nav.menuOpen);
   const dispatch = useAppDispatch();
   const pathname = usePathname();
+  const isCartActive = pathname === "/cart";
+
+  const isAlertsActive = pathname.startsWith("/subscribe-alerts");
 
   const [showAlerts, setShowAlerts] = useState(false);
 
@@ -206,22 +209,37 @@ export default function Navbar() {
                   >
                     Subscribe Alerts
                   </span>
-                </button>
 
+                  {isAlertsActive && (
+                    <Image
+                      src="/images/lotus 2.png"
+                      alt=""
+                      width={28}
+                      height={8}
+                      className="absolute -bottom-3 left-1/2 -translate-x-1/2"
+                    />
+                  )}
+                </button>
                 {isLoggedIn ? (
                   <>
                     <Link
                       href="/cart"
-                      className="relative flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border border-[#005D63] bg-[#EFDEC7] transition hover:bg-[#F3E5D2]"
+                      className={`relative flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border transition ${
+                        isCartActive
+                          ? "border-[#0F5C66] bg-[rgba(195,112,0,0.4)]"
+                          : "border-[#005D63] bg-[#EFDEC7] hover:bg-[#F3E5D2]"
+                      }`}
                       aria-label={`Cart with ${cartItemCount} items`}
                     >
                       <ShoppingCart
                         size={18}
                         strokeWidth={2}
-                        className="text-[#0F5C66]"
+                        className={
+                          isCartActive ? "text-[#0F5C66]" : "text-[#0F5C66]"
+                        }
                       />
                       {cartItemCount > 0 && (
-                        <span className="absolute -top-2 -right-2 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#EFDEC7] px-1 text-[10px] font-bold text-white">
+                        <span className="absolute -top-2 -right-2 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#C37000] px-1 text-[10px] font-bold text-white">
                           {cartItemCount > 99 ? "99+" : cartItemCount}
                         </span>
                       )}
