@@ -1,0 +1,89 @@
+"use client";
+
+import { Truck } from "lucide-react";
+import { useState } from "react";
+import Image from "next/image";
+
+export default function DeliveryOptions() {
+  const [selected, setSelected] = useState("standard");
+
+  const options = [
+    {
+      id: "standard",
+      title: "Standard Delivery",
+      days: "2–4 Business Days",
+      price: "₹49",
+    },
+    {
+      id: "express",
+      title: "Express Delivery",
+      days: "1–2 Business Days",
+      price: "₹99",
+    },
+  ];
+
+  return (
+    <section className="mt-5 rounded-2xl border border-[#C37000] bg-[#C37000]/4 p-5">
+      <div className="mb-5 flex items-center gap-2">
+        <Image
+          src="/images/truck.svg"
+          alt="Truck"
+          width={18}
+          height={18}
+          style={{ margin: "10px" }}
+        />
+
+        <h2 className="font-cormorant text-[25px] font-semibold text-[#0B6670]">
+          Delivery Options
+        </h2>
+      </div>
+
+      <div
+        className="grid grid-cols-2 gap-4"
+        style={{
+          marginLeft: "10px",
+          marginRight: "10px",
+          marginBottom: "20px",
+        }}
+      >
+        {options.map((option) => {
+          const active = selected === option.id;
+
+          return (
+            <button
+              key={option.id}
+              onClick={() => setSelected(option.id)}
+              className={`rounded-xl border p-4 text-left transition ${
+                active ? "border-[#0B6670] bg-[#F3FBFA]" : "border-[#E8C78D]"
+              }`}
+            >
+              <div
+                className="flex items-center gap-2"
+                style={{ marginLeft: "10px", marginTop: "10px" }}
+              >
+                <div
+                  className={`h-4 w-4 rounded-full border ${
+                    active
+                      ? "border-[#0B6670] bg-[#0B6670]"
+                      : "border-[#C8B08B]"
+                  }`}
+                />
+
+                <h3 className="text-[15px] font-medium">{option.title}</h3>
+              </div>
+
+              <div
+                className="mt-2 flex justify-between text-sm text-[#6F6356]"
+                style={{ marginLeft: "30px", marginBottom: "10px" }}
+              >
+                <span>{option.days}</span>
+
+                <span style={{ marginRight: "30px" }}>{option.price}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}

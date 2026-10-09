@@ -1,0 +1,73 @@
+"use client";
+
+import CheckoutHeader from "./CheckoutHeader";
+import CheckoutStepper from "./CheckoutStepper";
+import ContinueButton from "./delivery/ContinueButton";
+import DeliveryDetails from "./delivery/DeliveryDetails";
+import DeliveryForm from "./delivery/DeliveryForm";
+import DeliveryOptions from "./delivery/DeliveryOptions";
+import OrderSummary from "./OrderSummary";
+import TrustFeatures from "./TrustFeatures";
+// import { CheckoutProps } from "./types";
+import { useAppSelector } from "@/store/hooks";
+
+export default function CheckoutPage() {
+  const items = useAppSelector((state) => state.cart.items);
+  return (
+    <section className="relative overflow-hidden bg-[transparent]">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-[0.05]"></div>
+
+      <div className="relative mx-auto max-w-7xl px-6 py-10">
+        {/* Header */}
+        <CheckoutHeader />
+
+        {/* Stepper */}
+        <CheckoutStepper currentStep={1} />
+
+        {/* Main Layout */}
+        <div
+          className="grid gap-8 lg:grid-cols-[2fr_1fr]"
+          style={{ marginTop: "40px" }}
+        >
+          {/* Left Side */}
+          <div className="space-y-6">
+            <div className="rounded-3xl border-[#C67A00] bg-transparent p-10">
+              <h2 className="font-cormorant text-4xl text-[#0B6670]">
+                <DeliveryDetails />
+              </h2>
+            </div>
+
+            <div
+              className="rounded-3xl bg-transparent p-10"
+              style={{ marginTop: "10px" }}
+            >
+              <h2 className="font-cormorant text-4xl text-[#0B6670]">
+                <DeliveryOptions />
+              </h2>
+            </div>
+
+            <div
+              className="rounded-3xl bg-transparent p-10"
+              style={{ marginTop: "10px" }}
+            >
+              <ContinueButton />
+            </div>
+          </div>
+
+          {/* Right Side */}
+          <div
+            className="grid gap-6 lg:grid-rows-[1fr_auto]"
+            style={{ marginBottom: "40px" }}
+          >
+            {/* This automatically matches Delivery Details height */}
+            <OrderSummary items={items} />
+
+            {/* This automatically matches Delivery Options + Continue Button height */}
+            <TrustFeatures />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -1,0 +1,424 @@
+"use client";
+
+import {
+  CalendarDays,
+  Clock3,
+  UserRound,
+  MessageSquare,
+  Info,
+  Circle,
+} from "lucide-react";
+import { useState } from "react";
+
+interface AvailableDate {
+  id: string;
+  available_date: string;
+}
+
+interface Slot {
+  id: string;
+  slot_time: string;
+  capacity: number;
+  booked_count: number;
+}
+
+interface BookingProps {
+  dates: AvailableDate[];
+  slots: Slot[];
+
+  slotsLoading: boolean;
+
+  selectedDate: string;
+  selectedSlot: string;
+
+  onDateChange: (id: string) => void;
+  onSlotChange: (id: string) => void;
+}
+
+export default function Booking({
+  dates,
+  slots,
+  selectedDate,
+  selectedSlot,
+  slotsLoading,
+  onDateChange,
+  onSlotChange,
+}: BookingProps) {
+  // console.log("DATES:", dates);
+  // console.log("SLOTS:", slots);
+  const [bookingFor, setBookingFor] = useState<"self" | "other">("self");
+  return (
+    <section className="relative mt-16 overflow-hidden rounded-[28px] border-3 border-[#C37000] bg-[#EFDEC7]/20 p-8 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)] lg:p-10">
+      {/* ================= Date Selection ================= */}
+      <div>
+        <div
+          className="mb-6 flex items-start gap-3"
+          style={{ marginTop: "10px" }}
+        >
+          <CalendarDays
+            className="mt-1 h-6 w-6 text-[#D89A3D]"
+            style={{ marginTop: "15px", marginLeft: "20px" }}
+          />
+
+          <div>
+            <h2 className="font-cormorant text-[28px] font-semibold text-[#0B6670]">
+              Select Seva Date
+            </h2>
+
+            <p className="text-sm text-[#6D6259]">
+              Choose the date on which you wish to perform this seva
+            </p>
+          </div>
+        </div>
+
+        {/* Date Slider */}
+        <div className="flex items-center gap-4">
+          <button
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#C37000] bg-[#C37000]/20 text-[#0F5C66] transition hover:bg-[#FFF4E8]"
+            style={{ marginLeft: "20px" }}
+          >
+            ❮
+          </button>
+
+          <div
+            className="flex flex-1 justify-between gap-3"
+            style={{ marginTop: "10px" }}
+          >
+            {[...dates]
+              .sort(
+                (a, b) =>
+                  new Date(a.available_date).getTime() -
+                  new Date(b.available_date).getTime(),
+              )
+              .map((date) => {
+                const d = new Date(date.available_date);
+                const active = selectedDate === date.available_date;
+
+                return (
+                  <div
+                    key={date.id}
+                    onClick={() => onDateChange(date.available_date)}
+                    className={`flex h-[106px] w-[106px] cursor-pointer flex-col items-center justify-center rounded-xl border transition ${
+                      active
+                        ? "border-[#0B6670] bg-[#0B6670] text-[#EFDEC7]"
+                        : "border-[#E5C48A] bg-[#EFDEC7]/20 text-[#0B6670] hover:border-[#D89A3D]"
+                    }`}
+                  >
+                    <span className="text-[22px] leading-none font-bold">
+                      {d.getDate()}
+                    </span>
+
+                    <span className="font-cormorant mt-1 text-[22px]">
+                      {d.toLocaleString("en-IN", {
+                        month: "long",
+                      })}
+                    </span>
+
+                    <span className="text-xs opacity-80">
+                      {d.toLocaleString("en-IN", {
+                        weekday: "short",
+                      })}
+                    </span>
+                  </div>
+                );
+              })}
+          </div>
+
+          <button
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#C37000] bg-[#C37000]/20 text-[#0F5C66] transition hover:bg-[#FFF4E8]"
+            style={{ marginRight: "50px" }}
+          >
+            ❯
+          </button>
+        </div>
+      </div>
+
+      {/* ================= Time Slot ================= */}
+      <div className="mt-10">
+        <div
+          className="mb-6 flex items-start gap-3"
+          style={{ marginTop: "20px" }}
+        >
+          <Clock3
+            className="mt-1 h-6 w-6 text-[#D89A3D]"
+            style={{ marginTop: "15px", marginLeft: "20px" }}
+          />
+
+          <div>
+            <h2 className="font-cormorant text-[28px] font-semibold text-[#0B6670]">
+              Select Time Slot
+            </h2>
+
+            <p className="text-sm text-[#6D6259]">Timings are in IST</p>
+          </div>
+        </div>
+
+        {/* Time Slots */}
+        {slotsLoading ? (
+          <div className="flex h-[120px] items-center justify-center">
+            Loading available slots...
+          </div>
+        ) : (
+          <div
+            className="grid grid-cols-5 gap-4"
+            style={{
+              marginLeft: "40px",
+              marginRight: "40px",
+              marginTop: "10px",
+            }}
+          >
+            {slots.map((slot) => {
+              const available = slot.capacity - slot.booked_count;
+              const active = selectedSlot === slot.id;
+
+              return (
+                <div
+                  key={slot.id}
+                  onClick={() => onSlotChange(slot.id)}
+                  className={`h-[60px] w-[200px] cursor-pointer rounded-xl border bg-[#EFDEC7]/20 px-5 py-4 text-center transition ${
+                    active
+                      ? "border-2 border-[#0B6670] shadow-sm"
+                      : "border-[#E5C48A] hover:border-[#D89A3D]"
+                  }`}
+                >
+                  <p className="text-[18px] font-semibold text-[#0B6670]">
+                    {new Date(
+                      `1970-01-01T${slot.slot_time}`,
+                    ).toLocaleTimeString("en-IN", {
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })}
+                  </p>
+
+                  <p
+                    className={`mt-1 text-sm ${
+                      available <= 1 ? "text-[#D98200]" : "text-[#22A547]"
+                    }`}
+                  >
+                    {available <= 1
+                      ? "Only 1 Slot Left"
+                      : `${available} Slots Available`}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Info */}
+        <div
+          className="mt-4 flex items-center gap-2"
+          style={{
+            marginLeft: "20px",
+            marginTop: "20px",
+            marginBottom: "20px",
+          }}
+        >
+          <Info size={16} className="text-[#D89A3D]" strokeWidth={2} />
+
+          <p className="text-sm text-[#6D6259]">
+            Rajbhog Seva is performed during the afternoon bhog.
+          </p>
+        </div>
+      </div>
+
+      {/* Divider */}
+      <div className="my-10 border-t border-[#E8DCC8]" />
+
+      {/* ================= Devotee Details ================= */}
+      {/* ================= Devotee Details ================= */}
+      <div>
+        {/* Heading */}
+        <div
+          className="mb-6 flex items-start gap-3"
+          style={{ marginTop: "10px" }}
+        >
+          <UserRound
+            className="mt-1 h-6 w-6 text-[#D89A3D]"
+            style={{ marginTop: "15px", marginLeft: "20px" }}
+          />
+
+          <div>
+            <h2 className="font-cormorant text-[28px] font-semibold text-[#0B6670]">
+              Devotee Details
+            </h2>
+
+            <p className="text-sm text-[#6D6259]">
+              Provide details for whom the seva is being performed
+            </p>
+          </div>
+        </div>
+
+        {/* Radio Cards */}
+        <div
+          className="grid gap-8 lg:grid-cols-2"
+          style={{ marginLeft: "50px", marginTop: "20px", marginRight: "50px" }}
+        >
+          {/* Myself */}
+
+          {/* For Myself */}
+          <button
+            type="button"
+            onClick={() => setBookingFor("self")}
+            className={`flex items-start gap-4 rounded-2xl border bg-transparent px-6 py-5 transition-all ${
+              bookingFor === "self"
+                ? "border-[#0B6670] shadow-md"
+                : "border-[#D89A3D] hover:border-[#0B6670]"
+            }`}
+          >
+            <div
+              className={`mt-[10px] ml-[10px] flex h-6 w-6 items-center justify-center rounded-full border-2 ${
+                bookingFor === "self" ? "border-[#0B6670]" : "border-[#D89A3D]"
+              }`}
+              style={{ marginTop: "20px", marginLeft: "10px" }}
+            >
+              {bookingFor === "self" && (
+                <div className="h-3 w-3 rounded-full bg-[#0B6670]" />
+              )}
+            </div>
+
+            <div className="text-left">
+              <h3
+                className="font-cormorant text-[22px] font-semibold text-[#0B6670]"
+                style={{ marginTop: "10px" }}
+              >
+                For Myself
+              </h3>
+
+              <p
+                className="mt-1 text-sm text-[#6D6259]"
+                style={{ marginBottom: "10px" }}
+              >
+                Seva will be performed in your own name.
+              </p>
+            </div>
+          </button>
+
+          {/* For Someone Else */}
+          <button
+            type="button"
+            onClick={() => setBookingFor("other")}
+            className={`flex items-start gap-4 rounded-2xl border bg-transparent px-6 py-5 transition-all ${
+              bookingFor === "other"
+                ? "border-[#0B6670] shadow-md"
+                : "border-[#D89A3D] hover:border-[#0B6670]"
+            }`}
+          >
+            <div
+              className={`mt-[10px] ml-[10px] flex h-6 w-6 items-center justify-center rounded-full border-2 ${
+                bookingFor === "other" ? "border-[#0B6670]" : "border-[#D89A3D]"
+              }`}
+              style={{ marginTop: "20px", marginLeft: "10px" }}
+            >
+              {bookingFor === "other" && (
+                <div className="h-3 w-3 rounded-full bg-[#0B6670]" />
+              )}
+            </div>
+
+            <div className="text-left">
+              <h3
+                className="font-cormorant text-[22px] font-semibold text-[#0B6670]"
+                style={{ marginTop: "10px" }}
+              >
+                For Someone Else
+              </h3>
+
+              <p
+                className="mt-1 text-sm text-[#6D6259]"
+                style={{ marginBottom: "10px" }}
+              >
+                Seva will be performed on behalf of another devotee.
+              </p>
+            </div>
+          </button>
+        </div>
+
+        {/* Form */}
+        <div
+          className="mt-8 grid gap-6 lg:grid-cols-3"
+          style={{ marginLeft: "50px", marginTop: "20px", marginRight: "50px" }}
+        >
+          {/* Name */}
+          <div>
+            <label className="font-cormorant mb-2 block text-[20px] text-[#0B6670]">
+              Full Name <span className="text-[#D89A3D]">*</span>
+            </label>
+
+            <input
+              type="text"
+              placeholder="Enter Full Name"
+              style={{ paddingLeft: "10px" }}
+              className="h-12 w-full rounded-xl border border-[#D89A3D] bg-transparent text-[#4F4941] outline-none"
+            />
+          </div>
+
+          {/* Gotra */}
+          <div>
+            <label className="font-cormorant mb-2 block text-[20px] text-[#0B6670]">
+              Gotra (Optional)
+            </label>
+
+            <input
+              type="text"
+              placeholder="Enter Gotra"
+              style={{ paddingLeft: "10px" }}
+              className="h-12 w-full rounded-xl border border-[#D89A3D] bg-transparent px-5 text-[#4F4941] outline-none placeholder:text-[#9B948B] focus:border-[#0B6670]"
+            />
+          </div>
+
+          {/* Mobile */}
+          <div>
+            <label className="font-cormorant mb-2 block text-[20px] text-[#0B6670]">
+              Mobile Number <span className="text-[#D89A3D]">*</span>
+            </label>
+
+            <div className="flex h-12 overflow-hidden rounded-xl border border-[#D89A3D] bg-transparent">
+              <div className="flex w-[50px] items-center gap-2 border-r border-[#E7D5B5] px-4">
+                {/* <span className="text-lg">🇮🇳</span> */}
+                <span
+                  className="text-[#4F4941]"
+                  style={{ paddingLeft: "10px" }}
+                >
+                  +91
+                </span>
+              </div>
+
+              <input
+                type="tel"
+                placeholder="Enter Mobile Number"
+                style={{ paddingLeft: "10px" }}
+                className="flex-1 px-4 outline-none placeholder:text-[#9B948B]"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Whatsapp */}
+        <div
+          className="mt-8 flex items-start gap-4"
+          style={{
+            marginLeft: "20px",
+            marginTop: "30px",
+            marginBottom: "20px",
+          }}
+        >
+          <input
+            type="checkbox"
+            className="mt-1 h-5 w-5 rounded border-[#D89A3D]"
+            style={{ marginTop: "15px" }}
+          />
+
+          <div>
+            <h3 className="font-cormorant text-[22px] font-semibold text-[#0B6670]">
+              Send Seva Updates on Whatsapp
+            </h3>
+
+            <p className="text-sm text-[#6D6259]">
+              Provide details for whom the seva is being performed
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

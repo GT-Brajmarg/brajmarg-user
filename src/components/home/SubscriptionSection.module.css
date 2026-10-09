@@ -1,0 +1,301 @@
+/* ── Section Shell ── */
+.section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding: 80px 0 90px;
+}
+
+.sectionBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.bgTexture {
+  object-fit: cover;
+  object-position: center;
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Title ── */
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.title {
+  font-family: var(--font-cormorant), serif;
+  font-size: clamp(26px, 3.2vw, 40px);
+  font-weight: 700;
+  color: #08545e;
+  text-align: center;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-family: var(--font-cormorant);
+  font-size: clamp(15px, 1.8vw, 18px);
+  color: #444;
+  text-align: center;
+  margin-bottom: 48px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ── Cards Row ── */
+.cardsRow {
+  display: flex;
+  gap: 60px; /* Increase this */
+  justify-content: center;
+
+  width: 100%;
+}
+
+/* ── Base Card ── */
+.card {
+  position: relative;
+  flex: 0 0 600px;
+  max-width: 600px;
+  min-height: 600px;
+  border-radius: 16px;
+  overflow: visible;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+}
+
+.cardYearly {
+  border: 2px solid #c8860a;
+}
+
+.cardBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.cardContent {
+  position: relative;
+  z-index: 1;
+  padding: 40px 30px 30px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ── Best Value Badge ── */
+.bestValueBadge {
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  z-index: 20;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 4px 14px;
+  min-height: 24px;
+
+  background: #cf8500;
+  color: #fff;
+
+  border-radius: 999px;
+
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+/* ── Card Header ── */
+.cardHeader {
+  margin-bottom: 18px;
+}
+
+/* ── Price Row ── */
+.priceRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.currency {
+  font-size: 28px;
+  font-weight: 600;
+  margin-top: 2px;
+  color: #08545e;
+  line-height: 1;
+  align-self: flex-start;
+}
+
+.price {
+  font-size: 46px;
+  font-weight: 700;
+  color: #08545e;
+  line-height: 1;
+}
+
+.period {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+/* Gold variants for yearly */
+.currencyGold {
+  color: #c8860a;
+}
+
+.priceGold {
+  color: #c8860a;
+}
+
+.periodGold {
+  color: #888;
+}
+
+.saveBadge {
+  background: #c8860a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 12px;
+  margin-left: 6px;
+  margin-bottom: 8px;
+  align-self: flex-end;
+}
+
+/* ── Feature List ── */
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.featureItem {
+  font-size: 15px;
+  color: #505050;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-lato), sans-serif;
+}
+
+.tickIcon {
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.tickIconGold {
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.featureImgWide {
+  flex-shrink: 0;
+  object-fit: contain;
+  max-width: 220px;
+}
+
+.featureTextGold {
+  color: #c8860a;
+  font-weight: 500;
+}
+
+/* ── CTA Buttons ── */
+.btnMonthly {
+  display: block;
+  text-align: center;
+  margin-top: 28px;
+  padding: 13px 20px;
+  background: #08545e;
+  color: #efdec7;
+  font-family: var(--font-cormorant), serif;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: background 0.25s ease;
+}
+
+.btnMonthly:hover {
+  background: #064a52;
+}
+
+.btnYearly {
+  display: block;
+  text-align: center;
+  margin-top: 28px;
+  padding: 13px 20px;
+  background: #c37000;
+  color: #efdec7;
+  font-family: var(--font-cormorant), serif;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: background 0.25s ease;
+}
+
+.btnYearly:hover {
+  background: #b07405;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .cardsRow {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+.featureTextMonthly {
+  color: #0f5c66;
+  font-weight: 400;
+}
+
+.featureTextYearly {
+  color: #c8860a;
+  font-weight: 400; /* Remove bold */
+}

@@ -1,0 +1,284 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchTemples } from "@/store/slices/templesSlice";
+
+interface TempleGridProps {
+  searchTerm: string;
+}
+
+export default function TempleGrid({ searchTerm }: TempleGridProps) {
+  const dispatch = useAppDispatch();
+
+  const { temples, loading, error } = useAppSelector((state) => state.temples);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const templesPerPage = 8;
+
+  const filteredTemples = temples.filter((temple) => {
+    const search = searchTerm.toLowerCase();
+
+    return (
+      temple.name?.toLowerCase().includes(search) ||
+      temple.location?.toLowerCase().includes(search)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredTemples.length / templesPerPage);
+
+  const startIndex = (currentPage - 1) * templesPerPage;
+
+  const paginatedTemples = filteredTemples.slice(
+    startIndex,
+    startIndex + templesPerPage,
+  );
+
+  const getPagination = () => {
+    const pages: (number | "...")[] = [];
+
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    pages.push(1);
+
+    if (currentPage <= 4) {
+      pages.push(2, 3, 4, 5, "...", totalPages);
+    } else if (currentPage >= totalPages - 3) {
+      pages.push(
+        "...",
+        totalPages - 4,
+        totalPages - 3,
+        totalPages - 2,
+        totalPages - 1,
+        totalPages,
+      );
+    } else {
+      pages.push(
+        "...",
+        currentPage - 1,
+        currentPage,
+        currentPage + 1,
+        "...",
+        totalPages,
+      );
+    }
+
+    return pages;
+  };
+
+  const pages = getPagination();
+
+  useEffect(() => {
+    dispatch(fetchTemples());
+  }, [dispatch]);
+
+  if (loading) {
+    return (
+      <section className="flex min-h-[60vh] items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#D8C7A6] border-t-[#0F5C66]" />
+
+          <h3 className="font-cormorant mt-6 text-3xl font-semibold text-[#0F5C66]">
+            Loading Temples
+          </h3>
+
+          <p className="mt-2 text-sm text-[#6B7280]">
+            Please wait while we prepare your spiritual journey...
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return <div className="py-20 text-center">{error}</div>;
+  }
+
+  return (
+    <section className="relative w-full px-4 pt-[180px] pb-12">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <Image
+          src="/images/mandala_bg_1.png"
+          alt=""
+          width={1050}
+          height={1050}
+          className="opacity-[0.05]"
+        />
+      </div>
+      <div className="z-10 flex w-full justify-center">
+        {filteredTemples.length === 0 ? (
+          <div className="py-20 text-center">
+            <h3 className="font-cormorant text-[32px] font-semibold text-[#0D5560]">
+              No Temples Found
+            </h3>
+            <p className="mt-2 text-[#7A6A55]">
+              Try searching with a different temple name or location.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-18">
+            {paginatedTemples.map((temple) => (
+              <div
+                key={temple.id}
+                className={`relative mx-auto h-[420px] w-[260px] transition-all duration-300 hover:-translate-y-2 ${
+                  temple.is_coming_soon ? "opacity-40 grayscale-[20%]" : ""
+                }`}
+              >
+                {/* Scroll Frame */}
+                <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
+                  <div className="relative h-[420px] w-[260px]">
+                    <Image
+                      src="/images2/image 45.png"
+                      alt=""
+                      fill
+                      className="object-contain"
+                      priority
+                    />
+                  </div>
+                </div>
+
+                {/* Badge */}
+                <span
+                  className={`absolute top-[75px] left-[30px] z-50 inline-flex h-[30px] items-center rounded-full px-[20px] text-[12px] font-bold text-white shadow-sm ${
+                    temple.is_coming_soon
+                      ? "w-[95px] bg-[#D8A24A]"
+                      : "w-[52px] bg-[#15A44D]"
+                  }`}
+                >
+                  {!temple.is_coming_soon && (
+                    <span
+                      className="mr-[6px] h-[8px] w-[8px] rounded-full bg-white"
+                      style={{ marginLeft: "5px" }}
+                    />
+                  )}
+                  <span style={{ marginLeft: "5px" }}>
+                    {temple.is_coming_soon ? "COMING SOON" : "LIVE"}
+                  </span>
+                </span>
+
+                {/* Temple Image */}
+                <div className="absolute top-[40px] left-1/2 h-[180px] w-[200px] -translate-x-1/2">
+                  <div className="relative h-full w-full">
+                    <div className="absolute top-[-25px] left-1/2 h-[280px] w-[280px] -translate-x-1/2">
+                      <div
+                        className="absolute top-[58px] left-1/2 z-10 h-[165px] w-[155px] -translate-x-1/2 overflow-hidden rounded-t-[80px]"
+                        style={{
+                          clipPath:
+                            "polygon(50% 0%, 85% 18%, 100% 42%, 100% 100%, 0% 100%, 0% 42%, 15% 18%)",
+                        }}
+                      >
+                        <Image
+                          src={temple.image_url || ""}
+                          alt={temple.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+
+                      <Image
+                        src="/images2/temple-arch-frame.png"
+                        alt=""
+                        fill
+                        className="pointer-events-none absolute inset-0 z-20 object-contain"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Name */}
+                <h3 className="font-cormorant absolute top-[255px] left-1/2 w-[90%] -translate-x-1/2 text-center text-[16px] font-semibold text-[#0D5560]">
+                  {temple.name}
+                </h3>
+
+                {/* Location */}
+                <div className="absolute top-[285px] left-1/2 flex -translate-x-1/2 items-center gap-1">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#c8860a"
+                    strokeWidth="2.5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
+                    />
+                  </svg>
+
+                  <span className="font-cormorant block max-w-[140px] truncate text-[12px] text-[#7A6A55]">
+                    {temple.location}
+                  </span>
+                </div>
+
+                {/* Button */}
+                {temple.is_coming_soon ? (
+                  <button
+                    disabled
+                    className="font-cormorant absolute top-[315px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 cursor-not-allowed items-center justify-center rounded-full border border-[#D7B36A] bg-gray-400 text-[18px] font-semibold text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)]"
+                  >
+                    <span className="absolute -left-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
+                    <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3]" />
+                    Coming Soon
+                    <span className="absolute -right-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
+                  </button>
+                ) : (
+                  <Link
+                    href={`/temples/${temple.name
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")
+                      .replace(/[^\w-]/g, "")}`}
+                    className="font-cormorant absolute top-[315px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 items-center justify-center rounded-full border border-[#D7B36A] bg-[#2B8182] text-[18px] font-semibold !text-[#EFDEC7]"
+                  >
+                    <span className="absolute -left-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
+                    <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3] text-[#EFDEC7]" />
+                    Visit Temple
+                    <span className="absolute -right-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div
+        className="mt- flex justify-center"
+        style={{ marginTop: "50px", marginBottom: "50px" }}
+      >
+        {pages.map((page, index) =>
+          page === "..." ? (
+            <span
+              key={`dots-${index}`}
+              className="flex h-[32px] w-[32px] items-center justify-center text-[#0D6B73]"
+            >
+              ...
+            </span>
+          ) : (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`flex h-[32px] w-[32px] items-center justify-center rounded-[4px] border text-[18px] font-medium ${
+                currentPage === page
+                  ? "border-[#0D6B73] bg-[#0D6B73] text-white"
+                  : "border-[#C88A1A] bg-transparent text-[#0D6B73]"
+              }`}
+            >
+              {page}
+            </button>
+          ),
+        )}
+      </div>
+    </section>
+  );
+}
