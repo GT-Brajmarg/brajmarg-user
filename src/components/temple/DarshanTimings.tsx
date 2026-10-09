@@ -181,36 +181,23 @@ export default function DarshanTimings() {
   //   })),
   // );
   return (
-    <section className="relative -translate-y-6 overflow-hidden rounded-[30px] border-[2px] border-[#C37000] bg-transparent shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
+    <section className="relative w-full overflow-hidden rounded-[24px] border-[2px] border-[#C37000] bg-transparent shadow-[0_20px_50px_rgba(126,83,26,0.18),0_6px_14px_rgba(126,83,26,0.1)]">
       <div className="hidden lg:block">
-        <div
-          className="absolute inset-0 opacity-[0.05]"
-          // style={{
-          //   backgroundImage:
-          //     "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
-          //   backgroundSize: "22px 22px",
-          // }}
-        />
-
-        <div className="relative">
-          {/* Header */}
-          <div
-            className="grid grid-cols-[220px_1fr_220px] items-start px-4 pt-3"
-            style={{ marginLeft: "20px", marginTop: "30px" }}
-          >
-            {/* Date */}
+        <div className="relative p-6">
+          {/* Header Bar */}
+          <div className="grid grid-cols-[220px_1fr_220px] items-center">
+            {/* Date Selector */}
             <div>
-              <div className="relative w-[240px]">
+              <div className="relative w-[210px]">
                 <CalendarDays
-                  size={18}
-                  className="pointer-events-none absolute top-1/2 left-4 z-10 -translate-y-1/2 text-[#0F5C66]"
+                  size={17}
+                  className="pointer-events-none absolute top-1/2 left-3.5 z-10 -translate-y-1/2 text-[#0F5C66]"
                 />
 
                 <select
                   value={selectedDay}
                   onChange={(e) => setSelectedDay(e.target.value)}
-                  className="font-cormorant h-[45px] w-full cursor-pointer appearance-none rounded-[12px] border border-[#C37000] bg-[#EFDEC7]/40 py-0 pr-10 pl-[52px] text-[18px] font-bold text-[#0F5C66] shadow-sm transition outline-none focus:border-[#C9821E] focus:ring-2 focus:ring-[#F3D7A7]"
-                  style={{ paddingLeft: "50px" }}
+                  className="font-cormorant h-[42px] w-full cursor-pointer appearance-none rounded-[12px] border border-[#C37000] bg-[#EFDEC7]/40 pr-9 pl-10 text-[16px] font-bold text-[#0F5C66] shadow-sm transition outline-none focus:border-[#C9821E] focus:ring-2 focus:ring-[#F3D7A7]"
                 >
                   {weekDates.map((day) => (
                     <option key={day.value} value={day.value}>
@@ -220,143 +207,130 @@ export default function DarshanTimings() {
                 </select>
 
                 <ChevronDown
-                  size={18}
-                  className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-[#0F5C66]"
+                  size={17}
+                  className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-[#0F5C66]"
                 />
               </div>
             </div>
 
             {/* Title */}
             <div className="flex items-center justify-center gap-3">
-              <Image src="/images/lotus.png" alt="" width={42} height={42} />
+              <Image src="/images/lotus.png" alt="" width={38} height={38} />
 
-              <h2 className="font-cormorant text-[30px] font-semibold text-[#0B6670]">
+              <h2 className="font-cormorant text-[30px] font-bold text-[#0B6670]">
                 Darshan Timings
               </h2>
 
-              <Image src="/images/lotus.png" alt="" width={42} height={42} />
+              <Image src="/images/lotus.png" alt="" width={38} height={38} />
             </div>
 
-            {/* Next Darshan */}
+            {/* Placeholder for symmetry */}
+            <div />
           </div>
 
-          {/* Timings Row */}
-          <div className="mt-6 grid grid-cols-[1fr_240px] items-stretch px-8 pb-8">
-            <div className="mt-4 flex items-center px-2">
+          {/* Timings Row + Next Darshan */}
+          <div className="mt-6 grid grid-cols-[1fr_230px] items-center gap-4">
+            {/* Timings List */}
+            <div className="flex items-center divide-x divide-[#C37000]/50 py-2">
               {selectedDayTimings.map((timing) => {
                 const isActive = currentDarshan?.id === timing.id;
 
                 return (
                   <div
                     key={timing.id}
-                    className={`flex flex-1 items-center justify-center ${
-                      !isActive
-                        ? "border-r border-[#C37000]/60 last:border-r-0"
-                        : "border-r border-[#C37000]/60 last:border-r-0"
-                    }`}
+                    className="flex flex-1 items-center justify-center px-1"
                   >
-                    <div className="flex h-[50px] w-full items-center justify-center border-r border-[#C37000]/60 last:border-r-0">
-                      {isActive ? (
-                        <div className="relative flex h-[72px] w-[78px] flex-col items-center justify-center rounded-[12px] border border-[#C37000] bg-[#EFDEC7]/20">
-                          <p className="font-cormorant text-center text-[13px] leading-[1.1] text-[#C37000]">
-                            {timing.label}
-                          </p>
+                    {isActive ? (
+                      <div className="relative flex h-[78px] w-full max-w-[95px] flex-col items-center justify-center rounded-[12px] border border-[#C37000] bg-[#EFDEC7]/30 py-1 shadow-sm">
+                        <p className="font-cormorant text-center text-[13px] leading-tight font-semibold text-[#C37000] line-clamp-2 px-1">
+                          {timing.label}
+                        </p>
 
-                          <p className="mt-1 text-[14px] font-semibold text-[#C37000]">
-                            {timing.opening_time}
-                          </p>
+                        <p className="mt-0.5 text-[14px] font-bold text-[#C37000]">
+                          {timing.opening_time}
+                        </p>
 
-                          <div className="absolute -bottom-[9px] rounded-full bg-[#D18400] px-2 py-[1px] text-[8px] font-semibold text-white">
-                            <span
-                              style={{ marginLeft: "5px", marginRight: "5px" }}
-                            >
-                              ONGOING
-                            </span>
-                          </div>
+                        <div className="absolute -bottom-[9px] rounded-full bg-[#D18400] px-2.5 py-[1px] text-[8px] font-bold tracking-wider text-white shadow-xs">
+                          ONGOING
                         </div>
-                      ) : (
-                        <div className="text-center">
-                          <p className="font-cormorant mx-auto max-w-[90px] text-center text-[14px] leading-[1.1] break-words text-[#4D433B]">
-                            {timing.label}
-                          </p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center text-center px-1">
+                        <p className="font-cormorant text-center text-[13px] leading-tight font-medium text-[#4D433B] line-clamp-2 min-h-[32px] flex items-center justify-center">
+                          {timing.label}
+                        </p>
 
-                          <p className="mt-1 text-[15px] font-semibold text-[#4D433B]">
-                            {timing.opening_time}
-                          </p>
-                        </div>
-                      )}
-                    </div>
+                        <p className="mt-1 text-[14px] font-bold text-[#4D433B]">
+                          {timing.opening_time}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 );
               })}
             </div>
 
-            <div
-              className="pl-4"
-              style={{ marginRight: "20px", marginBottom: "30px" }}
-            >
-              <div className="h-full rounded-[18px] border border-[#C37000] bg-[#EFDEC7]/40 px-4 py-3">
-                <p className="font-cormorant text-center text-[16px] text-[#C37000]">
+            {/* Next Darshan Card */}
+            <div className="h-full">
+              <div className="flex h-full flex-col justify-between rounded-[18px] border border-[#C37000] bg-[#EFDEC7]/40 p-3.5 shadow-xs text-center">
+                <p className="font-cormorant text-[14px] font-semibold text-[#C37000]">
                   Next Darshan
                 </p>
 
-                <h3
-                  className="font-cormorant text-center text-[20px] leading-[1.05] font-bold text-[#3D352F]"
-                  style={{ marginTop: "10px" }}
-                >
+                <h3 className="font-cormorant mt-1 text-[19px] leading-tight font-bold text-[#3D352F] line-clamp-1">
                   {allDarshansCompleted
                     ? "All Darshans Completed"
                     : nextDarshan?.label || "No Upcoming Darshan"}
                 </h3>
 
-                <p className="font-cormorant mt-1 text-center text-[12px] text-[#3D352F]">
+                <p className="font-cormorant mt-0.5 text-[11px] text-[#6E675F]">
                   {allDarshansCompleted
                     ? "Today's Schedule Finished"
                     : "Starts In"}
                 </p>
 
                 {!allDarshansCompleted && (
-                  <div className="mt-1 flex items-center justify-center gap-1">
+                  <div className="my-1.5 flex items-center justify-center gap-1.5">
                     <div className="text-center">
-                      <div className="text-[18px] font-bold text-[#C37000]">
+                      <div className="text-[17px] font-bold text-[#C37000] leading-none">
                         {String(hours).padStart(2, "0")}
                       </div>
-                      <div className="text-[8px] text-[#3D352F]">HRS</div>
+                      <div className="text-[8px] font-medium text-[#6E675F] mt-0.5">HRS</div>
                     </div>
 
-                    <span className="text-[18px] font-bold text-[#C37000]">
+                    <span className="text-[16px] font-bold text-[#C37000] leading-none -mt-2">
                       :
                     </span>
 
                     <div className="text-center">
-                      <div className="text-[18px] font-bold text-[#C37000]">
+                      <div className="text-[17px] font-bold text-[#C37000] leading-none">
                         {String(minutes).padStart(2, "0")}
                       </div>
-                      <div className="text-[8px] text-[#3D352F]">MINS</div>
+                      <div className="text-[8px] font-medium text-[#6E675F] mt-0.5">MINS</div>
                     </div>
 
-                    <span className="text-[18px] font-bold text-[#C37000]">
+                    <span className="text-[16px] font-bold text-[#C37000] leading-none -mt-2">
                       :
                     </span>
 
                     <div className="text-center">
-                      <div className="text-[18px] font-bold text-[#C37000]">
+                      <div className="text-[17px] font-bold text-[#C37000] leading-none">
                         {String(seconds).padStart(2, "0")}
                       </div>
-                      <div className="text-[8px] text-[#3D352F]">SECS</div>
+                      <div className="text-[8px] font-medium text-[#6E675F] mt-0.5">SECS</div>
                     </div>
                   </div>
                 )}
 
-                <div className="font-cormorant mt-1 flex items-center justify-center gap-1 border-t border-[#C37000]/60 text-[14px] text-[#3D352F]">
+                <div className="mt-1 flex items-center justify-center gap-1 border-t border-[#C37000]/40 pt-1.5 text-[11px] text-[#6E675F]">
                   <Image
-                    src="/images/calendar-icon.svg" // replace with your image
-                    alt="Clock"
-                    width={10}
-                    height={10}
-                    className="h-[10px] w-[10px] shrink-0 object-contain"
+                    src="/images/calendar-icon.svg"
+                    alt="Calendar"
+                    width={11}
+                    height={11}
+                    className="h-3 w-3 shrink-0 object-contain opacity-70"
                   />
-                  <span className="text-[12px] font-medium text-[#6E675F]">
+                  <span className="font-medium truncate">
                     {allDarshansCompleted && isToday
                       ? "Today's schedule finished"
                       : `${isToday ? "Today" : selectedDayName} • ${

@@ -127,9 +127,9 @@ export default function ServicesSection() {
             <div
               key={service.id}
               className={styles.card}
-              // style={{
-              //   backgroundImage: 'url("/images3/Rectangle%2046.png")',
-              // }}
+            // style={{
+            //   backgroundImage: 'url("/images3/Rectangle%2046.png")',
+            // }}
             >
               <div className={styles.cardContent}>
                 {/* Icon wrapper */}

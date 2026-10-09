@@ -54,14 +54,6 @@ export default function TemplePage() {
 
       {/* Mobile */}
       <section className="relative h-[300px] overflow-hidden bg-[#F7F0E5] md:hidden">
-        <Image
-          src="/images/hero-temples.png"
-          alt=""
-          width={1920}
-          height={600}
-          priority
-          className="absolute bottom-[-20px] left-0 w-full"
-        />
 
         <div className="absolute inset-x-0 top-12 z-10 flex flex-col items-center px-4">
           <h1

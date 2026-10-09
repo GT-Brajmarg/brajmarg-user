@@ -66,7 +66,7 @@ export default function HeroSection() {
           className="flex flex-col items-center xl:hidden"
         >
           {/* Hero Heading & CTAs */}
-          <div className="w-full max-w-[480px] text-center">
+          <div className="w-full max-w-[480px] text-center -mt-6">
             <h1
               style={{ fontFamily: "var(--font-cormorant), serif" }}
               className="text-[34px] sm:text-[46px] leading-[1.12] font-bold text-[#2E241D]"
@@ -108,6 +108,7 @@ export default function HeroSection() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  gap: "8px",
                   borderRadius: "10px",
                   fontSize: "17px",
                   fontWeight: 600,
@@ -115,7 +116,23 @@ export default function HeroSection() {
                   whiteSpace: "nowrap",
                 }}
               >
-                Browse Shop →
+                <span>Browse Shop</span>
+                <svg
+                  width="20"
+                  height="14"
+                  viewBox="0 0 20 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ flexShrink: 0 }}
+                >
+                  <path
+                    d="M1 7H19M13 1L19 7L13 13"
+                    stroke="#EFDEC7"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </Link>
               <Link
                 href="/yatra"
@@ -448,7 +465,7 @@ export default function HeroSection() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: "6px",
+                  gap: "8px",
                   fontSize: "15px",
                   fontWeight: 600,
                   textDecoration: "none",
@@ -456,8 +473,23 @@ export default function HeroSection() {
                   fontFamily: "var(--font-cormorant), serif",
                 }}
               >
-                View All Darshan Timings
-                <span>→</span>
+                <span>View All Darshan Timings</span>
+                <svg
+                  width="20"
+                  height="14"
+                  viewBox="0 0 20 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ flexShrink: 0 }}
+                >
+                  <path
+                    d="M1 7H19M13 1L19 7L13 13"
+                    stroke="#EFDEC7"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </Link>
             </div>
           </div>
@@ -466,7 +498,7 @@ export default function HeroSection() {
           <div
             data-testid="left-content"
             // className="absolute top-[80px] left-1/2 z-20 flex w-[90%] max-w-[470px] -translate-x-1/2 flex-col gap-7 md:top-[90px] md:w-[470px] xl:top-[100px] xl:left-[130px] xl:w-[470px] xl:translate-x-0"
-            className="w-[535px] "
+            className="w-[535px] -mt-20 "
           >
             <h1 className="font-cormorant text-center text-[36px] leading-[0.98] font-bold text-[#2E241D] md:text-[46px] xl:text-left xl:text-[56px] xl:leading-[1.20]">
               Stay Connected to
@@ -490,10 +522,25 @@ export default function HeroSection() {
               <Link
                 href="/shop"
                 style={{ color: "#EFDEC7" }}
-                className="font-cormorant flex h-12 w-[150px] items-center justify-center gap-2 rounded-[10px] bg-[#0B7285] text-[20px]"
+                className="font-cormorant flex h-12 w-[165px] items-center justify-center gap-[10px] rounded-[10px] bg-[#0B7285] text-[20px]"
               >
-                Browse Shop
-                <span className="text-sm">→</span>
+                <span>Browse Shop</span>
+                <svg
+                  width="20"
+                  height="14"
+                  viewBox="0 0 20 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="flex-shrink-0"
+                >
+                  <path
+                    d="M1 7H19M13 1L19 7L13 13"
+                    stroke="#EFDEC7"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </Link>
 
               <Link
@@ -511,7 +558,7 @@ export default function HeroSection() {
           <div
             data-testid="darshan-card"
             // className="absolute relative top-[500px] left-1/2 h-[522px] w-[95%] max-w-[491px] -translate-x-1/2 rounded-[24px] bg-[#EFDEC7] md:top-[560px] md:w-[491px] xl:top-[72px] xl:left-[calc(100%-571px)] xl:translate-x-0"
-            className="relative h-[502px] w-[491px] rounded-[24px] bg-[#EFDEC7] top-15"
+            className="relative h-[502px] w-[491px] rounded-[24px] bg-[#EFDEC7] top-2"
           >
             {/* Header */}
             <h3 className="absolute top-[18px] left-[24px] text-[16px] font-bold text-[#C77700] uppercase">
@@ -646,8 +693,23 @@ export default function HeroSection() {
               className="font-cormorant absolute bottom-[8px] left-1/2 flex h-[35px] w-[250px] -translate-x-1/2 items-center justify-center gap-2 rounded-[10px] bg-[#0B7285] text-[15px] font-semibold text-[#F8F2E8]"
               style={{ color: "#EFDEC7" }}
             >
-              View All Darshan Timings
-              <span>→</span>
+              <span>View All Darshan Timings</span>
+              <svg
+                width="20"
+                height="14"
+                viewBox="0 0 20 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="flex-shrink-0"
+              >
+                <path
+                  d="M1 7H19M13 1L19 7L13 13"
+                  stroke="#EFDEC7"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </Link>
           </div>
         </div>

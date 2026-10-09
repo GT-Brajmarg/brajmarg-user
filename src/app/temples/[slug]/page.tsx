@@ -49,6 +49,9 @@ export default function TempleDetailsPage() {
   useEffect(() => {
     if (!slug) return;
 
+    // Always scroll to top when navigating to a temple details page
+    window.scrollTo(0, 0);
+
     let mounted = true;
 
     async function initialize() {
@@ -132,38 +135,23 @@ export default function TempleDetailsPage() {
         </div>
       </div>
 
-      <div className="relative z-10 mx-auto flex justify-center">
-        <div className="w-full max-w-[1200px]">
+      <div className="relative z-10 mx-auto flex justify-center px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-[1200px] space-y-6 sm:space-y-8 lg:space-y-10">
           <TempleHero temple={temple} loading={loading} />
 
           <DarshanTimings />
 
-          <div style={{ marginTop: isMobile ? "90px" : "30px" }}>
-            <TempleSevas templeSlug={slug} />
-          </div>
+          <TempleSevas templeSlug={slug} />
 
-          <div style={{ marginTop: isMobile ? "90px" : "40px" }}>
-            <TemplePrasad templeSlug={slug} />
-          </div>
+          <TemplePrasad templeSlug={slug} />
 
-          <div style={{ marginTop: isMobile ? "90px" : "10px" }}>
-            <TempleOfferings templeSlug={slug} />
-          </div>
+          <TempleOfferings templeSlug={slug} />
 
-          <div style={{ marginTop: isMobile ? "90px" : "30px" }}>
-            <TempleGallery />
-          </div>
+          <TempleGallery />
 
-          <div style={{ marginTop: isMobile ? "90px" : "30px" }}>
-            <TempleLocation />
-          </div>
+          <TempleLocation />
 
-          <div
-            style={{
-              marginTop: isMobile ? "90px" : "60px",
-              marginBottom: isMobile ? "90px" : "60px",
-            }}
-          >
+          <div className="pt-4 pb-12">
             <RelatedTemples currentTempleId={temple.id} />
           </div>
         </div>

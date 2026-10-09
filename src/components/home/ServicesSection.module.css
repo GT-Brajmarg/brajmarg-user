@@ -143,8 +143,9 @@
 .cardDesc {
   color: #ffffff;
   font-size: 14px;
-  line-height: 1.6;
-  font-family: var(--font-inter), sans-serif;
+  line-height: 1.3;
+  font-weight: 500;
+  font-family: var(--font-cormorant), sans-serif;
   margin: 0 0 18px 0;
 }
 
@@ -191,38 +192,46 @@
   .section {
     padding: 50px 0 60px;
   }
+
   .grid {
     grid-template-columns: 1fr;
     max-width: 330px;
     margin: 0 auto;
     gap: 20px;
   }
+
   .card {
     min-height: auto;
     width: 100%;
     border-radius: 18px;
   }
+
   .cardContent {
     flex: 0 0 auto;
     padding: 24px 18px 0;
   }
+
   .iconWrap {
     width: 60px;
     height: 70px;
     margin-bottom: 12px;
   }
+
   .cardTitle {
     font-size: 22px;
     margin: 0 0 10px 0;
   }
+
   .cardDesc {
     font-size: 13.5px;
     line-height: 1.55;
     margin: 0 0 16px 0;
   }
+
   .btnWrap {
     padding: 0 18px 20px;
   }
+
   .bgDecoLeft,
   .bgDecoRight {
     width: 200px;

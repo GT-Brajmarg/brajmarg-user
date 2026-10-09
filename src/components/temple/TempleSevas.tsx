@@ -32,161 +32,91 @@ export default function TempleSevas({ templeSlug }: TempleSevasProps) {
       Math.min(prev + 1, Math.max(sevas.length - visibleCount, 0)),
     );
   };
-  return (
-    <section className="relative z-20 -translate-y-4 overflow-hidden rounded-[22px] border-[2px] border-[#C37000] bg-transparent p-4 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
-      {/* Background Pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.05]"
-        // style={{
-        //   backgroundImage:
-        //     "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
-        //   backgroundSize: "22px 22px",
-        // }}
-      />
 
+  return (
+    <section className="relative w-full overflow-hidden rounded-[24px] border-[2px] border-[#C37000] bg-transparent p-5 sm:p-6 shadow-[0_20px_50px_rgba(126,83,26,0.18),0_6px_14px_rgba(126,83,26,0.1)]">
       <div className="relative">
         {/* Header */}
-        <div className="my-4 flex flex-col items-center justify-center text-center md:flex-row md:gap-3">
-          <div
-            className="flex items-center justify-center gap-2"
-            style={{ marginBottom: "20px", marginTop: "20px" }}
-          >
-            <Image src="/images/lotus.png" alt="" width={40} height={40} />
+        <div className="my-3 flex items-center justify-center gap-3 text-center">
+          <Image src="/images/lotus.png" alt="" width={38} height={38} />
 
-            <h2 className="font-cormorant text-[24px] leading-tight font-semibold text-[#0B6670] md:text-[28px]">
-              Seva at <br className="md:hidden" />
-              ShreenathJi Temple
-            </h2>
+          <h2 className="font-cormorant text-[28px] font-bold text-[#0B6670]">
+            Seva at ShreenathJi Temple
+          </h2>
 
-            <Image src="/images/lotus.png" alt="" width={30} height={30} />
-          </div>
+          <Image src="/images/lotus.png" alt="" width={38} height={38} />
         </div>
 
-        {/* Cards */}
-        <div
-          className="relative"
-          style={{
-            marginBottom: "20px",
-            marginLeft: "20px",
-            marginRight: "20px",
-          }}
-        >
-          <div
-
-          // className="scrollbar-hide flex gap-5 overflow-x-auto scroll-smooth pb-2"
-          // style={{ marginLeft: "-20px" }}
-          >
-            <div
-              className="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-1 pb-2 md:gap-5"
-              style={{
-                marginLeft: window.innerWidth >= 768 ? "40px" : "0px",
-                marginRight: window.innerWidth >= 768 ? "40px" : "0px",
-              }}
-            >
-              {visibleSevas.map((seva) => (
-                <div
-                  key={seva.id}
-                  className="group relative w-[calc(100%-24px)] min-w-[calc(100%-24px)] snap-start overflow-hidden rounded-[18px] border border-[#C37000] bg-transparent shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300 md:w-auto md:max-w-[200px] md:min-w-0"
-                >
-                  {/* Decorative Pattern */}
-                  <div
-                    className="absolute right-0 bottom-0 left-0 h-[45px] opacity-[0.08]"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(circle, #D89A3D 1px, transparent 1px)",
-                      backgroundSize: "12px 12px",
-                    }}
+        {/* Cards Carousel Container */}
+        <div className="relative mt-5 px-1 sm:px-2">
+          <div className="scrollbar-hide flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 pr-12">
+            {visibleSevas.map((seva) => (
+              <div
+                key={seva.id}
+                className="group relative w-[275px] min-w-[275px] flex-shrink-0 snap-start overflow-hidden rounded-[16px] border border-[#C37000] bg-transparent p-2.5 shadow-[0_2px_10px_rgba(0,0,0,0.05)] transition-all duration-300 hover:shadow-md"
+              >
+                {/* Image */}
+                <div className="relative h-[135px] w-full overflow-hidden rounded-[12px]">
+                  <Image
+                    src={seva.image_url || "/images2/default.png"}
+                    alt={seva.name}
+                    fill
+                    unoptimized
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-
-                  {/* Image */}
-                  <div className="relative h-[105px] overflow-hidden">
-                    <Image
-                      src={seva.image_url || "/images2/default.png"}
-                      alt={seva.name}
-                      fill
-                      unoptimized
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-
-                    {/* Seva Icon */}
-                    {/* <div className="absolute top-2 left-2 flex h-7 w-7 items-center justify-center rounded-full bg-white shadow-md">
-                    🪔
-                  </div> */}
-                  </div>
-
-                  {/* Content */}
-                  <div className="relative z-10 p-2.5">
-                    <div className="flex h-[80px] flex-col justify-between">
-                      <div
-                        className="flex items-start justify-between gap-2"
-                        style={{ marginTop: "15px" }}
-                      >
-                        <h3
-                          className="min-h-[28px] flex-1 text-[14px] leading-[1.2] font-medium text-[#24535D]"
-                          style={{ marginLeft: "5px" }}
-                        >
-                          {seva.name}
-                        </h3>
-                        <div className="border-l border-[#C37000]/60">
-                          <span
-                            className="shrink-0 text-[15px] font-bold text-[#D18400]"
-                            style={{ marginLeft: "10px", marginRight: "5px" }}
-                          >
-                            ₹{seva.price}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* <div className="flex items-center gap-1 text-[10px] text-[#6A6259]">
-                      <Clock3 size={10} />
-                      <span>{seva.time}</span>
-                    </div> */}
-                    </div>
-
-                    {seva.allow_direct_payment ? (
-                      <Link
-                        href={`/temples/${templeSlug}/sevas/${seva.id}`}
-                        className="font-cormorant mt-3 flex h-[34px] w-[120px] items-center justify-center rounded-[8px] bg-[#0B6670] text-[17px] font-medium !text-[#EFDEC7] hover:bg-[#09545b] hover:!text-[#EFDEC7] md:mx-auto md:mt-2 md:h-[28px] md:w-[120px] md:text-[15px]"
-                        style={{
-                          marginLeft:
-                            window.innerWidth < 768 ? "100px" : "40px",
-                          marginBottom: "10px",
-                        }}
-                      >
-                        Book Seva
-                      </Link>
-                    ) : (
-                      <button
-                        disabled
-                        className="font-cormorant mt-2 h-[28px] w-[120px] rounded-[8px] bg-gray-300 text-[15px] font-medium text-[#EFDEC7]"
-                        style={{ marginLeft: "40px", marginBottom: "10px" }}
-                      >
-                        Unavailable
-                      </button>
-                    )}
-                  </div>
                 </div>
-              ))}
-            </div>
+
+                {/* Content */}
+                <div className="flex flex-col pt-3 pb-1 px-1">
+                  {/* Name & Price */}
+                  <div className="flex items-center justify-between gap-2 border-b border-[#C37000]/30 pb-2">
+                    <h3 className="font-cormorant flex-1 text-[17px] font-bold text-[#24535D] line-clamp-1">
+                      {seva.name}
+                    </h3>
+                    <div className="border-l border-[#C37000]/40 pl-2.5">
+                      <span className="shrink-0 text-[17px] font-bold text-[#D18400]">
+                        ₹{seva.price}
+                      </span>
+                    </div>
+                  </div>
+
+
+                  {/* Button */}
+                  {seva.allow_direct_payment ? (
+                    <Link
+                      href={`/temples/${templeSlug}/sevas/${seva.id}`}
+                      className="font-cormorant mt-3 flex h-[34px] w-full items-center justify-center rounded-[8px] bg-[#0B6670] text-[16px] font-semibold text-[#EFDEC7] transition-all hover:bg-[#084F57]"
+                    >
+                      Book Seva
+                    </Link>
+                  ) : (
+                    <button
+                      disabled
+                      className="font-cormorant mt-3 flex h-[34px] w-full cursor-not-allowed items-center justify-center rounded-[8px] bg-gray-300 text-[15px] font-medium text-gray-500"
+                    >
+                      Unavailable
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
 
-          {/* Navigation Button */}
+          {/* Navigation Prev Button */}
           {currentIndex > 0 && (
             <button
               onClick={handlePrev}
-              className="absolute top-1/2 left-[-12px] z-20 flex hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105 md:flex"
-              style={{ marginLeft: "6px" }}
+              className="absolute top-1/2 left-2 z-30 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-md transition hover:scale-105"
             >
               <ChevronLeft size={18} className="text-[#0F5C66]" />
             </button>
           )}
 
-          {/* Right Arrow */}
+          {/* Navigation Next Button */}
           {currentIndex < sevas.length - visibleCount && (
             <button
               onClick={handleNext}
-              className="absolute top-1/2 right-[-12px] z-20 flex hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition hover:scale-105 md:flex"
-              style={{ marginRight: "6px" }}
+              className="absolute top-1/2 right-[-10px] z-30 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-md transition hover:scale-105"
             >
               <ChevronRight size={18} className="text-[#0F5C66]" />
             </button>

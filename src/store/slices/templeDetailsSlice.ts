@@ -19,8 +19,8 @@ export const getTempleDetails = createAsyncThunk(
       const state = getState() as RootState;
       const { currentSlug, loading, temple } = state.templeDetails;
 
-      // Do not call the API again for the currently cached temple.
-      if (loading || (currentSlug === slug && temple)) {
+      // Only skip the API call if this exact slug is already loaded and not loading.
+      if (!loading && currentSlug === slug && temple) {
         return false;
       }
 
