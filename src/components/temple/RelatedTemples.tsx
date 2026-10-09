@@ -93,7 +93,7 @@ export default function RelatedTemples({
       </div>
       <div className="lg:hidden">
         <div ref={scrollRef} className="flex flex-col items-center gap-2">
-          <div>
+          <div className="grid grid-cols-2 justify-items-center gap-2 sm:grid-cols-2">
             {relatedTemples.map((temple) => (
               <div
                 key={temple.id}

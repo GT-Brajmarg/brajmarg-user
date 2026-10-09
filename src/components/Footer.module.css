@@ -403,6 +403,7 @@
   .trustGrid {
     grid-template-columns: repeat(3, 1fr);
     row-gap: 24px;
+    justify-items: center;
   }
 
   .skylineWrap {
@@ -446,8 +447,95 @@
 @media (max-width: 600px) {
   .trustGrid {
     grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
   }
   .linksGrid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Tablet portrait fix (768px – 900px) ── */
+@media (min-width: 768px) and (max-width: 900px) {
+  .trustInner {
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 32px 28px;
+    gap: 32px;
+  }
+
+  .trustLeft {
+    flex: 1 1 auto;
+    max-width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+
+  .trustBody {
+    max-width: 480px;
+    text-align: center;
+  }
+
+  .vDivider {
+    display: none;
+  }
+
+  .trustRight {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .trustGrid {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 24px;
+    justify-items: center;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .bottomInner {
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 32px;
+    gap: 28px;
+    text-align: center;
+  }
+
+  .brandCol {
+    flex: 1 1 auto;
+    max-width: 100%;
+    align-items: center;
+  }
+
+  .logoRow {
+    justify-content: center;
+  }
+
+  .taglineWrap {
+    display: flex;
+    justify-content: center;
+  }
+
+  .footerVDivider {
+    display: none;
+  }
+
+  .linksCol {
+    width: 100%;
+    align-items: center;
+  }
+
+  .linksGrid {
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    justify-items: center;
+  }
+
+  .socialCol {
+    width: 100%;
+    align-items: center;
+  }
+
+  .socialIcons {
+    justify-content: center;
   }
 }

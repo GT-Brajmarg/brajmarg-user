@@ -23,7 +23,7 @@ export default function TemplesSection() {
   // console.log("Loading:", loading);
   // console.log("Error:", error);
   return (
-    <section className="relative mt-16 overflow-hidden bg-[#F8F2E8] pt-8 pb-20 md:mt-32 md:pt-12 md:pb-32">
+    <section className="relative overflow-hidden bg-[#F8F2E8] pt-8 pb-20 md:pt-12 md:pb-32">
       {/* lite-lotus-bg full section background */}
       <div className="pointer-events-none absolute top-[-60px] inset-0 z-0 overflow-hidden">
         <Image
@@ -37,9 +37,9 @@ export default function TemplesSection() {
       </div>
       <div className="relative z-10">
         {/* Background Mandala */}
-        <div className="relative z-20 min-h-[120px] pb-[80px] md:min-h-[150px] md:pb-[60px]">
+        <div className={`${styles.sectionHeading} relative z-20`}>
           {/* Centered Title */}
-          <div className="flex translate-y-4 flex-col items-center px-4 text-center md:translate-y-10">
+          <div className={`${styles.headingContent} flex flex-col items-center px-4 text-center`}>
             <div className="flex items-center gap-2">
               <Image src="/images/lotus.png" alt="" width={54} height={36} />
 
@@ -56,26 +56,42 @@ export default function TemplesSection() {
           </div>
 
           {/* Independent Button */}
-          {/* Desktop Button */}
-          <div className="absolute top-1/2 right-[80px] hidden -translate-y-1/2 md:block">
+          {/* Desktop & Tablet Button */}
+          <div className={styles.viewAll}>
             <Link
               href="/temples"
-              className="flex h-[47px] w-[212px] items-center justify-center rounded-[14px] border-2 border-[#0C6D72]"
+              className="flex h-[47px] w-[212px] items-center justify-center gap-2 rounded-[14px] border-2 border-[#0C6D72]"
             >
-              <span className="font-cormorant text-[#0F5C66] font-medium">
-                View All Temples →
+              <span className="font-cormorant text-[#0F5C66] font-medium text-[16px]">
+                View All Temples
               </span>
+              <svg
+                width="20"
+                height="14"
+                viewBox="0 0 20 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="flex-shrink-0"
+              >
+                <path
+                  d="M1 7H19M13 1L19 7L13 13"
+                  stroke="#0F5C66"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </Link>
           </div>
         </div>
 
         {/* ── Temple Cards Grid ── */}
-        <div className="hidden md:flex md:justify-center">
-          <div className="grid grid-cols-4 gap-x-18 gap-y-0">
+        <div className={styles.cardsViewport}>
+          <div className={styles.cardsGrid}>
             {temples.map((temple) => (
               <div
                 key={temple.id}
-                className={`relative mx-auto -mb-4 h-[420px] w-[260px] transition-all duration-300 hover:-translate-y-2 ${temple.is_coming_soon ? "opacity-40 grayscale-[20%]" : ""
+                className={`relative mx-auto -mb-4 h-[420px] w-[260px] transition-all duration-300 hover:-translate-y-2 ${temple.is_coming_soon ? "opacity-65 grayscale-[20%]" : ""
                   }`}
                 // className="relative mx-auto h-[420px] w-[290px]"
                 // style={{
@@ -99,26 +115,17 @@ export default function TemplesSection() {
 
                 {/* ── Card Inner Content ── */}
                 <div className="relative z-10 h-full w-full overflow-visible">
-                  {/* Image Area with Arch mask */}
                   {/* Badge */}
-                  <span
-                    className={`absolute top-[75px] z-50 inline-flex h-[30px] items-center rounded-full px-[25px] text-[12px] font-bold text-white shadow-sm ${temple.is_coming_soon
-                      ? "w-[95px] bg-[#D8A24A]"
-                      : "w-[50px] bg-[#15A44D]"
-                      }`}
-                    style={{ marginLeft: "30px" }}
-                  >
-                    {!temple.is_coming_soon && (
-                      <span
-                        className="mr-[6px] h-[8px] w-[8px] rounded-full bg-white"
-                        style={{ marginLeft: "5px" }}
-                      />
-                    )}
-
-                    <span style={{ marginLeft: "5px" }}>
-                      {temple.is_coming_soon ? "COMING SOON" : "LIVE"}
+                  {temple.is_coming_soon ? (
+                    <span className="absolute top-[68px] left-[188px] z-30 inline-flex -translate-x-1/2 items-center justify-center rounded-full bg-[#D8A24A] px-3 py-[3px] text-[10px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
+                      COMING SOON
                     </span>
-                  </span>
+                  ) : (
+                    <span className="absolute top-[69px] left-[35px] z-30 inline-flex items-center gap-1.5 rounded-full bg-[#15A44D] px-2.5 py-[3px] text-[11px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
+                      <span className="h-[7px] w-[7px] flex-shrink-0 rounded-full bg-white" />
+                      <span>LIVE</span>
+                    </span>
+                  )}
 
                   <div
                     className="s absolute left-1/2 h-[180px] w-[200px] -translate-x-1/2"
@@ -240,7 +247,7 @@ export default function TemplesSection() {
             {temples.slice(0, 4).map((temple) => (
               <div
                 key={temple.id}
-                className={`relative h-[360px] w-[220px] ${temple.is_coming_soon ? "opacity-50" : ""
+                className={`relative h-[360px] w-[220px] ${temple.is_coming_soon ? "opacity-65" : ""
                   }`}
               >
                 {/* Scroll Frame */}
@@ -367,10 +374,26 @@ export default function TemplesSection() {
           <div className="mt-8 flex justify-center">
             <Link
               href="/temples"
-              className="font-cormorant flex h-[42px] w-[180px] items-center justify-center rounded-[12px] border-2 border-[#0C6D72] text-[16px] font-semibold text-[#0C6D72]"
+              className="font-cormorant flex h-[42px] w-[180px] items-center justify-center gap-2 rounded-[12px] border-2 border-[#0C6D72] text-[16px] font-semibold text-[#0C6D72]"
               style={{ marginBottom: "40px", marginTop: "20px" }}
             >
-              View All Temples →
+              <span>View All Temples</span>
+              <svg
+                width="20"
+                height="14"
+                viewBox="0 0 20 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="flex-shrink-0"
+              >
+                <path
+                  d="M1 7H19M13 1L19 7L13 13"
+                  stroke="#0C6D72"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </Link>
           </div>
         </div>

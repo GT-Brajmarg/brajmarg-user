@@ -29,7 +29,7 @@ const templeInfo = {
 export default function TempleHero({ temple, loading }: TempleHeroProps) {
   if (loading) {
     return (
-      <section className="flex min-h-[60vh] items-center justify-center bg-[#F8F2E8]">
+      <section className="flex min-h-[60vh] items-center justify-center bg-transparent">
         <div className="flex flex-col items-center">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#D8C7A6] border-t-[#0F5C66]" />
 
@@ -44,27 +44,28 @@ export default function TempleHero({ temple, loading }: TempleHeroProps) {
       </section>
     );
   }
-  return (
-    <section className="relative h-[600px] overflow-visible bg-transparent pt-28">
-      <Link
-        href="/temples"
-        className="absolute top-5 left-4 z-20 inline-flex h-10 items-center gap-2 rounded-lg border border-[#C18426] bg-[#F8F2E8] px-4 lg:hidden"
-      >
-        <ArrowLeft className="h-4 w-4 text-[#1F3A44]" />
-        <span
-          className="font-cormorant text-lg text-[#1F3A44]"
-          // style={{ marginLeft: "50px", marginTop: "20px" }}
-        >
-          Back
-        </span>
-      </Link>
 
-      {/* ================= MOBILE ================= */}
-      <div className="block pt-14 lg:hidden">
-        <div className="mx-auto flex max-w-sm flex-col items-center px-6">
+  return (
+    <section className="relative w-full bg-transparent pt-6 pb-6 lg:pt-8 lg:pb-10">
+      {/* Back to Temples Button */}
+      <div className="mb-6 px-4 lg:px-0">
+        <Link
+          href="/temples"
+          className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#C18426] bg-[#F8F2E8]/80 px-4 transition-all hover:bg-[#F3E5D0] shadow-sm"
+        >
+          <ArrowLeft className="h-4 w-4 text-[#0F5C66]" />
+          <span className="font-cormorant text-lg font-medium text-[#0F5C66]">
+            Back to Temples
+          </span>
+        </Link>
+      </div>
+
+      {/* ================= MOBILE / TABLET (< lg) ================= */}
+      <div className="block lg:hidden">
+        <div className="mx-auto flex max-w-lg flex-col items-center px-4">
           {/* Temple Frame */}
-          <div className="relative h-[390px] w-[330px]">
-            <div className="absolute top-[100px] left-1/2 z-10 h-[205px] w-[210px] -translate-x-1/2 overflow-hidden rounded-t-[130px]">
+          <div className="relative h-[360px] w-[300px] sm:h-[420px] sm:w-[350px]">
+            <div className="absolute top-[90px] left-1/2 z-10 h-[190px] w-[190px] -translate-x-1/2 overflow-hidden rounded-t-[120px] sm:top-[105px] sm:h-[220px] sm:w-[225px] sm:rounded-t-[140px]">
               <Image
                 src={temple.image_url}
                 alt={temple.name}
@@ -85,228 +86,211 @@ export default function TempleHero({ temple, loading }: TempleHeroProps) {
           </div>
 
           {/* Location */}
-          <div className="mt-8 flex items-center gap-2">
+          <div className="mt-3 flex items-center gap-2">
             <MapPin className="h-4 w-4 text-[#C18426]" />
-            <span className="font-cormorant text-[18px] text-[#554B44]">
+            <span className="font-cormorant text-[18px] font-medium text-[#554B44]">
               {temple.location}
             </span>
           </div>
 
           {/* Heading */}
-          <h1 className="font-cormorant mt-3 text-center text-[36px] leading-[1.05] font-semibold text-[#0B6670]">
+          <h1 className="font-cormorant mt-2 text-center text-[36px] sm:text-[44px] leading-tight font-bold text-[#0F5C66]">
             {temple.name}
           </h1>
 
           {/* Divider */}
           <div className="my-4 flex items-center gap-3">
-            <div className="h-px w-10 bg-[#D4B06A]" />
-            <Image src="/images/lotus.png" alt="" width={28} height={28} />
-            <div className="h-px w-10 bg-[#D4B06A]" />
+            <div className="h-px w-12 bg-[#D4B06A]" />
+            <Image src="/images/lotus.png" alt="" width={30} height={30} />
+            <div className="h-px w-12 bg-[#D4B06A]" />
           </div>
 
           {/* Description */}
-          <p className="line-clamp-3 text-center text-[15px] leading-7 text-[#4F4941]">
+          <p className="line-clamp-4 text-center text-[15px] leading-relaxed text-[#3D352F]">
             {temple.description}
           </p>
+
+          {/* Stats on Mobile */}
+          <div className="mt-6 grid w-full grid-cols-3 divide-x divide-[#D8A65A]/70 border-t border-b border-[#D8A65A]/40 py-4">
+            <div className="flex flex-col items-center px-1 text-center">
+              <Image
+                src="/images/flower-icon.svg"
+                alt="Deity"
+                width={22}
+                height={22}
+                className="h-5 w-5 shrink-0 object-contain"
+              />
+              <span className="font-cormorant mt-1 text-[13px] text-[#6E675F]">
+                Deity
+              </span>
+              <span className="font-inter text-[13px] font-bold text-[#3D352F] truncate max-w-full">
+                {templeInfo.deity}
+              </span>
+            </div>
+
+            <div className="flex flex-col items-center px-1 text-center">
+              <Image
+                src="/images/calendar-icon.svg"
+                alt="Calendar"
+                width={20}
+                height={20}
+                className="h-5 w-5 shrink-0 object-contain"
+              />
+              <span className="font-cormorant mt-1 text-[13px] text-[#6E675F]">
+                Established
+              </span>
+              <span className="font-inter text-[13px] font-bold text-[#3D352F]">
+                {templeInfo.established}
+              </span>
+            </div>
+
+            <div className="flex flex-col items-center px-1 text-center">
+              <Image
+                src="/images/clock-icon.svg"
+                alt="Clock"
+                width={22}
+                height={22}
+                className="h-5 w-5 shrink-0 object-contain"
+              />
+              <span className="font-cormorant mt-1 text-[13px] text-[#6E675F]">
+                Timings
+              </span>
+              <span className="font-inter text-[12px] font-bold text-[#3D352F]">
+                {templeInfo.timings}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="hidden lg:block">
-        <Link
-          href="/temples"
-          className="absolute top-8 left-20 z-20 inline-flex h-11 items-center gap-2 rounded-lg border border-[#C18426] px-5"
-        >
-          <ArrowLeft
-            className="h-4 w-4 text-[#0F5C66]"
-            style={{ marginLeft: "8px" }}
-          />
-          <span
-            className="font-cormorant text-xl text-[#0F5C66]"
-            style={{ marginRight: "8px" }}
-          >
-            Back to Temples
-          </span>
-        </Link>
-        <div className="flex min-h-[720px] w-full justify-center px-12">
-          {/* <div className="flex w-full px-12">
-          <div className="flex w-fit">
-            <Link
-              href="/temples"
-              className="mb-14 inline-flex h-11 items-center gap-2 rounded-lg border border-[#C18426] px-5"
-            >
-              <ArrowLeft className="h-4 w-4 text-[#1F3A44]" />
-              <span className="font-cormorant text-xl text-[#1F3A44]">
-                Back to Temples
-              </span>
-            </Link>
-          </div>
-        </div> */}
-          <div className="flex w-fit items-center gap-5">
-            {/* LEFT */}
-            <div className="w-[520px] shrink-0">
-              <div className="relative h-[560px] w-[480px]">
-                {/* Temple Image */}
-                <div className="absolute top-[140px] left-1/2 z-10 h-[300px] w-[310px] -translate-x-1/2 overflow-hidden rounded-t-[180px]">
-                  <Image
-                    src={temple.image_url}
-                    alt={temple.name}
-                    fill
-                    priority
-                    unoptimized
-                    className="object-cover object-center"
-                  />
-                </div>
+      {/* ================= DESKTOP (lg+) ================= */}
+      <div className="hidden lg:block relative">
+        {/* Subtle Temple outline background watermark */}
+        <Image
+          src="/images2/temple-outline_2.png"
+          alt=""
+          width={360}
+          height={360}
+          priority
+          className="pointer-events-none absolute -top-12 -right-10 z-0 h-[360px] w-[360px] object-contain opacity-[0.14]"
+        />
 
-                {/* Frame */}
+        <div className="relative z-10 flex items-center justify-between gap-10">
+          {/* LEFT: Arch Frame */}
+          <div className="w-[460px] shrink-0">
+            <div className="relative h-[520px] w-[440px]">
+              {/* Temple Image */}
+              <div className="absolute top-[130px] left-1/2 z-10 h-[280px] w-[285px] -translate-x-1/2 overflow-hidden rounded-t-[170px]">
                 <Image
-                  src="/images2/temple-arch-frame.png"
-                  alt=""
+                  src={temple.image_url}
+                  alt={temple.name}
                   fill
                   priority
-                  className="pointer-events-none absolute inset-0 z-20 object-contain"
+                  unoptimized
+                  className="object-cover object-center"
                 />
               </div>
+
+              {/* Gold Arch Frame Overlay */}
+              <Image
+                src="/images2/temple-arch-frame.png"
+                alt=""
+                fill
+                priority
+                className="pointer-events-none absolute inset-0 z-20 object-contain"
+              />
+            </div>
+          </div>
+
+          {/* RIGHT: Temple Info */}
+          <div className="flex-1 max-w-[620px]">
+            {/* Location */}
+            <div className="flex items-center gap-2">
+              <MapPin className="h-5 w-5 text-[#C18426]" />
+              <span className="font-cormorant text-[20px] font-semibold text-[#554B44]">
+                {temple.location}
+              </span>
             </div>
 
-            {/* RIGHT */}
-            <div className="relative w-[620px] shrink-0 overflow-visible">
-              {/* Temple outline background */}
-              {/* <Image
-                src="/images2/temple-outline_2.png"
-                alt=""
-                width={420}
-                height={420}
-                className="pointer-events-none absolute -top-10 -right-24 z-0 hidden h-[420px] w-[420px] object-contain opacity-[0.10] lg:block"
-              /> */}
+            {/* Temple Name */}
+            <h1 className="font-cormorant mt-2 text-[56px] leading-[1.05] font-bold text-[#0F5C66]">
+              {temple.name}
+            </h1>
+
+            {/* Lotus Divider */}
+            <div className="my-4 flex items-center gap-3">
+              <div className="h-px w-16 bg-[#D4B06A]" />
               <Image
-                src="/images2/temple-outline_2.png"
+                src="/images/lotus.png"
                 alt=""
-                width={320}
-                height={320}
-                priority
-                className="pointer-events-none absolute top-[-180px] right-[-200px] z-[1] h-[320px] w-[320px] object-contain opacity-44"
+                width={34}
+                height={34}
+                className="shrink-0"
               />
+              <div className="h-px w-16 bg-[#D4B06A]" />
+            </div>
 
-              <div className="relative z-10">
-                <div className="mb-3 flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-[#C18426]" />
-                  <span className="font-cormorant text-[22px] font-bold text-[#3D352F]">
-                    {temple.location}
-                  </span>
+            {/* Description */}
+            <p className="text-[15px] leading-relaxed text-[#3D352F] line-clamp-5">
+              {temple.description}
+            </p>
+
+            {/* Stats Row */}
+            <div className="mt-8 flex items-center divide-x divide-[#D8A65A]/70 border-t border-[#D8A65A]/40 pt-6">
+              {/* Deity */}
+              <div className="flex items-center gap-3 pr-8">
+                <Image
+                  src="/images/flower-icon.svg"
+                  alt="Deity"
+                  width={28}
+                  height={28}
+                  className="h-7 w-7 shrink-0 object-contain"
+                />
+                <div>
+                  <p className="font-cormorant text-[15px] leading-tight text-[#6E675F]">
+                    Deity
+                  </p>
+                  <p className="font-inter text-[16px] font-bold text-[#3D352F]">
+                    {templeInfo.deity}
+                  </p>
                 </div>
+              </div>
 
-                <h1
-                  className="font-cormorant text-[58px] leading-[0.95] font-bold text-[#0F5C66]"
-                  style={{ marginBottom: "10px", marginTop: "10px" }}
-                >
-                  {temple.name}
-                </h1>
-
-                <div className="my-5 flex items-center gap-3">
-                  <div className="h-px w-16 bg-[#D4B06A]" />
-                  <Image
-                    src="/images/lotus.png"
-                    alt=""
-                    width={36}
-                    height={36}
-                  />
-                  <div className="h-px w-16 bg-[#D4B06A]" />
+              {/* Established */}
+              <div className="flex items-center gap-3 px-8">
+                <Image
+                  src="/images/calendar-icon.svg"
+                  alt="Calendar"
+                  width={24}
+                  height={24}
+                  className="h-6 w-6 shrink-0 object-contain"
+                />
+                <div>
+                  <p className="font-cormorant text-[15px] leading-tight text-[#6E675F]">
+                    Established
+                  </p>
+                  <p className="font-inter text-[16px] font-bold text-[#3D352F]">
+                    {templeInfo.established}
+                  </p>
                 </div>
+              </div>
 
-                <p
-                  className="line-clamp-4 max-w-[560px] text-[16px] leading-8 text-[#3D352F]"
-                  style={{ marginTop: "10px", fontWeight: "500" }}
-                >
-                  {temple.description}
-                </p>
-
-                <div
-                  className="grid grid-cols-[150px_170px_1fr]"
-                  style={{ marginTop: "40px" }}
-                >
-                  {/* Deity */}
-                  <div className="flex items-start gap-3 border-r border-[#D8A65A]/70 pr-12">
-                    <Image
-                      src="/images/flower-icon.svg" // change to your image path
-                      alt="Deity"
-                      width={28}
-                      height={28}
-                      className="mt-[5px] h-7 w-7 shrink-0 object-contain"
-                    />
-
-                    <div>
-                      <p
-                        className="font-cormorant text-[16px] leading-none text-[#3D352F]"
-                        style={{ fontWeight: "400", marginTop: "-4px" }}
-                      >
-                        Deity
-                      </p>
-                      <p
-                        className="font-inter mt-2 text-[18px] leading-none font-bold text-[#3D352F]"
-                        style={{ marginTop: "2px" }}
-                      >
-                        {templeInfo.deity}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Established */}
-                  <div
-                    className="flex items-start gap-3 border-r border-[#D8A65A]/70 px-9"
-                    style={{ marginLeft: "15px" }}
-                  >
-                    <Image
-                      src="/images/calendar-icon.svg" // replace with your image path
-                      alt="Calendar"
-                      width={24}
-                      height={24}
-                      className="mt-0.5 h-6 w-6 shrink-0 object-contain"
-                    />
-
-                    <div>
-                      <p
-                        className="font-cormorant text-[16px] leading-none text-[#3D352F]"
-                        style={{ fontWeight: "400", marginTop: "-4px" }}
-                      >
-                        Established
-                      </p>
-                      <p
-                        className="font-inter mt-2 text-[18px] leading-none font-bold text-[#3D352F]"
-                        style={{ marginTop: "2px" }}
-                      >
-                        {templeInfo.established}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Timings */}
-                  <div
-                    className="flex items-start gap-3 pl-9"
-                    style={{ marginLeft: "15px" }}
-                  >
-                    <Image
-                      src="/images/clock-icon.svg" // replace with your image path
-                      alt="Clock"
-                      width={28}
-                      height={28}
-                      className="mt-0.5 h-7 w-7 shrink-0 object-contain"
-                    />
-
-                    <div>
-                      <p
-                        className="font-cormorant text-[16px] leading-none text-[#3D352F]"
-                        style={{ fontWeight: "400", marginTop: "-4px" }}
-                      >
-                        Timings
-                      </p>
-                      <p
-                        className="font-inter mt-2 text-[18px] leading-none font-bold text-[#3D352F]"
-                        style={{ marginTop: "2px" }}
-                      >
-                        {templeInfo.timings}
-                      </p>
-                    </div>
-                  </div>
+              {/* Timings */}
+              <div className="flex items-center gap-3 pl-8">
+                <Image
+                  src="/images/clock-icon.svg"
+                  alt="Clock"
+                  width={26}
+                  height={26}
+                  className="h-6 w-6 shrink-0 object-contain"
+                />
+                <div>
+                  <p className="font-cormorant text-[15px] leading-tight text-[#6E675F]">
+                    Timings
+                  </p>
+                  <p className="font-inter text-[16px] font-bold text-[#3D352F]">
+                    {templeInfo.timings}
+                  </p>
                 </div>
               </div>
             </div>

@@ -41,43 +41,26 @@ export default function TempleGallery() {
   }
 
   return (
-    <section className="relative overflow-hidden rounded-[22px] border-[2px] border-[#C37000] bg-transparent p-4 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)]">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.05]" />
-
+    <section className="relative w-full overflow-hidden rounded-[24px] border-[2px] border-[#C37000] bg-transparent p-5 sm:p-6 shadow-[0_20px_50px_rgba(126,83,26,0.18),0_6px_14px_rgba(126,83,26,0.1)]">
       <div className="relative">
         {/* Header */}
-        <div
-          className="mb-4 flex items-center justify-center gap-3"
-          style={{ marginTop: "15px" }}
-        >
-          <Image src="/images/lotus.png" alt="" width={48} height={28} />
+        <div className="my-3 flex items-center justify-center gap-3 text-center">
+          <Image src="/images/lotus.png" alt="" width={38} height={38} />
 
-          <h2 className="font-cormorant text-[28px] font-semibold text-[#0B6670]">
+          <h2 className="font-cormorant text-[28px] font-bold text-[#0B6670]">
             Gallery
           </h2>
 
-          <Image src="/images/lotus.png" alt="" width={48} height={28} />
+          <Image src="/images/lotus.png" alt="" width={38} height={38} />
         </div>
 
-        {/* Gallery */}
-        <div
-          className="relative"
-          style={{
-            marginBottom: "20px",
-            marginTop: "15px",
-            marginLeft: "10px",
-            marginRight: "20px",
-          }}
-        >
-          <div
-            className="scrollbar-hide flex gap-3 overflow-x-auto scroll-smooth"
-            style={{ marginLeft: "50px", marginRight: "40px" }}
-          >
+        {/* Gallery Carousel */}
+        <div className="relative mt-5 px-1 sm:px-6">
+          <div className="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-2">
             {visibleGallery.map((image) => (
               <div
                 key={image.id}
-                className="group relative h-[202px] w-[202px] flex-shrink-0 overflow-hidden rounded-[10px] border border-[#D9B06C]"
+                className="group relative h-[180px] w-[180px] sm:h-[195px] sm:w-[195px] flex-shrink-0 snap-start overflow-hidden rounded-[14px] border border-[#D9B06C] shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
               >
                 <Image
                   src={image.image_url}
@@ -95,20 +78,18 @@ export default function TempleGallery() {
               {currentIndex > 0 && (
                 <button
                   onClick={handlePrev}
-                  className="absolute top-1/2 left-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-sm transition hover:scale-105"
-                  style={{ marginLeft: "6px" }}
+                  className="absolute top-1/2 left-0 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-md transition hover:scale-105 md:flex"
                 >
-                  <ChevronLeft size={18} className="text-[#0F5C66]" />
+                  <ChevronLeft size={20} className="text-[#0F5C66]" />
                 </button>
               )}
 
               {currentIndex < gallery.length - visibleCount && (
                 <button
                   onClick={handleNext}
-                  className="absolute top-1/2 right-[-12px] z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-sm transition hover:scale-105"
-                  style={{ marginRight: "6px" }}
+                  className="absolute top-1/2 right-0 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F8E6C5] shadow-md transition hover:scale-105 md:flex"
                 >
-                  <ChevronRight size={18} className="text-[#0F5C66]" />
+                  <ChevronRight size={20} className="text-[#0F5C66]" />
                 </button>
               )}
             </>

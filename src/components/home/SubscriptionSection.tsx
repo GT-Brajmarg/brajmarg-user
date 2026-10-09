@@ -117,7 +117,23 @@ export default function SubscriptionSection() {
                 href="/subscribe-alerts/temples?plan=monthly"
                 className={styles.btnMonthly}
               >
-                {monthlyPlan.button_text} →
+                <span>{monthlyPlan.button_text}</span>
+                <svg
+                  width="20"
+                  height="14"
+                  viewBox="0 0 20 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="flex-shrink-0"
+                >
+                  <path
+                    d="M1 7H19M13 1L19 7L13 13"
+                    stroke="#EFDEC7"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </Link>
             </div>
           </div>
@@ -193,7 +209,23 @@ export default function SubscriptionSection() {
                 href="/subscribe-alerts/temples?plan=yearly"
                 className={styles.btnYearly}
               >
-                {yearlyPlan.button_text} →
+                <span>{yearlyPlan.button_text}</span>
+                <svg
+                  width="20"
+                  height="14"
+                  viewBox="0 0 20 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="flex-shrink-0"
+                >
+                  <path
+                    d="M1 7H19M13 1L19 7L13 13"
+                    stroke="#EFDEC7"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </Link>
             </div>
           </div>

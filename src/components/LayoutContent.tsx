@@ -57,7 +57,7 @@ export default function LayoutContent({
   return (
     <>
       <Navbar />
-      <main className="min-h-screen pt-[76px]">{children}</main>
+      <main className="min-h-screen pt-[64px] xl:pt-[76px]">{children}</main>
       {!hideFooter && <Footer />}
     </>
   );

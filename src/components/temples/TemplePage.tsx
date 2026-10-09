@@ -22,24 +22,18 @@ export default function TemplePage() {
       />
 
       <div className="relative z-10">
-        <section className="relative h-[550px] overflow-visible md:h-[340px]">
+        <div className="relative">
           <TempleHero />
-
-          <div className="absolute bottom-[-50px] left-1/2 z-20 w-full max-w-[1260px] -translate-x-1/2 px-5 md:bottom-[-145px]">
+          <div className="relative z-20 mx-auto -mt-20 w-full max-w-[1260px] px-5 sm:-mt-24 md:-mt-28">
             <TempleSearch onSearch={setSearchTerm} />
           </div>
-        </section>
+        </div>
 
-        <section
-          className="mt-[220px] md:mt-[500px]"
-          style={{ marginTop: "180px" }}
-        >
+        <section className="mt-8 md:mt-10">
           <TempleGrid searchTerm={searchTerm} />
         </section>
-        <section
-          className="mb-[50px] flex justify-center pt-8"
-          style={{ marginBottom: "50px" }}
-        >
+
+        <section className="mt-6 mb-16 flex justify-center">
           <TempleCTA />
         </section>
       </div>

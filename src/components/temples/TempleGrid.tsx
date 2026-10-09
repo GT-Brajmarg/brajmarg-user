@@ -100,7 +100,7 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
   }
 
   return (
-    <section className="relative w-full px-4 pt-[180px] pb-12">
+    <section className="relative w-full px-4 pt-2 pb-4">
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <Image
           src="/images/mandala_bg_1.png"
@@ -121,13 +121,12 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-18">
+          <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-9">
             {paginatedTemples.map((temple) => (
               <div
                 key={temple.id}
-                className={`relative mx-auto h-[420px] w-[260px] transition-all duration-300 hover:-translate-y-2 ${
-                  temple.is_coming_soon ? "opacity-40 grayscale-[20%]" : ""
-                }`}
+                className={`relative mx-auto h-[420px] w-[260px] transition-all duration-300 hover:-translate-y-2 ${temple.is_coming_soon ? "opacity-65 grayscale-[20%]" : ""}`}
+                style={{ marginBottom: "0px" }}
               >
                 {/* Scroll Frame */}
                 <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
@@ -143,23 +142,16 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
                 </div>
 
                 {/* Badge */}
-                <span
-                  className={`absolute top-[75px] left-[30px] z-50 inline-flex h-[30px] items-center rounded-full px-[20px] text-[12px] font-bold text-white shadow-sm ${
-                    temple.is_coming_soon
-                      ? "w-[95px] bg-[#D8A24A]"
-                      : "w-[52px] bg-[#15A44D]"
-                  }`}
-                >
-                  {!temple.is_coming_soon && (
-                    <span
-                      className="mr-[6px] h-[8px] w-[8px] rounded-full bg-white"
-                      style={{ marginLeft: "5px" }}
-                    />
-                  )}
-                  <span style={{ marginLeft: "5px" }}>
-                    {temple.is_coming_soon ? "COMING SOON" : "LIVE"}
+                {temple.is_coming_soon ? (
+                  <span className="absolute top-[68px] left-[188px] z-30 inline-flex -translate-x-1/2 items-center justify-center rounded-full bg-[#D8A24A] px-3 py-[3px] text-[10px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
+                    COMING SOON
                   </span>
-                </span>
+                ) : (
+                  <span className="absolute top-[69px] left-[35px] z-30 inline-flex items-center gap-1.5 rounded-full bg-[#15A44D] px-2.5 py-[3px] text-[11px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
+                    <span className="h-[7px] w-[7px] flex-shrink-0 rounded-full bg-white" />
+                    <span>LIVE</span>
+                  </span>
+                )}
 
                 {/* Temple Image */}
                 <div className="absolute top-[40px] left-1/2 h-[180px] w-[200px] -translate-x-1/2">
@@ -192,18 +184,17 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
                 </div>
 
                 {/* Name */}
-                <h3 className="font-cormorant absolute top-[255px] left-1/2 w-[90%] -translate-x-1/2 text-center text-[16px] font-semibold text-[#0D5560]">
+                <h3 className="font-cormorant absolute top-[254px] left-1/2 w-[90%] -translate-x-1/2 text-center text-[16px] font-semibold text-[#0D5560] leading-tight">
                   {temple.name}
                 </h3>
 
                 {/* Location */}
-                <div className="absolute top-[285px] left-1/2 flex -translate-x-1/2 items-center gap-1">
+                <div className="absolute top-[282px] left-1/2 flex -translate-x-1/2 items-center justify-center gap-1.5">
                   <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
+                    className="h-3.5 w-3.5 flex-shrink-0 text-[#c8860a]"
                     fill="none"
-                    stroke="#c8860a"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                     strokeWidth="2.5"
                   >
                     <path
@@ -218,7 +209,7 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
                     />
                   </svg>
 
-                  <span className="font-cormorant block max-w-[140px] truncate text-[12px] text-[#7A6A55]">
+                  <span className="font-cormorant block max-w-[140px] truncate text-[12px] text-[#7A6A55] font-medium">
                     {temple.location}
                   </span>
                 </div>
@@ -227,7 +218,7 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
                 {temple.is_coming_soon ? (
                   <button
                     disabled
-                    className="font-cormorant absolute top-[315px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 cursor-not-allowed items-center justify-center rounded-full border border-[#D7B36A] bg-gray-400 text-[18px] font-semibold text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)]"
+                    className="font-cormorant absolute top-[312px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 cursor-not-allowed items-center justify-center rounded-full border border-[#D7B36A] bg-gray-400 text-[15px] font-semibold text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)]"
                   >
                     <span className="absolute -left-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
                     <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3]" />
@@ -240,10 +231,11 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
                       .toLowerCase()
                       .replace(/\s+/g, "-")
                       .replace(/[^\w-]/g, "")}`}
-                    className="font-cormorant absolute top-[315px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 items-center justify-center rounded-full border border-[#D7B36A] bg-[#2B8182] text-[18px] font-semibold !text-[#EFDEC7]"
+                    className="font-cormorant absolute top-[312px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 items-center justify-center rounded-full border border-[#D7B36A] bg-[#2B8182]/80 text-[15px] font-semibold text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)] transition-all hover:bg-[#236f70]"
+                    style={{ color: "#EFDEC7" }}
                   >
                     <span className="absolute -left-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
-                    <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3] text-[#EFDEC7]" />
+                    <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3]" style={{ color: "#EFDEC7" }} />
                     Visit Temple
                     <span className="absolute -right-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
                   </Link>
@@ -253,32 +245,74 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
           </div>
         )}
       </div>
-      <div
-        className="mt- flex justify-center"
-        style={{ marginTop: "50px", marginBottom: "50px" }}
-      >
+      <div className="mt-8 mb-4 flex items-center justify-center gap-2">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="flex h-[34px] w-[34px] items-center justify-center rounded-[6px] border border-[#D7B06B] bg-transparent text-[#0D6B73] transition-colors hover:bg-[#0D6B73]/10 disabled:opacity-40 disabled:cursor-not-allowed"
+          aria-label="Previous Page"
+        >
+          <svg
+            width="14"
+            height="10"
+            viewBox="0 0 20 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M19 7H1M7 1L1 7L7 13"
+              stroke="#0D6B73"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+
         {pages.map((page, index) =>
           page === "..." ? (
             <span
               key={`dots-${index}`}
-              className="flex h-[32px] w-[32px] items-center justify-center text-[#0D6B73]"
+              className="flex h-[34px] w-[34px] items-center justify-center text-[#0D6B73]"
             >
               ...
             </span>
           ) : (
             <button
               key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`flex h-[32px] w-[32px] items-center justify-center rounded-[4px] border text-[18px] font-medium ${
-                currentPage === page
-                  ? "border-[#0D6B73] bg-[#0D6B73] text-white"
-                  : "border-[#C88A1A] bg-transparent text-[#0D6B73]"
-              }`}
+              onClick={() => setCurrentPage(page as number)}
+              className={`flex h-[34px] w-[34px] items-center justify-center rounded-[6px] border text-[15px] font-semibold transition-all ${currentPage === page
+                  ? "border-[#0D6B73] bg-[#0D6B73] text-white shadow-sm"
+                  : "border-[#D7B06B] bg-transparent text-[#0D6B73] hover:border-[#0D6B73]"
+                }`}
             >
               {page}
             </button>
           ),
         )}
+
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages || totalPages === 0}
+          className="flex h-[34px] w-[34px] items-center justify-center rounded-[6px] border border-[#D7B06B] bg-transparent text-[#0D6B73] transition-colors hover:bg-[#0D6B73]/10 disabled:opacity-40 disabled:cursor-not-allowed"
+          aria-label="Next Page"
+        >
+          <svg
+            width="14"
+            height="10"
+            viewBox="0 0 20 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1 7H19M13 1L19 7L13 13"
+              stroke="#0D6B73"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
       </div>
     </section>
   );

@@ -102,25 +102,28 @@ export default function Navbar() {
           className="pointer-events-none object-cover opacity-40"
         />
         <nav className="relative z-10 w-full border-b-[1px] border-[#EFDEC7]">
-          <div className="w-full sm:px-8 lg:px-20">
-            {/* Mobile Top Navbar Bar (strictly md:hidden) */}
+          <div className="w-full xl:px-20">
+            {/* Mobile & Tablet Top Navbar Bar (strictly xl:hidden) */}
             <div
-              style={{ paddingLeft: "20px", paddingRight: "20px", height: "64px", width: "100%" }}
-              className="flex items-center justify-between md:hidden"
+              style={{
+                height: "64px",
+                width: "100%",
+                paddingLeft: "clamp(24px, 6vw, 64px)",
+                paddingRight: "clamp(24px, 6vw, 64px)",
+                boxSizing: "border-box",
+              }}
+              className="flex items-center justify-between xl:hidden"
             >
-              <Link href="/" className="flex items-center gap-2">
+              <Link href="/" className="flex items-center gap-2 sm:gap-3">
                 <Image
                   src="/images/image 49.png"
                   alt="Brajmarg"
                   width={30}
                   height={38}
                 />
-                <Image
-                  src="/images/Group 20.png"
-                  alt="Brajmarg"
-                  width={100}
-                  height={26}
-                />
+                <span className="font-cormorant text-[22px] sm:text-[24px] font-bold tracking-wide text-[#005D63]">
+                  Brajmarg
+                </span>
               </Link>
 
               <button
@@ -136,23 +139,21 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* Desktop Navbar (strictly hidden on mobile, visible on md:grid) */}
-            <div className="hidden h-[84px] grid-cols-[280px_1fr_340px] items-center md:grid">
+            {/* Desktop Navbar (strictly hidden on mobile & tablet, visible on xl:grid) */}
+            <div className="hidden h-[84px] grid-cols-[280px_1fr_340px] items-center xl:grid">
               {/* Logo */}
               <div className="flex justify-end pr-40">
                 <Link href="/" className="flex items-center gap-3">
                   <Image
                     src="/images/image 49.png"
                     alt="Brajmarg"
-                    width={42}
-                    height={52}
+                    width={102}
+                    height={62}
+                    className="h-[56px] w-auto object-contain"
                   />
-                  <Image
-                    src="/images/Group 20.png"
-                    alt="Brajmarg"
-                    width={130}
-                    height={34}
-                  />
+                  <span className="font-cormorant text-[21px] font-bold tracking-wide text-[#005D63]">
+                    Brajmarg
+                  </span>
                 </Link>
               </div>
 
@@ -224,11 +225,10 @@ export default function Navbar() {
                   <>
                     <Link
                       href="/cart"
-                      className={`relative flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border transition ${
-                        isCartActive
-                          ? "border-[#0F5C66] bg-[rgba(195,112,0,0.4)]"
-                          : "border-[#005D63] bg-[#EFDEC7] hover:bg-[#F3E5D2]"
-                      }`}
+                      className={`relative flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border transition ${isCartActive
+                        ? "border-[#0F5C66] bg-[rgba(195,112,0,0.4)]"
+                        : "border-[#005D63] bg-[#EFDEC7] hover:bg-[#F3E5D2]"
+                        }`}
                       aria-label={`Cart with ${cartItemCount} items`}
                     >
                       <ShoppingCart
@@ -288,9 +288,9 @@ export default function Navbar() {
         </nav>
       </header>
 
-      {/* ══ Mobile Right-Side Drawer Backdrop ══ */}
+      {/* ══ Mobile & Tablet Right-Side Drawer Backdrop ══ */}
       <div
-        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 xl:hidden ${menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
           }`}
         style={{ touchAction: "none" }}
         onTouchMove={(e) => e.preventDefault()}
@@ -298,12 +298,12 @@ export default function Navbar() {
         aria-hidden="true"
       />
 
-      {/* ══ Mobile Right-Side Drawer Panel ══ */}
+      {/* ══ Mobile & Tablet Right-Side Drawer Panel ══ */}
       <aside
         style={{
           height: "100dvh",
           maxHeight: "100vh",
-          width: "300px",
+          width: "320px",
           maxWidth: "85vw",
           position: "fixed",
           top: 0,
@@ -316,7 +316,7 @@ export default function Navbar() {
           boxShadow: "-12px 0 40px rgba(0,0,0,0.35)",
           overscrollBehavior: "contain",
         }}
-        className={`transition-transform duration-300 ease-in-out md:hidden ${menuOpen ? "translate-x-0" : "translate-x-full"
+        className={`transition-transform duration-300 ease-in-out xl:hidden ${menuOpen ? "translate-x-0" : "translate-x-full"
           }`}
       >
         {/* Paper texture overlay */}
@@ -352,8 +352,18 @@ export default function Navbar() {
             onClick={() => dispatch(closeMenu())}
             style={{ display: "flex", alignItems: "center", gap: "8px" }}
           >
-            <Image src="/images/image 49.png" alt="Brajmarg" width={26} height={34} />
-            <Image src="/images/Group 20.png" alt="Brajmarg" width={96} height={24} />
+            <Image src="/images/image 49.png" alt="Brajmarg" width={26} height={34} className="h-7 w-auto object-contain" />
+            <span
+              style={{
+                fontFamily: "var(--font-cormorant), serif",
+                fontSize: "20px",
+                fontWeight: 700,
+                color: "#005D63",
+                letterSpacing: "0.02em",
+              }}
+            >
+              Brajmarg
+            </span>
           </Link>
           <button
             onClick={() => dispatch(closeMenu())}
