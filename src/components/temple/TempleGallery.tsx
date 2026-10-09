@@ -83,6 +83,7 @@ export default function TempleGallery() {
                   src={image.image_url}
                   alt={image.alt_text || image.title || "Temple Gallery"}
                   fill
+                  unoptimized
                   className="object-cover transition duration-500 group-hover:scale-105"
                 />
               </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,7 +11,7 @@ import TempleSelectionHero from "@/components/subscribe-alerts/TempleSelectionHe
 import TempleSearch from "@/components/temples/TempleSearch";
 import TempleGrid from "@/components/subscribe-alerts/TempleGrid";
 
-export default function SubscribeTemplePage() {
+function SubscribeTempleContent() {
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
@@ -72,3 +73,12 @@ export default function SubscribeTemplePage() {
     </main>
   );
 }
+
+export default function SubscribeTemplePage() {
+  return (
+    <Suspense fallback={null}>
+      <SubscribeTempleContent />
+    </Suspense>
+  );
+}
+

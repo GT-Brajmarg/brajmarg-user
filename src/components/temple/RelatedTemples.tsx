@@ -142,6 +142,7 @@ export default function RelatedTemples({
                           src={temple.image_url || ""}
                           alt={temple.name}
                           fill
+                          unoptimized
                           className="object-cover"
                           style={{
                             objectPosition: "center center",
@@ -284,6 +285,7 @@ export default function RelatedTemples({
                           src={temple.image_url || ""}
                           alt={temple.name}
                           fill
+                          unoptimized
                           className="object-cover"
                         />
                       </div>

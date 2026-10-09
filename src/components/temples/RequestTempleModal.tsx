@@ -93,10 +93,21 @@ const NEXT_STEPS = [
 
 export default function RequestTempleModal({ open, onClose }: Props) {
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "auto";
-    return () => {
-      document.body.style.overflow = "auto";
-    };
+    if (open) {
+      const originalBodyOverflow = document.body.style.overflow;
+      const originalHtmlOverflow = document.documentElement.style.overflow;
+      const originalBodyTouchAction = document.body.style.touchAction;
+
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+
+      return () => {
+        document.body.style.overflow = originalBodyOverflow || "";
+        document.documentElement.style.overflow = originalHtmlOverflow || "";
+        document.body.style.touchAction = originalBodyTouchAction || "";
+      };
+    }
   }, [open]);
 
   const dispatch = useAppDispatch();
@@ -158,10 +169,15 @@ export default function RequestTempleModal({ open, onClose }: Props) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      style={{ touchAction: "none" }}
+    >
       {/* Backdrop */}
       <div
         onClick={onClose}
+        onTouchMove={(e) => e.preventDefault()}
+        style={{ touchAction: "none" }}
         className="absolute inset-0 bg-black/70 backdrop-blur-md"
       />
 
@@ -175,6 +191,8 @@ export default function RequestTempleModal({ open, onClose }: Props) {
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
           backgroundSize: "cover",
+          overscrollBehavior: "contain",
+          touchAction: "auto",
         }}
       >
         {/* Texture */}

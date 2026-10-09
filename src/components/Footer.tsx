@@ -4,13 +4,52 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./Footer.module.css";
 
-const trustIconLabels = [
-  "No Hidden Charges",
-  "Clear Pricing",
-  "Secure Payments",
-  "Timely Updates",
-  "Honest Communication",
-  "Devotee First Upreach",
+const trustItems = [
+  {
+    icon: "/images5/trust-1.png",
+    alt: "No Hidden Charges",
+    line1: "No Hidden",
+    line2: "Charges",
+  },
+  {
+    icon: "/images5/trust-2.png",
+    alt: "Clear Pricing",
+    line1: "Clear",
+    line2: "Pricing",
+  },
+  {
+    icon: "/images5/trust-3.png",
+    alt: "Secure Payments",
+    line1: "Secure",
+    line2: "Payments",
+  },
+  {
+    icon: "/images5/trust-4.png",
+    alt: "Timely Updates",
+    line1: "Timely",
+    line2: "Updates",
+  },
+  {
+    icon: "/images5/trust-5.png",
+    alt: "Honest Communication",
+    line1: "Honest",
+    line2: "Communication",
+  },
+  {
+    icon: "/images5/trust-6.png",
+    alt: "Devotee First Upreach",
+    line1: "Devotee First",
+    line2: "Upreach",
+  },
+];
+
+const quickLinks = [
+  { label: "Home", href: "/" },
+  { label: "Shop", href: "/shop" },
+  { label: "Yatra", href: "/services/yatra" },
+  { label: "Temples", href: "/temples" },
+  { label: "Seva", href: "/services/seva" },
+  { label: "About Us", href: "/about" },
 ];
 
 export default function Footer() {
@@ -32,40 +71,33 @@ export default function Footer() {
               Our role is coordination and service facilitation only.
             </p>
             <Link href="/disclaimer" className={styles.disclaimerBtn}>
-              Read Full Disclaimer &nbsp;→
+              <span>Read Full Disclaimer</span>
+              <span className={styles.disclaimerArrow}>→</span>
             </Link>
           </div>
 
           {/* Vertical divider */}
           <div className={styles.vDivider} />
 
-          {/* RIGHT: 6 icons row */}
+          {/* RIGHT: 6 icons with centered labels */}
           <div className={styles.trustRight}>
-            <div className={styles.iconsRow}>
-              <Image
-                src="/images5/Frame 72.png"
-                alt="Trust icons"
-                width={600}
-                height={80}
-                style={{ objectFit: "contain", width: "100%", height: "auto" }}
-              />
-            </div>
-            <div className={`${styles.labelsRow} ${styles.desktopLabels}`}>
-              {trustIconLabels.map((label) => (
-                <span key={label} className={styles.iconLabel}>
-                  {label}
-                </span>
-              ))}
-            </div>
-
-            <div
-              className="grid grid-cols-2 gap-x-4 gap-y-3 px-6 text-center md:hidden"
-              // style={{ marginTop: "2px" }}
-            >
-              {trustIconLabels.map((label) => (
-                <span key={label} className="text-[11px] text-white">
-                  {label}
-                </span>
+            <div className={styles.trustGrid}>
+              {trustItems.map((item, idx) => (
+                <div key={idx} className={styles.trustItem}>
+                  <div className={styles.trustIconWrap}>
+                    <Image
+                      src={item.icon}
+                      alt={item.alt}
+                      width={76}
+                      height={76}
+                      className={styles.trustIconImg}
+                    />
+                  </div>
+                  <div className={styles.trustLabel}>
+                    <div>{item.line1}</div>
+                    <div>{item.line2}</div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -79,12 +111,11 @@ export default function Footer() {
             fill
             className={styles.skylineImg}
             sizes="100vw"
-            style={{ objectFit: "fill" }}
           />
         </div>
       </div>
 
-      {/* ══ PART 2: Bottom Footer (golden bar) ══ */}
+      {/* ══ PART 2: Bottom Footer (golden parchment bar) ══ */}
       <div className={styles.bottomFooter}>
         {/* Background texture */}
         <div className={styles.bottomBg}>
@@ -103,29 +134,33 @@ export default function Footer() {
               <Image
                 src="/images5/image 67.png"
                 alt="Brajmarg Elephant"
-                width={52}
-                height={56}
-                style={{ objectFit: "contain" }}
+                width={64}
+                height={76}
+                style={{ objectFit: "contain", height: "auto" }}
               />
               <Image
                 src="/images5/Group 42.png"
                 alt="Brajmarg"
-                width={110}
-                height={36}
-                style={{ objectFit: "contain" }}
+                width={130}
+                height={43}
+                style={{ objectFit: "contain", height: "auto" }}
               />
             </div>
-            <Image
-              src="/images5/Connecting devotees with sacred temples across India through authentic sevas, prasadam and spiritual experiences..png"
-              alt="Connecting devotees with sacred temples across India through authentic sevas, prasadam and spiritual experiences."
-              width={270}
-              height={56}
-              style={{
-                objectFit: "contain",
-                objectPosition: "left",
-                marginTop: "10px",
-              }}
-            />
+            <div className={styles.taglineWrap}>
+              <Image
+                src="/images5/Connecting devotees with sacred temples across India through authentic sevas, prasadam and spiritual experiences..png"
+                alt="Connecting devotees with sacred temples across India through authentic sevas, prasadam and spiritual experiences."
+                width={420}
+                height={40}
+                style={{
+                  objectFit: "contain",
+                  objectPosition: "left",
+                  width: "100%",
+                  maxWidth: "420px",
+                  height: "auto",
+                }}
+              />
+            </div>
           </div>
 
           {/* Vertical divider */}
@@ -133,75 +168,24 @@ export default function Footer() {
 
           {/* Column 2: Quick Links */}
           <div className={styles.linksCol}>
-            <div className={styles.linksBlock}>
-              <h4 className={styles.linksTitle}>Quick Links</h4>
-              <div className={styles.linksGrid}>
-                <Link href="/" className={styles.linksItem}>
+            <h4 className={styles.linksTitle}>Quick Links</h4>
+            <div className={styles.linksGrid}>
+              {quickLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className={styles.linksItem}
+                >
                   <Image
                     src="/images/arrow-icon.svg"
                     alt=""
-                    width={28}
-                    height={28}
+                    width={16}
+                    height={16}
                     className={styles.arrow}
                   />
-                  <span>Home</span>
+                  <span>{link.label}</span>
                 </Link>
-
-                <Link href="/services/seva" className={styles.linksItem}>
-                  <Image
-                    src="/images/arrow-icon.svg"
-                    alt=""
-                    width={28}
-                    height={28}
-                    className={styles.arrow}
-                  />
-                  <span>Seva</span>
-                </Link>
-
-                <Link href="/temples" className={styles.linksItem}>
-                  <Image
-                    src="/images/arrow-icon.svg"
-                    alt=""
-                    width={28}
-                    height={28}
-                    className={styles.arrow}
-                  />
-                  <span>Temples</span>
-                </Link>
-
-                <Link href="/services/yatra" className={styles.linksItem}>
-                  <Image
-                    src="/images/arrow-icon.svg"
-                    alt=""
-                    width={28}
-                    height={28}
-                    className={styles.arrow}
-                  />
-                  <span>Yatra</span>
-                </Link>
-
-                <Link href="/shop" className={styles.linksItem}>
-                  <Image
-                    src="/images/arrow-icon.svg"
-                    alt=""
-                    width={28}
-                    height={28}
-                    className={styles.arrow}
-                  />
-                  <span>Shop</span>
-                </Link>
-
-                <Link href="/about" className={styles.linksItem}>
-                  <Image
-                    src="/images/arrow-icon.svg"
-                    alt=""
-                    width={28}
-                    height={28}
-                    className={styles.arrow}
-                  />
-                  <span>About Us</span>
-                </Link>
-              </div>
+              ))}
             </div>
           </div>
 
@@ -221,10 +205,10 @@ export default function Footer() {
               >
                 <span className={styles.socialCircle}>
                   <Image
-                    src="/images/facebook.svg" // or facebook.svg
+                    src="/images/facebook.svg"
                     alt="Facebook"
-                    width={15}
-                    height={15}
+                    width={16}
+                    height={16}
                   />
                 </span>
               </Link>
@@ -237,9 +221,9 @@ export default function Footer() {
               >
                 <span className={styles.socialCircle}>
                   <Image
-                    src="/images/x.svg" // or /images/x-logo.svg
+                    src="/images/x.svg"
                     alt="X"
-                    width={20}
+                    width={18}
                     height={18}
                   />
                 </span>
@@ -253,9 +237,9 @@ export default function Footer() {
               >
                 <span className={styles.socialCircle}>
                   <Image
-                    src="/images/instagram.svg" // or /images/instagram.svg
+                    src="/images/instagram.svg"
                     alt="Instagram"
-                    width={20}
+                    width={18}
                     height={18}
                   />
                 </span>

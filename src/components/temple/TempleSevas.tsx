@@ -104,6 +104,7 @@ export default function TempleSevas({ templeSlug }: TempleSevasProps) {
                       src={seva.image_url || "/images2/default.png"}
                       alt={seva.name}
                       fill
+                      unoptimized
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
 

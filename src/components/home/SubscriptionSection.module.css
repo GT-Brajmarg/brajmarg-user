@@ -3,7 +3,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding: 80px 0 90px;
+  padding: 60px 0 20px;
 }
 
 .sectionBg {
@@ -34,7 +34,7 @@
   align-items: center;
   justify-content: center;
   gap: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 11px;
   width: 100%;
 }
 
@@ -53,26 +53,25 @@
   font-size: clamp(15px, 1.8vw, 18px);
   color: #444;
   text-align: center;
-  margin-bottom: 48px;
-  font-style: italic;
+  margin-bottom: 42px;
   line-height: 1.5;
 }
 
 /* ── Cards Row ── */
 .cardsRow {
   display: flex;
-  gap: 60px; /* Increase this */
+  gap: 68px;
   justify-content: center;
-
+  align-items: stretch;
   width: 100%;
 }
 
 /* ── Base Card ── */
 .card {
   position: relative;
-  flex: 0 0 600px;
-  max-width: 600px;
-  min-height: 600px;
+  flex: 1 1 0;
+  max-width: 520px;
+  min-height: auto;
   border-radius: 16px;
   overflow: visible;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
@@ -82,13 +81,10 @@
 }
 
 .card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
 }
 
-.cardYearly {
-  border: 2px solid #c8860a;
-}
 
 .cardBg {
   position: absolute;
@@ -99,7 +95,7 @@
 .cardContent {
   position: relative;
   z-index: 1;
-  padding: 40px 30px 30px;
+  padding: 32px 28px 28px;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -134,22 +130,23 @@
 
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
+
 /* ── Card Header ── */
 .cardHeader {
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
 
 /* ── Price Row ── */
 .priceRow {
   display: flex;
   align-items: flex-end;
-  gap: 4px;
-  margin-bottom: 30px;
+  gap: 6px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
 .currency {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 600;
   margin-top: 2px;
   color: #08545e;
@@ -158,16 +155,16 @@
 }
 
 .price {
-  font-size: 46px;
+  font-size: 52px;
   font-weight: 700;
   color: #08545e;
   line-height: 1;
 }
 
 .period {
-  font-size: 14px;
+  font-size: 15px;
   color: #666;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 /* Gold variants for yearly */
@@ -184,12 +181,12 @@
 }
 
 .saveBadge {
-  background: #c8860a;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 9px;
-  border-radius: 12px;
+  background: transparent;
+  color: #8a6300;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 0;
+  border-radius: 0;
   margin-left: 6px;
   margin-bottom: 8px;
   align-self: flex-end;
@@ -202,7 +199,7 @@
   margin: 0 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 .featureItem {
@@ -211,7 +208,7 @@
   font-weight: 400;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-family: var(--font-lato), sans-serif;
 }
 
@@ -278,14 +275,21 @@
 }
 
 /* ── Responsive ── */
+@media (max-width: 1024px) {
+  .cardsRow {
+    gap: 32px;
+  }
+}
+
 @media (max-width: 768px) {
   .cardsRow {
     flex-direction: column;
     align-items: center;
+    gap: 32px;
   }
 
   .card {
-    max-width: 100%;
+    max-width: 440px;
     width: 100%;
   }
 }
@@ -297,5 +301,6 @@
 
 .featureTextYearly {
   color: #c8860a;
-  font-weight: 400; /* Remove bold */
+  font-weight: 400;
+  /* Remove bold */
 }

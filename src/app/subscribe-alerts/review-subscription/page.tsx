@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 
@@ -11,7 +12,7 @@ import GoodToKnowCard from "@/components/subscribe-alerts/GoodToKnowCard";
 import ReviewFooter from "@/components/subscribe-alerts/ReviewFooter";
 import MonthlyPlanBenefitsCard from "@/components/subscribe-alerts/MonthlyPlanBenefitsCard";
 
-export default function SubscribeReviewPage() {
+function ReviewSubscriptionContent() {
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan") ?? "monthly";
 
@@ -96,3 +97,12 @@ export default function SubscribeReviewPage() {
     </main>
   );
 }
+
+export default function SubscribeReviewPage() {
+  return (
+    <Suspense fallback={null}>
+      <ReviewSubscriptionContent />
+    </Suspense>
+  );
+}
+

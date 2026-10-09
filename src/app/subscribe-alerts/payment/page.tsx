@@ -1,5 +1,9 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
+import { Suspense } from "react";
+
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -11,7 +15,7 @@ import PaymentDetailsCard from "@/components/subscribe-alerts/PaymentDetailsCard
 import PaymentFooter from "@/components/subscribe-alerts/PaymentFooter";
 import { startRazorpayPayment } from "@/lib/payments/razorpay";
 
-export default function SubscribePaymentPage() {
+function PaymentPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -107,5 +111,13 @@ export default function SubscribePaymentPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function SubscribePaymentPage() {
+  return (
+    <Suspense fallback={null}>
+      <PaymentPageContent />
+    </Suspense>
   );
 }

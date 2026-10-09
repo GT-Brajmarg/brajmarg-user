@@ -2,16 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-// import styles from "./Navbar.module.css";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { toggleMenu, closeMenu } from "@/store/slices/navSlice";
 import { useEffect, useState } from "react";
 import { fetchAlerts } from "@/store/slices/alertsSlice";
-import { Cormorant_Garamond } from "next/font/google";
 import { Bell, User, Menu, X, ShoppingCart } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import LoginModal from "@/components/auth/LoginModal";
-import { usePathname } from "next/navigation";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -21,10 +18,6 @@ const navLinks = [
   { label: "Yatra", href: "/yatra" },
   { label: "About Us", href: "/about" },
 ];
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["500", "600"],
-});
 
 export default function Navbar() {
   const [loginOpen, setLoginOpen] = useState(false);
@@ -45,12 +38,7 @@ export default function Navbar() {
     0,
   );
 
-  const alertCount = alerts.length;
-
-  const latestAlerts = alerts.slice(0, 3);
-
   const router = useRouter();
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -60,13 +48,31 @@ export default function Navbar() {
     };
 
     checkLogin();
-
     window.addEventListener("storage", checkLogin);
 
     return () => {
       window.removeEventListener("storage", checkLogin);
     };
   }, []);
+
+  // Prevent background scroll when mobile drawer or login modal is open
+  useEffect(() => {
+    if (menuOpen || loginOpen) {
+      const originalBodyOverflow = document.body.style.overflow;
+      const originalHtmlOverflow = document.documentElement.style.overflow;
+      const originalBodyTouchAction = document.body.style.touchAction;
+
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+
+      return () => {
+        document.body.style.overflow = originalBodyOverflow || "";
+        document.documentElement.style.overflow = originalHtmlOverflow || "";
+        document.body.style.touchAction = originalBodyTouchAction || "";
+      };
+    }
+  }, [menuOpen, loginOpen]);
 
   const handleLogout = () => {
     localStorage.removeItem("brajmarg_temp_user");
@@ -80,21 +86,28 @@ export default function Navbar() {
   useEffect(() => {
     dispatch(fetchAlerts());
   }, [dispatch]);
+
   return (
     <>
-      <header className="relative w-full overflow-hidden border-[#2F2A24] bg-[#FBF8F3]">
+      <header
+        style={{ position: "fixed", top: 0, zIndex: 40 }}
+        className="w-full overflow-hidden border-[#2F2A24] bg-[#FBF8F3] shadow-[0px_2px_8px_0px_rgba(0,0,0,0.08)]"
+      >
         <Image
-          src="/images/temple-paper-texture.png" // your texture image
+          src="/images/temple-paper-texture.png"
           alt=""
           fill
           priority
           aria-hidden
           className="pointer-events-none object-cover opacity-40"
         />
-        <nav className="relative z-10 w-full border-b-[1px] border-[#EFDEC7] shadow-[0px_4px_4px_0px_#00000040]">
-          <div className="w-full px-8 lg:px-20">
-            {/* Mobile Navbar */}
-            <div className="flex h-[72px] items-center justify-between md:hidden">
+        <nav className="relative z-10 w-full border-b-[1px] border-[#EFDEC7]">
+          <div className="w-full sm:px-8 lg:px-20">
+            {/* Mobile Top Navbar Bar (strictly md:hidden) */}
+            <div
+              style={{ paddingLeft: "20px", paddingRight: "20px", height: "64px", width: "100%" }}
+              className="flex items-center justify-between md:hidden"
+            >
               <Link href="/" className="flex items-center gap-2">
                 <Image
                   src="/images/image 49.png"
@@ -102,7 +115,6 @@ export default function Navbar() {
                   width={30}
                   height={38}
                 />
-
                 <Image
                   src="/images/Group 20.png"
                   alt="Brajmarg"
@@ -113,110 +125,18 @@ export default function Navbar() {
 
               <button
                 onClick={() => dispatch(toggleMenu())}
-                className="rounded-md p-2"
+                className="rounded-md p-2 text-[#2D2924] transition hover:bg-[#EFDEC7]"
+                aria-label={menuOpen ? "Close menu" : "Open menu"}
               >
                 {menuOpen ? (
-                  <X size={28} className="text-[#2D2924]" />
+                  <X size={26} className="text-[#2D2924]" />
                 ) : (
-                  <Menu size={28} className="text-[#2D2924]" />
+                  <Menu size={26} className="text-[#2D2924]" />
                 )}
               </button>
             </div>
 
-            {/* Mobile Menu */}
-            {menuOpen && (
-              <div className="border-t border-[#D9C8B2] bg-[#EFDEC7] py-6 md:hidden">
-                <ul
-                  className={`${cormorant.className} flex flex-col items-center gap-5`}
-                >
-                  {navLinks.map((link) => (
-                    <li key={link.label}>
-                      <Link
-                        href={link.href}
-                        onClick={() => {
-                          dispatch(closeMenu());
-                        }}
-                        className={`text-[20px] font-semibold ${
-                          (
-                            link.href === "/"
-                              ? pathname === "/"
-                              : pathname.startsWith(link.href)
-                          )
-                            ? "text-[#C88A2A]"
-                            : "text-[#2D2924]"
-                        }`}
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-
-                <div
-                  className="mx-auto mt-6 flex flex-col items-center gap-3"
-                  style={{ marginTop: "30px" }}
-                >
-                  <button
-                    onClick={() => setShowAlerts((prev) => !prev)}
-                    className="flex h-[44px] w-[280px] items-center justify-center gap-2 rounded-[10px] bg-[#005D63]"
-                  >
-                    <Bell size={18} className="text-[#F7F1E8]" />
-
-                    <span
-                      className={`${cormorant.className} text-[15px] font-medium text-[#F7F1E8]`}
-                    >
-                      Subscribe Alerts
-                    </span>
-                  </button>
-
-                  {isLoggedIn ? (
-                    <div className="flex w-[280px] gap-3">
-                      <Link
-                        href="/cart"
-                        onClick={() => dispatch(closeMenu())}
-                        className="flex h-[44px] flex-1 items-center justify-center gap-2 rounded-[10px] border border-[#005D63] bg-[#EFDEC7]"
-                      >
-                        <ShoppingCart size={18} className="text-[#0F5C66]" />
-
-                        <span
-                          className={`${cormorant.className} text-[15px] font-medium text-[#0F5C66]`}
-                        >
-                          Cart
-                        </span>
-                      </Link>
-
-                      <Link
-                        href="/profile"
-                        onClick={() => dispatch(closeMenu())}
-                        className="flex h-[44px] w-[52px] items-center justify-center rounded-[10px] border border-[#005D63] bg-[#EFDEC7]"
-                        aria-label="Profile"
-                      >
-                        <User size={19} className="text-[#0F5C66]" />
-                      </Link>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        dispatch(closeMenu());
-                        setLoginOpen(true);
-                      }}
-                      className="flex h-[44px] w-[280px] items-center justify-center gap-2 rounded-[10px] border border-[#005D63]"
-                      style={{ color: "#0F5C66" }}
-                    >
-                      <User size={18} className="text-[#0F5C66]" />
-
-                      <span
-                        className={`${cormorant.className} text-[15px] font-medium text-[#0F5C66]`}
-                      >
-                        Login
-                      </span>
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* Desktop Navbar */}
+            {/* Desktop Navbar (strictly hidden on mobile, visible on md:grid) */}
             <div className="hidden h-[84px] grid-cols-[280px_1fr_340px] items-center md:grid">
               {/* Logo */}
               <div className="flex justify-end pr-40">
@@ -227,7 +147,6 @@ export default function Navbar() {
                     width={42}
                     height={52}
                   />
-
                   <Image
                     src="/images/Group 20.png"
                     alt="Brajmarg"
@@ -239,7 +158,7 @@ export default function Navbar() {
 
               {/* Nav Links */}
               <ul
-                className={`${cormorant.className} flex items-center justify-center gap-14`}
+                className="font-cormorant flex items-center justify-center gap-14"
               >
                 {navLinks.map((link) => {
                   const isActive =
@@ -254,9 +173,8 @@ export default function Navbar() {
                         className="relative flex flex-col items-center"
                       >
                         <span
-                          className={`text-[18px] font-semibold transition-colors ${
-                            isActive ? "text-[#C88A2A]" : "text-[#2D2924]"
-                          }`}
+                          className={`text-[18px] font-medium transition-colors ${isActive ? "text-[#C88A2A]" : "text-[#2D2924]"
+                            }`}
                         >
                           {link.label}
                         </span>
@@ -265,8 +183,8 @@ export default function Navbar() {
                           <Image
                             src="/images/lotus 2.png"
                             alt=""
-                            width={26}
-                            height={6}
+                            width={40}
+                            height={22}
                             className="absolute top-[28px] left-1/2 -translate-x-1/2"
                           />
                         )}
@@ -281,26 +199,13 @@ export default function Navbar() {
                 className="flex items-center justify-end gap-3 pr-8"
                 style={{ marginRight: "30px" }}
               >
-                <Link
-                  href="/subscribe-alerts"
-                  className={`relative flex h-[38px] w-[175px] items-center justify-center gap-2 rounded-[10px] border transition-all ${
-                    isAlertsActive
-                      ? "border-[#C37000]"
-                      : "border-[#005D63] bg-[#005D63]"
-                  }`}
+                <button
+                  onClick={() => setShowAlerts((prev) => !prev)}
+                  className="flex h-[38px] w-[165px] items-center justify-center gap-2 rounded-[10px] bg-[#005D63] transition hover:bg-[#004e54]"
                 >
-                  <Bell
-                    size={16}
-                    strokeWidth={2}
-                    className={
-                      isAlertsActive ? "text-[#C37000]" : "text-[#F7F1E8]"
-                    }
-                  />
-
+                  <Bell size={16} strokeWidth={2} className="text-[#F7F1E8]" />
                   <span
-                    className={`${cormorant.className} text-[15px] font-semibold ${
-                      isAlertsActive ? "text-[#C37000]" : "text-[#F7F1E8]"
-                    }`}
+                    className="font-cormorant text-[14px] font-medium text-[#F7F1E8]"
                   >
                     Subscribe Alerts
                   </span>
@@ -314,8 +219,7 @@ export default function Navbar() {
                       className="absolute -bottom-3 left-1/2 -translate-x-1/2"
                     />
                   )}
-                </Link>
-
+                </button>
                 {isLoggedIn ? (
                   <>
                     <Link
@@ -334,7 +238,6 @@ export default function Navbar() {
                           isCartActive ? "text-[#0F5C66]" : "text-[#0F5C66]"
                         }
                       />
-
                       {cartItemCount > 0 && (
                         <span className="absolute -top-2 -right-2 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#C37000] px-1 text-[10px] font-bold text-white">
                           {cartItemCount > 99 ? "99+" : cartItemCount}
@@ -357,7 +260,7 @@ export default function Navbar() {
                     <button
                       type="button"
                       onClick={handleLogout}
-                      className={`${cormorant.className} flex h-[38px] items-center justify-center rounded-[10px] border border-[#B85C38] px-3 text-[14px] font-medium text-[#B85C38] transition hover:bg-[#FBE5DA]`}
+                      className="font-cormorant flex h-[38px] items-center justify-center rounded-[10px] border border-[#B85C38] px-3 text-[14px] font-medium text-[#B85C38] transition hover:bg-[#FBE5DA]"
                     >
                       Logout
                     </button>
@@ -365,16 +268,15 @@ export default function Navbar() {
                 ) : (
                   <button
                     onClick={() => setLoginOpen(true)}
-                    className="flex h-[38px] w-[92px] items-center justify-center gap-2 rounded-[10px] border border-[#005D63] bg-[#EFDEC7]"
+                    className="flex h-[38px] w-[92px] items-center justify-center gap-2 rounded-[10px] border border-[#005D63] bg-[#EFDEC7] transition hover:bg-[#e4d1b8]"
                   >
                     <User
                       size={16}
                       strokeWidth={2}
                       className="text-[#0F5C66]"
                     />
-
                     <span
-                      className={`${cormorant.className} bg-[#EFDEC7] text-[14px] font-medium text-[#0F5C66]`}
+                      className="font-cormorant bg-transparent text-[14px] font-medium text-[#0F5C66]"
                     >
                       Login
                     </span>
@@ -385,6 +287,377 @@ export default function Navbar() {
           </div>
         </nav>
       </header>
+
+      {/* ══ Mobile Right-Side Drawer Backdrop ══ */}
+      <div
+        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
+        style={{ touchAction: "none" }}
+        onTouchMove={(e) => e.preventDefault()}
+        onClick={() => dispatch(closeMenu())}
+        aria-hidden="true"
+      />
+
+      {/* ══ Mobile Right-Side Drawer Panel ══ */}
+      <aside
+        style={{
+          height: "100dvh",
+          maxHeight: "100vh",
+          width: "300px",
+          maxWidth: "85vw",
+          position: "fixed",
+          top: 0,
+          right: 0,
+          zIndex: 50,
+          display: "flex",
+          flexDirection: "column",
+          backgroundColor: "#FBF8F3",
+          borderLeft: "1px solid #D4C3AC",
+          boxShadow: "-12px 0 40px rgba(0,0,0,0.35)",
+          overscrollBehavior: "contain",
+        }}
+        className={`transition-transform duration-300 ease-in-out md:hidden ${menuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+      >
+        {/* Paper texture overlay */}
+        <div
+          style={{ position: "absolute", inset: 0, zIndex: 0, opacity: 0.3, pointerEvents: "none" }}
+        >
+          <Image
+            src="/images/temple-paper-texture.png"
+            alt=""
+            fill
+            className="object-cover"
+          />
+        </div>
+
+        {/* ── Header ── */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 10,
+            height: "64px",
+            flexShrink: 0,
+            paddingLeft: "20px",
+            paddingRight: "16px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderBottom: "1px solid #D4C3AC",
+            backgroundColor: "#F3E7D5",
+          }}
+        >
+          <Link
+            href="/"
+            onClick={() => dispatch(closeMenu())}
+            style={{ display: "flex", alignItems: "center", gap: "8px" }}
+          >
+            <Image src="/images/image 49.png" alt="Brajmarg" width={26} height={34} />
+            <Image src="/images/Group 20.png" alt="Brajmarg" width={96} height={24} />
+          </Link>
+          <button
+            onClick={() => dispatch(closeMenu())}
+            style={{
+              width: "34px",
+              height: "34px",
+              borderRadius: "50%",
+              backgroundColor: "rgba(0,0,0,0.06)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#2D2924",
+              border: "none",
+              cursor: "pointer",
+            }}
+            aria-label="Close menu"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* ── Nav Links (scrollable) ── */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 10,
+            flex: "1 1 auto",
+            minHeight: 0,
+            overflowY: "auto",
+            padding: "20px 18px 16px 18px",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <p
+            style={{
+              paddingLeft: "8px",
+              marginBottom: "12px",
+              fontSize: "11px",
+              fontWeight: 700,
+              letterSpacing: "0.18em",
+              color: "#8C755E",
+              textTransform: "uppercase",
+              fontFamily: "var(--font-cormorant), serif",
+            }}
+          >
+            Navigation
+          </p>
+
+          <ul style={{ display: "flex", flexDirection: "column", gap: "6px", listStyle: "none", margin: 0, padding: 0 }}>
+            {navLinks.map((link) => {
+              const isActive =
+                link.href === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(link.href);
+
+              return (
+                <li key={link.label} style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                  <Link
+                    href={link.href}
+                    onClick={() => dispatch(closeMenu())}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "12px 18px",
+                      borderRadius: "12px",
+                      backgroundColor: isActive ? "#005D63" : "transparent",
+                      color: isActive ? "#FFFFFF" : "#2E241D",
+                      fontFamily: "var(--font-cormorant), serif",
+                      textDecoration: "none",
+                      transition: "all 0.2s ease",
+                      boxShadow: isActive ? "0 2px 8px rgba(0, 93, 99, 0.25)" : "none",
+                    }}
+                  >
+                    <span style={{ fontSize: "18px", fontWeight: isActive ? 600 : 500 }}>
+                      {link.label}
+                    </span>
+                    {isActive ? (
+                      <span
+                        style={{
+                          width: "8px",
+                          height: "8px",
+                          borderRadius: "50%",
+                          backgroundColor: "#FFFFFF",
+                          boxShadow: "0 0 6px rgba(255,255,255,0.8)",
+                        }}
+                      />
+                    ) : (
+                      <span style={{ fontSize: "18px", color: "#A28A70", opacity: 0.7 }}>›</span>
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* Spiritual blessing badge */}
+          <div
+            style={{
+              marginTop: "auto",
+              padding: "12px 14px",
+              borderRadius: "12px",
+              backgroundColor: "rgba(239, 222, 199, 0.45)",
+              border: "1px dashed #D4C3AC",
+              textAlign: "center",
+            }}
+          >
+            <p
+              style={{
+                fontSize: "14px",
+                fontWeight: 600,
+                color: "#8B5E34",
+                fontFamily: "var(--font-cormorant), serif",
+                letterSpacing: "0.06em",
+              }}
+            >
+              ॥ श्री राधे ॥
+            </p>
+            <p
+              style={{
+                fontSize: "11px",
+                color: "#7A6A55",
+                marginTop: "2px",
+                fontFamily: "var(--font-cormorant), serif",
+              }}
+            >
+              Braj Darshan & Seva
+            </p>
+          </div>
+        </div>
+
+        {/* ── Footer Actions (pinned bottom with safe-area) ── */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 10,
+            flexShrink: 0,
+            borderTop: "1px solid #D4C3AC",
+            backgroundColor: "#F3E7D5",
+            paddingTop: "16px",
+            paddingLeft: "18px",
+            paddingRight: "18px",
+            paddingBottom: "max(22px, env(safe-area-inset-bottom, 22px))",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
+          {/* Subscribe Alerts */}
+          <button
+            onClick={() => {
+              setShowAlerts((prev) => !prev);
+              dispatch(closeMenu());
+            }}
+            style={{
+              height: "44px",
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+              borderRadius: "10px",
+              backgroundColor: "#005D63",
+              color: "#FFFFFF",
+              border: "none",
+              cursor: "pointer",
+              boxShadow: "0 2px 8px rgba(0, 93, 99, 0.25)",
+            }}
+          >
+            <Bell size={16} color="#F7F1E8" />
+            <span
+              style={{
+                fontSize: "16px",
+                fontWeight: 600,
+                color: "#F7F1E8",
+                fontFamily: "var(--font-cormorant), serif",
+              }}
+            >
+              Subscribe Alerts
+            </span>
+          </button>
+
+          {/* Login / Profile */}
+          {isLoggedIn ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <div style={{ display: "flex", gap: "8px" }}>
+                <Link
+                  href="/cart"
+                  onClick={() => dispatch(closeMenu())}
+                  style={{
+                    height: "42px",
+                    flex: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    borderRadius: "10px",
+                    border: "1px solid #005D63",
+                    backgroundColor: "#EFDEC7",
+                    textDecoration: "none",
+                  }}
+                >
+                  <ShoppingCart size={16} color="#0F5C66" />
+                  <span
+                    style={{
+                      fontSize: "15px",
+                      fontWeight: 600,
+                      color: "#0F5C66",
+                      fontFamily: "var(--font-cormorant), serif",
+                    }}
+                  >
+                    Cart {cartItemCount > 0 && `(${cartItemCount})`}
+                  </span>
+                </Link>
+                <Link
+                  href="/profile"
+                  onClick={() => dispatch(closeMenu())}
+                  style={{
+                    height: "42px",
+                    width: "46px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "10px",
+                    border: "1px solid #005D63",
+                    backgroundColor: "#EFDEC7",
+                    textDecoration: "none",
+                  }}
+                  aria-label="Profile"
+                >
+                  <User size={18} color="#0F5C66" />
+                </Link>
+              </div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                style={{
+                  height: "40px",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "10px",
+                  border: "1px solid #B85C38",
+                  backgroundColor: "transparent",
+                  color: "#B85C38",
+                  fontSize: "15px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  fontFamily: "var(--font-cormorant), serif",
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                dispatch(closeMenu());
+                setLoginOpen(true);
+              }}
+              style={{
+                height: "44px",
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                borderRadius: "10px",
+                border: "2px solid #005D63",
+                backgroundColor: "#EFDEC7",
+                cursor: "pointer",
+              }}
+            >
+              <User size={16} color="#0F5C66" />
+              <span
+                style={{
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  color: "#0F5C66",
+                  fontFamily: "var(--font-cormorant), serif",
+                }}
+              >
+                Login
+              </span>
+            </button>
+          )}
+
+          {/* Tagline */}
+          <p
+            style={{
+              paddingTop: "2px",
+              textAlign: "center",
+              fontSize: "11px",
+              color: "#7A6A55",
+              fontFamily: "var(--font-cormorant), serif",
+            }}
+          >
+            Connecting Devotees to Braj Bhoomi
+          </p>
+        </div>
+      </aside>
+
       <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
     </>
   );

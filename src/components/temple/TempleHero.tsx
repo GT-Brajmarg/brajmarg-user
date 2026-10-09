@@ -70,6 +70,7 @@ export default function TempleHero({ temple, loading }: TempleHeroProps) {
                 alt={temple.name}
                 fill
                 priority
+                unoptimized
                 className="object-cover object-center"
               />
             </div>
@@ -151,6 +152,7 @@ export default function TempleHero({ temple, loading }: TempleHeroProps) {
                     alt={temple.name}
                     fill
                     priority
+                    unoptimized
                     className="object-cover object-center"
                   />
                 </div>

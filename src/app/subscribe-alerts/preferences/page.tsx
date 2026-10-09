@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Image from "next/image";
 
 import AlertPreferenceHero from "@/components/subscribe-alerts/AlertPreferenceHero";
@@ -93,7 +94,9 @@ export default function SubscribePreferencePage() {
           {/* Footer */}
 
           <div className="mt-8">
-            <PreferenceFooter />
+            <Suspense fallback={null}>
+              <PreferenceFooter />
+            </Suspense>
           </div>
         </div>
       </div>
