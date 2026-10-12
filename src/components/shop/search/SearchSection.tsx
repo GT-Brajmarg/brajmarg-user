@@ -70,6 +70,14 @@ export default function SearchSection({
     dispatch(fetchShopFilters(selectedCategories));
   }, [dispatch, selectedCategories]);
 
+  // Prevent page scroll behind mobile filter drawer
+  useEffect(() => {
+    document.body.style.overflow = mobileFiltersOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileFiltersOpen]);
+
   return (
     <section className="relative">
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
@@ -90,9 +98,9 @@ export default function SearchSection({
         </button>
       </div>
 
-      <div className="mt-4 flex flex-col gap-6 lg:mt-2 lg:flex-row lg:gap-8">
+      <div className="mt-4 flex flex-col gap-6 lg:mt-2 lg:flex-row lg:gap-7">
         {/* Desktop Sidebar */}
-        <div className="hidden lg:block">
+        <div className="hidden lg:block w-[240px] shrink-0">
           <FilterSidebar
             category={category ?? ""}
             selectedCategories={selectedCategories}
@@ -103,7 +111,7 @@ export default function SearchSection({
         </div>
 
         {/* Product Section */}
-        <div className="relative flex-1">
+        <div className="relative flex-1 min-w-0">
           {/* Temple Image */}
           <Image
             src="/images/search-temple.png"
@@ -113,7 +121,7 @@ export default function SearchSection({
             className="absolute -top-30 -right-8 hidden xl:block"
           />
 
-          <div className="rounded-xl border border-[#C37000] bg-transparent p-3 md:p-5">
+          <div className="rounded-[20px] border border-[#C37000]/60 bg-transparent p-3.5 md:p-5">
             <ActiveFilters
               category={category ?? ""}
               selectedCategories={selectedCategories}

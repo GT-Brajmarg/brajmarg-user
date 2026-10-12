@@ -97,15 +97,16 @@ export default function TempleDetailsPage() {
   }
 
   return (
-    <main className="relative overflow-hidden bg-[#F8F2E8]">
+    <main className="relative overflow-hidden bg-[#F7F0E5]">
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <Image
-          src="/images/temple-paper-texture.png"
+          src="/images/paper-texture.png"
           alt=""
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-[0.24]"
+          aria-hidden
+          className="pointer-events-none object-cover opacity-34 mix-blend-multiply"
         />
 
         <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">

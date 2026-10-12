@@ -83,22 +83,39 @@ export default function ShopHero() {
     router.push(`/shop/search?q=${encodeURIComponent(search.trim())}`);
   };
   return (
-    <section className="relative min-h-[500px] overflow-hidden bg-[#EED6A8]">
-      <Image
-        src="/images/hero-krishna.png"
-        alt="Krishna devotional shop collection"
-        fill
-        priority
-        // sizes="100vw"
-        className="object-cover opacity-90"
-        style={{
-          objectPosition: "75% center",
-        }}
-      />
+    <section className="relative overflow-hidden bg-[#EED6A8]">
+      {/* Tablet & Desktop Background Image (md and up) */}
+      <div className="hidden md:block absolute inset-0">
+        <Image
+          src="/images/hero-krishna.png"
+          alt="Krishna devotional shop collection"
+          fill
+          priority
+          className="object-cover opacity-90"
+          style={{
+            objectPosition: "75% center",
+          }}
+        />
+      </div>
 
-      <div className="relative z-10 mx-auto flex min-h-[500px] max-w-[1240px] items-center px-7 py-12 md:px-12">
-        <div className="max-w-[500px] md:translate-x-[200px]">
-          <h1 className="font-cormorant text-[45px] leading-[1.12] font-bold text-[#0B6670] md:text-[52px]">
+      {/* Mobile-only Image on Top */}
+      <div className="relative w-full h-[240px] sm:h-[300px] md:hidden overflow-hidden">
+        <Image
+          src="/images/hero-krishna.png"
+          alt="Krishna devotional shop collection"
+          fill
+          priority
+          className="object-cover"
+          style={{
+            objectPosition: "70% center",
+          }}
+        />
+      </div>
+
+      {/* Content Container (Below image on mobile, overlay on tablet & desktop) */}
+      <div className="relative z-10 mx-auto flex min-h-0 md:min-h-[500px] max-w-[1240px] items-center px-6 sm:px-10 md:px-12 py-8 sm:py-10 md:py-16">
+        <div className="w-full max-w-[420px] md:max-w-[290px] lg:max-w-[540px]">
+          <h1 className="font-cormorant text-[45px] leading-[1.12] font-bold text-[#0B6670] md:text-[36px] lg:text-[52px]">
             Shop Devotion,
             <br />
             Bring Home Blessings
@@ -120,13 +137,13 @@ export default function ShopHero() {
             <div className="h-px w-16 bg-[#D7B06B]" />
           </div>
 
-          <p className="font-cormorant mt-5 max-w-[385px] text-[18px] leading-relaxed text-[#3D352F]">
+          <p className="font-cormorant mt-5 max-w-[385px] text-[18px] md:text-[15px] lg:text-[18px] leading-relaxed text-[#3D352F]">
             Explore authentic puja items, sacred gifts and more — blessed by
             temples of India.
           </p>
 
           <div
-            className="mt-5 flex h-[42px] max-w-[460px] items-center rounded-md border border-[#C98C3D] px-3 shadow-[0_4px_10px_rgba(95,57,20,0.08)]"
+            className="mt-5 flex h-[42px] max-w-[460px] md:max-w-[290px] lg:max-w-[460px] items-center rounded-md border border-[#C98C3D] px-3 shadow-[0_4px_10px_rgba(95,57,20,0.08)]"
             style={{ marginTop: "20px" }}
           >
             <input
@@ -138,13 +155,13 @@ export default function ShopHero() {
                 }
               }}
               style={{ marginLeft: "10px" }}
-              placeholder="Search for products, categories..."
+              placeholder="Search for products, categories or temples..."
               className="font-cormorant h-full min-w-0 flex-1 bg-transparent font-serif text-[15px] text-[#5E513E] outline-none placeholder:text-[#9C8D78]"
             />
             <button
               type="button"
               onClick={handleSearch}
-              className={`${search.trim() ? "visible" : "invisible"} cursor-pointer`}
+              className="cursor-pointer"
             >
               <Search
                 className="h-4 w-4 text-[#C77824]"
@@ -154,20 +171,20 @@ export default function ShopHero() {
           </div>
 
           <div
-            className="mt-8 flex flex-wrap gap-x-5 gap-y-4"
+            className="mt-8 flex flex-wrap md:grid md:grid-cols-2 lg:flex lg:flex-nowrap items-center gap-x-3 md:gap-x-3 lg:gap-x-6 gap-y-3"
             style={{ marginTop: "30px" }}
           >
             {trustItems.map(({ image, top, bottom }) => (
-              <div key={top} className="flex items-center gap-2">
+              <div key={top} className="flex items-center gap-2 md:gap-1.5 lg:gap-2 flex-shrink-0">
                 <Image
                   src={image}
                   alt={top}
                   width={32}
                   height={32}
-                  className="h-8 w-8 object-contain"
+                  className="h-8 w-8 md:h-7 md:w-7 lg:h-8 lg:w-8 object-contain flex-shrink-0"
                 />
 
-                <p className="font-cormorant text-[15px] leading-[1.15] text-[#3D352F]">
+                <p className="font-cormorant text-[15px] md:text-[13px] lg:text-[15px] leading-[1.15] text-[#3D352F] whitespace-nowrap">
                   {top}
                   <br />
                   {bottom}

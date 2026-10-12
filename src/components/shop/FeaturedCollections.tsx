@@ -30,10 +30,10 @@ const collections = [
 
 export default function FeaturedCollections() {
   return (
-    <section className="mt-2">
+    <section className="pt-12">
       <div
         className="flex items-center justify-center gap-3"
-        style={{ marginTop: "40px", marginBottom: "30px" }}
+        style={{ marginTop: "40px", marginBottom: "50px" }}
       >
         <Image src="/images/lotus.png" alt="" width={54} height={36} />
 

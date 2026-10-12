@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -53,6 +54,12 @@ export default function LayoutContent({
     pathname.startsWith("/subscribe-alerts/preferences") ||
     pathname.startsWith("/subscribe-alerts/review-subscription") ||
     pathname.startsWith("/subscribe-alerts/payment");
+
+  // Scroll to top on every route change and clean up any body overflow lock
+  useEffect(() => {
+    document.body.style.overflow = "";
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <>

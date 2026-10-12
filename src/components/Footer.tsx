@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import styles from "./Footer.module.css";
 
 const trustItems = [
@@ -53,73 +54,93 @@ const quickLinks = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
+
   return (
     <footer className={styles.footer}>
-      {/* ══ PART 1: Teal Trust Banner ══ */}
-      <div className={styles.trustBanner}>
-        <div className={styles.trustInner}>
-          {/* LEFT: headline + body + button */}
-          <div className={styles.trustLeft}>
-            <h2 className={styles.trustHeading}>
-              Built on Transparency.
-              <br />
-              Devotion with Integrity.
-            </h2>
-            <p className={styles.trustBody}>
-              Brajmarg is a private facilitation platform. We are not owned,
-              operated, authorized or managed by any temple trust or authority.
-              Our role is coordination and service facilitation only.
-            </p>
-            <Link href="/disclaimer" className={styles.disclaimerBtn}>
-              <span>Read Full Disclaimer</span>
-              <svg
-                width="20"
-                height="14"
-                viewBox="0 0 20 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className={styles.disclaimerArrow}
-              >
-                <path
-                  d="M1 7H19M13 1L19 7L13 13"
-                  stroke="#EFDEC7"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Link>
-          </div>
+      {/* ══ PART 1: Teal Trust Banner & Skyline ══ */}
+      <div
+        className={`${styles.trustBanner} ${!isHomePage ? styles.trustBannerNoTeal : ""}`}
+      >
+        {!isHomePage && (
+          <Image
+            src="/images/paper-texture.png"
+            alt=""
+            fill
+            priority
+            aria-hidden
+            className="pointer-events-none object-cover opacity-34 mix-blend-multiply"
+          />
+        )}
+        {isHomePage && (
+          <div className={styles.trustInner}>
+            {/* LEFT: headline + body + button */}
+            <div className={styles.trustLeft}>
+              <h2 className={styles.trustHeading}>
+                Built on Transparency.
+                <br />
+                Devotion with Integrity.
+              </h2>
+              <p className={styles.trustBody}>
+                Brajmarg is a private facilitation platform. We are not owned,
+                operated, authorized or managed by any temple trust or authority.
+                Our role is coordination and service facilitation only.
+              </p>
+              <Link href="/disclaimer" className={styles.disclaimerBtn}>
+                <span>Read Full Disclaimer</span>
+                <svg
+                  width="20"
+                  height="14"
+                  viewBox="0 0 20 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={styles.disclaimerArrow}
+                >
+                  <path
+                    d="M1 7H19M13 1L19 7L13 13"
+                    stroke="#EFDEC7"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Link>
+            </div>
 
-          {/* Vertical divider */}
-          <div className={styles.vDivider} />
+            {/* Vertical divider */}
+            <div className={styles.vDivider} />
 
-          {/* RIGHT: 6 icons with centered labels */}
-          <div className={styles.trustRight}>
-            <div className={styles.trustGrid}>
-              {trustItems.map((item, idx) => (
-                <div key={idx} className={styles.trustItem}>
-                  <div className={styles.trustIconWrap}>
-                    <Image
-                      src={item.icon}
-                      alt={item.alt}
-                      width={76}
-                      height={76}
-                      className={styles.trustIconImg}
-                    />
+            {/* RIGHT: 6 icons with centered labels */}
+            <div className={styles.trustRight}>
+              <div className={styles.trustGrid}>
+                {trustItems.map((item, idx) => (
+                  <div key={idx} className={styles.trustItem}>
+                    <div className={styles.trustIconWrap}>
+                      <Image
+                        src={item.icon}
+                        alt={item.alt}
+                        width={76}
+                        height={76}
+                        className={styles.trustIconImg}
+                      />
+                    </div>
+                    <div className={styles.trustLabel}>
+                      <div>{item.line1}</div>
+                      <div>{item.line2}</div>
+                    </div>
                   </div>
-                  <div className={styles.trustLabel}>
-                    <div>{item.line1}</div>
-                    <div>{item.line2}</div>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Temple Skyline at bottom of teal section */}
-        <div className={styles.skylineWrap}>
+        <div
+          className={`${styles.skylineWrap} ${!isHomePage ? styles.skylineOnly : ""}`}
+          style={{ position: "relative", zIndex: 50 }}
+        >
           <Image
             src="/images5/Group 27.png"
             alt="Sacred temple skyline"

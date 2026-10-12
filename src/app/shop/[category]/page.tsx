@@ -56,7 +56,7 @@ export default async function CategoryPage({ params }: Props) {
   const { category } = await params;
 
   return (
-    <main className="relative min-h-screen bg-[#F9F3EA]">
+    <main className="relative isolate min-h-screen overflow-hidden bg-[#F7F0E5]">
       {/* paper texture */}
       <div
         aria-hidden="true"
@@ -64,12 +64,13 @@ export default async function CategoryPage({ params }: Props) {
       >
         {/* Paper Texture */}
         <Image
-          src="/images/temple-paper-texture.png"
+          src="/images/paper-texture.png"
           alt=""
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-[0.22]"
+          aria-hidden
+          className="pointer-events-none object-cover opacity-34 mix-blend-multiply"
         />
 
         {/* Mandala behind Shop Categories */}
