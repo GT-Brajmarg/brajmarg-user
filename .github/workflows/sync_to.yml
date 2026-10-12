@@ -2,10 +2,11 @@ name: Sync to GitVercel-GeloraTech
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
 
 jobs:
   sync:
+    if: github.repository == 'GT-Brajmarg/brajmarg-user'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -19,4 +20,4 @@ jobs:
           git config user.name "GitVercel-GeloraTech"
           git config user.email "git.vercel@geloratech.com"
           git remote add userb "https://x-access-token:${{ secrets.GIT_VERCEL_PUSH_TOKEN }}@github.com/GitVercel-GeloraTech/brajmarg-user.git"
-          git push userb main:main --force
+          git push userb ${{ github.ref_name }}:${{ github.ref_name }} --force
