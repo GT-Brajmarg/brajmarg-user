@@ -8,7 +8,7 @@ import WhyTravelWithUs from "@/components/yatra/WhyTravelWithUs";
 
 export default function YatraPage() {
   return (
-    <main className="relative isolate min-h-screen overflow-hidden bg-[#F8F2E8]">
+    <main className="relative isolate min-h-screen overflow-hidden bg-[#F7F0E5]">
       {/* Background */}
       <div
         aria-hidden="true"
@@ -16,12 +16,13 @@ export default function YatraPage() {
       >
         {/* Paper Texture */}
         <Image
-          src="/images/temple-paper-texture.png"
+          src="/images/paper-texture.png"
           alt=""
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-[0.22]"
+          aria-hidden
+          className="pointer-events-none object-cover opacity-34 mix-blend-multiply"
         />
 
         {/* Mandala Behind Filters */}

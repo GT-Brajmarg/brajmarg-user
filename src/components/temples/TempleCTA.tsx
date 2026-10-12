@@ -94,7 +94,7 @@ export default function TempleCTA() {
           >
             <p className="font-cormorant text-[15px] lg:text-[16px]">Request a Temple</p>
             <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
-              <path d="M1 7H19M19 7L13 1M19 7L13 13" stroke="#EFDEC7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M1 7H19M19 7L13 1M19 7L13 13" stroke="#EFDEC7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
 
@@ -106,7 +106,7 @@ export default function TempleCTA() {
           >
             <p className="font-cormorant text-[18px]">Request a Temple</p>
             <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0 }}>
-              <path d="M1 7H19M19 7L13 1M19 7L13 13" stroke="#EFDEC7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M1 7H19M19 7L13 1M19 7L13 13" stroke="#EFDEC7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
         </div>

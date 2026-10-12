@@ -161,15 +161,7 @@ export default function ProductGrid({
   }
 
   return (
-    <div
-      className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3"
-      style={{
-        marginLeft: "10px",
-        marginRight: "10px",
-        marginTop: "20px",
-        marginBottom: "20px",
-      }}
-    >
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mt-4 mb-2">
       {searchedProducts.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}

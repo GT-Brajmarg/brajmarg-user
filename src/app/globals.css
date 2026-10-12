@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f7f0e5;
   --foreground: #171717;
   --font-primary: var(--font-cormorant), serif;
 }
@@ -11,6 +11,10 @@
 
 .font-cormorant-infant {
   font-family: var(--font-cormorant-infant), serif;
+}
+
+.opacity-34 {
+  opacity: 0.34;
 }
 
 html {

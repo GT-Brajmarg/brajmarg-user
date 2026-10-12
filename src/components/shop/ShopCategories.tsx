@@ -70,7 +70,7 @@ export default function ShopCategories() {
     <section className="max-hpb-12 relative min-h-[450px] w-full px-4">
       <SectionTitle title="Shop by Category" />
 
-      <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-18">
+      <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4 md:gap-x-6 lg:grid-cols-4 lg:gap-x-10">
         {categories.map((category) => (
           <Link
             key={category.title}

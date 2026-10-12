@@ -15,6 +15,22 @@
   overflow: hidden;
 }
 
+/* On non-home pages: match the page parchment background (#F8F2E8) used on all inner pages */
+.trustBannerNoTeal {
+  background-color: #f7f0e5;
+  overflow: visible;
+}
+
+/* Paper texture image overlay — replicates the 24% opacity page background texture */
+.paperTextureOverlay {
+  position: absolute !important;
+  inset: 0;
+  z-index: 0;
+  object-fit: cover;
+  opacity: 0.24;
+  pointer-events: none;
+}
+
 .trustInner {
   max-width: 1400px;
   margin: 0 auto;
@@ -153,14 +169,23 @@
 .skylineWrap {
   position: relative;
   width: 100%;
-  height: 145px;
-  overflow: hidden;
+  height: 182px;
+  overflow: visible;
   margin-top: 6px;
+  z-index: 50;
 }
 
 .skylineImg {
   object-fit: cover;
   object-position: center bottom;
+}
+
+.skylineOnly {
+  height: 182px;
+  margin-top: 0;
+  overflow: visible;
+  position: relative;
+  z-index: 50;
 }
 
 /* ────────────────────────────────────
@@ -355,26 +380,33 @@
   .trustInner {
     padding: 40px 32px 28px;
   }
+
   .vDivider {
     margin: 6px 24px 0;
   }
+
   .trustGrid {
     gap: 8px;
   }
+
   .trustIconWrap,
   .trustIconImg {
     width: 64px;
     height: 64px;
   }
+
   .trustLabel {
     font-size: 12px;
   }
+
   .bottomInner {
     padding: 30px 32px 34px;
   }
+
   .footerVDivider {
     margin: 0 24px;
   }
+
   .linksGrid {
     column-gap: 28px;
   }
@@ -449,6 +481,7 @@
     grid-template-columns: repeat(2, 1fr);
     justify-items: center;
   }
+
   .linksGrid {
     grid-template-columns: repeat(2, 1fr);
   }

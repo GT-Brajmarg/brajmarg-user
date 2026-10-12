@@ -43,6 +43,17 @@ export default function DarshanTimings() {
     return hours * 3600 + minutes * 60 + seconds;
   };
 
+  const formatTo12Hour = (time?: string) => {
+    if (!time) return "";
+    const [hStr, mStr] = time.split(":");
+    const hours = parseInt(hStr, 10);
+    if (isNaN(hours)) return time;
+    const minutes = mStr ? mStr.padStart(2, "0") : "00";
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const h12 = hours % 12 || 12;
+    return `${h12}:${minutes} ${ampm}`;
+  };
+
   const isToday = selectedDay === String(today.getDay());
 
   const currentDarshan = isToday
@@ -246,8 +257,8 @@ export default function DarshanTimings() {
                           {timing.label}
                         </p>
 
-                        <p className="mt-0.5 text-[14px] font-bold text-[#C37000]">
-                          {timing.opening_time}
+                        <p className="mt-0.5 text-[14px] font-bold text-[#C37000] whitespace-nowrap">
+                          {formatTo12Hour(timing.opening_time)}
                         </p>
 
                         <div className="absolute -bottom-[9px] rounded-full bg-[#D18400] px-2.5 py-[1px] text-[8px] font-bold tracking-wider text-white shadow-xs">
@@ -260,8 +271,8 @@ export default function DarshanTimings() {
                           {timing.label}
                         </p>
 
-                        <p className="mt-1 text-[14px] font-bold text-[#4D433B]">
-                          {timing.opening_time}
+                        <p className="mt-1 text-[14px] font-bold text-[#4D433B] whitespace-nowrap">
+                          {formatTo12Hour(timing.opening_time)}
                         </p>
                       </div>
                     )}
@@ -334,7 +345,7 @@ export default function DarshanTimings() {
                     {allDarshansCompleted && isToday
                       ? "Today's schedule finished"
                       : `${isToday ? "Today" : selectedDayName} • ${
-                          nextDarshan?.opening_time || ""
+                          formatTo12Hour(nextDarshan?.opening_time)
                         }`}
                   </span>
                 </div>
@@ -458,7 +469,7 @@ export default function DarshanTimings() {
                               className="text-[17px] font-semibold text-[#0B6670]"
                               style={{ marginRight: "20px" }}
                             >
-                              {timing.opening_time}
+                              {formatTo12Hour(timing.opening_time)}
                             </span>
 
                             {/* <ChevronRight
@@ -549,7 +560,7 @@ export default function DarshanTimings() {
                   <span className="text-[12px] font-medium text-[#6E675F]">
                     {allDarshansCompleted && isToday
                       ? "Today's schedule finished"
-                      : `${selectedDateLabel} • ${nextDarshan?.opening_time || ""}`}
+                      : `${selectedDateLabel} • ${formatTo12Hour(nextDarshan?.opening_time)}`}
                   </span>
                 </div>
               </div>
