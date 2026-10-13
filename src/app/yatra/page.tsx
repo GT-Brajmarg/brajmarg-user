@@ -4,10 +4,12 @@ import YatraHero from "@/components/yatra/YatraHero";
 // import YatraFilters from "@/components/yatra/page/YatraFilters";
 import FeaturedYatras from "@/components/yatra/FeaturedYatras";
 import WhyTravelWithUs from "@/components/yatra/WhyTravelWithUs";
+import YatraPageClient from "@/components/yatra/YatraPageClient";
 // import WhyTravelWithUs from "@/components/yatra/page/WhyTravelWithUs";
 
 export default function YatraPage() {
   return (
+    <YatraPageClient>
     <main className="relative isolate min-h-screen overflow-hidden bg-[#F7F0E5]">
       {/* Background */}
       <div
@@ -69,5 +71,6 @@ export default function YatraPage() {
         </div>
       </section>
     </main>
+    </YatraPageClient>
   );
 }

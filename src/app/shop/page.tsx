@@ -2,9 +2,11 @@ import Image from "next/image";
 import ShopHero from "@/components/shop/ShopHero";
 import ShopCategories from "@/components/shop/ShopCategories";
 import FeaturedCollections from "@/components/shop/FeaturedCollections";
+import ShopPageClient from "@/components/shop/ShopPageClient";
 
 export default function ShopPage() {
   return (
+    <ShopPageClient>
     <main className="relative isolate min-h-screen overflow-hidden bg-[#F7F0E5]">
       {/* Background */}
       <div
@@ -65,5 +67,6 @@ export default function ShopPage() {
         </div>
       </section>
     </main>
+    </ShopPageClient>
   );
 }

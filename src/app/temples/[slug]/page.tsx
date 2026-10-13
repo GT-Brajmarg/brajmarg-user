@@ -21,7 +21,7 @@ import TempleOfferings from "@/components/temple/TempleOfferings";
 import TempleGallery from "@/components/temple/TempleGallery";
 import TempleLocation from "@/components/temple/TempleLocation";
 import RelatedTemples from "@/components/temple/RelatedTemples";
-import TempleDetailsLoader from "@/components/temple/TempleDetailsLoader";
+import PageLoader from "@/components/PageLoader";
 
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { getTempleDetails } from "@/store/slices/templeDetailsSlice";
@@ -89,7 +89,7 @@ export default function TempleDetailsPage() {
   }, [dispatch, slug]);
 
   if (booting) {
-    return <TempleDetailsLoader />;
+    return <PageLoader subtitle="Preparing your temple darshan..." />;
   }
 
   if (!temple || !hasCurrentTemple) {

@@ -14,7 +14,7 @@ export default function ShopCategories() {
       title: "Frames",
       subtitle: "Divine Frames & Wall Decor",
       image: "/images/category-frames.png",
-      link: "/shop/frames",
+      link: "/shop/search?category=frames",
       count: frames?.length || 0,
     },
     {
@@ -24,45 +24,45 @@ export default function ShopCategories() {
         prasad?.[0]?.image ||
         prasad?.[0]?.thumbnail ||
         "/images/category-prasad.png",
-      link: "/shop/prasad",
+      link: "/shop/search?category=prasad",
       count: prasad?.length || 0,
     },
     {
       title: "Poshak",
       subtitle: "Beautiful Dresses for Thakurji",
       image: "/images/category-poshak.png",
-      link: "/shop/poshak",
+      link: "/shop/search?category=poshak",
       count: cloths?.length || 0,
     },
     {
       title: "Puja Essentials",
       subtitle: "Puja Items & Accessories",
       image: "/images/category-puja.png",
-      link: "/shop/puja-essentials",
+      link: "/shop/search?category=puja-essentials",
     },
     {
       title: "Books & Scriptures",
       subtitle: "Spiritual Books & Scriptures",
       image: "/images/category-books.png",
-      link: "/shop/books-scriptures",
+      link: "/shop/search?category=books-scriptures",
     },
     {
       title: "Incense & Dhoop",
       subtitle: "Aromatic Incense & Dhoop",
       image: "/images/category-incense.png",
-      link: "/shop/incense-dhoop",
+      link: "/shop/search?category=incense-dhoop",
     },
     {
       title: "Idols & Murtis",
       subtitle: "Murtis, Brass & Wooden Idols",
       image: "/images/category-idols.png",
-      link: "/shop/idols-murtis",
+      link: "/shop/search?category=idols-murtis",
     },
     {
       title: "Gift Hampers",
       subtitle: "Curated Devotional Gift Hampers",
       image: "/images/category-hampers.png",
-      link: "/shop/gift-hampers",
+      link: "/shop/search?category=gift-hampers",
     },
   ];
 

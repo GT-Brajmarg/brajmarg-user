@@ -40,71 +40,69 @@ export default function YatraHero() {
         }}
       />
 
-      {/* Light Overlay */}
-
-      <div className="relative z-10 mx-auto flex min-h-[500px] max-w-[1240px] items-center px-7 py-12 md:px-12">
-        <div className="max-w-[650px] md:translate-x-[200px]">
+      {/* Content Container */}
+      <div className="relative z-10 mx-auto flex min-h-[500px] lg:min-h-[540px] max-w-[1240px] items-center px-6 sm:px-10 lg:px-14 py-10 lg:py-14">
+        <div className="w-full max-w-[600px]">
           {/* Heading */}
-
-          <h1 className="font-cormorant text-[52px] leading-[1.05] font-bold text-[#44301B]">
+          <h1 className="font-cormorant text-[38px] sm:text-[46px] lg:text-[52px] font-bold leading-[1.08] text-[#3B2813]">
             Begin Your
             <br />
-            <span className="text-[#0B6C73]">Sacred Journey</span>
+            <span className="text-[#0B6670]">Sacred Journey</span>
           </h1>
 
-          {/* Divider */}
-
-          <div
-            className="mt-5 flex items-center gap-3"
-            style={{ marginTop: "10px", marginBottom: "10px" }}
-          >
-            <div className="h-px w-14 bg-[#C98C3D]" />
-
-            <Image src="/images/lotus.png" alt="" width={50} height={50} />
-
-            <div className="h-px w-14 bg-[#C98C3D]" />
+          {/* Lotus Divider */}
+          <div className="my-3 sm:my-3.5 flex items-center gap-2">
+            <div className="h-[1px] w-12 sm:w-16 bg-[#C98C3D]/70" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#C98C3D]" />
+            <Image
+              src="/images/lotus.png"
+              alt=""
+              width={34}
+              height={24}
+              className="object-contain"
+            />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#C98C3D]" />
+            <div className="h-[1px] w-12 sm:w-16 bg-[#C98C3D]/70" />
           </div>
 
           {/* Description */}
-
-          <p className="font-cormorant mt-5 max-w-[470px] text-[22px] leading-8 text-[#4D433A]">
-            Travel with BrajMarg through thoughtfully planned pilgrimages to
+          <p className="font-cormorant text-[16px] sm:text-[18px] lg:text-[19px] leading-[1.38] text-[#3D352F] max-w-[490px]">
+            Travel with Brajmarg through thoughtfully planned pilgrimages to
             India's revered temples.
           </p>
 
-          {/* Features */}
-
+          {/* Glassmorphism Feature Badges Bar */}
           <div
-            className="mt-8 overflow-hidden rounded-xl border border-white bg-[#EFDEC7]/20 backdrop-blur-sm"
-            style={{ marginTop: "20px", width: "600px" }}
+            className="glass-card mt-6 w-full max-w-[580px] rounded-xl sm:rounded-2xl p-2.5 sm:p-3 transition-all"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%)",
+              backdropFilter: "blur(4px)",
+              WebkitBackdropFilter: "blur(4px)",
+              border: "0.6px solid rgba(255, 255, 255, 0.65)",
+              boxShadow:
+                "0 4px 20px 0 rgba(160, 100, 20, 0.05), inset 0 1px 1px 0 rgba(255, 255, 255, 0.75)",
+            }}
           >
-            <div className="grid grid-cols-2 gap-6 lg:grid-cols-4">
+            <div className="grid grid-cols-4 gap-1.5 sm:gap-2.5 py-1 px-0.5">
               {trustItems.map((item) => (
                 <div
                   key={item.title}
-                  className="flex flex-col items-center text-center"
-                  style={{
-                    marginTop: "10px",
-                    marginBottom: "10px",
-                  }}
+                  className="flex flex-col items-center text-center px-0.5 sm:px-1"
                 >
                   <Image
                     src={item.image}
                     alt={item.title}
-                    width={52}
-                    height={52}
-                    className="mb-3"
-                    style={{ marginLeft: "10px", marginBottom: "5PX" }}
+                    width={34}
+                    height={34}
+                    className="h-7 w-7 sm:h-8 sm:w-8 object-contain"
                   />
 
-                  <h4 className="font-cormorant text-[17px] leading-5 font-semibold whitespace-pre-line text-[#8D5A11]">
+                  <h4 className="font-cormorant mt-1.5 text-[12px] sm:text-[13.5px] lg:text-[14px] font-bold text-[#3B2813] leading-tight whitespace-pre-line">
                     {item.title}
                   </h4>
 
-                  <p
-                    className="font-cormorant mt-2 text-[14px] leading-5 whitespace-pre-line text-[#6D5A44]"
-                    style={{ marginTop: "5px" }}
-                  >
+                  <p className="font-cormorant mt-1 text-[10px] sm:text-[10.5px] lg:text-[11px] leading-[1.25] text-[#6E5942] whitespace-pre-line">
                     {item.subtitle}
                   </p>
                 </div>

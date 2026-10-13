@@ -1,14 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import {
-  Search,
-  ShieldCheck,
-  PackageCheck,
-  Truck,
-  HeartHandshake,
-} from "lucide-react";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -38,8 +30,6 @@ const trustItems = [
 export default function ShopHero() {
   const router = useRouter();
 
-  const [search, setSearch] = useState("");
-
   const CATEGORY_MAP: Record<string, string> = {
     frame: "frames",
     frames: "frames",
@@ -68,20 +58,8 @@ export default function ShopHero() {
     hampers: "gift-hampers",
   };
 
-  const handleSearch = () => {
-    const value = search.trim().toLowerCase();
 
-    if (!value) return;
 
-    // If user searched a category
-    if (CATEGORY_MAP[value]) {
-      router.push(`/shop/${CATEGORY_MAP[value]}`);
-      return;
-    }
-
-    // Otherwise perform global search
-    router.push(`/shop/search?q=${encodeURIComponent(search.trim())}`);
-  };
   return (
     <section className="relative overflow-hidden bg-[#EED6A8]">
       {/* Tablet & Desktop Background Image (md and up) */}
@@ -141,34 +119,6 @@ export default function ShopHero() {
             Explore authentic puja items, sacred gifts and more — blessed by
             temples of India.
           </p>
-
-          <div
-            className="mt-5 flex h-[42px] max-w-[460px] md:max-w-[290px] lg:max-w-[460px] items-center rounded-md border border-[#C98C3D] px-3 shadow-[0_4px_10px_rgba(95,57,20,0.08)]"
-            style={{ marginTop: "20px" }}
-          >
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSearch();
-                }
-              }}
-              style={{ marginLeft: "10px" }}
-              placeholder="Search for products, categories or temples..."
-              className="font-cormorant h-full min-w-0 flex-1 bg-transparent font-serif text-[15px] text-[#5E513E] outline-none placeholder:text-[#9C8D78]"
-            />
-            <button
-              type="button"
-              onClick={handleSearch}
-              className="cursor-pointer"
-            >
-              <Search
-                className="h-4 w-4 text-[#C77824]"
-                style={{ marginRight: "10px" }}
-              />
-            </button>
-          </div>
 
           <div
             className="mt-8 flex flex-wrap md:grid md:grid-cols-2 lg:flex lg:flex-nowrap items-center gap-x-3 md:gap-x-3 lg:gap-x-6 gap-y-3"

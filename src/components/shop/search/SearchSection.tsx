@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { SlidersHorizontal, X } from "lucide-react";
 
@@ -18,12 +18,14 @@ interface Props {
   category?: string;
   collection?: string;
   searchQuery?: string;
+  initialCategoryParam?: string;
 }
 
 export default function SearchSection({
   category,
   collection,
   searchQuery: initialSearchQuery = "",
+  initialCategoryParam,
 }: Props) {
   const categoryTitles: Record<string, string> = {
     frames: "Frames",
@@ -48,21 +50,88 @@ export default function SearchSection({
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
-  const title = category
-    ? (categoryTitles[category] ?? "Shop")
+  const activeCategory = category || initialCategoryParam?.split(",")[0]?.trim();
+  const title = activeCategory
+    ? (categoryTitles[activeCategory] ?? "Shop")
     : (collectionTitles[collection ?? ""] ?? "Shop");
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    category ? [category] : [],
-  );
+  const getInitialCategories = () => {
+    if (initialCategoryParam) {
+      return initialCategoryParam
+        .split(",")
+        .map((s) => s.trim().toLowerCase())
+        .filter(Boolean);
+    }
+    if (category) {
+      return [category.toLowerCase().trim()];
+    }
+    return [];
+  };
+
+  const [selectedCategories, setSelectedCategories] =
+    useState<string[]>(getInitialCategories);
 
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
+  const [priceFilter, setPriceFilter] = useState<{
+    min: number;
+    max: number;
+  } | null>(null);
 
   useEffect(() => {
-    if (category) {
-      setSelectedCategories([category]);
+    if (initialCategoryParam) {
+      const parsed = initialCategoryParam
+        .split(",")
+        .map((s) => s.trim().toLowerCase())
+        .filter(Boolean);
+      setSelectedCategories(parsed);
+    } else if (category) {
+      setSelectedCategories([category.toLowerCase().trim()]);
     }
-  }, [category]);
+  }, [category, initialCategoryParam]);
+
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    const pathname = window.location.pathname;
+    const params = new URLSearchParams(window.location.search);
+    params.delete("search");
+
+    if (selectedCategories.length > 0) {
+      params.set("category", selectedCategories.join(","));
+    } else {
+      params.delete("category");
+    }
+
+    const queryStr = params.toString();
+    const basePath = pathname.startsWith("/shop") ? pathname : "/shop/search";
+    const newPath = queryStr ? `${basePath}?${queryStr}` : basePath;
+    window.history.replaceState(null, "", newPath);
+  }, [selectedCategories]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const catParam = params.get("category") || params.get("search");
+      if (catParam) {
+        setSelectedCategories(
+          catParam
+            .split(",")
+            .map((s) => s.trim().toLowerCase())
+            .filter(Boolean),
+        );
+      } else {
+        setSelectedCategories([]);
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   useEffect(() => {
     if (selectedCategories.length === 0) return;
@@ -107,6 +176,8 @@ export default function SearchSection({
             setSelectedCategories={setSelectedCategories}
             selectedPriceRanges={selectedPriceRanges}
             setSelectedPriceRanges={setSelectedPriceRanges}
+            priceFilter={priceFilter}
+            setPriceFilter={setPriceFilter}
           />
         </div>
 
@@ -131,6 +202,7 @@ export default function SearchSection({
             <ProductGrid
               selectedCategories={selectedCategories}
               selectedPriceRanges={selectedPriceRanges}
+              priceFilter={priceFilter}
               collection={collection}
               searchQuery={searchQuery}
             />
@@ -164,6 +236,8 @@ export default function SearchSection({
                 setSelectedCategories={setSelectedCategories}
                 selectedPriceRanges={selectedPriceRanges}
                 setSelectedPriceRanges={setSelectedPriceRanges}
+                priceFilter={priceFilter}
+                setPriceFilter={setPriceFilter}
               />
             </div>
           </div>

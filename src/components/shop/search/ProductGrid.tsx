@@ -8,14 +8,16 @@ import { priceRanges } from "../shopFilters";
 
 interface ProductGridProps {
   selectedCategories: string[];
-  selectedPriceRanges: string[];
+  selectedPriceRanges?: string[];
+  priceFilter?: { min: number; max: number } | null;
   collection?: string;
   searchQuery: string;
 }
 
 export default function ProductGrid({
   selectedCategories,
-  selectedPriceRanges,
+  selectedPriceRanges = [],
+  priceFilter,
   collection,
   searchQuery,
 }: ProductGridProps) {
@@ -97,20 +99,27 @@ export default function ProductGrid({
       </div>
     );
   }
-  const filteredProducts =
-    selectedPriceRanges.length === 0
-      ? items
-      : items.filter((product) => {
-          const price = Number(product.price);
+  const filteredProducts = items.filter((product) => {
+    const price = Number(product.price);
+    if (isNaN(price)) return true;
 
-          return selectedPriceRanges.some((rangeId) => {
-            const range = priceRanges.find((r) => r.id === rangeId);
+    if (priceFilter) {
+      if (price < priceFilter.min || price > priceFilter.max) {
+        return false;
+      }
+    }
 
-            if (!range) return false;
+    if (selectedPriceRanges.length > 0) {
+      const match = selectedPriceRanges.some((rangeId) => {
+        const range = priceRanges.find((r) => r.id === rangeId);
+        if (!range) return false;
+        return price >= range.min && price <= range.max;
+      });
+      if (!match) return false;
+    }
 
-            return price >= range.min && price <= range.max;
-          });
-        });
+    return true;
+  });
 
   const searchedProducts =
     searchQuery.trim() === ""

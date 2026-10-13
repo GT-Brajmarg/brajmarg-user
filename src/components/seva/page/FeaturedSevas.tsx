@@ -40,23 +40,35 @@ export default function FeaturedSevas() {
     return featuredSevas.slice(start, start + ITEMS_PER_PAGE);
   }, [featuredSevas, currentPage]);
   return (
-    <section className="py-10" style={{ marginTop: "30px" }}>
+    <section className="py-6 sm:py-8 md:py-10" style={{ marginTop: "30px" }}>
       {/* Heading */}
 
-      <div className="mb-8 flex flex-col items-center">
-        <div className="flex items-center gap-3">
-          <Image src="/images/lotus.png" alt="" width={54} height={36} />
+      <div className="mb-6 sm:mb-8 flex flex-col items-center px-2 text-center">
+        <div className="flex items-center justify-center gap-2 sm:gap-3">
+          <Image
+            src="/images/lotus.png"
+            alt=""
+            width={54}
+            height={36}
+            className="h-5 w-8 sm:h-7 sm:w-11 md:h-9 md:w-14 shrink-0 object-contain"
+          />
 
-          <h2 className="font-cormorant text-[36px] font-semibold text-[#0B6670]">
+          <h2 className="font-cormorant text-[25px] sm:text-[28px] md:text-[36px] font-semibold text-[#0B6670] whitespace-nowrap">
             {selectedDate || selectedSevaType
               ? "Available Sevas"
               : "Featured Sevas"}
           </h2>
 
-          <Image src="/images/lotus.png" alt="" width={54} height={36} />
+          <Image
+            src="/images/lotus.png"
+            alt=""
+            width={54}
+            height={36}
+            className="h-5 w-8 sm:h-7 sm:w-11 md:h-9 md:w-14 shrink-0 object-contain"
+          />
         </div>
 
-        <p className="font-cormorant text-[24px] text-[#3D352F]">
+        <p className="font-cormorant mt-1 text-[15px] sm:text-[18px] md:text-[24px] text-[#3D352F] whitespace-nowrap text-center">
           {selectedDate || selectedSevaType
             ? "Showing sevas matching your selection"
             : "Handpicked Devotional Sevas for You"}
@@ -125,11 +137,10 @@ export default function FeaturedSevas() {
         <button
           disabled={currentPage === 1}
           onClick={() => setCurrentPage((prev) => prev - 1)}
-          className={`flex h-10 w-10 items-center justify-center rounded border ${
-            currentPage === 1
-              ? "cursor-not-allowed border-gray-300 text-gray-300"
-              : "border-[#D18418] text-[#0B6670]"
-          } `}
+          className={`flex h-10 w-10 items-center justify-center rounded border ${currentPage === 1
+            ? "cursor-not-allowed border-gray-300 text-gray-300"
+            : "border-[#D18418] text-[#0B6670]"
+            } `}
         >
           <ChevronLeft size={18} />
         </button>
@@ -141,11 +152,10 @@ export default function FeaturedSevas() {
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`flex h-10 w-10 items-center justify-center rounded ${
-                currentPage === page
-                  ? "bg-[#0B6670] text-white"
-                  : "border border-[#D18418] text-[#0B6670]"
-              } `}
+              className={`flex h-10 w-10 items-center justify-center rounded ${currentPage === page
+                ? "bg-[#0B6670] text-white"
+                : "border border-[#D18418] text-[#0B6670]"
+                } `}
             >
               {page}
             </button>
@@ -155,11 +165,10 @@ export default function FeaturedSevas() {
         <button
           disabled={currentPage === totalPages}
           onClick={() => setCurrentPage((prev) => prev + 1)}
-          className={`flex h-10 w-10 items-center justify-center rounded border ${
-            currentPage === totalPages
-              ? "cursor-not-allowed border-gray-300 text-gray-300"
-              : "border-[#D18418] text-[#0B6670]"
-          } `}
+          className={`flex h-10 w-10 items-center justify-center rounded border ${currentPage === totalPages
+            ? "cursor-not-allowed border-gray-300 text-gray-300"
+            : "border-[#D18418] text-[#0B6670]"
+            } `}
         >
           <ChevronRight size={18} />
         </button>

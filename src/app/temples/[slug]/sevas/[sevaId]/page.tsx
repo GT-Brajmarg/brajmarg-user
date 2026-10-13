@@ -14,7 +14,7 @@ import {
 } from "@/store/slices/sevaBookingSlice";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import SevaLoader from "@/components/seva/SevaLoader";
+import PageLoader from "@/components/PageLoader";
 
 export default function Page() {
   const params = useParams();
@@ -76,7 +76,7 @@ export default function Page() {
 
   if (!seva) {
     return pageLoading ? (
-      <SevaLoader />
+      <PageLoader subtitle="Loading sacred sevas for you..." />
     ) : (
       <div className="py-20 text-center">Seva not found.</div>
     );

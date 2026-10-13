@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 import {
   CalendarDays,
@@ -8,7 +9,8 @@ import {
   HandHelping,
   LucideIcon,
   ArrowRight,
-  HandHeart,
+  ChevronLeft,
+  ChevronRight,
   HeartHandshake,
 } from "lucide-react";
 
@@ -46,30 +48,49 @@ const steps: Step[] = [
     description: "Receive prasad and updates of your seva",
   },
 ];
+
 export default function HowSevaWorks() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () =>
+    scrollRef.current?.scrollBy({
+      left: -200,
+      behavior: "smooth",
+    });
+
+  const scrollRight = () =>
+    scrollRef.current?.scrollBy({
+      left: 200,
+      behavior: "smooth",
+    });
+
   return (
-    <section
-      className="py-14"
-      style={{ marginTop: "60px", marginBottom: "40px" }}
-    >
+    <section className="mb-8 md:mb-10">
       {/* Heading */}
+      <div className="mb-8 sm:mb-10 md:mb-12 flex items-center justify-center gap-2 sm:gap-3">
+        <Image
+          src="/images/lotus.png"
+          alt=""
+          width={54}
+          height={36}
+          className="h-6 w-9 sm:h-7 sm:w-11 md:h-9 md:w-14 object-contain"
+        />
 
-      <div
-        className="mb-12 flex items-center justify-center gap-3"
-        style={{ marginBottom: "20px" }}
-      >
-        <Image src="/images/lotus.png" alt="" width={54} height={36} />
-
-        <h2 className="font-cormorant text-[36px] font-semibold text-[#0F5C66]">
+        <h2 className="font-cormorant text-[24px] sm:text-[30px] md:text-[36px] font-semibold text-[#0F5C66] text-center">
           How Seva Works
         </h2>
 
-        <Image src="/images/lotus.png" alt="" width={54} height={36} />
+        <Image
+          src="/images/lotus.png"
+          alt=""
+          width={54}
+          height={36}
+          className="h-6 w-9 sm:h-7 sm:w-11 md:h-9 md:w-14 object-contain"
+        />
       </div>
 
-      {/* Steps */}
-
-      <div className="mx-auto flex max-w-[1180px] items-start justify-between">
+      {/* Desktop Steps */}
+      <div className="hidden md:flex mx-auto max-w-[1180px] items-start justify-between">
         {steps.map((step, index) => (
           <div
             key={step.title}
@@ -77,7 +98,6 @@ export default function HowSevaWorks() {
           >
             <div className="flex flex-col items-center text-center">
               {/* Circle */}
-
               <div className="flex h-[120px] w-[120px] items-center justify-center rounded-full border-2 border-[#C37000] bg-[#C37000]/20">
                 {step.image ? (
                   <Image
@@ -95,13 +115,11 @@ export default function HowSevaWorks() {
               </div>
 
               {/* Title */}
-
               <h3 className="font-cormorant mt-5 text-[22px] font-semibold text-[#0F5C66]">
                 {step.title}
               </h3>
 
               {/* Description */}
-
               <p
                 className="mt-2 max-w-[180px] text-[16px] leading-5 text-[#3D352F]"
                 style={{ fontWeight: "500" }}
@@ -111,7 +129,6 @@ export default function HowSevaWorks() {
             </div>
 
             {/* Arrow */}
-
             {index < steps.length - 1 && (
               <div
                 className="mt-[48px] flex w-[90px] items-center justify-center"
@@ -126,6 +143,78 @@ export default function HowSevaWorks() {
             )}
           </div>
         ))}
+      </div>
+
+      {/* Mobile Steps Carousel */}
+      <div className="relative md:hidden px-1">
+        <div
+          ref={scrollRef}
+          className="scrollbar-hide flex items-start gap-2 overflow-x-auto scroll-smooth snap-x snap-mandatory px-8 py-2"
+        >
+          {steps.map((step, index) => (
+            <div key={step.title} className="flex items-start shrink-0">
+              <div className="flex w-[140px] sm:w-[165px] shrink-0 snap-center flex-col items-center text-center">
+                {/* Circle */}
+                <div className="relative flex h-[82px] w-[82px] sm:h-[94px] sm:w-[94px] items-center justify-center rounded-full border-2 border-[#C37000] bg-[#C37000]/20 shadow-sm">
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#0F5C66] text-[11px] font-bold text-[#EFDEC7]">
+                    {index + 1}
+                  </span>
+                  {step.image ? (
+                    <Image
+                      src={step.image}
+                      alt={step.title}
+                      width={40}
+                      height={40}
+                    />
+                  ) : step.icon ? (
+                    <step.icon
+                      className="h-10 w-10 sm:h-11 sm:w-11 text-[#0F5C66]"
+                      strokeWidth={2}
+                    />
+                  ) : null}
+                </div>
+
+                {/* Title */}
+                <h3 className="font-cormorant mt-2.5 text-[17px] sm:text-[19px] font-semibold text-[#0F5C66] leading-tight">
+                  {step.title}
+                </h3>
+
+                {/* Description */}
+                <p className="mt-1 text-[13px] sm:text-[14px] leading-snug text-[#3D352F] font-medium max-w-[135px]">
+                  {step.description}
+                </p>
+              </div>
+
+              {/* Arrow */}
+              {index < steps.length - 1 && (
+                <div className="flex w-[24px] sm:w-[30px] shrink-0 items-center justify-center mt-[28px] sm:mt-[34px]">
+                  <ArrowRight
+                    size={18}
+                    strokeWidth={2.2}
+                    className="text-[#C37000]"
+                  />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile Navigation Arrows */}
+        <button
+          onClick={scrollLeft}
+          className="absolute top-[38px] left-0 z-10 flex h-7 w-7 items-center justify-center rounded-full border border-[#C37000] bg-[#F7F0E5] shadow-sm transition-colors hover:bg-[#F3DFC2]"
+          aria-label="Previous step"
+        >
+          <ChevronLeft className="h-4 w-4 text-[#0F5C66]" />
+        </button>
+
+        <button
+          onClick={scrollRight}
+          className="absolute top-[38px] right-0 z-10 flex h-7 w-7 items-center justify-center rounded-full border border-[#C37000] bg-[#F7F0E5] shadow-sm transition-colors hover:bg-[#F3DFC2]"
+          aria-label="Next step"
+        >
+          <ChevronRight className="h-4 w-4 text-[#0F5C66]" />
+        </button>
       </div>
     </section>
   );

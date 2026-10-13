@@ -14,7 +14,7 @@ import FrameHero from "./FrameHero";
 import Booking from "./Booking";
 import ImportantNotes from "./ImportantNotes";
 import BookingSummary from "./BookingSummary";
-import FrameLoader from "./FrameLoader";
+import PageLoader from "@/components/PageLoader";
 
 interface Props {
   slug: string;
@@ -62,7 +62,7 @@ export default function FrameBookingPage({ slug, frameId }: Props) {
 
   if (!frame) {
     return loading ? (
-      <FrameLoader />
+      <PageLoader subtitle="Preparing your frame booking..." />
     ) : (
       <div className="py-20 text-center">Frame not found.</div>
     );
@@ -70,7 +70,7 @@ export default function FrameBookingPage({ slug, frameId }: Props) {
 
   return (
     <>
-      {loading && <FrameLoader />}
+      {loading && <PageLoader subtitle="Preparing your frame booking..." />}
       <FrameHero templeSlug={slug} temple={frame.temples} frame={frame} />
 
       <div className="mt-8">
