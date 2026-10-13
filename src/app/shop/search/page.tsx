@@ -1,16 +1,22 @@
 import SearchSection from "@/components/shop/search/SearchSection";
+import ShopHero from "@/components/shop/ShopHero";
+import ShopSearchPageClient from "@/components/shop/ShopSearchPageClient";
 import Image from "next/image";
 
 interface Props {
   searchParams: Promise<{
     q?: string;
+    search?: string;
+    category?: string;
   }>;
 }
 
 export default async function SearchPage({ searchParams }: Props) {
-  const { q } = await searchParams;
+  const { q, search, category } = await searchParams;
+  const initialCategoryParam = category || search;
 
   return (
+    <ShopSearchPageClient>
     <main className="relative isolate min-h-screen overflow-hidden bg-[#F7F0E5]">
       {/* paper texture */}
       <div
@@ -34,7 +40,7 @@ export default async function SearchPage({ searchParams }: Props) {
           alt=""
           width={1050}
           height={1050}
-          className="absolute top-[10px] left-1/2 w-[900px] max-w-none -translate-x-1/2 opacity-[0.045] md:w-[1050px]"
+          className="absolute top-[500px] left-1/2 w-[900px] max-w-none -translate-x-1/2 opacity-[0.045] md:w-[1050px]"
         />
 
         {/* Mandala behind Featured Collections */}
@@ -55,13 +61,23 @@ export default async function SearchPage({ searchParams }: Props) {
           className="absolute bottom-[-250px] left-1/2 w-[750px] max-w-none -translate-x-1/2 opacity-[0.035] md:w-[900px]"
         />
       </div>
+
+      {/* Hero */}
+      <div className="relative z-10 w-full">
+        <ShopHero />
+      </div>
+
       <section className="relative z-10 py-10">
         <div className="flex justify-center px-5">
           <div className="w-full max-w-[1200px]">
-            <SearchSection searchQuery={q ?? ""} />
+            <SearchSection
+              searchQuery={q ?? ""}
+              initialCategoryParam={initialCategoryParam}
+            />
           </div>
         </div>
       </section>
     </main>
+    </ShopSearchPageClient>
   );
 }

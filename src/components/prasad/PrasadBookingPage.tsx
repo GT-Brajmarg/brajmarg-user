@@ -12,7 +12,7 @@ import PrasadHero from "./prasadHero";
 import Booking from "./Booking";
 import ImportantNotes from "./ImportantNotes";
 import BookingSummary from "./BookingSummary";
-import PrasadLoader from "./PrasadLoader";
+import PageLoader from "@/components/PageLoader";
 
 interface Props {
   slug: string;
@@ -49,7 +49,7 @@ export default function PrasadBookingPage({ slug, prasadId }: Props) {
 
   if (!prasad) {
     return loading ? (
-      <PrasadLoader />
+      <PageLoader subtitle="Preparing your prasad booking..." />
     ) : (
       <div className="py-20 text-center">Prasad not found.</div>
     );
@@ -57,7 +57,7 @@ export default function PrasadBookingPage({ slug, prasadId }: Props) {
 
   return (
     <>
-      {loading && <PrasadLoader />}
+      {loading && <PageLoader subtitle="Preparing your prasad booking..." />}
       <main className="relative overflow-hidden bg-[#F8F2E8]">
         {/* Background Mandalas */}
         <Image

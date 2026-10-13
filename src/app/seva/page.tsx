@@ -4,12 +4,14 @@ import SevaHero from "@/components/seva/page/SevaHero";
 import SevaFilters from "@/components/seva/page/SevaFilters";
 import FeaturedSevas from "@/components/seva/page/FeaturedSevas";
 import HowSevaWorks from "@/components/seva/page/HowSevaWorks";
+import SevaPageClient from "@/components/seva/SevaPageClient";
 // import SevaDateSection from "@/components/seva/SevaDateSection";
 // import SevaTypeSection from "@/components/seva/SevaTypeSection";
 // import FeaturedSevas from "@/components/seva/FeaturedSevas";
 
 export default function SevaPage() {
   return (
+    <SevaPageClient>
     <main className="relative isolate min-h-screen overflow-hidden bg-[#F7F0E5]">
       {/* Background */}
       <div
@@ -83,5 +85,6 @@ export default function SevaPage() {
         </div>
       </section>
     </main>
+    </SevaPageClient>
   );
 }

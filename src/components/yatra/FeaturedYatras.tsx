@@ -109,40 +109,41 @@ export default function FeaturedYatras() {
   }, [currentPage]);
 
   return (
-    <section className="py-12" style={{ marginTop: "40px" }}>
+    <section className="py-12">
       {/* Heading */}
 
-      <div className="mb-8 flex flex-col items-center">
-        <div className="flex items-center gap-3">
-          <Image src="/images/lotus.png" alt="" width={46} height={46} />
+      <div className="mb-8 flex flex-col items-center text-center px-4">
+        <div className="flex items-center justify-center gap-2 sm:gap-3">
+          <Image
+            src="/images/lotus.png"
+            alt=""
+            width={46}
+            height={46}
+            className="h-6 w-7 sm:h-8 sm:w-9 md:h-10 md:w-11 object-contain"
+          />
 
-          <h2 className="font-cormorant text-[38px] font-semibold text-[#0B6670]">
+          <h2 className="font-cormorant text-[28px] sm:text-[32px] md:text-[38px] font-semibold text-[#0B6670] whitespace-nowrap">
             Explore Yatras
           </h2>
 
-          <Image src="/images/lotus.png" alt="" width={46} height={46} />
+          <Image
+            src="/images/lotus.png"
+            alt=""
+            width={46}
+            height={46}
+            className="h-6 w-7 sm:h-8 sm:w-9 md:h-10 md:w-11 object-contain"
+          />
         </div>
 
-        <p
-          className="font-cormorant mt-1 text-[22px] text-[#5B4633]"
-          style={{ marginBottom: "10px" }}
-        >
+        <p className="font-cormorant mt-1 text-[17px] sm:text-[20px] md:text-[22px] text-[#5B4633]">
           Sacred journeys thoughtfully planned by BrajMarg
         </p>
 
-        <div className="mt-4 rounded-lg border-2 border-[#C37000] bg-[#C37000]/20 px-5 py-2 text-[#3D352F]">
-          <div
-            className="flex items-center gap-2"
-            style={{
-              marginLeft: "10px",
-              marginRight: "10px",
-              marginTop: "5px",
-              marginBottom: "5px",
-            }}
-          >
-            <Image src="/images/group.svg" alt="" width={28} height={28} />
+        <div className="mt-4 rounded-xl border border-[#C37000] bg-[#EFDEC7]/40 px-4 py-2 sm:px-6 sm:py-2.5 text-[#3D352F] shadow-sm">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-center">
+            <Image src="/images/group.svg" alt="" width={24} height={24} className="shrink-0" />
 
-            <span className="font-cormorant text-[24px] font-bold">
+            <span className="font-cormorant text-[17px] sm:text-[19px] md:text-[22px] font-semibold">
               All yatras are organized group journeys by BrajMarg
             </span>
           </div>
@@ -150,30 +151,21 @@ export default function FeaturedYatras() {
       </div>
 
       {/* Cards */}
-
-      <div
-        className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
-        style={{ marginTop: "40px" }}
-      >
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mt-8 sm:mt-10">
         {currentYatras.map((yatra) => (
           <YatraCard key={yatra.id} yatra={yatra} />
         ))}
       </div>
 
       {/* Pagination */}
-
-      <div
-        className="mt-10 flex items-center justify-center gap-2"
-        style={{ marginTop: "20px", marginBottom: "20px" }}
-      >
+      <div className="mt-8 sm:mt-10 flex items-center justify-center gap-2">
         <button
           disabled={currentPage === 1}
           onClick={() => setCurrentPage((p) => p - 1)}
-          className={`flex h-9 w-9 items-center justify-center rounded border ${
-            currentPage === 1
-              ? "cursor-not-allowed border-gray-300 text-gray-300"
-              : "border-[#D59A3B] text-[#0B6670]"
-          }`}
+          className={`flex h-9 w-9 items-center justify-center rounded border ${currentPage === 1
+            ? "cursor-not-allowed border-gray-300 text-gray-300"
+            : "border-[#D59A3B] text-[#0B6670]"
+            }`}
         >
           <ChevronLeft size={18} />
         </button>
@@ -185,11 +177,10 @@ export default function FeaturedYatras() {
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`h-9 w-9 rounded border font-medium transition ${
-                currentPage === page
-                  ? "border-[#0B6670] bg-[#0B6670] text-white"
-                  : "border-[#D59A3B] bg-white text-[#0B6670]"
-              }`}
+              className={`h-9 w-9 rounded border font-medium transition ${currentPage === page
+                ? "border-[#0B6670] bg-[#0B6670] text-white"
+                : "border-[#D59A3B] bg-white text-[#0B6670]"
+                }`}
             >
               {page}
             </button>
@@ -199,11 +190,10 @@ export default function FeaturedYatras() {
         <button
           disabled={currentPage === totalPages}
           onClick={() => setCurrentPage((p) => p + 1)}
-          className={`flex h-9 w-9 items-center justify-center rounded border ${
-            currentPage === totalPages
-              ? "cursor-not-allowed border-gray-300 text-gray-300"
-              : "border-[#D59A3B] text-[#0B6670]"
-          }`}
+          className={`flex h-9 w-9 items-center justify-center rounded border ${currentPage === totalPages
+            ? "cursor-not-allowed border-gray-300 text-gray-300"
+            : "border-[#D59A3B] text-[#0B6670]"
+            }`}
         >
           <ChevronRight size={18} />
         </button>

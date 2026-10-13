@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchLiveDarshan } from "@/store/slices/heroSlice";
 import { fetchTemples } from "@/store/slices/templesSlice";
-import HomePageLoader from "./HomePageLoader";
+import PageLoader from "@/components/PageLoader";
 
 export default function HomePageClient({
   children,
@@ -55,7 +55,7 @@ export default function HomePageClient({
   }, [dispatch]);
 
   if (booting) {
-    return <HomePageLoader />;
+    return <PageLoader subtitle="Connecting you to sacred temples..." />;
   }
 
   return <>{children}</>;

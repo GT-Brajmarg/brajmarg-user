@@ -87,7 +87,10 @@ export default function TempleSevas({ templeSlug }: TempleSevasProps) {
                       href={`/temples/${templeSlug}/sevas/${seva.id}`}
                       className="font-cormorant mt-3 flex h-[34px] w-full items-center justify-center rounded-[8px] bg-[#0B6670] text-[16px] font-semibold text-[#EFDEC7] transition-all hover:bg-[#084F57]"
                     >
-                      Book Seva
+                      <button className="h-[34px] w-full rounded-[8px] bg-[#0B6670] text-[16px] font-semibold text-[#EFDEC7] transition-all hover:bg-[#084F57] cursor-pointer">
+                        Book Seva
+                      </button>
+
                     </Link>
                   ) : (
                     <button

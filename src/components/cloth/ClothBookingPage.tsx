@@ -14,7 +14,7 @@ import ClothHero from "./ClothHero";
 import Booking from "./Booking";
 import ImportantNotes from "./ImportantNotes";
 import BookingSummary from "./BookingSummary";
-import ClothLoader from "./ClothLoader";
+import PageLoader from "@/components/PageLoader";
 
 interface Props {
   slug: string;
@@ -66,14 +66,14 @@ export default function ClothBookingPage({ slug, clothId }: Props) {
 
   if (!cloth) {
     return loading ? (
-      <ClothLoader />
+      <PageLoader subtitle="Preparing your cloth booking..." />
     ) : (
       <div className="py-20 text-center">Cloth not found.</div>
     );
   }
   return (
     <>
-      {loading && <ClothLoader />}
+      {loading && <PageLoader subtitle="Preparing your cloth booking..." />}
       <ClothHero templeSlug={slug} temple={cloth.temples} cloth={cloth} />
 
       <div className="mt-8">

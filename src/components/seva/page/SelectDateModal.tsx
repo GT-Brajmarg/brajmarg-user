@@ -105,14 +105,17 @@ export default function SelectDateModal({ open, onClose }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-[999] flex items-center justify-center bg-black/40 backdrop-blur-sm"
+      className="fixed inset-0 z-[1100] mt-20 flex items-center justify-center px-4 sm:px-6 bg-black/40 backdrop-blur-sm"
       style={{ touchAction: "none" }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
       onTouchMove={(e) => {
         if (e.target === e.currentTarget) e.preventDefault();
       }}
     >
       <div
-        className="relative w-[560px] overflow-hidden rounded-[22px] border border-[#D89A3D] bg-[#F8EEDC] shadow-2xl"
+        className="relative w-full max-w-[520px] overflow-hidden rounded-[20px] border border-[#D89A3D] bg-[#F8EEDC] shadow-2xl"
         style={{ overscrollBehavior: "contain", touchAction: "auto" }}
       >
         <Image
@@ -122,36 +125,27 @@ export default function SelectDateModal({ open, onClose }: Props) {
           className="pointer-events-none object-cover opacity-60"
         />
 
-        <div className="relative z-10">
-          <button
-            onClick={onClose}
-            className="absolute top-1 right-5 flex h-9 w-9 items-center justify-center rounded-full border border-[#D8B67A] bg-[#F7EAD4]/90 shadow-sm transition-all duration-200 hover:scale-105 hover:bg-[#F3DFC2]"
-          >
-            <X size={18} className="text-[#8C6A45]" strokeWidth={2.2} />
-          </button>
-
-          {/* Heading */}
-
-          <h2
-            className={`${cormorantInfant.className} text-[28px] font-bold text-[#0F5C66]`}
-            style={{ marginLeft: "30px", marginTop: "10px" }}
-          >
-            Select Date
-          </h2>
-
-          <div
-            className="rounded-xl border border-[#D89A3D] p-4"
-            style={{
-              marginLeft: "20px",
-              marginRight: "20px",
-              marginTop: "20px",
-              marginBottom: "20px",
-            }}
-          >
-            <div
-              className="mb-6 flex items-center justify-between"
-              style={{ marginTop: "5px" }}
+        <div className="relative z-10 px-4 sm:px-5 pt-4 pb-4">
+          {/* Header Row: Title + Close */}
+          <div className="flex items-center justify-between mb-3">
+            <h2
+              className={`${cormorantInfant.className} text-[22px] sm:text-[24px] font-bold text-[#0F5C66]`}
             >
+              Select Date
+            </h2>
+
+            <button
+              onClick={onClose}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#D8B67A] bg-[#F7EAD4]/90 shadow-sm transition-all duration-200 hover:scale-105 hover:bg-[#F3DFC2]"
+            >
+              <X size={16} className="text-[#8C6A45]" strokeWidth={2.2} />
+            </button>
+          </div>
+
+          {/* Calendar Card */}
+          <div className="rounded-xl border border-[#D89A3D] px-3 sm:px-4 py-3 sm:py-4">
+            {/* Month Navigation */}
+            <div className="flex items-center justify-between mb-3">
               <button
                 onClick={() =>
                   setCurrentMonth(
@@ -162,14 +156,13 @@ export default function SelectDateModal({ open, onClose }: Props) {
                     ),
                   )
                 }
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#C37000] bg-[#C37000]/20"
-                style={{ marginLeft: "10px" }}
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-[#C37000] bg-[#C37000]/20 transition-colors hover:bg-[#C37000]/30"
               >
-                <ChevronLeft className="text-[#0F5C66]" />
+                <ChevronLeft className="h-4 w-4 text-[#0F5C66]" />
               </button>
 
               <h3
-                className={`${cormorantInfant.className} text-[28px] font-bold text-[#0F5C66]`}
+                className={`${cormorantInfant.className} text-[20px] sm:text-[22px] font-bold text-[#0F5C66]`}
               >
                 {currentMonth.toLocaleString("en-IN", {
                   month: "long",
@@ -187,81 +180,77 @@ export default function SelectDateModal({ open, onClose }: Props) {
                     ),
                   )
                 }
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#C37000] bg-[#C37000]/20"
-                style={{ marginRight: "10px" }}
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-[#C37000] bg-[#C37000]/20 transition-colors hover:bg-[#C37000]/30"
               >
-                <ChevronRight className="text-[#0F5C66]" />
+                <ChevronRight className="h-4 w-4 text-[#0F5C66]" />
               </button>
             </div>
 
-            <div style={{ marginTop: "10px" }}>
-              <div className="grid grid-cols-7 text-center">
-                {weekDays.map((day) => (
-                  <p
-                    key={day}
-                    className={`${cormorantInfant.className} text-[16px] font-bold text-[#0F5C66]`}
-                  >
-                    {day}
-                  </p>
-                ))}
-              </div>
-
-              {/* Divider */}
-              <div className="mt-3 h-px w-full bg-[#C37000] opacity-50" />
+            {/* Weekday Headers */}
+            <div className="grid grid-cols-7 text-center mb-1">
+              {weekDays.map((day) => (
+                <p
+                  key={day}
+                  className={`${cormorantInfant.className} text-[12px] sm:text-[13px] font-bold text-[#0F5C66]`}
+                >
+                  {day}
+                </p>
+              ))}
             </div>
 
-            <div className="space-y-0">
-              <div className="space-y-0">
-                {weeks.map((week, weekIndex) => (
-                  <div key={weekIndex}>
-                    <div className="grid grid-cols-7 text-center">
-                      {week.map((date, index) => {
-                        if (!date) {
-                          return <div key={index} className="h-[72px]" />;
-                        }
+            {/* Divider */}
+            <div className="mt-1 mb-0.5 h-px w-full bg-[#C37000] opacity-50" />
 
-                        const iso = formatISODate(date);
+            {/* Calendar Grid */}
+            <div>
+              {weeks.map((week, weekIndex) => (
+                <div key={weekIndex}>
+                  <div className="grid grid-cols-7 text-center">
+                    {week.map((date, index) => {
+                      if (!date) {
+                        return <div key={index} className="h-[44px] sm:h-[50px]" />;
+                      }
 
-                        const available = availableDates.has(iso);
+                      const iso = formatISODate(date);
 
-                        const active = selectedDate === iso;
+                      const available = availableDates.has(iso);
 
-                        return (
-                          <button
-                            key={iso}
-                            disabled={!available}
-                            onClick={() => {
-                              dispatch(setSelectedDate(iso));
-                              onClose();
-                            }}
-                            className={`flex h-[72px] flex-col items-center justify-center rounded-lg transition-all duration-200 ${
-                              active
-                                ? "bg-[#0B6670] text-[#EFDEC7]"
-                                : available
-                                  ? "text-[#0B6670] hover:bg-[#EAD6B4]"
-                                  : "cursor-not-allowed text-[#C8C8C8]"
+                      const active = selectedDate === iso;
+
+                      return (
+                        <button
+                          key={iso}
+                          disabled={!available}
+                          onClick={() => {
+                            dispatch(setSelectedDate(iso));
+                            onClose();
+                          }}
+                          className={`flex h-[44px] sm:h-[50px] flex-col items-center justify-center rounded-md transition-all duration-200 ${active
+                            ? "bg-[#0B6670] text-[#EFDEC7]"
+                            : available
+                              ? "text-[#0B6670] hover:bg-[#EAD6B4]"
+                              : "cursor-not-allowed text-[#C8C8C8]"
                             }`}
+                        >
+                          <span
+                            className={`${cormorantInfant.className} text-[14px] sm:text-[16px] leading-none font-bold`}
                           >
-                            <span
-                              className={`${cormorantInfant.className} text-[20px] leading-none font-bold`}
-                            >
-                              {date.getDate()}
-                            </span>
+                            {date.getDate()}
+                          </span>
 
-                            <span className="mt-1 text-[10px]">
-                              {available ? "Available" : ""}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    {weekIndex !== weeks.length - 1 && (
-                      <div className="my-2 h-px w-full bg-[#C37000]/35" />
-                    )}
+                          <span className="mt-0.5 text-[8px] sm:text-[9px]">
+                            {available ? "Available" : ""}
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
-                ))}
-              </div>
+
+                  {weekIndex !== weeks.length - 1 && (
+                    <div className="my-0.5 h-px w-full bg-[#C37000]/35" />
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>

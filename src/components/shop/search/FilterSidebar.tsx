@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useAppSelector } from "@/store/hooks";
 
@@ -9,8 +9,13 @@ interface FilterSidebarProps {
   selectedCategories: string[];
   setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
 
-  selectedPriceRanges: string[];
-  setSelectedPriceRanges: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedPriceRanges?: string[];
+  setSelectedPriceRanges?: React.Dispatch<React.SetStateAction<string[]>>;
+
+  priceFilter?: { min: number; max: number } | null;
+  setPriceFilter?: React.Dispatch<
+    React.SetStateAction<{ min: number; max: number } | null>
+  >;
 }
 
 const categories = [
@@ -24,19 +29,108 @@ const categories = [
   { slug: "gift-hampers", label: "Gift Hampers", count: 3 },
 ];
 
-const priceRanges = [
-  { id: "0-250", label: "Under ₹250", count: 3, min: 0, max: 250 },
-  { id: "251-500", label: "₹251 – ₹500", count: 5, min: 251, max: 500 },
-  { id: "501-1000", label: "₹501 – ₹1,000", count: 3, min: 501, max: 1000 },
-  { id: "1001-2500", label: "₹1,001 – ₹2,500", count: 4, min: 1001, max: 2500 },
-  { id: "2501-5000", label: "₹2,501 – ₹5,000", count: 2, min: 2501, max: 5000 },
-  { id: "5001+", label: "Above ₹5,000", count: 2, min: 5001, max: Infinity },
-];
+function PriceRangeSlider({
+  min,
+  max,
+  value,
+  onChange,
+}: {
+  min: number;
+  max: number;
+  value: { min: number; max: number };
+  onChange: (val: { min: number; max: number }) => void;
+}) {
+  const step = 10;
+  const currentMin = Math.max(min, Math.min(value.min, max));
+  const currentMax = Math.min(max, Math.max(value.max, min));
 
-const availabilityOptions = [
-  { label: "In Stock", count: 18 },
-  { label: "Ready to Ship", count: 2 },
-];
+  const minPercent = max > min ? ((currentMin - min) / (max - min)) * 100 : 0;
+  const maxPercent = max > min ? ((currentMax - min) / (max - min)) * 100 : 100;
+
+  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = Number(e.target.value);
+    const newMin = Math.min(val, currentMax - step);
+    onChange({ min: newMin, max: currentMax });
+  };
+
+  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = Number(e.target.value);
+    const newMax = Math.max(val, currentMin + step);
+    onChange({ min: currentMin, max: newMax });
+  };
+
+  return (
+    <div className="space-y-3 px-1 py-2">
+      {/* Price Labels / Badges */}
+      <div className="flex items-center justify-between font-cormorant text-[14px]">
+        <div className="flex flex-col">
+          <span className="text-[11px] text-[#A6723E] uppercase tracking-wider">
+            Min
+          </span>
+          <span className="rounded border border-[#C37000]/40 bg-[#FAF3E8] px-2 py-0.5 font-bold text-[#0B6670]">
+            ₹{currentMin}
+          </span>
+        </div>
+        <span className="mt-3 font-bold text-[#A6723E]">—</span>
+        <div className="flex flex-col items-end">
+          <span className="text-[11px] text-[#A6723E] uppercase tracking-wider">
+            Max
+          </span>
+          <span className="rounded border border-[#C37000]/40 bg-[#FAF3E8] px-2 py-0.5 font-bold text-[#0B6670]">
+            ₹{currentMax}
+          </span>
+        </div>
+      </div>
+
+      {/* Dual Slider Track Container */}
+      <div className="relative flex h-5 items-center">
+        {/* Background rail */}
+        <div className="absolute h-1.5 w-full rounded-full bg-[#EAD8BD]" />
+
+        {/* Active Teal track */}
+        <div
+          className="absolute h-1.5 rounded-full bg-[#0B6670]"
+          style={{
+            left: `${minPercent}%`,
+            width: `${Math.max(0, maxPercent - minPercent)}%`,
+          }}
+        />
+
+        {/* Min Input Slider */}
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={currentMin}
+          onChange={handleMinChange}
+          aria-label="Minimum price"
+          style={{ zIndex: currentMin > max - 100 ? 25 : 15 }}
+          className="pointer-events-none absolute w-full appearance-none bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#FAF3E8] [&::-webkit-slider-thumb]:bg-[#0B6670] [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#FAF3E8] [&::-moz-range-thumb]:bg-[#0B6670] [&::-moz-range-thumb]:cursor-pointer"
+        />
+
+        {/* Max Input Slider */}
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={currentMax}
+          onChange={handleMaxChange}
+          aria-label="Maximum price"
+          style={{ zIndex: 20 }}
+          className="pointer-events-none absolute w-full appearance-none bg-transparent [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#FAF3E8] [&::-webkit-slider-thumb]:bg-[#0B6670] [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#FAF3E8] [&::-moz-range-thumb]:bg-[#0B6670] [&::-moz-range-thumb]:cursor-pointer"
+        />
+      </div>
+
+      {/* Min / Max bounds */}
+      <div className="flex justify-between font-cormorant text-[12px] text-[#A6723E]">
+        <span>₹{min}</span>
+        <span>₹{max}</span>
+      </div>
+    </div>
+  );
+}
 
 function FilterSection({
   title,
@@ -77,10 +171,44 @@ export default function FilterSidebar({
   setSelectedCategories,
   selectedPriceRanges,
   setSelectedPriceRanges,
+  priceFilter,
+  setPriceFilter,
 }: FilterSidebarProps) {
   const { materials, sizes, colors, quantities } = useAppSelector(
     (state) => state.shopFilters,
   );
+  const items = useAppSelector((state) => state.shop.items);
+
+  const { sliderMin, sliderMax } = useMemo(() => {
+    if (!items || items.length === 0) {
+      return { sliderMin: 0, sliderMax: 1000 };
+    }
+
+    const prices = items
+      .map((p: any) => Number(p.price))
+      .filter((p: number) => !isNaN(p) && p >= 0);
+
+    if (prices.length === 0) {
+      return { sliderMin: 0, sliderMax: 1000 };
+    }
+
+    const rawMin = Math.min(...prices);
+    const rawMax = Math.max(...prices);
+
+    const calculatedMin = Math.floor(rawMin / 100) * 100;
+    let calculatedMax = Math.ceil(rawMax / 100) * 100;
+
+    if (calculatedMax <= calculatedMin) {
+      calculatedMax = calculatedMin + 100;
+    }
+
+    return { sliderMin: calculatedMin, sliderMax: calculatedMax };
+  }, [items]);
+
+  const currentPriceRange = priceFilter ?? {
+    min: sliderMin,
+    max: sliderMax,
+  };
 
   return (
     <aside className="w-full lg:w-[240px]">
@@ -93,7 +221,8 @@ export default function FilterSidebar({
         <button
           onClick={() => {
             setSelectedCategories([]);
-            setSelectedPriceRanges([]);
+            setSelectedPriceRanges?.([]);
+            setPriceFilter?.(null);
           }}
           className="font-cormorant text-[12px] font-medium text-[#A6723E] hover:underline cursor-pointer"
         >
@@ -166,7 +295,7 @@ export default function FilterSidebar({
 
       {/* MATERIAL */}
       {materials.length > 0 && (
-        <FilterSection title="Material">
+        <FilterSection title="Material" defaultOpen={false}>
           <div className="space-y-2">
             {materials.map((item, idx) => (
               <label
@@ -191,7 +320,7 @@ export default function FilterSidebar({
 
       {/* SIZE */}
       {sizes.length > 0 && (
-        <FilterSection title="Size">
+        <FilterSection title="Size" defaultOpen={false}>
           <div className="space-y-2">
             {sizes.map((size, idx) => (
               <label
@@ -216,7 +345,7 @@ export default function FilterSidebar({
 
       {/* COLOR */}
       {colors.length > 0 && (
-        <FilterSection title="Color">
+        <FilterSection title="Color" defaultOpen={false}>
           <div className="space-y-2">
             {colors.map((color, idx) => (
               <label
@@ -241,7 +370,7 @@ export default function FilterSidebar({
 
       {/* QUANTITY */}
       {quantities.length > 0 && (
-        <FilterSection title="Quantity">
+        <FilterSection title="Quantity" defaultOpen={false}>
           <div className="space-y-2">
             {quantities.map((quantity, idx) => (
               <label
@@ -265,40 +394,19 @@ export default function FilterSidebar({
       )}
 
       {/* PRICE RANGE */}
-      <FilterSection title="Price Range">
-        <div className="space-y-2">
-          {priceRanges.map((price) => (
-            <label
-              key={price.id}
-              className="flex cursor-pointer items-center gap-3"
-            >
-              <input
-                type="checkbox"
-                checked={selectedPriceRanges.includes(price.id)}
-                onChange={() => {
-                  if (selectedPriceRanges.includes(price.id)) {
-                    setSelectedPriceRanges(
-                      selectedPriceRanges.filter((id) => id !== price.id),
-                    );
-                  } else {
-                    setSelectedPriceRanges([...selectedPriceRanges, price.id]);
-                  }
-                }}
-                className="h-3.5 w-3.5 cursor-pointer appearance-none rounded-[3px] border border-[#C37000] bg-transparent checked:border-[#0B6670] checked:bg-[#0B6670] focus:outline-none"
-              />
-              <span className="flex-1 font-cormorant text-[15px] font-medium text-[#3D352F]">
-                {price.label}
-              </span>
-              <span className="font-cormorant text-[13px] font-bold text-[#0B6670]">
-                {price.count}
-              </span>
-            </label>
-          ))}
-        </div>
+      <FilterSection title="Price Range" defaultOpen={false}>
+        <PriceRangeSlider
+          min={sliderMin}
+          max={sliderMax}
+          value={currentPriceRange}
+          onChange={(newRange) => {
+            setPriceFilter?.(newRange);
+          }}
+        />
       </FilterSection>
 
       {/* AVAILABILITY */}
-      <FilterSection title="Availability">
+      {/* <FilterSection title="Availability">
         <div className="space-y-2">
           {availabilityOptions.map((option) => (
             <label
@@ -318,7 +426,7 @@ export default function FilterSidebar({
             </label>
           ))}
         </div>
-      </FilterSection>
+      </FilterSection> */}
     </aside>
   );
 }

@@ -2,7 +2,13 @@
 
 import Image from "next/image";
 
-export default function HomePageLoader() {
+interface PageLoaderProps {
+  subtitle?: string;
+}
+
+export default function PageLoader({
+  subtitle = "Connecting you to sacred temples...",
+}: PageLoaderProps) {
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#F8F2E8]">
       {/* Background Mandala */}
@@ -41,21 +47,8 @@ export default function HomePageLoader() {
         </h2>
 
         <p className="mt-2 text-[15px] text-[#6C5E4B]">
-          Connecting you to sacred temples...
+          {subtitle}
         </p>
-
-        {/* Progress Dots */}
-        {/* <div className="mt-6 flex gap-2">
-          <span className="h-2 w-2 animate-bounce rounded-full bg-[#0C6D72]" />
-          <span
-            className="h-2 w-2 animate-bounce rounded-full bg-[#0C6D72]"
-            style={{ animationDelay: "0.15s" }}
-          />
-          <span
-            className="h-2 w-2 animate-bounce rounded-full bg-[#0C6D72]"
-            style={{ animationDelay: "0.3s" }}
-          />
-        </div> */}
       </div>
     </div>
   );
