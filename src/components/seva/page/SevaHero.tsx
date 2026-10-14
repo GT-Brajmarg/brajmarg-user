@@ -40,7 +40,7 @@ export default function SevaHero() {
         }}
       />
 
-      <div className="relative z-10 mx-auto flex min-h-[440px] sm:min-h-[500px] lg:min-h-[540px] max-w-[1240px] flex-col justify-center px-4 sm:px-6 md:px-10 lg:px-12 py-8 sm:py-10 lg:py-14">
+      <div className="relative z-10 flex min-h-[440px] sm:min-h-[500px] lg:min-h-[540px] max-w-[1240px] flex-col justify-center px-4 sm:px-6 md:px-16 lg:px-28 py-8 sm:py-10 lg:py-14">
         {/* Top Text Content */}
         <div className="w-full max-w-[600px]">
           {/* Main Title */}
@@ -57,8 +57,8 @@ export default function SevaHero() {
             <Image
               src="/images/lotus.png"
               alt=""
-              width={34}
-              height={24}
+              width={54}
+              height={44}
               className="object-contain"
             />
             <span className="h-1.5 w-1.5 rounded-full bg-[#C98C3D]" />

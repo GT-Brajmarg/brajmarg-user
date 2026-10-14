@@ -129,7 +129,7 @@ export default function Page() {
 
         {/* Foreground page content */}
         <div className="relative z-10 mx-auto flex justify-center">
-          <div className="w-full max-w-[1200px] px-4 py-10">
+          <div className="w-full max-w-[1340px] px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
             <SevaHero templeSlug={slug} temple={temple} seva={seva} />
 
             <div className="mt-[30px]">
@@ -162,6 +162,7 @@ export default function Page() {
                 temple={{
                   name: temple.name,
                   location: temple.location,
+                  image_url: temple?.image_url,
                 }}
                 selectedDate={selectedDate}
                 selectedTime={

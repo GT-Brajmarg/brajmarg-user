@@ -17,6 +17,7 @@ export default function OfferDateSelector() {
   const dispatch = useAppDispatch();
 
   const { dates, selectedDate } = useAppSelector((state) => state.sevaPage);
+  console.log("dates", dates);
 
   useEffect(() => {
     dispatch(fetchAvailableDates());

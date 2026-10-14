@@ -94,30 +94,22 @@ export default function BookingSummary({
       >
         {/* ================= LEFT ================= */}
         <div className="flex items-center gap-6">
-          {/* Image */}
-          <div
-            className="relative h-[150px] w-[180px] shrink-0"
-            style={{ marginLeft: "40px" }}
-          >
-            <div className="absolute inset-0">
-              {/* Cloth photo */}
-              <div className="absolute top-1/2 left-1/2 z-10 h-[118px] w-[132px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[22px]">
-                <Image
-                  src={prasad.image_url || "/images2/default.png"}
-                  alt={prasad.name}
-                  fill
-                  className="object-cover object-center"
-                />
-              </div>
-
-              {/* Frame overlay */}
+          {/* Framed Thumbnail */}
+          <div className="relative w-[90px] sm:w-[105px] aspect-[1862/1756] shrink-0">
+            <div className="absolute top-[11.5%] left-[8%] h-[78%] w-[84%] overflow-hidden rounded-[8px] z-0">
               <Image
-                src="/images/frame_1.png"
-                alt=""
+                src={prasad.image_url || "/images2/default.png"}
+                alt={prasad.name}
                 fill
-                className="pointer-events-none z-20 object-contain"
+                className="object-cover object-center"
               />
             </div>
+            <Image
+              src="/images/frame_1.png"
+              alt=""
+              fill
+              className="pointer-events-none z-10 object-contain brightness-[1.15] contrast-[1.1] drop-shadow-[0_0_1px_rgba(90,55,15,0.75)] drop-shadow-[0_1px_2px_rgba(130,80,20,0.3)]"
+            />
           </div>
 
           {/* Info */}

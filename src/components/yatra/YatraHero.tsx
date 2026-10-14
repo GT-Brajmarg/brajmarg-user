@@ -41,7 +41,7 @@ export default function YatraHero() {
       />
 
       {/* Content Container */}
-      <div className="relative z-10 mx-auto flex min-h-[500px] lg:min-h-[540px] max-w-[1240px] items-center px-6 sm:px-10 lg:px-14 py-10 lg:py-14">
+      <div className="relative z-10 flex min-h-[500px] lg:min-h-[540px] max-w-[1240px] items-center px-6 sm:px-18 lg:px-28 py-10 lg:py-14">
         <div className="w-full max-w-[600px]">
           {/* Heading */}
           <h1 className="font-cormorant text-[38px] sm:text-[46px] lg:text-[52px] font-bold leading-[1.08] text-[#3B2813]">

@@ -4,11 +4,11 @@ import {
   CalendarDays,
   Clock3,
   UserRound,
-  MessageSquare,
   Info,
-  Circle,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 interface AvailableDate {
   id: string;
@@ -25,12 +25,9 @@ interface Slot {
 interface BookingProps {
   dates: AvailableDate[];
   slots: Slot[];
-
   slotsLoading: boolean;
-
   selectedDate: string;
   selectedSlot: string;
-
   onDateChange: (id: string) => void;
   onSlotChange: (id: string) => void;
 }
@@ -44,144 +41,138 @@ export default function Booking({
   onDateChange,
   onSlotChange,
 }: BookingProps) {
-  // console.log("DATES:", dates);
-  // console.log("SLOTS:", slots);
   const [bookingFor, setBookingFor] = useState<"self" | "other">("self");
+  const datesScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollDates = (direction: "left" | "right") => {
+    if (datesScrollRef.current) {
+      const scrollAmount = direction === "left" ? -240 : 240;
+      datesScrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
+
+  const sortedDates = [...dates].sort(
+    (a, b) =>
+      new Date(a.available_date).getTime() - new Date(b.available_date).getTime(),
+  );
+
   return (
-    <section className="relative mt-16 overflow-hidden rounded-[28px] border-3 border-[#C37000] bg-[#EFDEC7]/20 p-8 shadow-[0_24px_60px_rgba(126,83,26,0.22),0_8px_18px_rgba(126,83,26,0.12)] lg:p-10">
+    <section className="relative mt-8 sm:mt-10 overflow-hidden rounded-[24px] sm:rounded-[28px] border-[2px] border-[#C37000] bg-[#EFDEC7]/20 p-5 sm:p-7 md:p-8 lg:p-10 shadow-[0_12px_36px_rgba(126,83,26,0.10)]">
       {/* ================= Date Selection ================= */}
       <div>
-        <div
-          className="mb-6 flex items-start gap-3"
-          style={{ marginTop: "10px" }}
-        >
-          <CalendarDays
-            className="mt-1 h-6 w-6 text-[#D89A3D]"
-            style={{ marginTop: "15px", marginLeft: "20px" }}
-          />
-
+        <div className="flex items-start gap-2.5 sm:gap-3">
+          <CalendarDays className="mt-0.5 h-5 w-5 sm:h-6 sm:w-6 text-[#D89A3D] shrink-0" />
           <div>
-            <h2 className="font-cormorant text-[28px] font-semibold text-[#0B6670]">
+            <h2 className="font-cormorant text-[24px] sm:text-[28px] font-semibold text-[#0B6670] leading-tight">
               Select Seva Date
             </h2>
-
-            <p className="text-sm text-[#6D6259]">
+            <p className="font-cormorant mt-0.5 text-[14px] sm:text-[15px] text-[#6D6259]">
               Choose the date on which you wish to perform this seva
             </p>
           </div>
         </div>
 
         {/* Date Slider */}
-        <div className="flex items-center gap-4">
+        <div className="mt-5 flex justify-center items-center gap-2 sm:gap-3">
+          {/* Prev Button */}
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#C37000] bg-[#C37000]/20 text-[#0F5C66] transition hover:bg-[#FFF4E8]"
-            style={{ marginLeft: "20px" }}
+            type="button"
+            onClick={() => scrollDates("left")}
+            aria-label="Previous dates"
+            className="flex h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F7F0E5] text-[#0B6670] shadow-sm transition hover:bg-[#F3DFC2] cursor-pointer"
           >
-            ❮
+            <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
           </button>
 
+          {/* Dates Container */}
           <div
-            className="flex flex-1 justify-between gap-3"
-            style={{ marginTop: "10px" }}
+            ref={datesScrollRef}
+            className="scrollbar-hide flex max-w-full justify-center items-center gap-2.5 sm:gap-3.5 overflow-x-auto scroll-smooth py-1 px-1"
           >
-            {[...dates]
-              .sort(
-                (a, b) =>
-                  new Date(a.available_date).getTime() -
-                  new Date(b.available_date).getTime(),
-              )
-              .map((date) => {
-                const d = new Date(date.available_date);
-                const active = selectedDate === date.available_date;
+            {sortedDates.map((date) => {
+              const d = new Date(date.available_date);
+              const active = selectedDate === date.available_date;
 
-                return (
-                  <div
-                    key={date.id}
-                    onClick={() => onDateChange(date.available_date)}
-                    className={`flex h-[106px] w-[106px] cursor-pointer flex-col items-center justify-center rounded-xl border transition ${
-                      active
-                        ? "border-[#0B6670] bg-[#0B6670] text-[#EFDEC7]"
-                        : "border-[#E5C48A] bg-[#EFDEC7]/20 text-[#0B6670] hover:border-[#D89A3D]"
-                    }`}
-                  >
-                    <span className="text-[22px] leading-none font-bold">
-                      {d.getDate()}
-                    </span>
+              return (
+                <button
+                  key={date.id}
+                  type="button"
+                  onClick={() => onDateChange(date.available_date)}
+                  className={`flex h-[106px] sm:h-[116px] w-[84px] sm:w-[96px] lg:w-[104px] shrink-0 cursor-pointer flex-col items-center justify-center rounded-[14px] sm:rounded-[16px] transition-all duration-200 ${
+                    active
+                      ? "border-[2px] border-[#0B6670] bg-[#0B6670] text-[#EFDEC7] shadow-sm"
+                      : "border border-[#C18426]/70 bg-transparent text-[#0B6670] hover:bg-[#FAF0E2]"
+                  }`}
+                >
+                  <span className="font-cormorant text-[30px] sm:text-[34px] font-bold leading-none">
+                    {d.getDate()}
+                  </span>
 
-                    <span className="font-cormorant mt-1 text-[22px]">
-                      {d.toLocaleString("en-IN", {
-                        month: "long",
-                      })}
-                    </span>
+                  <span className="font-cormorant text-[17px] sm:text-[19px] font-medium leading-tight mt-1">
+                    {d.toLocaleString("en-IN", {
+                      month: "long",
+                    })}
+                  </span>
 
-                    <span className="text-xs opacity-80">
-                      {d.toLocaleString("en-IN", {
-                        weekday: "short",
-                      })}
-                    </span>
-                  </div>
-                );
-              })}
+                  <span className="font-cormorant text-[14px] sm:text-[15px] font-medium leading-tight opacity-90">
+                    {d.toLocaleString("en-IN", {
+                      weekday: "short",
+                    })}
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
+          {/* Next Button */}
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#C37000] bg-[#C37000]/20 text-[#0F5C66] transition hover:bg-[#FFF4E8]"
-            style={{ marginRight: "50px" }}
+            type="button"
+            onClick={() => scrollDates("right")}
+            aria-label="Next dates"
+            className="flex h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-full border border-[#D89A3D] bg-[#F7F0E5] text-[#0B6670] shadow-sm transition hover:bg-[#F3DFC2] cursor-pointer"
           >
-            ❯
+            <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
           </button>
         </div>
       </div>
 
       {/* ================= Time Slot ================= */}
-      <div className="mt-10">
-        <div
-          className="mb-6 flex items-start gap-3"
-          style={{ marginTop: "20px" }}
-        >
-          <Clock3
-            className="mt-1 h-6 w-6 text-[#D89A3D]"
-            style={{ marginTop: "15px", marginLeft: "20px" }}
-          />
-
+      <div className="mt-8 sm:mt-10">
+        <div className="flex items-start gap-2.5 sm:gap-3">
+          <Clock3 className="mt-0.5 h-5 w-5 sm:h-6 sm:w-6 text-[#D89A3D] shrink-0" />
           <div>
-            <h2 className="font-cormorant text-[28px] font-semibold text-[#0B6670]">
+            <h2 className="font-cormorant text-[24px] sm:text-[28px] font-semibold text-[#0B6670] leading-tight">
               Select Time Slot
             </h2>
-
-            <p className="text-sm text-[#6D6259]">Timings are in IST</p>
+            <p className="font-cormorant mt-0.5 text-[14px] sm:text-[15px] text-[#6D6259]">
+              Timings are in IST
+            </p>
           </div>
         </div>
 
-        {/* Time Slots */}
+        {/* Time Slots Grid */}
         {slotsLoading ? (
-          <div className="flex h-[120px] items-center justify-center">
+          <div className="flex h-[90px] items-center justify-center font-cormorant text-[18px] text-[#0B6670]">
             Loading available slots...
           </div>
         ) : (
-          <div
-            className="grid grid-cols-5 gap-4"
-            style={{
-              marginLeft: "40px",
-              marginRight: "40px",
-              marginTop: "10px",
-            }}
-          >
+          <div className="mt-4 flex flex-wrap justify-center gap-3 sm:gap-4">
             {slots.map((slot) => {
               const available = slot.capacity - slot.booked_count;
               const active = selectedSlot === slot.id;
 
               return (
-                <div
+                <button
                   key={slot.id}
+                  type="button"
                   onClick={() => onSlotChange(slot.id)}
-                  className={`h-[60px] w-[200px] cursor-pointer rounded-xl border bg-[#EFDEC7]/20 px-5 py-4 text-center transition ${
+                  className={`flex flex-col items-center justify-center rounded-[14px] py-4 px-6 min-h-[82px] sm:min-h-[90px] min-w-[140px] sm:min-w-[160px] text-center transition-all cursor-pointer ${
                     active
-                      ? "border-2 border-[#0B6670] shadow-sm"
-                      : "border-[#E5C48A] hover:border-[#D89A3D]"
+                      ? "border-[2px] border-[#0B6670] bg-[#FAF3E8] shadow-sm"
+                      : "border border-[#C18426]/70 bg-transparent hover:border-[#0B6670]"
                   }`}
                 >
-                  <p className="text-[18px] font-semibold text-[#0B6670]">
+                  <p className="font-cormorant text-[22px] sm:text-[26px] font-bold leading-tight text-[#0B6670]">
                     {new Date(
                       `1970-01-01T${slot.slot_time}`,
                     ).toLocaleTimeString("en-IN", {
@@ -191,105 +182,75 @@ export default function Booking({
                   </p>
 
                   <p
-                    className={`mt-1 text-sm ${
-                      available <= 1 ? "text-[#D98200]" : "text-[#22A547]"
+                    className={`font-cormorant text-[14px] sm:text-[15px] font-semibold mt-1 leading-tight ${
+                      available <= 1 ? "text-[#C37000]" : "text-[#1B7A5C]"
                     }`}
                   >
                     {available <= 1
                       ? "Only 1 Slot Left"
                       : `${available} Slots Available`}
                   </p>
-                </div>
+                </button>
               );
             })}
           </div>
         )}
 
         {/* Info */}
-        <div
-          className="mt-4 flex items-center gap-2"
-          style={{
-            marginLeft: "20px",
-            marginTop: "20px",
-            marginBottom: "20px",
-          }}
-        >
-          <Info size={16} className="text-[#D89A3D]" strokeWidth={2} />
-
-          <p className="text-sm text-[#6D6259]">
+        <div className="mt-4 flex items-center gap-2 text-[14px] sm:text-[15px] text-[#6D6259]">
+          <Info size={16} className="text-[#D89A3D] shrink-0" strokeWidth={2} />
+          <p className="font-cormorant text-[14px] sm:text-[15px] text-[#6D6259]">
             Rajbhog Seva is performed during the afternoon bhog.
           </p>
         </div>
       </div>
 
       {/* Divider */}
-      <div className="my-10 border-t border-[#E8DCC8]" />
+      <div className="my-8 sm:my-10 border-t border-[#E8DCC8]" />
 
-      {/* ================= Devotee Details ================= */}
       {/* ================= Devotee Details ================= */}
       <div>
         {/* Heading */}
-        <div
-          className="mb-6 flex items-start gap-3"
-          style={{ marginTop: "10px" }}
-        >
-          <UserRound
-            className="mt-1 h-6 w-6 text-[#D89A3D]"
-            style={{ marginTop: "15px", marginLeft: "20px" }}
-          />
-
+        <div className="flex items-start gap-2.5 sm:gap-3">
+          <UserRound className="mt-0.5 h-5 w-5 sm:h-6 sm:w-6 text-[#D89A3D] shrink-0" />
           <div>
-            <h2 className="font-cormorant text-[28px] font-semibold text-[#0B6670]">
+            <h2 className="font-cormorant text-[24px] sm:text-[28px] font-semibold text-[#0B6670] leading-tight">
               Devotee Details
             </h2>
-
-            <p className="text-sm text-[#6D6259]">
+            <p className="font-cormorant mt-0.5 text-[14px] sm:text-[15px] text-[#6D6259]">
               Provide details for whom the seva is being performed
             </p>
           </div>
         </div>
 
         {/* Radio Cards */}
-        <div
-          className="grid gap-8 lg:grid-cols-2"
-          style={{ marginLeft: "50px", marginTop: "20px", marginRight: "50px" }}
-        >
-          {/* Myself */}
-
-          {/* For Myself */}
+        <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          {/* For Myself / My family */}
           <button
             type="button"
             onClick={() => setBookingFor("self")}
-            className={`flex items-start gap-4 rounded-2xl border bg-transparent px-6 py-5 transition-all ${
+            className={`flex items-start gap-3.5 rounded-[16px] sm:rounded-[18px] border px-5 py-3.5 sm:py-4 transition-all cursor-pointer text-left ${
               bookingFor === "self"
-                ? "border-[#0B6670] shadow-md"
-                : "border-[#D89A3D] hover:border-[#0B6670]"
+                ? "border-[#0B6670] bg-[#0B6670]/5 shadow-sm"
+                : "border border-[#C18426]/70 bg-transparent hover:border-[#0B6670]"
             }`}
           >
             <div
-              className={`mt-[10px] ml-[10px] flex h-6 w-6 items-center justify-center rounded-full border-2 ${
-                bookingFor === "self" ? "border-[#0B6670]" : "border-[#D89A3D]"
+              className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-[1.5px] ${
+                bookingFor === "self" ? "border-[#0B6670]" : "border-[#C18426]"
               }`}
-              style={{ marginTop: "20px", marginLeft: "10px" }}
             >
               {bookingFor === "self" && (
-                <div className="h-3 w-3 rounded-full bg-[#0B6670]" />
+                <div className="h-2.5 w-2.5 rounded-full bg-[#0B6670]" />
               )}
             </div>
 
-            <div className="text-left">
-              <h3
-                className="font-cormorant text-[22px] font-semibold text-[#0B6670]"
-                style={{ marginTop: "10px" }}
-              >
-                For Myself
+            <div>
+              <h3 className="font-cormorant text-[19px] sm:text-[21px] font-semibold text-[#0B6670] leading-tight">
+                For Myself / My family
               </h3>
-
-              <p
-                className="mt-1 text-sm text-[#6D6259]"
-                style={{ marginBottom: "10px" }}
-              >
-                Seva will be performed in your own name.
+              <p className="font-cormorant mt-1 text-[13.5px] sm:text-[14.5px] text-[#6D6259]">
+                Seva will be performed in your name
               </p>
             </div>
           </button>
@@ -298,125 +259,95 @@ export default function Booking({
           <button
             type="button"
             onClick={() => setBookingFor("other")}
-            className={`flex items-start gap-4 rounded-2xl border bg-transparent px-6 py-5 transition-all ${
+            className={`flex items-start gap-3.5 rounded-[16px] sm:rounded-[18px] border px-5 py-3.5 sm:py-4 transition-all cursor-pointer text-left ${
               bookingFor === "other"
-                ? "border-[#0B6670] shadow-md"
-                : "border-[#D89A3D] hover:border-[#0B6670]"
+                ? "border-[#0B6670] bg-[#0B6670]/5 shadow-sm"
+                : "border border-[#C18426]/70 bg-transparent hover:border-[#0B6670]"
             }`}
           >
             <div
-              className={`mt-[10px] ml-[10px] flex h-6 w-6 items-center justify-center rounded-full border-2 ${
-                bookingFor === "other" ? "border-[#0B6670]" : "border-[#D89A3D]"
+              className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-[1.5px] ${
+                bookingFor === "other" ? "border-[#0B6670]" : "border-[#C18426]"
               }`}
-              style={{ marginTop: "20px", marginLeft: "10px" }}
             >
               {bookingFor === "other" && (
-                <div className="h-3 w-3 rounded-full bg-[#0B6670]" />
+                <div className="h-2.5 w-2.5 rounded-full bg-[#0B6670]" />
               )}
             </div>
 
-            <div className="text-left">
-              <h3
-                className="font-cormorant text-[22px] font-semibold text-[#0B6670]"
-                style={{ marginTop: "10px" }}
-              >
+            <div>
+              <h3 className="font-cormorant text-[19px] sm:text-[21px] font-semibold text-[#0B6670] leading-tight">
                 For Someone Else
               </h3>
-
-              <p
-                className="mt-1 text-sm text-[#6D6259]"
-                style={{ marginBottom: "10px" }}
-              >
-                Seva will be performed on behalf of another devotee.
+              <p className="font-cormorant mt-1 text-[13.5px] sm:text-[14.5px] text-[#6D6259]">
+                Seva will be performed on behalf of others
               </p>
             </div>
           </button>
         </div>
 
-        {/* Form */}
-        <div
-          className="mt-8 grid gap-6 lg:grid-cols-3"
-          style={{ marginLeft: "50px", marginTop: "20px", marginRight: "50px" }}
-        >
-          {/* Name */}
+        {/* Form Fields */}
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {/* Full Name */}
           <div>
-            <label className="font-cormorant mb-2 block text-[20px] text-[#0B6670]">
+            <label className="font-cormorant mb-1.5 block text-[17px] sm:text-[19px] font-medium text-[#0B6670]">
               Full Name <span className="text-[#D89A3D]">*</span>
             </label>
-
             <input
               type="text"
               placeholder="Enter Full Name"
-              style={{ paddingLeft: "10px" }}
-              className="h-12 w-full rounded-xl border border-[#D89A3D] bg-transparent text-[#4F4941] outline-none"
+              className="h-11 sm:h-12 w-full rounded-[12px] border border-[#C18426]/70 bg-transparent px-3.5 sm:px-4 font-cormorant text-[16px] sm:text-[17px] text-[#3D352F] placeholder:text-[#9B948B] outline-none focus:border-[#0B6670]"
             />
           </div>
 
           {/* Gotra */}
           <div>
-            <label className="font-cormorant mb-2 block text-[20px] text-[#0B6670]">
+            <label className="font-cormorant mb-1.5 block text-[17px] sm:text-[19px] font-medium text-[#0B6670]">
               Gotra (Optional)
             </label>
-
             <input
               type="text"
               placeholder="Enter Gotra"
-              style={{ paddingLeft: "10px" }}
-              className="h-12 w-full rounded-xl border border-[#D89A3D] bg-transparent px-5 text-[#4F4941] outline-none placeholder:text-[#9B948B] focus:border-[#0B6670]"
+              className="h-11 sm:h-12 w-full rounded-[12px] border border-[#C18426]/70 bg-transparent px-3.5 sm:px-4 font-cormorant text-[16px] sm:text-[17px] text-[#3D352F] placeholder:text-[#9B948B] outline-none focus:border-[#0B6670]"
             />
           </div>
 
-          {/* Mobile */}
-          <div>
-            <label className="font-cormorant mb-2 block text-[20px] text-[#0B6670]">
+          {/* Mobile Number */}
+          <div className="sm:col-span-2 lg:col-span-1">
+            <label className="font-cormorant mb-1.5 block text-[17px] sm:text-[19px] font-medium text-[#0B6670]">
               Mobile Number <span className="text-[#D89A3D]">*</span>
             </label>
-
-            <div className="flex h-12 overflow-hidden rounded-xl border border-[#D89A3D] bg-transparent">
-              <div className="flex w-[50px] items-center gap-2 border-r border-[#E7D5B5] px-4">
-                {/* <span className="text-lg">🇮🇳</span> */}
-                <span
-                  className="text-[#4F4941]"
-                  style={{ paddingLeft: "10px" }}
-                >
+            <div className="flex h-11 sm:h-12 overflow-hidden rounded-[12px] border border-[#C18426]/70 bg-transparent focus-within:border-[#0B6670]">
+              <div className="flex items-center gap-1.5 border-r border-[#C18426]/70 bg-transparent px-3 shrink-0">
+                <span className="text-base leading-none">🇮🇳</span>
+                <span className="font-cormorant text-[16px] font-semibold text-[#3D352F]">
                   +91
                 </span>
               </div>
-
               <input
                 type="tel"
                 placeholder="Enter Mobile Number"
-                style={{ paddingLeft: "10px" }}
-                className="flex-1 px-4 outline-none placeholder:text-[#9B948B]"
+                className="flex-1 bg-transparent px-3 font-cormorant text-[16px] sm:text-[17px] text-[#3D352F] placeholder:text-[#9B948B] outline-none"
               />
             </div>
           </div>
         </div>
 
-        {/* Whatsapp */}
-        <div
-          className="mt-8 flex items-start gap-4"
-          style={{
-            marginLeft: "20px",
-            marginTop: "30px",
-            marginBottom: "20px",
-          }}
-        >
+        {/* Whatsapp Checkbox */}
+        <div className="mt-6 flex items-start gap-3">
           <input
             type="checkbox"
-            className="mt-1 h-5 w-5 rounded border-[#D89A3D]"
-            style={{ marginTop: "15px" }}
+            id="whatsapp-updates"
+            className="mt-1 h-4 w-4 sm:h-5 sm:w-5 rounded border border-[#C18426] accent-[#0B6670] cursor-pointer"
           />
-
-          <div>
-            <h3 className="font-cormorant text-[22px] font-semibold text-[#0B6670]">
+          <label htmlFor="whatsapp-updates" className="cursor-pointer">
+            <h3 className="font-cormorant text-[18px] sm:text-[20px] font-semibold text-[#0B6670] leading-tight">
               Send Seva Updates on Whatsapp
             </h3>
-
-            <p className="text-sm text-[#6D6259]">
+            <p className="font-cormorant mt-0.5 text-[13px] sm:text-[14px] text-[#6D6259]">
               Provide details for whom the seva is being performed
             </p>
-          </div>
+          </label>
         </div>
       </div>
     </section>

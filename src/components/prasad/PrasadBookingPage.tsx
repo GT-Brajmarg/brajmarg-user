@@ -96,7 +96,7 @@ export default function PrasadBookingPage({ slug, prasadId }: Props) {
 
         {/* Page Content */}
         <div className="relative z-10 mx-auto flex justify-center">
-          <div className="w-full max-w-[1200px] px-4 py-10">
+          <div className="w-full max-w-[1340px] px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
             <PrasadHero
               templeSlug={slug}
               temple={prasad.temples}

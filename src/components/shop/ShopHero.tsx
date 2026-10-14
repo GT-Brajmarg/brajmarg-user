@@ -91,7 +91,7 @@ export default function ShopHero() {
       </div>
 
       {/* Content Container (Below image on mobile, overlay on tablet & desktop) */}
-      <div className="relative z-10 mx-auto flex min-h-0 md:min-h-[500px] max-w-[1240px] items-center px-6 sm:px-10 md:px-12 py-8 sm:py-10 md:py-16">
+      <div className="relative z-10  flex min-h-0 md:min-h-[500px] max-w-[1240px] items-center px-4 md:px-16 lg:px-28 py-8 sm:py-10 md:py-16">
         <div className="w-full max-w-[420px] md:max-w-[290px] lg:max-w-[540px]">
           <h1 className="font-cormorant text-[45px] leading-[1.12] font-bold text-[#0B6670] md:text-[36px] lg:text-[52px]">
             Shop Devotion,
