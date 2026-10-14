@@ -56,7 +56,7 @@ export default function SevaFilters() {
         <OfferDateSelector />
 
         <SevaTypeSelector />
-        {(selectedDate || selectedSevaType) && (
+        {/* {(selectedDate || selectedSevaType) && (
           <div
             className="mt-4 sm:mt-6 flex flex-row items-center justify-between gap-2 sm:gap-3 rounded-[14px] sm:rounded-[16px] border border-[#0F5C66] bg-[#0F5C66]/20 px-3 sm:px-5 md:px-6 py-2.5 sm:py-3 md:py-4"
           >
@@ -108,7 +108,7 @@ export default function SevaFilters() {
               {featuredSevas.length} Sevas Found
             </p>
           </div>
-        )}
+        )} */}
       </div>
     </section>
   );

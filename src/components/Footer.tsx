@@ -47,9 +47,9 @@ const trustItems = [
 const quickLinks = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },
-  { label: "Yatra", href: "/services/yatra" },
+  { label: "Yatra", href: "/yatra" },
   { label: "Temples", href: "/temples" },
-  { label: "Seva", href: "/services/seva" },
+  { label: "Seva", href: "/seva" },
   { label: "About Us", href: "/about" },
 ];
 

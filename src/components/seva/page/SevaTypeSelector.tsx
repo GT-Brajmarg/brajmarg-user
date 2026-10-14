@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { HandHelping, ChevronLeft, ChevronRight } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
@@ -34,6 +34,13 @@ export default function SevaTypeSelector() {
 
   console.log("Seva Types:", sevaTypes);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      setCanScrollLeft(scrollRef.current.scrollLeft > 0);
+    }
+  };
 
   const scrollLeft = () => {
     scrollRef.current?.scrollBy({
@@ -70,6 +77,7 @@ export default function SevaTypeSelector() {
         <div className="relative">
           <div
             ref={scrollRef}
+            onScroll={handleScroll}
             className="scrollbar-hide flex gap-2.5 sm:gap-3.5 md:gap-5 overflow-x-auto scroll-smooth pb-2 mx-7 sm:mx-9 md:mx-0 md:ml-[80px] md:mr-[80px] md:mt-[20px]"
           >
             {sevaTypes.map((item) => (
@@ -106,13 +114,15 @@ export default function SevaTypeSelector() {
           </div>
 
           {/* Left Arrow */}
-          <button
-            onClick={scrollLeft}
-            className="absolute top-1/2 left-0 z-10 flex h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#C37000] bg-[#F7F0E5] md:bg-[#C37000]/20 shadow-sm md:shadow-none md:left-0 md:ml-[40px] md:-translate-x-1/2 transition-colors hover:bg-[#F3DFC2]"
-            aria-label="Previous seva type"
-          >
-            <ChevronLeft className="h-4 w-4 md:h-5 md:w-5 text-[#0F5C66]" />
-          </button>
+          {canScrollLeft && (
+            <button
+              onClick={scrollLeft}
+              className="absolute top-1/2 left-0 z-10 flex h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#C37000] bg-[#F7F0E5] md:bg-[#C37000]/20 shadow-sm md:shadow-none md:left-0 md:ml-[40px] md:-translate-x-1/2 transition-colors hover:bg-[#F3DFC2]"
+              aria-label="Previous seva type"
+            >
+              <ChevronLeft className="h-4 w-4 md:h-5 md:w-5 text-[#0F5C66]" />
+            </button>
+          )}
 
           {/* Right Arrow */}
           <button
