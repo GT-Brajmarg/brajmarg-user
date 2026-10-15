@@ -141,13 +141,11 @@ export default function SubscriptionSection() {
           {/* Yearly Card */}
           <div className={`${styles.card} ${styles.cardYearly}`}>
             {/* Best Value badge */}
-            <div className={styles.bestValueBadge}>
-              {yearlyPlan.badge_text && (
-                <div className={styles.bestValueBadge}>
-                  {yearlyPlan.badge_text}
-                </div>
-              )}
-            </div>
+            {yearlyPlan.badge_text && (
+              <div className={styles.bestValueBadge}>
+                {yearlyPlan.badge_text}
+              </div>
+            )}
 
             {/* Card background */}
             <div className={styles.cardBg}>
@@ -179,9 +177,8 @@ export default function SubscriptionSection() {
                 <span className={`${styles.price} ${styles.priceGold}`}>
                   {yearlyPlan.price}
                 </span>
-                <span className={`${styles.period} ${styles.periodGold}`}>
-                  /month
-                </span>
+
+                <span className={styles.period}>/month</span>
                 <span className={styles.saveBadge}>
                   {yearlyPlan.savings_text}
                 </span>

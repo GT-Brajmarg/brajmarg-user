@@ -52,28 +52,24 @@ const inclusions = [
 
 export default function IncludedSection() {
   return (
-    <section className="rounded-[20px] border-2 border-[#C37000] bg-[#EFDEC7]/20 p-6">
-      <h2
-        className="font-cormorant text-[32px] font-bold text-[#0F5C66]"
-        style={{ marginLeft: "20px" }}
-      >
+    <section className="flex h-full flex-col justify-between rounded-[18px] border border-[#C37000] bg-[#EFDEC7]/40 p-5 sm:p-6">
+      <h2 className="font-cormorant text-[28px] sm:text-[30px] font-bold text-[#0F5C66] mb-4">
         What's Included
       </h2>
 
-      <div
-        className="mt-8 grid grid-cols-3 gap-y-8"
-        style={{ marginLeft: "20px", marginBottom: "10px" }}
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-4 gap-y-4 my-auto">
         {inclusions.map((item) => (
-          <div key={item.title} className="flex items-center gap-4">
-            <Image src={item.image} alt={item.title} width={42} height={42} />
+          <div key={item.title} className="flex items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center">
+              <Image src={item.image} alt={item.title} width={34} height={34} className="h-8 w-8 object-contain" />
+            </div>
 
             <div>
-              <h3 className="font-cormorant text-[22px] font-semibold text-[#3D352F]">
+              <h3 className="font-cormorant text-[16px] font-bold text-[#3D352F] leading-tight">
                 {item.title}
               </h3>
 
-              <p className="font-cormorant text-[20px] leading-5 text-[#5D5044]">
+              <p className="font-cormorant text-[14px] text-[#5D5044] leading-tight">
                 {item.subtitle}
               </p>
             </div>

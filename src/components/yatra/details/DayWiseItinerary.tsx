@@ -44,40 +44,39 @@ const itinerary = [
 export default function DayWiseItinerary() {
   return (
     <section
-      className="rounded-[18px] border-2 border-[#C37000] bg-[#EFDEC7]/20 p-5"
-      style={{ marginTop: "20px" }}
+      className="rounded-[18px] border-2 border-[#C37000] bg-[#EFDEC7]/20 p-3"
+      style={{ marginTop: "60px" }}
     >
       <h2
-        className="font-cormorant text-[32px] font-bold text-[#0F5C66]"
+        className="font-cormorant text-[30px] font-bold text-[#0F5C66]"
         style={{ marginLeft: "20px" }}
       >
         Day-wise Itinerary
       </h2>
 
-      <div className="mt-4" style={{ marginTop: "10px", marginBottom: "10px" }}>
+      <div className="mt-4" style={{ marginTop: "8px", marginBottom: "8px" }}>
         {itinerary.map((item, index) => (
           <div
             key={item.day}
-            className={`grid grid-cols-[70px_1fr] gap-4 py-4 ${
-              index !== itinerary.length - 1 ? "border-b border-[#E7D6B5]" : ""
-            }`}
+            className={`grid grid-cols-[70px_1fr] gap-4 py-4 ${index !== itinerary.length - 1 ? "border-b border-[#E7D6B5]" : ""
+              }`}
             style={{ marginLeft: "20px", marginRight: "20px" }}
           >
             <div
-              className={`${cormorantInfant.className} text-[20px] font-bold text-[#C37000]`}
+              className={`${cormorantInfant.className} text-[18px] font-bold text-[#C37000]`}
             >
               {item.day}
             </div>
 
             <div>
               <h3
-                className={`${cormorantInfant.className} text-[20px] font-bold text-[#3F3125]`}
+                className={`${cormorantInfant.className} text-[18px] font-bold text-[#3F3125]`}
               >
                 {item.title}
               </h3>
 
               <p
-                className={`${cormorantInfant.className} mt-1 text-[16px] leading-6 font-bold text-[#5F5347]`}
+                className={`${cormorantInfant.className} mt-1 text-[15px] leading-6 font-bold text-[#5F5347]`}
               >
                 {item.description}
               </p>

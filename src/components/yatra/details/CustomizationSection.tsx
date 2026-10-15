@@ -10,35 +10,25 @@ const cormorantInfant = Cormorant_Infant({
 
 export default function CustomizationSection() {
   return (
-    <section className="flex h-full flex-col rounded-[20px] border-2 border-[#C37000] bg-[#C37000]/10 p-6">
-      <h2
-        className="font-cormorant text-[32px] font-bold text-[#C37000]"
-        style={{ marginLeft: "20px" }}
-      >
-        Need Customization?
-      </h2>
+    <section className="flex h-full flex-col justify-between rounded-[18px] border border-[#C37000] bg-[#EFDEC7]/40 p-5 sm:p-6">
+      <div>
+        <h2 className="font-cormorant text-[26px] sm:text-[28px] font-bold text-[#C37000] leading-tight">
+          Need Customization?
+        </h2>
 
-      <p
-        className={`${cormorantInfant.className} mt-4 text-[20px] leading-8 font-bold text-[#3D352F]`}
-        style={{ marginLeft: "20px" }}
-      >
-        Planning for family, friends or a special group?
-      </p>
+        <p className="font-cormorant mt-3 text-[15px] sm:text-[16px] font-semibold leading-snug text-[#3D352F]">
+          Planning for family, friends or a special group?
+        </p>
 
-      <p
-        className={`${cormorantInfant.className} mt-4 text-[20px] leading-8 font-bold text-[#3D352F]`}
-        style={{ marginLeft: "20px" }}
-      >
-        We can customize travel, stay and arrangements as per your requirements.
-      </p>
+        <p className="font-cormorant mt-2 text-[15px] sm:text-[16px] font-semibold leading-snug text-[#3D352F]">
+          We can customize travel, stay and arrangements as per your requirements.
+        </p>
+      </div>
 
-      <div
-        className="mt-auto pt-10"
-        style={{ marginTop: "30px", marginLeft: "40px" }}
-      >
-        <button className="font-cormorant flex w-[300px] items-center justify-center gap-3 rounded-xl border border-[#C37000] py-3 text-[28px] font-semibold text-[#C37000] transition hover:bg-[#C37000] hover:text-white">
-          Contact Us
-          <Image src="/images/phone.svg" alt="Phone" width={22} height={22} />
+      <div className="mt-6">
+        <button className="font-cormorant flex w-full items-center justify-center gap-2 rounded-xl border border-[#C37000] bg-[#EFDEC7]/60 py-2.5 text-[20px] sm:text-[22px] font-bold text-[#C37000] transition hover:bg-[#C37000] hover:text-white">
+          <span>Contact Us</span>
+          <Image src="/images/phone.svg" alt="Phone" width={20} height={20} className="h-5 w-5 object-contain" />
         </button>
       </div>
     </section>

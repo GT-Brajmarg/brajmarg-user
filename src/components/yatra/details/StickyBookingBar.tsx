@@ -11,124 +11,76 @@ const cormorantInfant = Cormorant_Infant({
 
 export default function StickyBookingBar() {
   return (
-    <div
-      className="bottom-4 z-50 mx-auto mt-10 w-full max-w-[1240px] px-4"
-      style={{ marginTop: "20px", marginBottom: "20px" }}
-    >
-      <div className="flex items-center justify-between rounded-[18px] border-2 border-[#C37000] bg-[#EFDEC7]/20 px-8 py-4 shadow-xl backdrop-blur-md">
-        {/* Left */}
-
-        <div className="flex items-center gap-5">
+    <div className="z-50 mx-auto my-6 w-full">
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-[16px] border border-[#C37000] bg-[#EFDEC7]/50 px-6 py-3.5 shadow-lg backdrop-blur-md">
+        {/* Left: Yatra info */}
+        <div className="flex items-center gap-3.5">
           <Image
             src="/images/temple-darshan.svg"
             alt="Yatra"
-            width={46}
-            height={46}
-            style={{ marginLeft: "20px" }}
+            width={38}
+            height={38}
+            className="h-9 w-9 object-contain"
           />
 
           <div>
-            <h3
-              className="font-cormorant text-[28px] leading-none font-bold text-[#0F5C66]"
-              style={{ marginTop: "10px" }}
-            >
+            <h3 className="font-cormorant text-[24px] font-bold text-[#0F5C66] leading-tight">
               Braj Yatra
             </h3>
-
-            <p
-              className={`${cormorantInfant.className} mt-1 text-[18px] font-bold text-[#3D352F]`}
-              style={{ marginBottom: "10px" }}
-            >
+            <p className="font-cormorant text-[15px] font-bold text-[#3D352F] leading-tight">
               Nathdwara to Vrindavan
             </p>
           </div>
         </div>
 
         {/* Divider */}
-
-        <div className="h-12 w-px bg-[#D4A04B]" />
+        <div className="hidden lg:block h-9 w-px bg-[#D4A04B]/60" />
 
         {/* Package */}
-
         <div>
-          <p
-            className={`${cormorantInfant.className} text-[16px] font-bold text-[#3D352F]`}
-          >
+          <p className="font-cormorant text-[13px] font-medium text-[#3D352F] leading-tight">
             Selected Package
           </p>
-
-          <h4 className="font-cormorant text-[22px] font-bold text-[#C37000]">
+          <h4 className="font-cormorant text-[18px] font-bold text-[#C37000] leading-tight">
             Standard Package
           </h4>
         </div>
 
         {/* Divider */}
-
-        <div className="h-12 w-px bg-[#D4A04B]" />
+        <div className="hidden lg:block h-9 w-px bg-[#D4A04B]/60" />
 
         {/* Seats */}
-
         <div>
-          <p
-            className={`${cormorantInfant.className} text-[16px] font-bold text-[#3D352F]`}
-          >
+          <p className="font-cormorant text-[13px] font-medium text-[#3D352F] leading-tight">
             Seats Left
           </p>
-
-          <h4 className="font-cormorant text-[22px] font-bold text-[#C37000]">
+          <h4 className="font-cormorant text-[18px] font-bold text-[#C37000] leading-tight">
             6 Seats Left
           </h4>
         </div>
 
         {/* Divider */}
-
-        <div className="h-12 w-px bg-[#D4A04B]" />
+        <div className="hidden lg:block h-9 w-px bg-[#D4A04B]/60" />
 
         {/* Price */}
-
         <div>
-          <p
-            className={`${cormorantInfant.className} text-[16px] font-bold text-[#3D352F]`}
-          >
+          <p className="font-cormorant text-[13px] font-medium text-[#3D352F] leading-tight">
             Price
           </p>
-
-          <div className="flex items-end gap-1">
-            <span
-              className={`${cormorantInfant.className} text-[22px] font-bold text-[#C37000]`}
-            >
+          <div className="flex items-baseline gap-1 leading-tight">
+            <span className="font-cormorant text-[20px] font-bold text-[#C37000]">
               ₹3,999
             </span>
-
-            <span
-              className={`${cormorantInfant.className} mb-[4px] text-[16px] font-bold text-[#3D352F]`}
-            >
+            <span className="font-cormorant text-[13px] font-bold text-[#3D352F]">
               /person
             </span>
           </div>
         </div>
 
-        {/* CTA */}
-
-        <button
-          className={`${cormorantInfant.className} flex items-center gap-3 rounded-xl bg-[#0F5C66] px-10 py-4 text-[24px] font-bold text-[#EFDEC7] transition hover:bg-[#0C4C54]`}
-          style={{ marginRight: "20px" }}
-        >
-          <span
-            style={{
-              marginLeft: "10px",
-              marginTop: "5px",
-              marginBottom: "5px",
-            }}
-          >
-            Book This Yatra
-          </span>
-
-          <ArrowRight
-            size={24}
-            strokeWidth={2.3}
-            style={{ marginRight: "10px" }}
-          />
+        {/* CTA Button */}
+        <button className="font-cormorant flex items-center gap-2 rounded-xl bg-[#0F5C66] px-6 py-2.5 text-[18px] font-bold text-[#EFDEC7] transition hover:bg-[#0C4C54]">
+          <span>Book This Yatra</span>
+          <ArrowRight size={18} strokeWidth={2.2} />
         </button>
       </div>
     </div>

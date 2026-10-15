@@ -21,7 +21,7 @@ import StickyBookingBar from "@/components/yatra/details/StickyBookingBar";
 export default function YatraDetailsPage() {
   return (
     <>
-      <main className="relative isolate min-h-screen overflow-hidden bg-[#F8F2E8]">
+      <main className="relative isolate min-h-screen overflow-hidden bg-[#F7F0E5]">
         {/* Background */}
         <div
           aria-hidden="true"
@@ -29,12 +29,13 @@ export default function YatraDetailsPage() {
         >
           {/* Paper Texture */}
           <Image
-            src="/images/temple-paper-texture.png"
+            src="/images/paper-texture.png"
             alt=""
             fill
             priority
             sizes="100vw"
-            className="object-cover opacity-[0.22]"
+            aria-hidden
+            className="pointer-events-none object-cover opacity-34 mix-blend-multiply"
           />
 
           {/* Hero Mandala */}
@@ -87,7 +88,7 @@ export default function YatraDetailsPage() {
         <div className="relative z-10">
           <YatraHero />
 
-          <section className="py-8">
+          <section className="pt-0 pb-8">
             <div className="relative z-10 flex w-full justify-center px-5 sm:px-8 lg:px-12">
               <div className="w-full max-w-[1200px] space-y-8">
                 <div

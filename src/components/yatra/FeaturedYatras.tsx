@@ -136,7 +136,7 @@ export default function FeaturedYatras() {
         </div>
 
         <p className="font-cormorant mt-1 text-[17px] sm:text-[20px] md:text-[22px] text-[#5B4633]">
-          Sacred journeys thoughtfully planned by BrajMarg
+          Sacred journeys thoughtfully planned by Brajmarg
         </p>
 
         <div className="mt-4 rounded-xl border border-[#C37000] bg-[#EFDEC7]/40 px-4 py-2 sm:px-6 sm:py-2.5 text-[#3D352F] shadow-sm">
@@ -144,7 +144,7 @@ export default function FeaturedYatras() {
             <Image src="/images/group.svg" alt="" width={24} height={24} className="shrink-0" />
 
             <span className="font-cormorant text-[17px] sm:text-[19px] md:text-[22px] font-semibold">
-              All yatras are organized group journeys by BrajMarg
+              All yatras are organized group journeys by Brajmarg
             </span>
           </div>
         </div>

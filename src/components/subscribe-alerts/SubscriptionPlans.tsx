@@ -30,7 +30,7 @@ const plans = [
     image: "/images/yearly-alert.svg",
     price: "₹799",
     duration: "/month",
-    button: "Subscribe Yearly",
+    button: "Subscribe Yearlyy",
     highlight: true,
     features: [
       "Everything in Monthly Plan",
@@ -81,11 +81,10 @@ export default function SubscriptionPlans() {
         {plans.map((plan) => (
           <div
             key={plan.id}
-            className={`relative flex min-h-[450px] flex-col rounded-[24px] border p-8 ${
-              plan.highlight
+            className={`relative flex min-h-[450px] flex-col rounded-[24px] border p-8 ${plan.highlight
                 ? "border-[#D18418] bg-[#3D352F]/10"
                 : "border-[#D8C4A8] bg-[#3D352F]/10"
-            }`}
+              }`}
           >
             {/* Badge */}
             {plan.highlight && (
@@ -104,9 +103,8 @@ export default function SubscriptionPlans() {
               <Image src={plan.image} alt={plan.title} width={28} height={28} />
 
               <h3
-                className={`font-cormorant text-[32px] font-bold ${
-                  plan.highlight ? "text-[#C37000]" : "text-[#0F5C66]"
-                }`}
+                className={`font-cormorant text-[32px] font-bold ${plan.highlight ? "text-[#C37000]" : "text-[#0F5C66]"
+                  }`}
               >
                 {plan.title}
               </h3>
@@ -151,9 +149,8 @@ export default function SubscriptionPlans() {
                   />
 
                   <span
-                    className={`font-cormorant text-[22px] ${
-                      plan.highlight ? "text-[#C37000]" : "text-[#0B6670]"
-                    }`}
+                    className={`font-cormorant text-[22px] ${plan.highlight ? "text-[#C37000]" : "text-[#0B6670]"
+                      }`}
                   >
                     {feature}
                   </span>
@@ -168,11 +165,10 @@ export default function SubscriptionPlans() {
             >
               <button
                 onClick={() => handleSubscribe(plan.id)}
-                className={`font-cormorant h-[52px] w-full max-w-[500px] rounded-lg text-[20px] text-[#EFDEC7] transition ${
-                  plan.highlight
+                className={`font-cormorant h-[52px] w-full max-w-[500px] rounded-lg text-[20px] text-[#EFDEC7] transition ${plan.highlight
                     ? "bg-[#D18418] hover:bg-[#BC7400]"
                     : "bg-[#0B6670] hover:bg-[#084E55]"
-                }`}
+                  }`}
               >
                 {plan.button}
                 <span className="ml-2" style={{ marginLeft: "10px" }}>
