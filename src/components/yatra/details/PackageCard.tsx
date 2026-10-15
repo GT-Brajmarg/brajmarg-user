@@ -22,56 +22,47 @@ interface Props {
 export default function PackageCard({ pkg }: Props) {
   return (
     <div
-      className={`relative rounded-[20px] border-[#0F5C66] bg-[#0F5C66]/10 p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
+      className={`relative flex h-full flex-col justify-between rounded-[20px] bg-[#0F5C66]/5 p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
         pkg.popular
-          ? "border-4 border-[#0F5C66] shadow-lg"
-          : "border-2 border-[#0F5C66]"
+          ? "border-2 border-[#0F5C66]"
+          : "border border-[#0F5C66]"
       }`}
     >
-      <h3
-        className="font-cormorant text-[32px] font-bold text-[#0F5C66]"
-        style={{ marginLeft: "10px" }}
-      >
-        {pkg.name}
-      </h3>
-      <p
-        className="font-cormorant text-[24px] font-bold text-[#C37000]"
-        style={{ marginLeft: "10px" }}
-      >
-        {pkg.subtitle}
-      </p>
-      <div className="mt-5 flex items-end" style={{ marginLeft: "10px" }}>
-        <span
-          className={`${cormorantInfant.className} text-[36px] font-bold text-[#0F5C66]`}
-        >
-          ₹{pkg.price.toLocaleString()}
-        </span>
+      <div>
+        <h3 className="font-cormorant text-[28px] font-bold text-[#0F5C66] leading-tight">
+          {pkg.name}
+        </h3>
+        <p className="font-cormorant text-[17px] font-bold text-[#C37000] mt-0.5">
+          {pkg.subtitle}
+        </p>
 
-        <span
-          className={`${cormorantInfant.className} mb-2 ml-1 text-[20px] font-bold text-[#3D352F]`}
-        >
-          /person
-        </span>
-      </div>
-      <div
-        className="mt-6 space-y-4"
-        style={{ marginLeft: "10px", marginTop: "10px", marginBottom: "10PX" }}
-      >
-        {pkg.features.map((feature) => (
-          <div key={feature} className="flex items-start gap-3">
-            <CircleCheck size={20} className="mt-1 shrink-0 text-[#C37000]" />
+        <div className="mt-2.5 flex items-baseline gap-1">
+          <span className="font-cormorant text-[32px] font-bold text-[#0F5C66]">
+            ₹{pkg.price.toLocaleString()}
+          </span>
+          <span className="font-cormorant text-[15px] font-bold text-[#3D352F]">
+            /person
+          </span>
+        </div>
 
-            <span className={`text-[16px] text-[#3D352F]`}>{feature}</span>
-          </div>
-        ))}
+        <div className="mt-3.5 space-y-2">
+          {pkg.features.map((feature) => (
+            <div key={feature} className="flex items-center gap-2.5">
+              <CircleCheck size={16} className="shrink-0 text-[#C37000]" />
+              <span className="font-cormorant text-[16px] font-medium text-[#3D352F]">
+                {feature}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
+
       <button
-        className={`${cormorantInfant.className} mt-8 h-[50px] w-[330PX] rounded-xl border py-3 text-[28px] font-bold transition-all ${
+        className={`font-cormorant mt-6 w-full rounded-xl border py-2 text-[22px] font-bold transition-all ${
           pkg.popular
             ? "border-[#0F5C66] bg-[#0F5C66] text-[#EFDEC7] hover:bg-[#0c4b52]"
-            : "border-[#0F5C66] bg-transparent text-[#0F5C66] hover:bg-[#0F5C66] hover:text-white"
+            : "border-[#0F5C66] bg-[#EFDEC7]/60 text-[#0F5C66] hover:bg-[#0F5C66] hover:text-[#EFDEC7]"
         }`}
-        style={{ marginTop: "20px", marginBottom: "20px", marginLeft: "25px" }}
       >
         Select Package
       </button>

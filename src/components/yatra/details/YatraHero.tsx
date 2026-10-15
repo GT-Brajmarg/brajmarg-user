@@ -49,96 +49,79 @@ export default function YatraHero() {
 
       {/* Overlay */}
 
-      <div className="relative z-10 mx-auto flex min-h-[500px] max-w-[1240px] items-center px-7 py-12 md:px-12">
-        <div className="max-w-[650px] md:translate-x-[200px]">
+      <div className="relative z-10 mx-auto flex min-h-[600px] max-w-[1280px] items-start -pl-20 py-10  md:pr-7" >
+        <div className="w-full max-w-[520px]">
           {/* Breadcrumb */}
 
-          <div className="flex items-center gap-2 pt-6">
+          <div className="flex flex-wrap items-center gap-2 pt-2">
             <Link
               href="/yatra"
-              className="inline-flex h-11 items-center gap-2 rounded-lg border border-[#C18426] bg-transparent px-5 transition hover:bg-[#FCF5E9]"
+              className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#C18426] bg-transparent px-4 transition hover:bg-[#FCF5E9]"
             >
-              <ArrowLeft
-                className="h-5 w-5 text-[#0F5C66]"
-                style={{ marginLeft: "5px" }}
-              />
-
-              <span
-                className="font-cormorant text-[22px] leading-none text-[#0F5C66]"
-                style={{ marginRight: "5px" }}
-              >
+              <ArrowLeft className="h-4 w-4 text-[#0F5C66]" />
+              <span className="font-cormorant text-[19px] leading-none text-[#0F5C66]">
                 Back to Yatra
               </span>
             </Link>
 
-            <span className="text-[20px] text-[#A8854E]">/</span>
+            <span className="text-[18px] text-[#A8854E]">/</span>
 
-            <span className="font-cormorant text-[22px] text-[#2F241B]">
+            <span className="font-cormorant text-[19px] text-[#2F241B]">
               Braj Yatra
             </span>
 
-            <span className="text-[20px] text-[#A8854E]">/</span>
+            <span className="text-[18px] text-[#A8854E]">/</span>
 
-            <span className="font-cormorant text-[22px] text-[#2F241B]">
+            <span className="font-cormorant text-[20px] text-[#2F241B]">
               Yatra Details
             </span>
           </div>
 
           {/* Title */}
 
-          <h1
-            className="font-cormorant text-[62px] leading-none font-bold text-[#0F5C66]"
-            style={{ marginTop: "40px" }}
-          >
+          <h1 className="font-cormorant mt-8 text-[48px] leading-none font-bold text-[#0F5C66]">
             Braj Yatra
           </h1>
 
-          <h2 className="font-cormorant mt-2 text-[40px] font-bold text-[#C37000]">
+          <h2 className="font-cormorant mt-1 text-[33px] font-bold text-[#C37000]">
             Mathura to Vrindavan
           </h2>
 
           {/* Stats */}
 
           <div
-            className={`${cormorantInfant.className} mt-5 flex flex-wrap items-center text-[16px] font-bold text-[#3D352F]/86`}
+            className={`${cormorantInfant.className} mt-4 flex flex-wrap items-center gap-0 text-[15px] font-bold text-[#3D352F]`}
           >
-            <div
-              className="flex items-center gap-2 pr-5"
-              style={{ marginRight: "10px" }}
-            >
+            <div className="flex items-center gap-1.5">
               <Image
                 src="/images/calendar-4.svg"
                 alt="Duration"
-                width={20}
-                height={20}
+                width={18}
+                height={18}
               />
-              <span>9 Days / 8 Nights</span>
+              <span>9 Days/8 Night</span>
             </div>
-            <div className="mx-4 h-5 w-px bg-[#D4A04B]" />
 
-            <div
-              className="ml-5 flex items-center gap-2 pr-5"
-              style={{ marginLeft: "10px", marginRight: "10px" }}
-            >
+            <div className="mx-3 h-4 w-px bg-[#D4A04B]" />
+
+            <div className="flex items-center gap-1.5">
               <Image
                 src="/images/travellers.svg"
                 alt="Travellers"
-                width={20}
-                height={20}
+                width={18}
+                height={18}
               />
               <span>17 Travellers</span>
             </div>
-            <div className="mx-4 h-5 w-px bg-[#D4A04B]" />
 
-            <div
-              className="ml-5 flex items-center gap-2"
-              style={{ marginLeft: "10px" }}
-            >
+            <div className="mx-3 h-4 w-px bg-[#D4A04B]" />
+
+            <div className="flex items-center gap-1.5">
               <Image
                 src="/images/bus.svg"
                 alt="Round Trip"
-                width={20}
-                height={20}
+                width={18}
+                height={18}
               />
               <span>1300 km Round Trip</span>
             </div>
@@ -146,41 +129,31 @@ export default function YatraHero() {
 
           {/* Description */}
 
-          <p
-            className="font-cormorant mt-5 max-w-[520px] text-[21px] leading-7 font-semibold text-[#3D352F]"
-            style={{ marginTop: "20px" }}
-          >
+          <p className="font-cormorant mt-4 max-w-[460px] text-[19px] leading-6 font-semibold text-[#3D352F]">
             Embark on a divine journey from the sacred abode of Shri Nathdwara
-            to the land of Shri Krishna's leelas in Vrindavan. Experience
+            to the land of Shri Krishna&apos;s leelas in Vrindavan. Experience
             devotion, comfort and memories to cherish forever.
           </p>
 
           {/* Highlights */}
 
-          <div className="mt-8 flex items-center" style={{ marginTop: "20px" }}>
+          <div className="mt-6 flex items-start">
             {highlights.map((item, index) => (
               <Fragment key={item.title}>
-                <div
-                  className="flex flex-col items-center px-5 text-center"
-                  style={{ marginLeft: "30px", marginRight: "30px" }}
-                >
+                <div className="flex flex-col items-center px-4 text-center">
                   <Image
                     src={item.image}
                     alt={item.title}
-                    width={44}
-                    height={44}
+                    width={42}
+                    height={42}
                   />
-
-                  <span
-                    className="font-cormorant mt-2 text-[20px] leading-5 font-bold whitespace-pre-line text-[#0F5C66]"
-                    style={{ marginTop: "10px" }}
-                  >
+                  <span className="font-cormorant mt-2 text-[16px] leading-[1.3] font-bold whitespace-pre-line text-[#0F5C66]">
                     {item.title}
                   </span>
                 </div>
 
                 {index !== highlights.length - 1 && (
-                  <div className="mx-2 h-12 w-px bg-[#C37000]" />
+                  <div className="mx-1 mt-1 h-10 w-px self-center bg-[#C37000]" />
                 )}
               </Fragment>
             ))}

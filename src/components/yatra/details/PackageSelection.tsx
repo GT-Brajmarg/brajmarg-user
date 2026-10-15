@@ -49,18 +49,18 @@ const packages = [
 
 export default function PackageSelection() {
   return (
-    <section className="py-10" style={{ marginTop: "20px" }}>
-      <div className="mb-10 flex items-center justify-center gap-3">
-        <Image src="/images/lotus.png" alt="" width={48} height={48} />
+    <section className="py-4">
+      <div className="mb-6 flex items-center justify-center gap-3">
+        <Image src="/images/lotus.png" alt="" width={36} height={36} className="h-9 w-9 object-contain" />
 
-        <h2 className="font-cormorant text-[36px] font-bold text-[#0F5C66]">
+        <h2 className="font-cormorant text-[32px] sm:text-[36px] font-bold text-[#0F5C66]">
           Choose Your Package
         </h2>
 
-        <Image src="/images/lotus.png" alt="" width={48} height={48} />
+        <Image src="/images/lotus.png" alt="" width={36} height={36} className="h-9 w-9 object-contain" />
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-3" style={{ marginTop: "20px" }}>
+      <div className="grid gap-5 md:grid-cols-3">
         {packages.map((pkg) => (
           <PackageCard key={pkg.id} pkg={pkg} />
         ))}

@@ -65,8 +65,8 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
       <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-[480px_1fr] lg:gap-10 xl:gap-12">
         {/* ================= Left Image ================= */}
         <div className="relative mx-auto lg:mx-0 w-full max-w-[420px] sm:max-w-[460px] lg:max-w-[480px] aspect-[1862/1756]">
-          {/* Photo layer — placed strictly inside the inner decorative frame opening */}
-          <div className="absolute top-[11.5%] left-[8%] h-[78%] w-[84%] overflow-hidden rounded-[18px] sm:rounded-[24px] z-0">
+          {/* Photo layer — fills the inner frame completely matching reference */}
+          <div className="absolute top-[4%] bottom-[4%] left-[4.5%] right-[4.5%] overflow-hidden rounded-[36px] sm:rounded-[48px] lg:rounded-[56px] z-10">
             <Image
               src={seva.image_url || "/images2/default.png"}
               alt={seva.name}
@@ -82,7 +82,7 @@ export default function SevaHero({ templeSlug, temple, seva }: Props) {
             alt=""
             fill
             priority
-            className="pointer-events-none z-10 object-contain brightness-[1.15] contrast-[1.1] drop-shadow-[0_0_1px_rgba(90,55,15,0.75)] drop-shadow-[0_1px_3px_rgba(130,80,20,0.3)]"
+            className="pointer-events-none z-20 object-contain"
           />
         </div>
 

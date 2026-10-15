@@ -60,7 +60,7 @@ export default function PlacesAlongJourney() {
     >
       <div className="mb-5 flex items-center justify-between">
         <h2
-          className="font-cormorant text-[30px] font-bold text-[#0F5C66]"
+          className="font-cormorant text-[28px] font-bold text-[#0F5C66]"
           style={{ marginLeft: "20px" }}
         >
           Places Along Your Journey
