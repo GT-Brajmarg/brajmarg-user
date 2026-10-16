@@ -78,7 +78,7 @@ export default function StickyBookingBar() {
         </div>
 
         {/* CTA Button */}
-        <button className="font-cormorant flex items-center gap-2 rounded-xl bg-[#0F5C66] px-6 py-2.5 text-[18px] font-bold text-[#EFDEC7] transition hover:bg-[#0C4C54]">
+        <button className="font-cormorant flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-[#0F5C66] px-6 py-2.5 text-[18px] font-bold text-[#EFDEC7] transition hover:bg-[#0C4C54]">
           <span>Book This Yatra</span>
           <ArrowRight size={18} strokeWidth={2.2} />
         </button>

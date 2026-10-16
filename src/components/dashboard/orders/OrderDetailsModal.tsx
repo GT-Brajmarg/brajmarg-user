@@ -35,6 +35,8 @@ export default function OrderDetailsModal({ open, onClose }: Props) {
     return () => {
       window.removeEventListener("keydown", handler);
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.body.style.touchAction = "";
     };
   }, [open, onClose]);
 

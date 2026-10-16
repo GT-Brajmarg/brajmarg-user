@@ -17,19 +17,18 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
 
   useEffect(() => {
     if (open) {
-      const originalBodyOverflow = document.body.style.overflow;
-      const originalHtmlOverflow = document.documentElement.style.overflow;
-      const originalBodyTouchAction = document.body.style.touchAction;
-
       document.body.style.overflow = "hidden";
       document.documentElement.style.overflow = "hidden";
-      document.body.style.touchAction = "none";
 
       return () => {
-        document.body.style.overflow = originalBodyOverflow || "";
-        document.documentElement.style.overflow = originalHtmlOverflow || "";
-        document.body.style.touchAction = originalBodyTouchAction || "";
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+        document.body.style.touchAction = "";
       };
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.body.style.touchAction = "";
     }
   }, [open]);
 
@@ -42,40 +41,37 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
   if (!open) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 backdrop-blur-md"
-      style={{ touchAction: "none" }}
-    >
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/60 p-3 sm:p-4 md:p-6 backdrop-blur-md">
       {/* Backdrop */}
       <div
-        className="absolute inset-0"
+        className="fixed inset-0"
         onClick={onClose}
-        onTouchMove={(e) => e.preventDefault()}
-        style={{ touchAction: "none" }}
+        aria-hidden="true"
       />
 
       {/* Modal */}
       <div
-        className="relative z-10 w-full max-w-[980px] overflow-hidden rounded-[26px] bg-[#F7ECD9] shadow-[0_35px_120px_rgba(0,0,0,.35)] transition-all duration-300"
-        style={{ overscrollBehavior: "contain", touchAction: "auto" }}
+        className="relative z-10 my-auto w-full max-w-[960px] overflow-hidden rounded-2xl sm:rounded-[26px] bg-[#F7ECD9] shadow-[0_25px_80px_rgba(0,0,0,.3)] transition-all duration-300"
+        style={{ overscrollBehavior: "contain" }}
       >
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-[#DCC7A7] bg-white text-[#5F4E3B] transition hover:rotate-90"
+          aria-label="Close login modal"
+          className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 z-30 flex h-9 w-9 items-center justify-center rounded-full border border-[#DCC7A7] bg-white text-[#5F4E3B] shadow-sm transition hover:rotate-90 hover:bg-[#FAF4EB]"
         >
           <X size={18} />
         </button>
 
-        <div className="grid min-h-[660px] lg:grid-cols-[48%_52%]">
+        <div className="grid lg:grid-cols-[48%_52%]">
           {/* Left */}
-          <div className="hidden lg:block">
+          <div className="hidden lg:flex lg:flex-col h-full">
             <AuthLeftPanel />
           </div>
 
           {/* Right */}
           <div
-            className="relative flex flex-col bg-[#F8EEDB]"
+            className="relative flex flex-col justify-center bg-[#F8EEDB] px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12 min-h-[540px] lg:min-h-[640px]"
             style={{
               backgroundImage: `
                 radial-gradient(circle at 0% 0%, rgba(214,171,93,.08), transparent 35%),
@@ -84,58 +80,20 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
             }}
           >
             {/* Mobile Logo */}
-            <div
-              className="flex flex-col items-center pt-8 lg:hidden"
-              style={{ marginTop: "20px" }}
-            >
+            <div className="flex flex-col items-center pb-4 lg:hidden">
               <img
                 src="/images/image 49.png"
-                className="h-14 w-auto"
+                className="h-12 w-auto"
                 alt="Brajmarg"
               />
 
-              <h2 className="font-cormorant mt-4 text-3xl font-semibold text-[#0B6971]">
+              <h2 className="font-cormorant mt-2 text-2xl font-semibold text-[#0B6971]">
                 Brajmarg
               </h2>
             </div>
 
-            {/* Tabs */}
-            {/* <div
-              className="flex justify-center px-6 pt-8 lg:px-10"
-              style={{ marginTop: "50px" }}
-            >
-              <div className="grid h-[52px] w-full max-w-[330px] grid-cols-2 overflow-hidden rounded-xl border border-[#D8BE92] bg-[#F8F0E3]">
-                <button
-                  onClick={() => setActiveTab("login")}
-                  className={`flex items-center justify-center gap-2 transition-all duration-300 ${
-                    activeTab === "login"
-                      ? "bg-[#D7B06C] text-[#0D6971]"
-                      : "text-[#6C5B48] hover:bg-[#F2E4C8]"
-                  }`}
-                >
-                  <LogIn size={18} strokeWidth={2} />
-                  <span className="font-medium">Login</span>
-                </button>
-
-                <button
-                  onClick={() => setActiveTab("signup")}
-                  className={`flex items-center justify-center gap-2 transition-all duration-300 ${
-                    activeTab === "signup"
-                      ? "bg-[#D7B06C] text-[#0D6971]"
-                      : "text-[#6C5B48] hover:bg-[#F2E4C8]"
-                  }`}
-                >
-                  <UserPlus size={18} strokeWidth={2} />
-                  <span className="font-medium">Sign Up</span>
-                </button>
-              </div>
-            </div> */}
-
             {/* Forms */}
-            <div
-              className="flex-1 px-6 py-8 lg:px-10"
-              style={{ marginTop: "100px" }}
-            >
+            <div className="flex flex-1 flex-col justify-center">
               {activeTab === "login" ? <LoginForm /> : <SignupForm />}
             </div>
           </div>

@@ -61,40 +61,38 @@ export default function AuthLeftPanel() {
       <div className="absolute right-0 bottom-0 h-56 w-56 rounded-full bg-[#0D6971]/10 blur-3xl" />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-1 flex-col items-center px-10 pt-12">
+      <div className="relative z-10 flex flex-1 flex-col items-center px-6 pt-7 pb-0">
         {/* Lotus */}
         <Image
-          src="/images/lotus.png"
+          src="/images/yellow-dark.png"
           alt="Lotus"
-          width={50}
-          height={50}
-          style={{ marginTop: "40px" }}
+          width={42}
+          height={42}
+          className="object-contain"
         />
 
         {/* Heading */}
-        <p className="mt-3 text-[20px] text-[#6C5A45]">Welcome to</p>
+        <p className="mt-2 text-[16px] text-[#6C5A45]">Welcome to</p>
 
         <h1
-          className={`${cormorant.className} text-[56px] leading-none font-semibold text-[#0C6971]`}
+          className={`${cormorant.className} text-[46px] xl:text-[50px] leading-tight font-semibold text-[#0C6971]`}
         >
           Brajmarg
         </h1>
-        <div
-          className="relative mt-2 mb-2 h-2 w-[180px]"
-          style={{ marginBottom: "70px", marginTop: "-30px" }}
-        >
+
+        <div className="my-2 h-[24px] w-[170px]">
           <Image
             src="/images/brajmarg-divider.png"
             alt="Divider"
-            width={180}
-            height={8}
-            className="object-contain"
+            width={950}
+            height={50}
+            className="h-full w-full object-contain"
           />
         </div>
 
         {/* Description */}
         <p
-          className={`${cormorant.className} max-w-[260px] text-center text-[18px] leading-7 text-[#6C5A45]`}
+          className={`${cormorant.className} mt-1 max-w-[270px] text-center text-[16px] xl:text-[17px] leading-relaxed text-[#6C5A45]`}
         >
           Login or Sign Up to book sevas,
           <br />
@@ -104,7 +102,7 @@ export default function AuthLeftPanel() {
         </p>
 
         {/* Temple Illustration */}
-        <div className="relative mt-auto flex h-[330px] w-full items-end justify-center">
+        <div className="relative mt-auto flex h-[200px] xl:h-[230px] w-full items-end justify-center">
           <Image
             src="/images/login-temple.png"
             alt="Temple"
@@ -116,35 +114,29 @@ export default function AuthLeftPanel() {
       </div>
 
       {/* Bottom Feature Bar */}
-      <div
-        className="relative z-10 border-t border-[#E6D3B5] bg-[#F7EAD5]/90 px-5 py-5 backdrop-blur-sm"
-        style={{ height: "85px" }}
-      >
-        <div
-          className="flex items-start justify-between"
-          style={{ marginTop: "6px" }}
-        >
+      <div className="relative z-10 border-t border-[#E6D3B5] bg-[#F7EAD5]/95 px-3 py-3 backdrop-blur-sm">
+        <div className="flex items-start justify-between">
           {FEATURES.map((item) => {
             const Icon = item.icon;
 
             return (
               <div
                 key={item.title}
-                className="flex w-[62px] flex-col items-center text-center"
+                className="flex flex-1 flex-col items-center text-center px-0.5"
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D9B67A] bg-[#FFF7EB] shadow-sm">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#D9B67A] bg-[#FFF7EB] shadow-xs">
                   <Icon
-                    size={18}
+                    size={17}
                     strokeWidth={1.8}
                     className="text-[#D08A2F]"
                   />
                 </div>
 
-                <span className="mt-2 text-[10px] leading-3 font-medium text-[#6B5946]">
+                <span className="mt-1.5 text-[10px] leading-tight font-medium text-[#6B5946]">
                   {item.title}
                 </span>
 
-                <span className="text-[10px] leading-3 text-[#6B5946]">
+                <span className="text-[9.5px] leading-tight text-[#8A7864]">
                   {item.subtitle}
                 </span>
               </div>

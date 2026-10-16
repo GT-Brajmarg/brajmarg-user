@@ -37,10 +37,7 @@ export default function SignupForm() {
   };
 
   return (
-    <div
-      className="mx-auto w-full max-w-[430px] lg:translate-x-[40px]"
-      style={{ paddingInline: "20px" }}
-    >
+    <div className="mx-auto w-full max-w-[390px]">
       {/* Heading */}
       <h2
         className={`${cormorant.className} text-[30px] leading-none font-semibold text-[#0C6B73]`}

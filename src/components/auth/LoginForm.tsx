@@ -1,16 +1,45 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Eye, EyeOff, ArrowRight, Mail } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, Mail, Pencil } from "lucide-react";
 import { Cormorant_Garamond } from "next/font/google";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
 });
+
+function IndiaFlag() {
+  return (
+    <svg
+      viewBox="0 0 30 20"
+      className="h-[15px] w-[23px] shrink-0 overflow-hidden rounded-[3px] shadow-[0_1px_2px_rgba(0,0,0,0.12)]"
+      aria-hidden="true"
+    >
+      <rect width="30" height="6.67" fill="#FF9933" />
+      <rect y="6.67" width="30" height="6.67" fill="#FFFFFF" />
+      <rect y="13.33" width="30" height="6.67" fill="#128807" />
+      <circle cx="15" cy="10" r="2.35" fill="none" stroke="#000080" strokeWidth="0.5" />
+      <circle cx="15" cy="10" r="0.65" fill="#000080" />
+      <g stroke="#000080" strokeWidth="0.28">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <line
+            key={i}
+            x1="15"
+            y1="7.65"
+            x2="15"
+            y2="12.35"
+            transform={`rotate(${i * 15} 15 10)`}
+          />
+        ))}
+      </g>
+    </svg>
+  );
+}
 
 export default function LoginForm() {
   const router = useRouter();
@@ -21,12 +50,36 @@ export default function LoginForm() {
 
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [timer, setTimer] = useState(30);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const isPhone = /^\d*$/.test(identifier);
+  const isPhone = identifier.length > 0 && /^\d/.test(identifier);
+  const isEmail = identifier.length > 0 && !/^\d/.test(identifier);
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier.trim());
+
+  // 30 seconds countdown timer when OTP is sent
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (otpSent && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+      }, 1000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [otpSent, timer]);
+
+  const formattedIdentifier =
+    isPhone && identifier.length === 10
+      ? `+91 ${identifier.slice(0, 5)} ${identifier.slice(5)}`
+      : isPhone
+        ? `+91 ${identifier}`
+        : identifier;
+
   const handleSendOtp = async () => {
     setError("");
 
@@ -61,6 +114,22 @@ export default function LoginForm() {
       }
 
       setOtpSent(true);
+      setTimer(30);
+      toast.success("OTP sent successfully!", {
+        icon: (
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#0B6971]/15 text-[#0B6971] shrink-0">
+            <svg
+              className="h-3.5 w-3.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={3}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </span>
+        ),
+      });
     } catch {
       setError("Unable to send OTP. Please try again.");
     } finally {
@@ -169,25 +238,47 @@ export default function LoginForm() {
 
   return (
     <div className="w-full">
-      <div
-        className="mx-auto w-full max-w-[430px] lg:translate-x-[40px]"
-        style={{ paddingInline: "20px" }}
-      >
+      <div className="mx-auto w-full max-w-[390px]">
         {/* Heading */}
-        <h2
-          className={`${cormorant.className} text-[30px] leading-none font-semibold text-[#0C6B73]`}
-        >
-          Welcome Back!
-        </h2>
+        {!otpSent ? (
+          <>
+            <h2
+              className={`${cormorant.className} text-[28px] sm:text-[32px] leading-tight font-semibold text-[#0C6B73]`}
+            >
+              Welcome Back!
+            </h2>
 
-        {/* <p className="mt-2 text-[14px] text-[#6B5A49]">
-          Login to your account to continue
-        </p> */}
-        <p className="mt-2 text-[14px] text-[#6B5A49]">
-          {otpSent
-            ? `Enter the OTP sent to ${identifier}`
-            : "Enter your email or mobile number to receive an OTP"}
-        </p>
+            <p className="mt-1.5 text-[13px] sm:text-[14px] text-[#6B5A49]">
+              Enter your email or mobile number to receive an OTP
+            </p>
+          </>
+        ) : (
+          <>
+            <h2 className="text-[28px] sm:text-[32px] font-bold text-[#1E293B] tracking-tight">
+              Almost there!
+            </h2>
+
+            <div className="mt-2 text-[14px] sm:text-[15px] leading-relaxed text-[#475569]">
+              <p>We've sent a 6-digit OTP to</p>
+              <div className="mt-0.5 flex items-center font-semibold text-[#1E293B]">
+                <span>{formattedIdentifier}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOtpSent(false);
+                    setOtp(["", "", "", "", "", ""]);
+                    setError("");
+                  }}
+                  className="ml-2 inline-flex items-center rounded-md p-1 text-[#64748B] transition-colors hover:bg-[#F3ECE0]/70 hover:text-[#0B6971] cursor-pointer"
+                  title="Edit"
+                  aria-label="Edit mobile number or email"
+                >
+                  <Pencil size={15} className="stroke-[2.2]" />
+                </button>
+              </div>
+            </div>
+          </>
+        )}
 
         <form
           onSubmit={(e) => {
@@ -199,44 +290,75 @@ export default function LoginForm() {
               handleSendOtp();
             }
           }}
-          className="mt-8 space-y-5"
-          style={{ marginTop: "20px" }}
+          className="mt-6 space-y-4"
         >
-          {/* Phone */}
-          <div>
-            <label className="mb-2 block text-[13px] font-medium text-[#5D4E3F]">
-              Email or Mobile Number
-            </label>
-
-            <div className="flex h-[52px] overflow-hidden rounded-xl border border-[#DCC6A5] bg-[#FBF5EA]">
-              {isPhone ? (
-                <div className="flex w-[82px] items-center justify-center gap-2 border-r border-[#E6D7BF]">
-                  <span className="text-sm font-medium">+91</span>
-                </div>
-              ) : (
-                <div className="flex w-[82px] items-center justify-center border-r border-[#E6D7BF]">
-                  <Mail size={18} className="text-[#6B5A49]" />
-                </div>
-              )}
-
-              <input
-                type="text"
-                placeholder="Enter Email or Mobile Number"
-                value={identifier}
-                onChange={(e) => setIdentifier(e.target.value)}
-                style={{ paddingLeft: "10px" }}
-                className="flex-1 bg-transparent px-4 text-[14px] outline-none placeholder:text-[#A59684]"
-              />
-            </div>
-          </div>
-
-          {otpSent && (
-            <div style={{ marginTop: "8px" }}>
-              <label className="mb-2 block text-[13px] font-medium text-[#5D4E3F]">
-                OTP
+          {/* Phone or Email Input (Step 1) */}
+          {!otpSent && (
+            <div>
+              <label
+                className={`${cormorant.className} mb-1.5 block text-[16px] sm:text-[17px] font-semibold text-[#4A3B2C]`}
+              >
+                {identifier.length === 0
+                  ? "Email or Mobile Number"
+                  : isPhone
+                    ? "Mobile Number"
+                    : "Email"}
               </label>
 
-              <div className="flex justify-between gap-3">
+              <div className="flex h-[50px] sm:h-[52px] items-center overflow-hidden rounded-xl border border-[#DCC6A5] bg-[#FAF5EC] transition focus-within:border-[#0C6B73] focus-within:ring-1 focus-within:ring-[#0C6B73]/20">
+                {isPhone ? (
+                  <div className="flex h-full items-center gap-2 pl-3.5 pr-3 border-r border-[#E0D2BE] select-none shrink-0">
+                    <IndiaFlag />
+                    <span className="text-[15px] font-semibold text-[#3E3228]">+91</span>
+                  </div>
+                ) : null}
+
+                <input
+                  type={isEmail ? "email" : isPhone ? "tel" : "text"}
+                  inputMode={isPhone ? "numeric" : isEmail ? "email" : "text"}
+                  placeholder={
+                    identifier.length === 0
+                      ? "Enter Email or Mobile Number"
+                      : isPhone
+                        ? "Enter Mobile Number"
+                        : "Enter Email Address"
+                  }
+                  maxLength={isPhone ? 10 : undefined}
+                  value={identifier}
+                  onChange={(e) => {
+                    const rawVal = e.target.value;
+                    if (rawVal === "") {
+                      setIdentifier("");
+                      return;
+                    }
+                    // Check if phone mode or user typed/pasted number
+                    const cleaned = rawVal.replace(/^\+91\s*/, "");
+                    if (/^\d/.test(cleaned) || /^\d/.test(rawVal)) {
+                      const digits = (rawVal.startsWith("+91") ? cleaned : rawVal)
+                        .replace(/\D/g, "")
+                        .slice(0, 10);
+                      setIdentifier(digits);
+                    } else {
+                      setIdentifier(rawVal);
+                    }
+                  }}
+                  className="flex-1 bg-transparent px-3.5 text-[14px] sm:text-[15px] text-[#2D241E] outline-none placeholder:text-[#9B8C7E]"
+                />
+              </div>
+
+              {/* Email format validation feedback */}
+              {isEmail && identifier.length >= 3 && identifier.includes("@") && !isEmailValid && (
+                <p className="mt-1.5 text-[12px] text-amber-800">
+                  Please enter a complete email address (e.g. name@example.com)
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* OTP Input (Step 2) */}
+          {otpSent && (
+            <div className="space-y-4 pt-1">
+              <div className="flex justify-between gap-2 sm:gap-2.5">
                 {otp.map((digit, index) => (
                   <input
                     key={index}
@@ -250,18 +372,33 @@ export default function LoginForm() {
                     onChange={(e) => handleOtpChange(e.target.value, index)}
                     onKeyDown={(e) => handleOtpKeyDown(e, index)}
                     onPaste={handleOtpPaste}
-                    className="h-14 w-12 rounded-xl border border-[#DCC6A5] bg-[#FBF5EA] text-center text-xl font-semibold transition outline-none focus:border-[#C37000] focus:ring-2 focus:ring-[#F6D9AA]"
+                    className="h-[52px] w-[46px] sm:h-[56px] sm:w-[50px] rounded-xl sm:rounded-2xl border border-[#DCC6A5] bg-[#FAF5EC] text-center text-xl font-bold text-[#1E293B] shadow-xs transition outline-none focus:border-[#0B6971] focus:ring-2 focus:ring-[#0B6971]/20"
                   />
                 ))}
               </div>
 
-              <button
-                type="button"
-                onClick={handleSendOtp}
-                className="mt-3 text-[13px] text-[#C37000] hover:underline"
-              >
-                Resend OTP
-              </button>
+              {/* Timer / Resend */}
+              <div className="text-center text-[13px] sm:text-[13.5px] text-[#64748B]">
+                <span>Didn't receive the OTP? </span>
+                {timer > 0 ? (
+                  <span className="font-semibold text-[#0B6971]">
+                    Resend in 00.{timer < 10 ? `0${timer}` : timer}
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      setOtp(["", "", "", "", "", ""]);
+                      setTimer(30);
+                      await handleSendOtp();
+                    }}
+                    disabled={loading}
+                    className="font-semibold text-[#0B6971] hover:underline cursor-pointer disabled:opacity-60"
+                  >
+                    Resend OTP
+                  </button>
+                )}
+              </div>
             </div>
           )}
 
@@ -271,69 +408,71 @@ export default function LoginForm() {
             </div>
           )}
 
-          {/* Login */}
+          {/* Step 1: Send OTP Button */}
           {!otpSent && (
             <button
               type="submit"
               disabled={loading}
-              className="group flex h-[54px] w-full items-center justify-center rounded-xl bg-[#0B6971] text-white transition hover:bg-[#095A61] disabled:cursor-not-allowed disabled:opacity-70"
-              style={{ marginTop: "20px" }}
+              className="group flex h-[50px] sm:h-[52px] w-full items-center justify-center rounded-xl bg-[#0B6971] text-white transition hover:bg-[#095A61] disabled:cursor-not-allowed disabled:opacity-70 mt-4"
             >
-              <span className={`${cormorant.className} text-[20px]`}>
+              <span className={`${cormorant.className} text-[19px] sm:text-[20px] font-semibold tracking-wide`}>
                 {loading ? "Sending OTP..." : "Send OTP"}
               </span>
 
               {!loading && (
                 <ArrowRight
                   size={18}
-                  className="ml-3 transition group-hover:translate-x-1"
+                  className="ml-2.5 transition group-hover:translate-x-1"
+                />
+              )}
+            </button>
+          )}
+
+          {/* Step 2: Verify OTP Button */}
+          {otpSent && (
+            <button
+              type="submit"
+              disabled={loading}
+              className="group flex h-[50px] sm:h-[52px] w-full items-center justify-center rounded-xl bg-[#0B6971] text-white transition hover:bg-[#095A61] disabled:cursor-not-allowed disabled:opacity-70 mt-4 shadow-xs"
+            >
+              <span className={`${cormorant.className} text-[19px] sm:text-[20px] font-semibold tracking-wide`}>
+                {loading ? "Verifying..." : "Verify OTP"}
+              </span>
+
+              {!loading && (
+                <ArrowRight
+                  size={18}
+                  className="ml-2.5 transition group-hover:translate-x-1"
                 />
               )}
             </button>
           )}
         </form>
 
-        {/* Divider */}
-        <div
-          className="my-8 flex items-center gap-4"
-          style={{ marginTop: "10px", marginBottom: "10px" }}
-        >
-          <div className="h-px flex-1 bg-[#DDCCB4]" />
+        {/* Divider & Social Login */}
+        {/* {!otpSent && (
+          <>
+            <div className="my-5 flex items-center gap-3">
+              <div className="h-px flex-1 bg-[#DDCCB4]" />
+              <span className="text-[12px] sm:text-[13px] text-[#8A7864] whitespace-nowrap">
+                or continue with
+              </span>
+              <div className="h-px flex-1 bg-[#DDCCB4]" />
+            </div>
 
-          <span className="text-[13px] text-[#8A7864]">or continue with</span>
-
-          <div className="h-px flex-1 bg-[#DDCCB4]" />
-        </div>
-
-        {/* Social Login */}
-        <div className="grid grid-cols-1">
-          <button
-            type="button"
-            className="flex h-[50px] w-full items-center justify-center gap-3 rounded-xl border border-[#DCC6A5] bg-[#FFF8EF] transition hover:bg-white"
-          >
-            {/* <Image
-              src="/images/google.png"
-              alt="Google"
-              width={20}
-              height={20}
-            /> */}
-
-            <span className="text-[14px] font-medium text-[#333]">Google</span>
-          </button>
-
-          {/* <button
-            type="button"
-            className="flex h-[50px] items-center justify-center gap-3 rounded-xl border border-[#DCC6A5] bg-[#FFF8EF] transition hover:bg-white"
-          >
-            <span className="text-[14px] font-medium text-[#333]">Apple</span>
-          </button> */}
-        </div>
+            <div className="w-full">
+              <button
+                type="button"
+                className="flex h-[46px] sm:h-[48px] w-full items-center justify-center gap-3 rounded-xl border border-[#DCC6A5] bg-[#FFF8EF] shadow-xs transition hover:bg-white hover:border-[#CDB38E]"
+              >
+                <span className="text-[14px] font-medium text-[#44382C]">Google</span>
+              </button>
+            </div>
+          </>
+        )} */}
 
         {/* Terms */}
-        <p
-          className="mt-8 text-center text-[11px] leading-5 text-[#8B7A66]"
-          style={{ marginTop: "0px" }}
-        >
+        <p className="mt-4 sm:mt-5 text-center text-[11px] sm:text-[11.5px] leading-relaxed text-[#8B7A66]">
           By continuing, you agree to{" "}
           <span className="font-medium text-[#5F4A2D]">Brajmarg's</span>{" "}
           <Link
