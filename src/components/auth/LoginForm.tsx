@@ -292,7 +292,7 @@ export default function LoginForm() {
           }}
           className="mt-6 space-y-4"
         >
-          {/* Phone / Email Input (Step 1) */}
+          {/* Phone or Email Input (Step 1) */}
           {!otpSent && (
             <div>
               <label
