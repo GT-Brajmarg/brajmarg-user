@@ -58,6 +58,8 @@ export default function LayoutContent({
   // Scroll to top on every route change and clean up any body overflow lock
   useEffect(() => {
     document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
+    document.body.style.touchAction = "";
     window.scrollTo(0, 0);
   }, [pathname]);
 

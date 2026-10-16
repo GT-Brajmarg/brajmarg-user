@@ -44,6 +44,8 @@ export default function SevaDetailsModal({ open, onClose, seva }: Props) {
     return () => {
       window.removeEventListener("keydown", handler);
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.body.style.touchAction = "";
     };
   }, [open, onClose]);
 

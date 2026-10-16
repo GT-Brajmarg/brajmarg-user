@@ -55,24 +55,23 @@ export default function Navbar() {
     };
   }, []);
 
-  // Prevent background scroll when mobile drawer or login modal is open
+  // Prevent background scroll when mobile drawer is open
   useEffect(() => {
-    if (menuOpen || loginOpen) {
-      const originalBodyOverflow = document.body.style.overflow;
-      const originalHtmlOverflow = document.documentElement.style.overflow;
-      const originalBodyTouchAction = document.body.style.touchAction;
-
+    if (menuOpen) {
       document.body.style.overflow = "hidden";
       document.documentElement.style.overflow = "hidden";
-      document.body.style.touchAction = "none";
 
       return () => {
-        document.body.style.overflow = originalBodyOverflow || "";
-        document.documentElement.style.overflow = originalHtmlOverflow || "";
-        document.body.style.touchAction = originalBodyTouchAction || "";
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+        document.body.style.touchAction = "";
       };
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.body.style.touchAction = "";
     }
-  }, [menuOpen, loginOpen]);
+  }, [menuOpen]);
 
   const handleLogout = () => {
     localStorage.removeItem("brajmarg_temp_user");

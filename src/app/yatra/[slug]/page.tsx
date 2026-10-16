@@ -91,10 +91,7 @@ export default function YatraDetailsPage() {
           <section className="pt-0 pb-8">
             <div className="relative z-10 flex w-full justify-center px-5 sm:px-8 lg:px-12">
               <div className="w-full max-w-[1200px] space-y-8">
-                <div
-                  className="grid grid-cols-[320px_1fr] gap-5"
-                  style={{ marginTop: "-30px" }}
-                >
+                <div className="grid grid-cols-1 gap-5 lg:grid-cols-[320px_1fr] mt-4 sm:mt-6 lg:-mt-7">
                   <RouteOverview />
                   <TempleCarousel />
                 </div>

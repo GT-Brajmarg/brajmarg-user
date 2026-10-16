@@ -94,19 +94,18 @@ const NEXT_STEPS = [
 export default function RequestTempleModal({ open, onClose }: Props) {
   useEffect(() => {
     if (open) {
-      const originalBodyOverflow = document.body.style.overflow;
-      const originalHtmlOverflow = document.documentElement.style.overflow;
-      const originalBodyTouchAction = document.body.style.touchAction;
-
       document.body.style.overflow = "hidden";
       document.documentElement.style.overflow = "hidden";
-      document.body.style.touchAction = "none";
 
       return () => {
-        document.body.style.overflow = originalBodyOverflow || "";
-        document.documentElement.style.overflow = originalHtmlOverflow || "";
-        document.body.style.touchAction = originalBodyTouchAction || "";
+        document.body.style.overflow = "";
+        document.documentElement.style.overflow = "";
+        document.body.style.touchAction = "";
       };
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      document.body.style.touchAction = "";
     }
   }, [open]);
 

@@ -58,12 +58,9 @@ export default function TempleCarousel() {
   };
 
   return (
-    <section className="rounded-[18px] border border-[#C37000] bg-[#EFDEC7]/50 p-4">
-      <div className="mb-3 flex items-center justify-between">
-        <h2
-          className="font-cormorant text-[30px] font-bold text-[#0F5C66]"
-          style={{ marginLeft: "10px" }}
-        >
+    <section className="rounded-[18px] border border-[#C37000] bg-[#EFDEC7]/50 p-3.5 sm:p-4">
+      <div className="mb-2.5 sm:mb-3 flex items-center justify-between px-1 sm:px-2">
+        <h2 className="font-cormorant text-[24px] sm:text-[28px] md:text-[30px] font-bold text-[#0F5C66]">
           Temples Covered
         </h2>
       </div>
@@ -73,44 +70,44 @@ export default function TempleCarousel() {
         {hasScrolled && (
           <button
             onClick={() => scroll("left")}
-            className="absolute left-1 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#C98C3D] bg-[#EFDEC7]/85 text-[#0F5C66] shadow-md backdrop-blur-sm transition-all hover:bg-[#EFDEC7]"
+            className="absolute left-1 top-1/2 z-10 flex h-8 w-8 sm:h-9 sm:w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#C98C3D] bg-[#EFDEC7]/90 text-[#0F5C66] shadow-md backdrop-blur-sm transition-all hover:bg-[#EFDEC7]"
             aria-label="Scroll left"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </button>
         )}
 
         {/* Right Arrow Button */}
         <button
           onClick={() => scroll("right")}
-          className="absolute right-1 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#C98C3D] bg-[#EFDEC7]/85 text-[#0F5C66] shadow-md backdrop-blur-sm transition-all hover:bg-[#EFDEC7]"
+          className="absolute right-1 top-1/2 z-10 flex h-8 w-8 sm:h-9 sm:w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#C98C3D] bg-[#EFDEC7]/90 text-[#0F5C66] shadow-md backdrop-blur-sm transition-all hover:bg-[#EFDEC7]"
           aria-label="Scroll right"
         >
-          <ChevronRight size={20} />
+          <ChevronRight size={18} />
         </button>
 
         <div
           ref={slider}
           onScroll={handleScroll}
-          className="scrollbar-hide flex gap-4 overflow-x-auto scroll-smooth"
-          style={{ marginLeft: "10px", marginRight: "10px", marginBottom: "8px", marginTop: "4px" }}
+          className="scrollbar-hide flex gap-3 sm:gap-4 overflow-x-auto scroll-smooth px-1 py-1"
         >
           {temples.map((temple) => (
             <div
               key={temple.id}
-              className="min-w-[125px] flex-shrink-0 overflow-hidden rounded-xl bg-[#C37000]/20"
+              className="min-w-[130px] sm:min-w-[145px] flex-shrink-0 overflow-hidden rounded-xl border border-[#C37000]/25 bg-[#F9F3EA] shadow-xs transition hover:shadow-md"
             >
-              <div className="relative h-[92px]">
+              <div className="relative h-[95px] sm:h-[105px] w-full overflow-hidden bg-[#EFDEC7]/60">
                 <Image
                   src={temple.image}
                   alt={temple.name}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-300 hover:scale-105"
+                  sizes="(max-width: 640px) 130px, 150px"
                 />
               </div>
 
-              <div className="p-2">
-                <h3 className="font-cormorant line-clamp-2 text-center text-[16px] font-bold text-[#0F5C66]">
+              <div className="p-2 sm:p-2.5">
+                <h3 className="font-cormorant line-clamp-2 text-center text-[15px] sm:text-[16px] font-bold text-[#0F5C66] leading-tight">
                   {temple.name}
                 </h3>
               </div>
