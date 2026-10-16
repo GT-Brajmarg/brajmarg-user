@@ -2,13 +2,7 @@
 
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { Cormorant_Infant } from "next/font/google";
 import Link from "next/link";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["600", "700"],
-});
 interface Product {
   id: string;
   name: string;
