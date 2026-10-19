@@ -11,6 +11,7 @@ import {
   updateAddress,
 } from "@/store/slices/addressSlice";
 import type { Address, AddressPayload } from "@/types/address.types";
+import { showToast, handleApiError } from "@/lib/toast";
 
 const EMPTY_FORM = {
   label: "Home" as Address["label"],
@@ -102,39 +103,57 @@ export default function DeliveryDetails() {
   };
 
   const [formError, setFormError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [fieldTouched, setFieldTouched] = useState<Record<string, boolean>>({});
+
+  const validateField = (field: string, value: string): string => {
+    if (field === "fullName" && !value.trim()) return "Full name is required.";
+    if (field === "mobile" && value.length !== 10) return "Enter a valid 10-digit mobile number.";
+    if (field === "addressLine1" && !value.trim()) return "Address Line 1 is required.";
+    if (field === "city" && !value.trim()) return "City is required.";
+    if (field === "state" && !value.trim()) return "Please select your state.";
+    if (field === "pincode" && value.length !== 6) return "Enter a valid 6-digit pincode.";
+    return "";
+  };
+
+  const handleFieldBlur = (field: string, value: string) => {
+    setFieldTouched((prev) => ({ ...prev, [field]: true }));
+    setFieldErrors((prev) => ({ ...prev, [field]: validateField(field, value) }));
+  };
+
+  const updateFormField = (
+    field: keyof typeof EMPTY_FORM,
+    value: string | boolean,
+  ) => {
+    setForm((previous) => ({
+      ...previous,
+      [field]: value,
+    }));
+    if (typeof value === "string" && fieldTouched[field]) {
+      setFieldErrors((prev) => ({ ...prev, [field]: validateField(field, value) }));
+    }
+  };
 
   const handleSaveAddress = async () => {
     setFormError("");
 
-    if (!form.fullName.trim()) {
-      setFormError("Please enter your full name.");
-      return;
-    }
+    // Validate all fields and show inline errors
+    const newErrors: Record<string, string> = {
+      fullName: validateField("fullName", form.fullName),
+      mobile: validateField("mobile", form.mobile),
+      addressLine1: validateField("addressLine1", form.addressLine1),
+      city: validateField("city", form.city),
+      state: validateField("state", form.state),
+      pincode: validateField("pincode", form.pincode),
+    };
+    setFieldErrors(newErrors);
+    setFieldTouched({
+      fullName: true, mobile: true, addressLine1: true,
+      city: true, state: true, pincode: true,
+    });
 
-    if (form.mobile.length !== 10) {
-      setFormError("Please enter a valid 10-digit mobile number.");
-      return;
-    }
-
-    if (!form.addressLine1.trim()) {
-      setFormError("Please enter address line 1.");
-      return;
-    }
-
-    if (!form.city.trim()) {
-      setFormError("Please enter your city.");
-      return;
-    }
-
-    if (!form.state.trim()) {
-      setFormError("Please select your state.");
-      return;
-    }
-
-    if (form.pincode.length !== 6) {
-      setFormError("Please enter a valid 6-digit pincode.");
-      return;
-    }
+    const hasError = Object.values(newErrors).some((e) => !!e);
+    if (hasError) return;
 
     const payload: AddressPayload = {
       label: form.label,
@@ -156,30 +175,34 @@ export default function DeliveryDetails() {
             payload,
           }),
         ).unwrap();
+        showToast.success("Address updated successfully!");
       } else {
         await dispatch(createAddress(payload)).unwrap();
+        showToast.success("Address saved successfully!");
       }
 
       setShowAddressForm(false);
       resetForm();
     } catch (error) {
-      setFormError(
+      const msg =
         typeof error === "string"
           ? error
-          : "Unable to save address. Please try again.",
-      );
+          : "Unable to save address. Please try again.";
+      setFormError(msg);
+      showToast.error(msg);
     }
   };
 
   const handleDeleteAddress = async (addressId: string) => {
     try {
       await dispatch(deleteAddress(addressId)).unwrap();
+      showToast.success("Address removed successfully!");
 
       if (savedAddresses.length === 1) {
         openNewAddressForm();
       }
-    } catch {
-      // Error message is available in Redux: state.addresses.error
+    } catch (err) {
+      handleApiError(err, "Unable to delete address. Please try again.");
     }
   };
 
@@ -249,10 +272,14 @@ export default function DeliveryDetails() {
 
               <input
                 value={form.fullName}
-                onChange={(event) => updateForm("fullName", event.target.value)}
+                onChange={(event) => updateFormField("fullName", event.target.value)}
+                onBlur={(event) => handleFieldBlur("fullName", event.target.value)}
                 placeholder="Enter your Full Name"
-                className={input}
+                className={`${input} ${fieldErrors.fullName ? "border-red-400" : ""}`}
               />
+              {fieldErrors.fullName && (
+                <p className="mt-1 text-[11px] font-medium text-red-500">{fieldErrors.fullName}</p>
+              )}
             </div>
 
             <div>
@@ -275,15 +302,19 @@ export default function DeliveryDetails() {
                   type="tel"
                   value={form.mobile}
                   onChange={(event) =>
-                    updateForm(
+                    updateFormField(
                       "mobile",
                       event.target.value.replace(/\D/g, "").slice(0, 10),
                     )
                   }
+                  onBlur={(event) => handleFieldBlur("mobile", event.target.value)}
                   placeholder="Enter Mobile Number"
                   className="h-full min-w-0 flex-1 bg-transparent px-3 text-[13px] text-[#4D443B] outline-none placeholder:text-[#B59D79]"
                 />
               </div>
+              {fieldErrors.mobile && (
+                <p className="mt-1 text-[11px] font-medium text-red-500">{fieldErrors.mobile}</p>
+              )}
             </div>
           </div>
 
@@ -332,11 +363,15 @@ export default function DeliveryDetails() {
             <input
               value={form.addressLine1}
               onChange={(event) =>
-                updateForm("addressLine1", event.target.value)
+                updateFormField("addressLine1", event.target.value)
               }
+              onBlur={(event) => handleFieldBlur("addressLine1", event.target.value)}
               placeholder="House / Building / Street / Area"
-              className={input}
+              className={`${input} ${fieldErrors.addressLine1 ? "border-red-400" : ""}`}
             />
+            {fieldErrors.addressLine1 && (
+              <p className="mt-1 text-[11px] font-medium text-red-500">{fieldErrors.addressLine1}</p>
+            )}
           </div>
 
           <div
@@ -374,10 +409,14 @@ export default function DeliveryDetails() {
 
               <input
                 value={form.city}
-                onChange={(event) => updateForm("city", event.target.value)}
+                onChange={(event) => updateFormField("city", event.target.value)}
+                onBlur={(event) => handleFieldBlur("city", event.target.value)}
                 placeholder="Enter City"
-                className={input}
+                className={`${input} ${fieldErrors.city ? "border-red-400" : ""}`}
               />
+              {fieldErrors.city && (
+                <p className="mt-1 text-[11px] font-medium text-red-500">{fieldErrors.city}</p>
+              )}
             </div>
 
             <div>
@@ -390,15 +429,19 @@ export default function DeliveryDetails() {
 
               <select
                 value={form.state}
-                onChange={(event) => updateForm("state", event.target.value)}
-                className={input}
+                onChange={(event) => updateFormField("state", event.target.value)}
+                onBlur={(event) => handleFieldBlur("state", event.target.value)}
+                className={`${input} ${fieldErrors.state ? "border-red-400" : ""}`}
               >
                 <option value="">Select State</option>
                 <option value="Maharashtra">Maharashtra</option>
                 <option value="Rajasthan">Rajasthan</option>
-                <option value="Gujarat">Gujat</option>
+                <option value="Gujarat">Gujarat</option>
                 <option value="Uttar Pradesh">Uttar Pradesh</option>
               </select>
+              {fieldErrors.state && (
+                <p className="mt-1 text-[11px] font-medium text-red-500">{fieldErrors.state}</p>
+              )}
             </div>
           </div>
 
@@ -416,14 +459,18 @@ export default function DeliveryDetails() {
             <input
               value={form.pincode}
               onChange={(event) =>
-                updateForm(
+                updateFormField(
                   "pincode",
                   event.target.value.replace(/\D/g, "").slice(0, 6),
                 )
               }
+              onBlur={(event) => handleFieldBlur("pincode", event.target.value)}
               placeholder="Enter Pincode"
-              className={input}
+              className={`${input} ${fieldErrors.pincode ? "border-red-400" : ""}`}
             />
+            {fieldErrors.pincode && (
+              <p className="mt-1 text-[11px] font-medium text-red-500">{fieldErrors.pincode}</p>
+            )}
           </div>
 
           <label className="mt-5 flex cursor-pointer items-start gap-3">

@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import AuthLeftPanel from "./AuthLeftPanel";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
@@ -14,6 +15,13 @@ interface LoginModalProps {
 
 export default function LoginModal({ open, onClose }: LoginModalProps) {
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (open) {
+      onClose();
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (open) {

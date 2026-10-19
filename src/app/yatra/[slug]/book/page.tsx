@@ -1,24 +1,28 @@
+import { Suspense } from "react";
 import Image from "next/image";
 
 import BookingHero from "@/components/yatra/booking/BookingHero";
 import BookingSummary from "@/components/yatra/booking/BookingSummary";
-// import ContactDetails from "@/components/yatra/booking/ContactDetails";
-// import TravelDetails from "@/components/yatra/booking/TravelDetails";
-// import TravellerDetails from "@/components/yatra/booking/TravellerDetails";
-// import ImportantNotice from "@/components/yatra/booking/ImportantNotice";
-// import BookingFooter from "@/components/yatra/booking/BookingFooter";
+import BookingForm from "@/components/yatra/booking/BookingForm";
 
-export default function BookYatraPage() {
+interface BookYatraPageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export default async function BookYatraPage({ params }: BookYatraPageProps) {
+  const { slug } = await params;
+
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      {/* Background */}
-
-      <div aria-hidden className="pointer-events-none absolute inset-0">
+    <main className="relative isolate min-h-screen overflow-hidden bg-[#F7F0E5]">
+      {/* ── Background layers ── */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
         <Image
-          src="/images/temple-paper-texture.png"
+          src="/images/paper-texture.png"
           alt=""
           fill
-          className="object-cover opacity-[0.42]"
+          priority
+          sizes="100vw"
+          className="pointer-events-none object-cover opacity-34 mix-blend-multiply"
         />
 
         <Image
@@ -26,10 +30,9 @@ export default function BookYatraPage() {
           alt=""
           width={1050}
           height={1050}
-          className="absolute top-[320px] left-1/2 w-[900px] -translate-x-1/2 opacity-[0.04] md:w-[1050px]"
+          className="absolute top-[320px] left-1/2 w-[900px] -translate-x-1/2 opacity-[0.045] md:w-[1050px]"
         />
 
-        {/* Temple Carousel */}
         <Image
           src="/images/mandala_bg_1.png"
           alt=""
@@ -38,7 +41,6 @@ export default function BookYatraPage() {
           className="absolute top-[1100px] left-1/2 w-[950px] -translate-x-1/2 opacity-[0.04] md:w-[1100px]"
         />
 
-        {/* Itinerary */}
         <Image
           src="/images/mandala_bg_1.png"
           alt=""
@@ -47,7 +49,6 @@ export default function BookYatraPage() {
           className="absolute top-[2000px] left-1/2 w-[950px] -translate-x-1/2 opacity-[0.04] md:w-[1100px]"
         />
 
-        {/* Packages */}
         <Image
           src="/images/mandala_bg_1.png"
           alt=""
@@ -56,7 +57,6 @@ export default function BookYatraPage() {
           className="absolute top-[3050px] left-1/2 w-[950px] -translate-x-1/2 opacity-[0.04] md:w-[1100px]"
         />
 
-        {/* Bottom */}
         <Image
           src="/images/mandala_bg_1.png"
           alt=""
@@ -66,22 +66,22 @@ export default function BookYatraPage() {
         />
       </div>
 
-      <div className="relative z-10 flex w-full justify-center px-5 sm:px-8 lg:px-12">
-        <div className="w-full max-w-[1200px] space-y-8">
+      {/* ── Page Content ── */}
+      <div className="relative z-10 flex w-full justify-center px-4 sm:px-6 lg:px-12">
+        <div className="w-full max-w-[1200px]">
+          {/* Hero Header */}
           <BookingHero />
 
-          <div className="mt-6 rounded-[20px] border border-[#C37000] bg-[#FFF9F1]/80">
-            <BookingSummary />
+          {/* ── Card 1: Booking Summary ── */}
+          <div className="overflow-hidden rounded-[20px] border-2 border-[#C37000] bg-[rgba(239,222,199,0.4)] shadow-[0_8px_32px_rgba(195,112,0,0.10)]">
+            <Suspense fallback={null}>
+              <BookingSummary />
+            </Suspense>
+          </div>
 
-            {/* <ContactDetails />
-
-          <TravelDetails />
-
-          <TravellerDetails />
-
-          <ImportantNotice />
-
-          <BookingFooter /> */}
+          {/* ── Card 2: Interactive Booking Form ── */}
+          <div className="mt-6 mb-12 overflow-hidden rounded-[20px] border-2 border-[#C37000] bg-[rgba(239,222,199,0.4)] shadow-[0_8px_32px_rgba(195,112,0,0.10)]">
+            <BookingForm slug={slug} />
           </div>
         </div>
       </div>

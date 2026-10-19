@@ -151,11 +151,11 @@ export default function SignupForm() {
 
           <span className="text-[12px] leading-5 text-[#6D5A47]">
             I agree to the{" "}
-            <Link href="/terms" className="font-medium text-[#0B6971]">
+            <Link href="/terms" className="font-medium text-[#0B6971] underline underline-offset-2 hover:text-[#095A61] transition-colors">
               Terms of Service
             </Link>{" "}
             and{" "}
-            <Link href="/privacy" className="font-medium text-[#0B6971]">
+            <Link href="/privacy" className="font-medium text-[#0B6971] underline underline-offset-2 hover:text-[#095A61] transition-colors">
               Privacy Policy
             </Link>
           </span>

@@ -18,7 +18,12 @@ import StickyBookingBar from "@/components/yatra/details/StickyBookingBar";
 // import CustomizationSection from "@/components/yatra/details/CustomizationSection";
 // import StickyBookingBar from "@/components/yatra/details/StickyBookingBar";
 
-export default function YatraDetailsPage() {
+interface YatraDetailsPageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export default async function YatraDetailsPage({ params }: YatraDetailsPageProps) {
+  const { slug } = await params;
   return (
     <>
       <main className="relative isolate min-h-screen overflow-hidden bg-[#F7F0E5]">
@@ -106,7 +111,7 @@ export default function YatraDetailsPage() {
                   <IncludedSection />
                   <CustomizationSection />
                 </div>
-                <StickyBookingBar />
+                <StickyBookingBar slug={slug} />
                 {/* <RouteOverview />
 
               <TempleCarousel />
