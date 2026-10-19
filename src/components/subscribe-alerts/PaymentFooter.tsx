@@ -73,8 +73,8 @@ export default function PaymentFooter({
               onBack
                 ? onBack()
                 : router.push(
-                    `/subscribe-alerts/review-subscription?plan=${plan}`,
-                  )
+                  `/subscribe-alerts/review-subscription?plan=${plan}`,
+                )
             }
             className="flex h-[66px] items-center justify-center rounded-[8px] border border-[#0F5C66] bg-transparent px-6 text-[#0F5C66] transition hover:bg-[#F8F2E8] disabled:cursor-not-allowed disabled:opacity-50"
             style={{ marginTop: "5px" }}

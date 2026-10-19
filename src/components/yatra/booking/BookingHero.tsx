@@ -1,33 +1,37 @@
 "use client";
 
 import Image from "next/image";
+import { Cormorant_Garamond } from "next/font/google";
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export default function BookingHero() {
   return (
-    <section className="relative overflow-hidden py-6">
-      {/* Temple Illustration */}
-
+    <section className="relative w-full overflow-hidden pt-10 pb-6 sm:pt-12 sm:pb-7">
+      {/* Temple Outline — decorative top-right */}
       <Image
         src="/images/hero-temple-outline-1.png"
         alt=""
-        width={520}
-        height={220}
-        className="absolute top-0 right-2"
+        width={420}
+        height={180}
+        aria-hidden
+        className="pointer-events-none absolute top-0 right-0 opacity-60 hidden sm:block"
       />
 
-      <div className="relative">
+      <div className="relative z-10">
         <h1
-          className="font-cormorant text-[52px] leading-none font-bold text-[#0F5C66]"
-          style={{ marginTop: "60px" }}
+          className={`${cormorant.className} text-[32px] sm:text-[42px] lg:text-[50px] leading-none font-bold text-[#0F5C66]`}
         >
           Book Your Yatra
         </h1>
 
         <p
-          className="font-cormorant mt-3 text-[22px] text-[#3D352F]"
-          style={{ marginTop: "10px", marginBottom: "50px" }}
+          className={`${cormorant.className} mt-2 text-[18px] sm:text-[22px] font-bold text-[#3D352F]`}
         >
-          Fill in your details to confirm your booking
+          Fill in your details to confirm your sacred journey
         </p>
       </div>
     </section>

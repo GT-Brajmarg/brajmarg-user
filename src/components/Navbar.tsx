@@ -9,6 +9,7 @@ import { fetchAlerts } from "@/store/slices/alertsSlice";
 import { Bell, User, Menu, X, ShoppingCart } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import LoginModal from "@/components/auth/LoginModal";
+import { showToast } from "@/lib/toast";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -28,9 +29,6 @@ export default function Navbar() {
 
   const isAlertsActive = pathname.startsWith("/subscribe-alerts");
 
-  const [showAlerts, setShowAlerts] = useState(false);
-
-  const alerts = useAppSelector((state) => state.alerts.alerts);
   const cartItems = useAppSelector((state) => state.cart.items);
 
   const cartItemCount = cartItems.reduce(
@@ -79,6 +77,8 @@ export default function Navbar() {
 
     setIsLoggedIn(false);
     dispatch(closeMenu());
+    showToast.success("Logged out successfully");
+    window.dispatchEvent(new Event("storage"));
     router.push("/");
   };
 
@@ -90,7 +90,7 @@ export default function Navbar() {
     <>
       <header
         style={{ position: "fixed", top: 0, zIndex: 40 }}
-        className="w-full overflow-hidden border-[#2F2A24] bg-[#FBF8F3] shadow-[0px_2px_8px_0px_rgba(0,0,0,0.08)]"
+        className="w-full border-b border-[#EFDEC7] bg-[#FBF8F3] shadow-[0px_2px_8px_0px_rgba(0,0,0,0.08)]"
       >
         <Image
           src="/images/temple-paper-texture.png"
@@ -100,34 +100,60 @@ export default function Navbar() {
           aria-hidden
           className="pointer-events-none object-cover opacity-40"
         />
-        <nav className="relative z-10 w-full border-b-[1px] border-[#EFDEC7]">
-          <div className="w-full xl:px-20">
-            {/* Mobile & Tablet Top Navbar Bar (strictly xl:hidden) */}
-            <div
-              style={{
-                height: "64px",
-                width: "100%",
-                paddingLeft: "clamp(24px, 6vw, 64px)",
-                paddingRight: "clamp(24px, 6vw, 64px)",
-                boxSizing: "border-box",
-              }}
-              className="flex items-center justify-between xl:hidden"
-            >
-              <Link href="/" className="flex items-center gap-2 sm:gap-3">
-                <Image
-                  src="/images/image 49.png"
-                  alt="Brajmarg"
-                  width={30}
-                  height={38}
-                />
-                <span className="font-cormorant text-[22px] sm:text-[24px] font-bold tracking-wide text-[#005D63]">
-                  Brajmarg
-                </span>
-              </Link>
+        <nav className="relative z-10 w-full">
+          {/* ══ Mobile & Tablet Top Navbar Bar (strictly lg:hidden) ══ */}
+          <div className="flex h-[64px] w-full items-center justify-between px-4 sm:px-6 lg:hidden">
+            <Link href="/" className="flex items-center gap-2 sm:gap-2.5">
+              <Image
+                src="/images/image 49.png"
+                alt="Brajmarg"
+                width={34}
+                height={40}
+                className="h-[38px] w-auto object-contain"
+              />
+              <span className="font-cormorant text-[22px] sm:text-[24px] font-bold tracking-wide text-[#005D63]">
+                Brajmarg
+              </span>
+            </Link>
+
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    href="/cart"
+                    className="relative flex h-[36px] w-[36px] items-center justify-center rounded-[9px] border border-[#005D63] bg-[#EFDEC7] transition active:scale-95"
+                    aria-label="Cart"
+                  >
+                    <ShoppingCart size={17} className="text-[#0F5C66]" />
+                    {cartItemCount > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-[#C37000] px-1 text-[9px] font-bold text-white shadow-xs">
+                        {cartItemCount > 99 ? "99+" : cartItemCount}
+                      </span>
+                    )}
+                  </Link>
+
+                  <Link
+                    href="/profile"
+                    className="flex h-[36px] w-[36px] items-center justify-center rounded-[9px] border border-[#005D63] bg-[#EFDEC7] transition active:scale-95"
+                    aria-label="Profile"
+                  >
+                    <User size={17} className="text-[#0F5C66]" />
+                  </Link>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setLoginOpen(true)}
+                  className="flex h-[34px] items-center justify-center gap-1.5 rounded-[8px] border border-[#005D63] bg-[#EFDEC7] px-3 text-[13px] font-medium text-[#0F5C66] cursor-pointer"
+                >
+                  <User size={15} />
+                  <span className="font-cormorant font-semibold">Login</span>
+                </button>
+              )}
 
               <button
                 onClick={() => dispatch(toggleMenu())}
-                className="rounded-md p-2 text-[#2D2924] transition hover:bg-[#EFDEC7]"
+                className="rounded-md p-1.5 text-[#2D2924] transition hover:bg-[#EFDEC7] active:scale-95"
                 aria-label={menuOpen ? "Close menu" : "Open menu"}
               >
                 {menuOpen ? (
@@ -137,151 +163,159 @@ export default function Navbar() {
                 )}
               </button>
             </div>
+          </div>
 
-            {/* Desktop Navbar (strictly hidden on mobile & tablet, visible on xl:grid) */}
-            <div className="hidden h-[84px] grid-cols-[280px_1fr_340px] items-center xl:grid">
-              {/* Logo */}
-              <div className="flex justify-end pr-40">
-                <Link href="/" className="flex items-center gap-3">
-                  <Image
-                    src="/images/image 49.png"
-                    alt="Brajmarg"
-                    width={102}
-                    height={62}
-                    className="h-[56px] w-auto object-contain"
-                  />
-                  <span className="font-cormorant text-[21px] font-bold tracking-wide text-[#005D63]">
-                    Brajmarg
-                  </span>
-                </Link>
-              </div>
+          {/* ══ Desktop Navbar (strictly visible on lg:flex) ══ */}
+          <div className="mx-auto hidden h-[84px] w-full max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8 xl:px-12 lg:flex">
+            {/* Left: Brand Logo */}
+            <div className="flex shrink-0 items-center">
+              <Link href="/" className="flex items-center gap-3">
+                <Image
+                  src="/images/image 49.png"
+                  alt="Brajmarg"
+                  width={64}
+                  height={56}
+                  className="h-[52px] w-auto object-contain"
+                  priority
+                />
+                <span className="font-cormorant text-[23px] xl:text-[24px] font-bold tracking-wide text-[#005D63]">
+                  Brajmarg
+                </span>
+              </Link>
+            </div>
 
-              {/* Nav Links */}
-              <ul
-                className="font-cormorant flex items-center justify-center gap-14"
-              >
-                {navLinks.map((link) => {
-                  const isActive =
-                    link.href === "/"
-                      ? pathname === "/"
-                      : pathname.startsWith(link.href);
+            {/* Center: Nav Links */}
+            <ul className="font-cormorant flex flex-1 items-center justify-center gap-7 lg:gap-8 xl:gap-11 2xl:gap-14 px-4">
+              {navLinks.map((link) => {
+                const isActive =
+                  link.href === "/"
+                    ? pathname === "/"
+                    : pathname.startsWith(link.href);
 
-                  return (
-                    <li key={link.label}>
-                      <Link
-                        href={link.href}
-                        className="relative flex flex-col items-center"
-                      >
-                        <span
-                          className={`text-[18px] font-medium transition-colors ${isActive ? "text-[#C88A2A]" : "text-[#2D2924]"
-                            }`}
-                        >
-                          {link.label}
-                        </span>
-
-                        {isActive && (
-                          <Image
-                            src="/images/lotus 2.png"
-                            alt=""
-                            width={40}
-                            height={22}
-                            className="absolute top-[28px] left-1/2 -translate-x-1/2"
-                          />
-                        )}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-
-              {/* Right Side */}
-              <div
-                className="flex items-center justify-end gap-3 pr-8"
-                style={{ marginRight: "30px" }}
-              >
-                <button
-                  onClick={() => setShowAlerts((prev) => !prev)}
-                  className="flex h-[38px] w-[165px] items-center justify-center gap-2 rounded-[10px] bg-[#005D63] transition hover:bg-[#004e54]"
-                >
-                  <Bell size={16} strokeWidth={2} className="text-[#F7F1E8]" />
-                  <span
-                    className="font-cormorant text-[14px] font-medium text-[#F7F1E8]"
-                  >
-                    Subscribe Alerts
-                  </span>
-
-                  {isAlertsActive && (
-                    <Image
-                      src="/images/lotus 2.png"
-                      alt=""
-                      width={28}
-                      height={8}
-                      className="absolute -bottom-3 left-1/2 -translate-x-1/2"
-                    />
-                  )}
-                </button>
-                {isLoggedIn ? (
-                  <>
+                return (
+                  <li key={link.label}>
                     <Link
-                      href="/cart"
-                      className={`relative flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border transition ${isCartActive
-                        ? "border-[#0F5C66] bg-[rgba(195,112,0,0.4)]"
-                        : "border-[#005D63] bg-[#EFDEC7] hover:bg-[#F3E5D2]"
-                        }`}
-                      aria-label={`Cart with ${cartItemCount} items`}
+                      href={link.href}
+                      className="relative flex flex-col items-center py-2 transition-transform hover:-translate-y-0.5"
                     >
-                      <ShoppingCart
-                        size={18}
-                        strokeWidth={2}
-                        className={
-                          isCartActive ? "text-[#0F5C66]" : "text-[#0F5C66]"
-                        }
-                      />
-                      {cartItemCount > 0 && (
-                        <span className="absolute -top-2 -right-2 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#C37000] px-1 text-[10px] font-bold text-white">
-                          {cartItemCount > 99 ? "99+" : cartItemCount}
-                        </span>
+                      <span
+                        className={`text-[17px] xl:text-[18px] font-medium transition-colors ${
+                          isActive
+                            ? "text-[#C88A2A] font-semibold"
+                            : "text-[#2D2924] hover:text-[#005D63]"
+                        }`}
+                      >
+                        {link.label}
+                      </span>
+
+                      {isActive && (
+                        <Image
+                          src="/images/lotus 2.png"
+                          alt=""
+                          width={38}
+                          height={20}
+                          className="pointer-events-none absolute top-[28px] left-1/2 -translate-x-1/2"
+                        />
                       )}
                     </Link>
+                  </li>
+                );
+              })}
+            </ul>
 
-                    <Link
-                      href="/profile"
-                      className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border border-[#005D63] bg-[#EFDEC7] transition hover:bg-[#F3E5D2]"
-                      aria-label="Profile"
-                    >
-                      <User
-                        size={18}
-                        strokeWidth={2}
-                        className="text-[#0F5C66]"
-                      />
-                    </Link>
+            {/* Right: Actions */}
+            <div className="flex shrink-0 items-center justify-end gap-2.5 xl:gap-3">
+              {/* Subscribe Alerts button */}
+              <Link
+                href="/subscribe-alerts"
+                className={`relative flex h-[38px] items-center justify-center gap-2 rounded-[10px] px-3.5 xl:px-4 transition shadow-xs ${
+                  isAlertsActive
+                    ? "bg-[#004e54] ring-2 ring-[#C88A2A]/40"
+                    : "bg-[#005D63] hover:bg-[#004e54]"
+                }`}
+              >
+                <Bell size={16} strokeWidth={2} className="text-[#F7F1E8]" />
+                <span className="font-cormorant text-[14px] font-medium text-[#F7F1E8] whitespace-nowrap">
+                  Subscribe Alerts
+                </span>
 
-                    <button
-                      type="button"
-                      onClick={handleLogout}
-                      className="font-cormorant flex h-[38px] items-center justify-center rounded-[10px] border border-[#B85C38] px-3 text-[14px] font-medium text-[#B85C38] transition hover:bg-[#FBE5DA]"
-                    >
-                      Logout
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={() => setLoginOpen(true)}
-                    className="flex h-[38px] w-[92px] items-center justify-center gap-2 rounded-[10px] border border-[#005D63] bg-[#EFDEC7] transition hover:bg-[#e4d1b8]"
+                {isAlertsActive && (
+                  <Image
+                    src="/images/lotus 2.png"
+                    alt=""
+                    width={28}
+                    height={8}
+                    className="pointer-events-none absolute -bottom-2.5 left-1/2 -translate-x-1/2"
+                  />
+                )}
+              </Link>
+
+              {isLoggedIn ? (
+                <div className="flex items-center gap-2.5 xl:gap-3">
+                  {/* Cart */}
+                  <Link
+                    href="/cart"
+                    className={`relative flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border transition ${
+                      isCartActive
+                        ? "border-[#005D63] bg-[#E2CCA9]"
+                        : "border-[#005D63] bg-[#EFDEC7] hover:bg-[#E8D4B8]"
+                    }`}
+                    aria-label={`Cart with ${cartItemCount} items`}
                   >
-                    <User
-                      size={16}
+                    <ShoppingCart
+                      size={18}
                       strokeWidth={2}
                       className="text-[#0F5C66]"
                     />
-                    <span
-                      className="font-cormorant bg-transparent text-[14px] font-medium text-[#0F5C66]"
-                    >
-                      Login
-                    </span>
+                    {cartItemCount > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#C37000] px-1 text-[10px] font-bold text-white shadow-xs">
+                        {cartItemCount > 99 ? "99+" : cartItemCount}
+                      </span>
+                    )}
+                  </Link>
+
+                  {/* Profile */}
+                  <Link
+                    href="/profile"
+                    className={`flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border transition ${
+                      pathname === "/profile"
+                        ? "border-[#005D63] bg-[#E2CCA9]"
+                        : "border-[#005D63] bg-[#EFDEC7] hover:bg-[#E8D4B8]"
+                    }`}
+                    aria-label="Profile"
+                  >
+                    <User
+                      size={18}
+                      strokeWidth={2}
+                      className="text-[#0F5C66]"
+                    />
+                  </Link>
+
+                  {/* Logout Button */}
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="font-cormorant flex h-[38px] items-center justify-center rounded-[10px] border border-[#B85C38] bg-transparent px-3.5 text-[14px] font-medium text-[#B85C38] transition hover:bg-[#FBE5DA] hover:border-[#9E4725] cursor-pointer whitespace-nowrap"
+                  >
+                    Logout
                   </button>
-                )}
-              </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setLoginOpen(true)}
+                  className="flex h-[38px] items-center justify-center gap-2 rounded-[10px] border border-[#005D63] bg-[#EFDEC7] px-4 transition hover:bg-[#E4D1B8] cursor-pointer"
+                >
+                  <User
+                    size={16}
+                    strokeWidth={2}
+                    className="text-[#0F5C66]"
+                  />
+                  <span className="font-cormorant bg-transparent text-[14px] font-medium text-[#0F5C66]">
+                    Login
+                  </span>
+                </button>
+              )}
             </div>
           </div>
         </nav>
@@ -289,8 +323,9 @@ export default function Navbar() {
 
       {/* ══ Mobile & Tablet Right-Side Drawer Backdrop ══ */}
       <div
-        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 xl:hidden ${menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-          }`}
+        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
+          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
         style={{ touchAction: "none" }}
         onTouchMove={(e) => e.preventDefault()}
         onClick={() => dispatch(closeMenu())}
@@ -315,8 +350,9 @@ export default function Navbar() {
           boxShadow: "-12px 0 40px rgba(0,0,0,0.35)",
           overscrollBehavior: "contain",
         }}
-        className={`transition-transform duration-300 ease-in-out xl:hidden ${menuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+        className={`transition-transform duration-300 ease-in-out lg:hidden ${
+          menuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
       >
         {/* Paper texture overlay */}
         <div
@@ -513,11 +549,9 @@ export default function Navbar() {
           }}
         >
           {/* Subscribe Alerts */}
-          <button
-            onClick={() => {
-              setShowAlerts((prev) => !prev);
-              dispatch(closeMenu());
-            }}
+          <Link
+            href="/subscribe-alerts"
+            onClick={() => dispatch(closeMenu())}
             style={{
               height: "44px",
               width: "100%",
@@ -528,8 +562,7 @@ export default function Navbar() {
               borderRadius: "10px",
               backgroundColor: "#005D63",
               color: "#FFFFFF",
-              border: "none",
-              cursor: "pointer",
+              textDecoration: "none",
               boxShadow: "0 2px 8px rgba(0, 93, 99, 0.25)",
             }}
           >
@@ -544,7 +577,7 @@ export default function Navbar() {
             >
               Subscribe Alerts
             </span>
-          </button>
+          </Link>
 
           {/* Login / Profile */}
           {isLoggedIn ? (

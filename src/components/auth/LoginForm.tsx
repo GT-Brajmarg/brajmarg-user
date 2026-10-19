@@ -1,12 +1,14 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { Eye, EyeOff, ArrowRight, Mail, Pencil } from "lucide-react";
+import { ArrowRight, Pencil } from "lucide-react";
 import { Cormorant_Garamond } from "next/font/google";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import {
+  showToast,
+  handleApiError,
+  getErrorMessageFromStatus,
+} from "@/lib/toast";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -42,10 +44,6 @@ function IndiaFlag() {
 }
 
 export default function LoginForm() {
-  const router = useRouter();
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const [identifier, setIdentifier] = useState("");
 
   const [otpSent, setOtpSent] = useState(false);
@@ -109,29 +107,22 @@ export default function LoginForm() {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        setError(result.message || "Unable to send OTP.");
+        const errorMsg =
+          result.message ||
+          getErrorMessageFromStatus(response.status, "Unable to send OTP.");
+        showToast.error(errorMsg);
         return;
       }
 
       setOtpSent(true);
       setTimer(30);
-      toast.success("OTP sent successfully!", {
-        icon: (
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#0B6971]/15 text-[#0B6971] shrink-0">
-            <svg
-              className="h-3.5 w-3.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={3}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-          </span>
-        ),
-      });
-    } catch {
-      setError("Unable to send OTP. Please try again.");
+      showToast.success(result.message || "OTP sent successfully!");
+    } catch (err) {
+      const errorMsg = handleApiError(
+        err,
+        "Unable to send OTP. Please check your connection.",
+      )
+      showToast.error(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -143,7 +134,8 @@ export default function LoginForm() {
     const otpValue = enteredOtp ?? otp.join("");
 
     if (otpValue.length !== 6) {
-      setError("Please enter a valid OTP.");
+      const msg = "Please enter a valid 6-digit OTP."
+      showToast.warning(msg);
       return;
     }
 
@@ -164,9 +156,14 @@ export default function LoginForm() {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        setError(result.message || "Invalid OTP.");
+        const errorMsg =
+          result.message ||
+          getErrorMessageFromStatus(response.status, "Invalid OTP.");
+        showToast.error(errorMsg);
         return;
       }
+
+      showToast.success(result.message || "Signed in successfully!");
 
       localStorage.setItem("brajmarg_temp_user", JSON.stringify(result.user));
       localStorage.setItem("brajmarg_is_logged_in", "true");
@@ -177,8 +174,12 @@ export default function LoginForm() {
       localStorage.removeItem("brajmarg_login_redirect");
 
       window.location.assign(redirectPath);
-    } catch {
-      setError("Unable to login. Please try again.");
+    } catch (err) {
+      const errorMsg = handleApiError(
+        err,
+        "Unable to login. Please try again.",
+      );
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -259,7 +260,7 @@ export default function LoginForm() {
             </h2>
 
             <div className="mt-2 text-[14px] sm:text-[15px] leading-relaxed text-[#475569]">
-              <p>We've sent a 6-digit OTP to</p>
+              <p>We&apos;ve sent a 6-digit OTP to</p>
               <div className="mt-0.5 flex items-center font-semibold text-[#1E293B]">
                 <span>{formattedIdentifier}</span>
                 <button
@@ -379,7 +380,7 @@ export default function LoginForm() {
 
               {/* Timer / Resend */}
               <div className="text-center text-[13px] sm:text-[13.5px] text-[#64748B]">
-                <span>Didn't receive the OTP? </span>
+                <span>Didn&apos;t receive the OTP? </span>
                 {timer > 0 ? (
                   <span className="font-semibold text-[#0B6971]">
                     Resend in 00.{timer < 10 ? `0${timer}` : timer}
@@ -472,24 +473,26 @@ export default function LoginForm() {
         )} */}
 
         {/* Terms */}
-        <p className="mt-4 sm:mt-5 text-center text-[11px] sm:text-[11.5px] leading-relaxed text-[#8B7A66]">
-          By continuing, you agree to{" "}
-          <span className="font-medium text-[#5F4A2D]">Brajmarg's</span>{" "}
-          <Link
-            href="/terms"
-            className="font-medium text-[#0C6B73] transition-colors hover:text-[#095A61] hover:underline"
-          >
-            Terms of Service
-          </Link>{" "}
-          and{" "}
-          <Link
-            href="/privacy"
-            className="font-medium text-[#0C6B73] transition-colors hover:text-[#095A61] hover:underline"
-          >
-            Privacy Policy
-          </Link>
-          .
-        </p>
+        {otpSent &&
+          (<p className="mt-4 sm:mt-5 text-center text-[11px] sm:text-[11.5px] leading-relaxed text-[#8B7A66]">
+            By continuing, you agree to{" "}
+            <span className="font-medium text-[#5F4A2D]">Brajmarg&apos;s</span>{" "}
+            <Link
+              href="/terms"
+              className="font-medium text-[#0C6B73] underline underline-offset-2 transition-colors hover:text-[#095A61]"
+            >
+              Terms of Service
+            </Link>{" "}
+            and{" "}
+            <Link
+              href="/privacy"
+              className="font-medium text-[#0C6B73] underline underline-offset-2 transition-colors hover:text-[#095A61]"
+            >
+              Privacy Policy
+            </Link>
+            .
+          </p>)
+        }
       </div>
     </div>
   );

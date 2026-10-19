@@ -139,13 +139,13 @@ export default function Footer() {
         {/* Temple Skyline at bottom of teal section */}
         <div
           className={`${styles.skylineWrap} ${!isHomePage ? styles.skylineOnly : ""}`}
-          style={{ position: "relative", zIndex: 50 }}
         >
           <Image
             src="/images5/Group 27.png"
             alt="Sacred temple skyline"
             fill
-            className={styles.skylineImg}
+            className={`${styles.skylineImg} ${!isHomePage ? styles.skylineMultiply : ""}`}
+            style={!isHomePage ? { mixBlendMode: "multiply" } : undefined}
             sizes="100vw"
           />
         </div>

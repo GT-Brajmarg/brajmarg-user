@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import PackageCard from "./PackageCard";
 
@@ -48,6 +49,23 @@ const packages = [
 ];
 
 export default function PackageSelection() {
+  const [selectedId, setSelectedId] = useState<number>(2); // Default to Standard (id: 2)
+
+  const handleSelect = (pkg: (typeof packages)[0]) => {
+    setSelectedId(pkg.id);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("yatra_package_change", {
+          detail: {
+            id: pkg.id,
+            name: pkg.name,
+            price: pkg.price,
+          },
+        })
+      );
+    }
+  };
+
   return (
     <section className="py-4">
       <div className="mb-6 flex items-center justify-center gap-3">
@@ -62,9 +80,15 @@ export default function PackageSelection() {
 
       <div className="grid gap-5 md:grid-cols-3">
         {packages.map((pkg) => (
-          <PackageCard key={pkg.id} pkg={pkg} />
+          <PackageCard
+            key={pkg.id}
+            pkg={pkg}
+            isSelected={selectedId === pkg.id}
+            onSelect={() => handleSelect(pkg)}
+          />
         ))}
       </div>
     </section>
   );
 }
+

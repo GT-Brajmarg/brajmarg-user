@@ -65,13 +65,13 @@ export const submitTempleRequest = createAsyncThunk(
 
       const result = await response.json();
 
-      if (!result.success) {
-        return rejectWithValue(result.message);
+      if (!response.ok || !result.success) {
+        return rejectWithValue(result.message || "Failed to submit request.");
       }
 
-      return result.data;
+      return result;
     } catch {
-      return rejectWithValue("Failed to submit request.");
+      return rejectWithValue("Failed to submit request. Please try again.");
     }
   },
 );

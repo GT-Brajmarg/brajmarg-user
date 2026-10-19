@@ -19,6 +19,7 @@ import {
   resetTempleRequest,
 } from "@/store/slices/requestTempleSlice";
 import { Cormorant_Infant } from "next/font/google";
+import { showToast, handleApiError } from "@/lib/toast";
 
 export const cormorantInfant = Cormorant_Infant({
   subsets: ["latin"],
@@ -161,8 +162,18 @@ export default function RequestTempleModal({ open, onClose }: Props) {
     }));
   };
 
-  const handleSubmit = () => {
-    dispatch(submitTempleRequest(form));
+  const handleSubmit = async () => {
+    try {
+      const res = await dispatch(submitTempleRequest(form)).unwrap();
+      const message =
+        typeof res === "object" && res !== null && "message" in res
+          ? String((res as Record<string, unknown>).message)
+          : "Temple request submitted successfully.";
+      showToast.success(message);
+      onClose();
+    } catch (err) {
+      handleApiError(err, "Failed to submit temple request.");
+    }
   };
 
   if (!open) return null;

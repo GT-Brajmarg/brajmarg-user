@@ -1,99 +1,91 @@
 "use client";
 
 import Image from "next/image";
-import { CalendarDays, Bus, Users } from "lucide-react";
-import { Cormorant_Infant } from "next/font/google";
+import { useSearchParams } from "next/navigation";
+import { Clock, Bus, Users } from "lucide-react";
 
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
+const PACKAGE_DATA: Record<string, { name: string; price: number }> = {
+  basic: { name: "Basic Package", price: 2499 },
+  standard: { name: "Standard Package", price: 3999 },
+  premium: { name: "Premium Package", price: 5999 },
+};
 
 export default function BookingSummary() {
-  return (
-    <section className="overflow-hidden rounded-[18px] border-2 border-[#C37000] bg-[#EFDEC7]/40">
-      <div className="grid lg:grid-cols-[1fr_260px]">
-        {/* Left */}
+  const searchParams = useSearchParams();
+  const pkgParam = searchParams.get("package")?.toLowerCase() || "standard";
+  const pkgInfo = PACKAGE_DATA[pkgParam] || PACKAGE_DATA.standard;
 
-        <div className="flex items-center gap-6 p-6">
-          <div
-            className="relative h-[200px] w-[260px] overflow-hidden rounded-xl"
-            style={{
-              marginTop: "10px",
-              marginBottom: "10px",
-              marginLeft: "20px",
-            }}
-          >
+  return (
+    <section className="w-full px-5 sm:px-6 py-4 sm:py-5">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6">
+        {/* ── Left: Image + Info ── */}
+        <div className="flex items-center gap-4 flex-1 min-w-0">
+          {/* Temple Image */}
+          <div className="relative h-[90px] w-[130px] shrink-0 overflow-hidden rounded-[12px] shadow-sm">
             <Image
-              src="/images2/default.png"
-              alt="Braj Yatra"
+              src="/images/braj_white.png"
+              alt="Braj Yatra Temple"
               fill
+              priority
               className="object-cover"
             />
           </div>
 
-          <div className="flex-1">
-            <h2 className="font-cormorant text-[48px] font-bold text-[#0F5C66]">
+          {/* Details */}
+          <div className="flex flex-col justify-center min-w-0">
+            <h2 className="font-cormorant text-[24px] sm:text-[28px] font-bold leading-tight text-[#0F5C66]">
               Braj Yatra
             </h2>
-
-            <h3
-              className="font-cormorant text-[36px] font-bold text-[#C37000]"
-              style={{ marginBottom: "20px" }}
-            >
-              Nathdwara to Vrindavan
+            <h3 className="font-cormorant text-[18px] sm:text-[22px] font-bold leading-tight text-[#C37000] mt-0.5">
+              Nathdwara to Vrindavaan
             </h3>
 
-            <div
-              className={`${cormorantInfant.className} mt-5 flex flex-wrap items-center gap-4 text-[15px] text-[#5A4A39]`}
-              style={{ marginBottom: "30px" }}
-            >
-              <div className="flex items-center gap-2">
-                <CalendarDays size={16} className="text-[#C37000]" />
-
-                <span>9 Days / 8 Nights</span>
+            {/* Stats — single line with | separators */}
+            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1">
+              <div className="flex items-center gap-1.5">
+                <Clock size={15} strokeWidth={2.2} className="text-[#C37000] shrink-0" />
+                <span className="font-cormorant text-[14px] sm:text-[15px] font-bold text-[#3D352F]">
+                  9 Days/8 Night
+                </span>
               </div>
 
-              <div className="h-4 w-px bg-[#D39A3E]" />
+              <span className="text-[#C37000]/60 font-bold">|</span>
 
-              <div className="flex items-center gap-2">
-                <Bus size={16} className="text-[#C37000]" />
-
-                <span>17-seater Urbania</span>
+              <div className="flex items-center gap-1.5">
+                <Bus size={15} strokeWidth={2.2} className="text-[#C37000] shrink-0" />
+                <span className="font-cormorant text-[14px] sm:text-[15px] font-bold text-[#3D352F]">
+                  17-seater Urbania
+                </span>
               </div>
 
-              <div className="h-4 w-px bg-[#D39A3E]" />
+              <span className="text-[#C37000]/60 font-bold">|</span>
 
-              <div className="flex items-center gap-2">
-                <Users size={16} className="text-[#C37000]" />
-
-                <span>6 Seats Left</span>
+              <div className="flex items-center gap-1.5">
+                <Users size={15} strokeWidth={2.2} className="text-[#C37000] shrink-0" />
+                <span className="font-cormorant text-[14px] sm:text-[15px] font-bold text-[#3D352F]">
+                  6 Seats Left
+                </span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right */}
+        {/* ── Vertical Divider ── */}
+        <div className="hidden sm:block h-[80px] w-px bg-[#C37000]/40 shrink-0" />
 
-        <div className="border-l border-[#D8B67A] p-6">
-          <p
-            className={`${cormorantInfant.className} text-[18px] text-[#3D352F]`}
-          >
+        {/* ── Right: Package + Price ── */}
+        <div className="flex flex-col items-start sm:items-start shrink-0 pl-0 sm:pl-2">
+          <p className="font-cormorant text-[13px] sm:text-[14px] font-bold text-[#3D352F]/70 leading-tight">
             Selected Package
           </p>
-
-          <h3 className="font-cormorant mt-2 text-[30px] font-semibold text-[#C37000]">
-            Standard Package
-          </h3>
-
-          <div className="mt-5 flex items-end">
-            <span className="font-cormorant text-[42px] font-semibold text-[#C37000]">
-              ₹3,999
+          <h4 className="font-cormorant text-[20px] sm:text-[24px] font-bold text-[#C37000] leading-tight mt-0.5">
+            {pkgInfo.name}
+          </h4>
+          <div className="mt-1 flex items-baseline gap-1">
+            <span className="font-cormorant text-[32px] sm:text-[36px] font-bold text-[#C37000] leading-none">
+              ₹{pkgInfo.price.toLocaleString()}
             </span>
-
-            <span
-              className={`${cormorantInfant.className} mb-[5px] ml-1 text-[18px] text-[#3D352F]`}
-            >
+            <span className="font-cormorant text-[14px] sm:text-[16px] font-bold text-[#3D352F] leading-none">
               /person
             </span>
           </div>
