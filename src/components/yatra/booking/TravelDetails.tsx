@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { CalendarDays, Users } from "lucide-react";
 
 interface TravelDetailsProps {
+  initialDate?: string;
   travellerCount?: number;
   submitted?: boolean;
   onChange?: (data: { travelDate: string; travellers: number }) => void;
@@ -12,13 +13,13 @@ interface TravelDetailsProps {
 const TRAVELLER_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
 
 export default function TravelDetails({
+  initialDate = "",
   travellerCount = 2,
   submitted = false,
   onChange,
 }: TravelDetailsProps) {
-  const [travelDate, setTravelDate] = useState("");
+  const [travelDate, setTravelDate] = useState(initialDate);
   const [travellers, setTravellers] = useState(travellerCount);
-  const [touchedDate, setTouchedDate] = useState(false);
   const [dateError, setDateError] = useState<string | undefined>();
 
   const validateDate = (val: string) => {
@@ -28,21 +29,15 @@ export default function TravelDetails({
 
   const handleDateChange = (val: string) => {
     setTravelDate(val);
-    if (touchedDate) {
+    if (submitted) {
       setDateError(validateDate(val));
     }
     onChange?.({ travelDate: val, travellers });
   };
 
-  const handleDateBlur = () => {
-    setTouchedDate(true);
-    setDateError(validateDate(travelDate));
-  };
-
   // When parent submits, force-show the date error
   useEffect(() => {
     if (submitted) {
-      setTouchedDate(true);
       setDateError(validateDate(travelDate));
     }
   }, [submitted, travelDate]);
@@ -83,16 +78,15 @@ export default function TravelDetails({
               type="date"
               value={travelDate}
               onChange={(e) => handleDateChange(e.target.value)}
-              onBlur={handleDateBlur}
               className={`${inputBase} pl-9 pr-3 cursor-pointer ${
-                touchedDate && dateError
+                submitted && dateError
                   ? "border-[#D04B16] focus:border-[#D04B16]"
                   : "border-[#C37000]/50 focus:border-[#C37000]"
               }`}
               style={{ colorScheme: "light", backgroundColor: "transparent" }}
             />
           </div>
-          {touchedDate && dateError && (
+          {submitted && dateError && (
             <p className="font-cormorant text-[13px] font-bold text-[#D04B16] mt-0.5">
               {dateError}
             </p>

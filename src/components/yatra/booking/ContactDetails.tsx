@@ -6,12 +6,20 @@ import { User } from "lucide-react";
 interface FormErrors {
   name?: string;
   phone?: string;
+  email?: string;
   aadhaar?: string;
   address?: string;
 }
 
 interface ContactDetailsProps {
   submitted?: boolean;
+  initialData?: {
+    name: string;
+    phone: string;
+    email: string;
+    aadhaar: string;
+    address: string;
+  };
   onChange?: (data: {
     name: string;
     phone: string;
@@ -58,15 +66,15 @@ const errorClass = "font-cormorant text-[13px] font-bold text-[#D04B16] mt-0.5";
 
 export default function ContactDetails({
   submitted = false,
+  initialData,
   onChange,
 }: ContactDetailsProps) {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [aadhaar, setAadhaar] = useState("");
-  const [address, setAddress] = useState("");
+  const [name, setName] = useState(initialData?.name || "");
+  const [phone, setPhone] = useState(initialData?.phone || "");
+  const [email, setEmail] = useState(initialData?.email || "");
+  const [aadhaar, setAadhaar] = useState(initialData?.aadhaar || "");
+  const [address, setAddress] = useState(initialData?.address || "");
   const [errors, setErrors] = useState<FormErrors>({});
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const validate = (field: string, value: string): string | undefined => {
     if (field === "name" && !value.trim()) return "Full name is required";
@@ -74,6 +82,13 @@ export default function ContactDetails({
       if (!value.trim()) return "Mobile number is required";
       if (!/^\d{10}$/.test(value.replace(/\s/g, "")))
         return "Enter a valid 10-digit number";
+    }
+    if (field === "email") {
+      const trimmed = value.trim();
+      if (trimmed && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+        return "Enter a valid email address";
+      }
+      return undefined;
     }
     if (field === "aadhaar") {
       if (!value.trim()) return "Aadhaar number is required";
@@ -86,25 +101,15 @@ export default function ContactDetails({
 
   useEffect(() => {
     if (submitted) {
-      setTouched({
-        name: true,
-        phone: true,
-        aadhaar: true,
-        address: true,
-      });
       setErrors({
         name: validate("name", name),
         phone: validate("phone", phone),
+        email: validate("email", email),
         aadhaar: validate("aadhaar", aadhaar),
         address: validate("address", address),
       });
     }
-  }, [submitted, name, phone, aadhaar, address]);
-
-  const handleBlur = (field: string, value: string) => {
-    setTouched((p) => ({ ...p, [field]: true }));
-    setErrors((p) => ({ ...p, [field]: validate(field, value) }));
-  };
+  }, [submitted, name, phone, email, aadhaar, address]);
 
   const notify = (vals: {
     name: string; phone: string; email: string; aadhaar: string; address: string;
@@ -132,16 +137,16 @@ export default function ContactDetails({
             placeholder="Enter your Full Name"
             value={name}
             onChange={(e) => {
-              setName(e.target.value);
-              if (touched.name)
-                setErrors((p) => ({ ...p, name: validate("name", e.target.value) }));
-              notify({ name: e.target.value, phone, email, aadhaar, address });
+              const val = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+              setName(val);
+              if (submitted)
+                setErrors((p) => ({ ...p, name: validate("name", val) }));
+              notify({ name: val, phone, email, aadhaar, address });
             }}
-            onBlur={(e) => handleBlur("name", e.target.value)}
-            className={touched.name && errors.name ? inputError : inputNormal}
+            className={submitted && errors.name ? inputError : inputNormal}
             style={{ backgroundColor: "transparent" }}
           />
-          {touched.name && errors.name && (
+          {submitted && errors.name && (
             <p className={errorClass}>{errors.name}</p>
           )}
         </div>
@@ -153,7 +158,7 @@ export default function ContactDetails({
           </label>
           <div
             className={`flex h-[44px] overflow-hidden rounded-[8px] border bg-transparent transition ${
-              touched.phone && errors.phone
+              submitted && errors.phone
                 ? "border-[#D04B16]"
                 : "border-[#C37000]/50 focus-within:border-[#C37000]"
             }`}
@@ -174,16 +179,15 @@ export default function ContactDetails({
               onChange={(e) => {
                 const val = e.target.value.replace(/\D/g, "");
                 setPhone(val);
-                if (touched.phone)
+                if (submitted)
                   setErrors((p) => ({ ...p, phone: validate("phone", val) }));
                 notify({ name, phone: val, email, aadhaar, address });
               }}
-              onBlur={(e) => handleBlur("phone", e.target.value)}
               className="font-cormorant min-w-0 flex-1 bg-transparent px-3 text-[16px] font-bold text-[#3D352F] placeholder:text-[#3D352F]/40 placeholder:font-bold focus:outline-none"
               style={{ backgroundColor: "transparent" }}
             />
           </div>
-          {touched.phone && errors.phone && (
+          {submitted && errors.phone && (
             <p className={errorClass}>{errors.phone}</p>
           )}
         </div>
@@ -196,12 +200,18 @@ export default function ContactDetails({
             placeholder="Enter your Email"
             value={email}
             onChange={(e) => {
-              setEmail(e.target.value);
-              notify({ name, phone, email: e.target.value, aadhaar, address });
+              const val = e.target.value;
+              setEmail(val);
+              if (submitted)
+                setErrors((p) => ({ ...p, email: validate("email", val) }));
+              notify({ name, phone, email: val, aadhaar, address });
             }}
-            className={inputNormal}
+            className={submitted && errors.email ? inputError : inputNormal}
             style={{ backgroundColor: "transparent" }}
           />
+          {submitted && errors.email && (
+            <p className={errorClass}>{errors.email}</p>
+          )}
         </div>
       </div>
 
@@ -220,15 +230,14 @@ export default function ContactDetails({
             onChange={(e) => {
               const val = e.target.value.replace(/\D/g, "");
               setAadhaar(val);
-              if (touched.aadhaar)
+              if (submitted)
                 setErrors((p) => ({ ...p, aadhaar: validate("aadhaar", val) }));
               notify({ name, phone, email, aadhaar: val, address });
             }}
-            onBlur={(e) => handleBlur("aadhaar", e.target.value)}
-            className={touched.aadhaar && errors.aadhaar ? inputError : inputNormal}
+            className={submitted && errors.aadhaar ? inputError : inputNormal}
             style={{ backgroundColor: "transparent" }}
           />
-          {touched.aadhaar && errors.aadhaar && (
+          {submitted && errors.aadhaar && (
             <p className={errorClass}>{errors.aadhaar}</p>
           )}
         </div>
@@ -243,19 +252,19 @@ export default function ContactDetails({
             placeholder="Enter complete address"
             value={address}
             onChange={(e) => {
-              setAddress(e.target.value);
-              if (touched.address)
+              const val = e.target.value;
+              setAddress(val);
+              if (submitted)
                 setErrors((p) => ({
                   ...p,
-                  address: validate("address", e.target.value),
+                  address: validate("address", val),
                 }));
-              notify({ name, phone, email, aadhaar, address: e.target.value });
+              notify({ name, phone, email, aadhaar, address: val });
             }}
-            onBlur={(e) => handleBlur("address", e.target.value)}
-            className={touched.address && errors.address ? inputError : inputNormal}
+            className={submitted && errors.address ? inputError : inputNormal}
             style={{ backgroundColor: "transparent" }}
           />
-          {touched.address && errors.address && (
+          {submitted && errors.address && (
             <p className={errorClass}>{errors.address}</p>
           )}
         </div>

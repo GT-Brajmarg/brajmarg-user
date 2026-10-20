@@ -196,7 +196,7 @@ export default function Navbar() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="relative flex flex-col items-center py-2 transition-transform hover:-translate-y-0.5"
+                      className="relative flex flex-col items-center  transition-transform hover:-translate-y-0.5"
                     >
                       <span
                         className={`text-[17px] xl:text-[18px] font-medium transition-colors ${
@@ -212,8 +212,8 @@ export default function Navbar() {
                         <Image
                           src="/images/lotus 2.png"
                           alt=""
-                          width={38}
-                          height={20}
+                          width={48}
+                          height={30}
                           className="pointer-events-none absolute top-[28px] left-1/2 -translate-x-1/2"
                         />
                       )}

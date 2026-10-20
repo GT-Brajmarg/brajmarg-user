@@ -4,21 +4,22 @@ import { useState, useEffect } from "react";
 import { Users, Info } from "lucide-react";
 
 interface TravellerDetailsProps {
+  initialNames?: string[];
   travellerCount?: number;
   submitted?: boolean;
   onChange?: (names: string[]) => void;
 }
 
 export default function TravellerDetails({
+  initialNames,
   travellerCount = 2,
   submitted = false,
   onChange,
 }: TravellerDetailsProps) {
   const [names, setNames] = useState<string[]>(
-    Array(travellerCount).fill("")
-  );
-  const [touched, setTouched] = useState<boolean[]>(
-    Array(travellerCount).fill(false)
+    initialNames && initialNames.length >= travellerCount
+      ? initialNames.slice(0, travellerCount)
+      : Array(travellerCount).fill("")
   );
   const [errors, setErrors] = useState<string[]>(
     Array(travellerCount).fill("")
@@ -31,11 +32,6 @@ export default function TravellerDetails({
       while (updated.length < travellerCount) updated.push("");
       return updated.slice(0, travellerCount);
     });
-    setTouched((prev) => {
-      const updated = [...prev];
-      while (updated.length < travellerCount) updated.push(false);
-      return updated.slice(0, travellerCount);
-    });
     setErrors((prev) => {
       const updated = [...prev];
       while (updated.length < travellerCount) updated.push("");
@@ -43,41 +39,31 @@ export default function TravellerDetails({
     });
   }, [travellerCount]);
 
-  // When parent submits, force-show all traveller name errors
-  useEffect(() => {
-    if (submitted) {
-      setTouched(Array(travellerCount).fill(true));
-      setErrors(names.map((n) => validateName(n)));
-    }
-  }, [submitted, travellerCount, names]);
-
   const validateName = (val: string) => {
     if (!val.trim()) return "Full Name as per ID is required";
     return "";
   };
 
+  // When parent submits, force-show all traveller name errors
+  useEffect(() => {
+    if (submitted) {
+      setErrors(names.map((n) => validateName(n)));
+    }
+  }, [submitted, travellerCount, names]);
+
   const handleNameChange = (index: number, val: string) => {
+    const cleanVal = val.replace(/[^a-zA-Z\s]/g, "");
     const updatedNames = [...names];
-    updatedNames[index] = val;
+    updatedNames[index] = cleanVal;
     setNames(updatedNames);
 
-    if (touched[index]) {
+    if (submitted) {
       const updatedErrors = [...errors];
-      updatedErrors[index] = validateName(val);
+      updatedErrors[index] = validateName(cleanVal);
       setErrors(updatedErrors);
     }
 
     onChange?.(updatedNames);
-  };
-
-  const handleBlur = (index: number, val: string) => {
-    const updatedTouched = [...touched];
-    updatedTouched[index] = true;
-    setTouched(updatedTouched);
-
-    const updatedErrors = [...errors];
-    updatedErrors[index] = validateName(val);
-    setErrors(updatedErrors);
   };
 
   const inputBase =
@@ -108,7 +94,7 @@ export default function TravellerDetails({
       {/* One card per traveller — Full Name as per ID */}
       <div className="space-y-3">
         {names.map((name, index) => {
-          const hasError = touched[index] && !!errors[index];
+          const hasError = submitted && !!errors[index];
 
           return (
             <div
@@ -127,7 +113,6 @@ export default function TravellerDetails({
                 placeholder="Enter Full Name"
                 value={name}
                 onChange={(e) => handleNameChange(index, e.target.value)}
-                onBlur={(e) => handleBlur(index, e.target.value)}
                 className={`${inputBase} ${
                   hasError
                     ? "border-[#D04B16] focus:border-[#D04B16]"

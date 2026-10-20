@@ -1,9 +1,7 @@
 import { Suspense } from "react";
 import Image from "next/image";
 
-import BookingHero from "@/components/yatra/booking/BookingHero";
-import BookingSummary from "@/components/yatra/booking/BookingSummary";
-import BookingForm from "@/components/yatra/booking/BookingForm";
+import BookingFlow from "@/components/yatra/booking/BookingFlow";
 
 interface BookYatraPageProps {
   params: Promise<{ slug: string }>;
@@ -13,7 +11,7 @@ export default async function BookYatraPage({ params }: BookYatraPageProps) {
   const { slug } = await params;
 
   return (
-    <main className="relative isolate min-h-screen overflow-hidden bg-[#F7F0E5]">
+    <main className="relative isolate min-h-screen overflow-x-clip bg-[#F7F0E5]">
       {/* ── Background layers ── */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
         <Image
@@ -69,20 +67,9 @@ export default async function BookYatraPage({ params }: BookYatraPageProps) {
       {/* ── Page Content ── */}
       <div className="relative z-10 flex w-full justify-center px-4 sm:px-6 lg:px-12">
         <div className="w-full max-w-[1200px]">
-          {/* Hero Header */}
-          <BookingHero />
-
-          {/* ── Card 1: Booking Summary ── */}
-          <div className="overflow-hidden rounded-[20px] border-2 border-[#C37000] bg-[rgba(239,222,199,0.4)] shadow-[0_8px_32px_rgba(195,112,0,0.10)]">
-            <Suspense fallback={null}>
-              <BookingSummary />
-            </Suspense>
-          </div>
-
-          {/* ── Card 2: Interactive Booking Form ── */}
-          <div className="mt-6 mb-12 overflow-hidden rounded-[20px] border-2 border-[#C37000] bg-[rgba(239,222,199,0.4)] shadow-[0_8px_32px_rgba(195,112,0,0.10)]">
-            <BookingForm slug={slug} />
-          </div>
+          <Suspense fallback={null}>
+            <BookingFlow slug={slug} />
+          </Suspense>
         </div>
       </div>
     </main>
