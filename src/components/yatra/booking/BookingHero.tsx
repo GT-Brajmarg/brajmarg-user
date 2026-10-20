@@ -8,7 +8,15 @@ const cormorant = Cormorant_Garamond({
   weight: ["400", "500", "600", "700"],
 });
 
-export default function BookingHero() {
+interface BookingHeroProps {
+  title?: string;
+  subtitle?: string;
+}
+
+export default function BookingHero({
+  title = "Book Your Yatra",
+  subtitle = "Fill in your details to confirm your sacred journey",
+}: BookingHeroProps) {
   return (
     <section className="relative w-full overflow-hidden pt-10 pb-6 sm:pt-12 sm:pb-7">
       {/* Temple Outline — decorative top-right */}
@@ -25,13 +33,13 @@ export default function BookingHero() {
         <h1
           className={`${cormorant.className} text-[32px] sm:text-[42px] lg:text-[50px] leading-none font-bold text-[#0F5C66]`}
         >
-          Book Your Yatra
+          {title}
         </h1>
 
         <p
           className={`${cormorant.className} mt-2 text-[18px] sm:text-[22px] font-bold text-[#3D352F]`}
         >
-          Fill in your details to confirm your sacred journey
+          {subtitle}
         </p>
       </div>
     </section>
