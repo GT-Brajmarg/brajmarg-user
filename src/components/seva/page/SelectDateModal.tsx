@@ -6,12 +6,7 @@ import { useMemo, useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSelectedDate } from "@/store/slices/sevaPageSlice";
 
-import { Cormorant_Infant } from "next/font/google";
-
-export const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+import { cormorantInfant } from "@/lib/fonts";
 
 interface Props {
   open: boolean;

@@ -2,16 +2,7 @@
 
 import { Info, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
-import { Cormorant_Infant, Inter } from "next/font/google";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-});
+import { cormorantInfant, inter } from "@/lib/fonts";
 
 const notes = [
   "You can change these preferences anytime from your dashboard.",

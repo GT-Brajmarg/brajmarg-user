@@ -1,15 +1,10 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { Cormorant_Infant } from "next/font/google";
+import { cormorantInfant } from "@/lib/fonts";
 import BirthdayBlessingCard from "./BirthdayBlessingCard";
 import AnniversaryBlessingCard from "./AnniversaryBlessingCard";
 import HowItWorksCard from "./HowItWorksCard";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 
 export default function ActivateBenefitsCard() {
   return (

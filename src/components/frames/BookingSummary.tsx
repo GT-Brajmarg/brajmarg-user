@@ -6,12 +6,7 @@ import { useState } from "react";
 import { useAppDispatch } from "@/store/hooks";
 import { addToCart } from "@/store/slices/cartSlice";
 import LoginModal from "@/components/auth/LoginModal";
-import { Cormorant_Infant } from "next/font/google";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+import { cormorantInfant } from "@/lib/fonts";
 
 interface BookingSummaryProps {
   frame: {
