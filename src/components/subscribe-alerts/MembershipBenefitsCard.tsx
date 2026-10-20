@@ -1,17 +1,8 @@
 "use client";
 
 import { CheckCircle2, Star } from "lucide-react";
-import { Cormorant_Infant, Inter } from "next/font/google";
+import { cormorantInfant, inter } from "@/lib/fonts";
 import Image from "next/image";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-});
 
 const monthlyBenefits = [
   "Aarti & Pooja Reminders",

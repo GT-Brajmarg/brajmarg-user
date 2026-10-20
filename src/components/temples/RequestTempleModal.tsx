@@ -18,13 +18,9 @@ import {
   submitTempleRequest,
   resetTempleRequest,
 } from "@/store/slices/requestTempleSlice";
-import { Cormorant_Infant } from "next/font/google";
+import { cormorantInfant } from "@/lib/fonts";
 import { showToast, handleApiError } from "@/lib/toast";
 
-export const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 // import { headers } from "next/headers";
 
 interface Props {

@@ -2,14 +2,9 @@
 
 import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Cormorant_Infant } from "next/font/google";
+import { cormorantInfant } from "@/lib/fonts";
 import { useRouter, useSearchParams } from "next/navigation";
 import { startRazorpayPayment } from "@/lib/payments/razorpay";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 
 interface PaymentFooterProps {
   amount: number;

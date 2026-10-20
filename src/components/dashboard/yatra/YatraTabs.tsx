@@ -1,11 +1,6 @@
 "use client";
 
-import { Cormorant_Infant } from "next/font/google";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+import { cormorantInfant } from "@/lib/fonts";
 
 interface Props {
   active: string;

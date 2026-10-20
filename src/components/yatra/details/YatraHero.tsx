@@ -5,12 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, CalendarDays, Users, Bus } from "lucide-react";
 import { Fragment } from "react";
 
-import { Cormorant_Infant } from "next/font/google";
-
-export const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
+import { cormorantInfant } from "@/lib/fonts";
 
 const highlights = [
   {

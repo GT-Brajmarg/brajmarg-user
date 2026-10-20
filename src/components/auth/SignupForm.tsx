@@ -4,12 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Eye, EyeOff, ArrowRight } from "lucide-react";
-import { Cormorant_Garamond } from "next/font/google";
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-});
+import { cormorant } from "@/lib/fonts";
 
 export default function SignupForm() {
   const [form, setForm] = useState({

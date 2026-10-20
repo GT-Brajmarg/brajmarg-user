@@ -1,17 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { Cormorant_Infant, Inter } from "next/font/google";
+import { cormorantInfant, inter } from "@/lib/fonts";
 import { useSearchParams } from "next/navigation";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-});
 
 export default function BillDetailsCard({}) {
   const searchParams = useSearchParams();

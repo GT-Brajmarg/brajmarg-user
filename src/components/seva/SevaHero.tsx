@@ -3,12 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
-import { Cormorant_Infant } from "next/font/google";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+import { cormorantInfant } from "@/lib/fonts";
 
 const sevaDetails =
   "Offered during the afternoon Rajbhog, this seva includes bhog, vastra, and special prayers for the well-being and prosperity of you and your family.";

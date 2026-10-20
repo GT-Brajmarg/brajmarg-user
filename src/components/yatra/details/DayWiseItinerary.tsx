@@ -1,12 +1,6 @@
 "use client";
 
-import { Cormorant_Infant } from "next/font/google";
-
-export const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-cormorant-infant",
-});
+import { cormorantInfant } from "@/lib/fonts";
 
 const itinerary = [
   {

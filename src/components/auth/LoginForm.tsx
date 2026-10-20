@@ -3,17 +3,12 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight, Pencil } from "lucide-react";
-import { Cormorant_Garamond } from "next/font/google";
+import { cormorant } from "@/lib/fonts";
 import {
   showToast,
   handleApiError,
   getErrorMessageFromStatus,
 } from "@/lib/toast";
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-});
 
 function IndiaFlag() {
   return (

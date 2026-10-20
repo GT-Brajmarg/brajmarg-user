@@ -1,7 +1,7 @@
 import "./globals.css";
 import ReduxProvider from "@/components/ReduxProvider";
 import LayoutContent from "@/components/LayoutContent";
-import { Cormorant_Garamond, Cormorant_Infant } from "next/font/google";
+import { cormorant, cormorantInfant } from "@/lib/fonts";
 import type { Metadata, Viewport } from "next";
 import { Toaster } from "sonner";
 
@@ -9,18 +9,6 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
 };
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-cormorant",
-});
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-cormorant-infant",
-});
 
 export const metadata: Metadata = {
   title: "Brajmarg – Discover Sacred Temples & Pilgrimages",

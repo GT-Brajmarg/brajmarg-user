@@ -2,18 +2,7 @@
 
 import Image from "next/image";
 import { X, Check } from "lucide-react";
-import { Cormorant_Infant } from "next/font/google";
-import { Inter } from "next/font/google";
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+import { cormorantInfant, inter } from "@/lib/fonts";
 
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { removeSelectedTemple } from "@/store/slices/subscriptionSlice";
