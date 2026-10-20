@@ -4,12 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Cormorant_Infant } from "next/font/google";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
+import { cormorantInfant } from "@/lib/fonts";
 
 interface StickyBookingBarProps {
   slug?: string;

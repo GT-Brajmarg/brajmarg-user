@@ -2,16 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { Cormorant_Infant, Inter } from "next/font/google";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-});
+import { cormorantInfant, inter } from "@/lib/fonts";
 
 export default function PaymentDetailsCard() {
   const [selected, setSelected] = useState("razorpay");

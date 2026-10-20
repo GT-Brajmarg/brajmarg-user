@@ -3,14 +3,9 @@
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import OrderStatusBadge from "./OrderStatusBadge";
-import { Cormorant_Infant } from "next/font/google";
+import { cormorantInfant } from "@/lib/fonts";
 import { useState } from "react";
 import OrderDetailsModal from "./OrderDetailsModal";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 
 interface Props {
   image: string;

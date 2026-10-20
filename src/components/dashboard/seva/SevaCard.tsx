@@ -2,16 +2,11 @@
 
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { Cormorant_Infant } from "next/font/google";
+import { cormorantInfant } from "@/lib/fonts";
 import { useState } from "react";
 import SevaStatusBadge from "./SevaStatusBadge";
 import SevaDetailsModal from "./SevaDetailsModal";
 // import SevaDetailsModal from "./SevaDetailsModal";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 
 interface Props {
   image: string;

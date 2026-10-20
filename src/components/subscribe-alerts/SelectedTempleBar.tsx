@@ -2,14 +2,8 @@
 
 import Image from "next/image";
 import { X, ArrowRight } from "lucide-react";
-import { Cormorant_Infant } from "next/font/google";
+import { cormorantInfant } from "@/lib/fonts";
 import { useRouter, useSearchParams } from "next/navigation";
-
-export const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-cormorant-infant",
-});
 
 interface Temple {
   id: string;

@@ -3,13 +3,8 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
-import { Cormorant_Infant } from "next/font/google";
+import { cormorantInfant } from "@/lib/fonts";
 import SevaStatusBadge from "../seva/SevaStatusBadge";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 
 interface Props {
   open: boolean;

@@ -3,15 +3,10 @@
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
-import { Cormorant_Infant } from "next/font/google";
+import { cormorantInfant } from "@/lib/fonts";
 
 import SevaStatusBadge from "../seva/SevaStatusBadge";
 import YatraDetailsModal from "./YatraDetailsModal";
-
-const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 
 interface Props {
   bookingId: string;
