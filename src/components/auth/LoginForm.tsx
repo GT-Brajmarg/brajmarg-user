@@ -82,7 +82,7 @@ export default function LoginForm() {
     const isPhone = /^[6-9]\d{9}$/.test(value);
 
     if (!isEmail && !isPhone) {
-      setError("Please enter a valid email or mobile number.");
+      showToast.error("Please enter a valid email or mobile number.");
       return;
     }
 
@@ -174,7 +174,7 @@ export default function LoginForm() {
         err,
         "Unable to login. Please try again.",
       );
-      setError(errorMsg);
+      showToast.error(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -342,12 +342,7 @@ export default function LoginForm() {
                 />
               </div>
 
-              {/* Email format validation feedback */}
-              {isEmail && identifier.length >= 3 && identifier.includes("@") && !isEmailValid && (
-                <p className="mt-1.5 text-[12px] text-amber-800">
-                  Please enter a complete email address (e.g. name@example.com)
-                </p>
-              )}
+
             </div>
           )}
 
@@ -398,11 +393,7 @@ export default function LoginForm() {
             </div>
           )}
 
-          {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-center text-[12px] text-red-600">
-              {error}
-            </div>
-          )}
+
 
           {/* Step 1: Send OTP Button */}
           {!otpSent && (
@@ -468,26 +459,28 @@ export default function LoginForm() {
         )} */}
 
         {/* Terms */}
-        {otpSent &&
-          (<p className="mt-4 sm:mt-5 text-center text-[11px] sm:text-[11.5px] leading-relaxed text-[#8B7A66]">
+        {otpSent && (
+          <p className="mt-4 sm:mt-5 text-center text-[11px] sm:text-[11.5px] leading-relaxed text-[#8B7A66]">
             By continuing, you agree to{" "}
-            <span className="font-medium text-[#5F4A2D]">Brajmarg&apos;s</span>{" "}
+            <span className="text-[#5F4A2D]">Brajmarg&apos;s</span>{" "}
             <Link
               href="/terms"
-              className="font-medium text-[#0C6B73] underline underline-offset-2 transition-colors hover:text-[#095A61]"
+              style={{ color: "#2563EB", textDecoration: "underline" }}
+              className="font-medium !text-blue-600 !underline underline-offset-2 transition-colors hover:!text-blue-700"
             >
               Terms of Service
             </Link>{" "}
             and{" "}
             <Link
               href="/privacy"
-              className="font-medium text-[#0C6B73] underline underline-offset-2 transition-colors hover:text-[#095A61]"
+              style={{ color: "#2563EB", textDecoration: "underline" }}
+              className="font-medium !text-blue-600 !underline underline-offset-2 transition-colors hover:!text-blue-700"
             >
               Privacy Policy
             </Link>
             .
-          </p>)
-        }
+          </p>
+        )}
       </div>
     </div>
   );

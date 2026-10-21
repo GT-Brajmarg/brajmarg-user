@@ -5,14 +5,14 @@ import { Cormorant_Garamond, Cormorant_Infant, Inter } from "next/font/google";
 // which fails on Vercel (`Can't resolve '@vercel/turbopack-next/internal/font/google/font'`).
 
 export const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-cormorant",
   display: "swap",
 });
 
 export const cormorantInfant = Cormorant_Infant({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-cormorant-infant",
   display: "swap",

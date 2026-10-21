@@ -11,9 +11,9 @@ export default async function BookYatraPage({ params }: BookYatraPageProps) {
   const { slug } = await params;
 
   return (
-    <main className="relative isolate min-h-screen overflow-x-clip bg-[#F7F0E5]">
+    <main className="relative isolate min-h-screen overflow-hidden bg-[#F7F0E5]">
       {/* ── Background layers ── */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
         <Image
           src="/images/paper-texture.png"
           alt=""
@@ -37,30 +37,6 @@ export default async function BookYatraPage({ params }: BookYatraPageProps) {
           width={1050}
           height={1050}
           className="absolute top-[1100px] left-1/2 w-[950px] -translate-x-1/2 opacity-[0.04] md:w-[1100px]"
-        />
-
-        <Image
-          src="/images/mandala_bg_1.png"
-          alt=""
-          width={1050}
-          height={1050}
-          className="absolute top-[2000px] left-1/2 w-[950px] -translate-x-1/2 opacity-[0.04] md:w-[1100px]"
-        />
-
-        <Image
-          src="/images/mandala_bg_1.png"
-          alt=""
-          width={1050}
-          height={1050}
-          className="absolute top-[3050px] left-1/2 w-[950px] -translate-x-1/2 opacity-[0.04] md:w-[1100px]"
-        />
-
-        <Image
-          src="/images/mandala_bg_1.png"
-          alt=""
-          width={900}
-          height={900}
-          className="absolute bottom-[-250px] left-1/2 w-[750px] -translate-x-1/2 opacity-[0.035] md:w-[900px]"
         />
       </div>
 

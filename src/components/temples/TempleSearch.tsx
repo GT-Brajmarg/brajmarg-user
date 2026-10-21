@@ -36,10 +36,10 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
   return (
     <div
       className="w-full rounded-[18px] border border-white/40 bg-[#EFDEC7]/40 px-6 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.15)] backdrop-blur-2xl"
-      // style={{
-      //   background:
-      //     "linear-gradient(135deg, rgba(255,255,255,0.35), rgba(248,241,230,0.65))",
-      // }}
+    // style={{
+    //   background:
+    //     "linear-gradient(135deg, rgba(255,255,255,0.35), rgba(248,241,230,0.65))",
+    // }}
     >
       {/* ================= Desktop ================= */}
       <div
@@ -79,7 +79,7 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
               paddingLeft: "48px",
               paddingRight: "16px",
               fontFamily: "font-cormonant",
-              border: "1px solid #C88A1A",
+              border: "2px solid #C88A1A",
               borderRadius: "8px",
               background: "transparent",
               fontSize: "14px",
@@ -111,7 +111,7 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
               fontFamily: "font-cormonant",
               paddingLeft: "42px",
               paddingRight: "36px",
-              border: "1px solid #C88A1A",
+              border: "2px solid #C88A1A",
               borderRadius: "8px",
               background: "transparent",
               fontSize: "14px",
@@ -189,7 +189,7 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
               fontFamily: "var(--font-cormorant)",
               paddingLeft: "40px",
               paddingRight: "16px",
-              border: "1px solid #C88A1A",
+              border: "3px solid #C88A1A",
               borderRadius: "8px",
               background: "transparent",
               fontSize: "14px",
@@ -311,9 +311,9 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
                 onSearch(item.name);
               }}
               style={{
-                height: "25px",
+                height: "30px",
                 padding: "0 20px",
-                border: "1px solid #C88A1A",
+                border: "px solid #C88A1A",
                 borderRadius: "999px",
                 display: "flex",
                 alignItems: "center",

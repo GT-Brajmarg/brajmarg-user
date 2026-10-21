@@ -6,17 +6,21 @@ import Image from "next/image";
 
 export default function SubscribeAlertsPage() {
   return (
-    <main className="relative isolate overflow-hidden bg-[#F8F2E8]">
+    <main className="relative isolate min-h-screen overflow-hidden bg-[#F7F0E5]">
       {/* Background */}
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+      >
         {/* Paper Texture */}
         <Image
-          src="/images/temple-paper-texture.png"
+          src="/images/paper-texture.png"
           alt=""
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-[0.24]"
+          aria-hidden
+          className="pointer-events-none object-cover opacity-34 mix-blend-multiply"
         />
 
         {/* Decorative Mandalas */}
@@ -45,18 +49,16 @@ export default function SubscribeAlertsPage() {
         />
       </div>
 
-      <div className="relative z-10 w-full">
+      {/* Page Content */}
+      <div className="relative z-10">
         <SubscribeHero />
-      </div>
 
-      {/* Foreground */}
-      <div className="relative z-10 mx-auto flex justify-center">
-        <div className="w-full max-w-[1200px] px-4 py-10">
-          {/* Hero */}
-          <AlertCategories />
-          <SubscriptionPlans />
-          <HowAlertsWork />
-          {/* Why Subscribe */}
+        <div className="relative z-10 mx-auto flex justify-center">
+          <div className="w-full max-w-[1200px] px-4 py-10">
+            <AlertCategories />
+            <SubscriptionPlans />
+            <HowAlertsWork />
+          </div>
         </div>
       </div>
     </main>

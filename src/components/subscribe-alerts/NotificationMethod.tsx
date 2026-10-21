@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
-
 import { useAppDispatch } from "@/store/hooks";
 import { setNotificationMethod } from "@/store/slices/subscriptionSlice";
+import { cormorant } from "@/lib/fonts";
 
 const methods = [
   {
@@ -28,78 +28,65 @@ const methods = [
 export default function NotificationMethod() {
   const [selected, setSelected] = useState("whatsapp");
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(
       setNotificationMethod(
         methods.find((method) => method.id === selected)?.title ?? "",
       ),
     );
-  }, [dispatch]);
+  }, [dispatch, selected]);
 
   return (
-    <section className="rounded-[18px] border border-[#C37000] bg-[#C37000]/4 p-5">
+    <section className="rounded-[18px] border border-[#C37000] bg-[#FAF3E8]/80 p-4 sm:p-5 shadow-xs">
       {/* Heading */}
-
-      <h2
-        className="font-cormorant text-[24px] leading-tight font-semibold text-[#0F5C66]"
-        style={{ marginTop: "10px", marginLeft: "10px" }}
-      >
+      <h2 className={`${cormorant.className} text-[18px] sm:text-[20px] font-bold text-[#0F5C66] leading-tight`}>
         Choose how you want to receive notifications
       </h2>
 
       {/* Options */}
-
-      <div
-        className="mt-5 grid grid-cols-3 gap-3"
-        style={{
-          marginLeft: "10px",
-          marginRight: "10px",
-          marginBottom: "20px",
-        }}
-      >
+      <div className="mt-3.5 grid grid-cols-3 gap-2.5">
         {methods.map((method) => {
           const active = selected === method.id;
 
           return (
             <button
               key={method.id}
+              type="button"
               onClick={() => {
                 setSelected(method.id);
                 dispatch(setNotificationMethod(method.title));
               }}
-              className={`relative flex flex-col items-center rounded-[12px] border p-4 transition-all duration-300 ${
+              className={`relative flex flex-col items-center justify-center rounded-[12px] border p-2.5 sm:p-3 transition-all duration-200 cursor-pointer ${
                 active
-                  ? "border-[#0F5C66]"
-                  : "border-[#D7B06B] hover:border-[#C37000]"
+                  ? "border-[#0F5C66] bg-[#F5ECE1]/40 shadow-xs"
+                  : "border-[#D9B67A] bg-transparent hover:border-[#C37000]"
               }`}
-              style={{ marginTop: "10px" }}
             >
               {/* Checkbox */}
-
               <div
-                className={`absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-sm border ${
-                  active ? "border-[#0F5C66] bg-[#0F5C66]" : "border-[#D7B06B]"
+                className={`absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-[3px] border transition-colors ${
+                  active ? "border-[#0F5C66] bg-[#0F5C66]" : "border-[#D9B67A] bg-transparent"
                 }`}
               >
                 {active && (
-                  <Check size={12} strokeWidth={3} className="text-white" />
+                  <Check size={11} strokeWidth={3} className="text-white" />
                 )}
               </div>
 
               {/* Icon */}
-
-              <Image
-                src={method.image}
-                alt={method.title}
-                width={34}
-                height={34}
-                className="object-contain"
-                style={{ marginTop: "10px" }}
-              />
+              <div className="my-1 flex h-10 w-10 items-center justify-center">
+                <Image
+                  src={method.image}
+                  alt={method.title}
+                  width={34}
+                  height={34}
+                  className="object-contain"
+                />
+              </div>
 
               {/* Label */}
-
-              <span className="font-cormorant mt-3 text-[18px] font-semibold text-[#3D352F]">
+              <span className={`${cormorant.className} mt-1 text-[15px] sm:text-[16px] font-semibold text-[#2C241E]`}>
                 {method.title}
               </span>
             </button>
@@ -109,3 +96,4 @@ export default function NotificationMethod() {
     </section>
   );
 }
+

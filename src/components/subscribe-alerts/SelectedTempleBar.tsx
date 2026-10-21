@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import { X, ArrowRight } from "lucide-react";
-import { cormorantInfant } from "@/lib/fonts";
-import { useRouter, useSearchParams } from "next/navigation";
+import { cormorant } from "@/lib/fonts";
 
 interface Temple {
   id: string;
@@ -21,91 +20,82 @@ export default function SelectedTempleBar({
   onRemove,
   onContinue,
 }: SelectedTempleBarProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const plan = searchParams.get("plan") || "monthly";
   return (
-    <div
-      className="rounded-[18px] border-[2px] border-[#C37000] p-4 shadow-md"
-      style={{ marginBottom: "40px" }}
-    >
-      <div className="flex items-center justify-between gap-6">
-        {/* Left */}
-        <div className="flex items-center gap-5">
-          <div className="flex items-start gap-3">
-            <Image
-              src="/images/lotus.png"
-              alt=""
-              width={65}
-              height={56}
-              style={{ marginTop: "20px", marginLeft: "20px" }}
-            />
+    <div className="w-full rounded-[16px] sm:rounded-[18px] border-[1.5px] border-[#D18418] bg-[#F7F0E5]/80 backdrop-blur-xs px-4 sm:px-6 py-3.5 sm:py-4 shadow-[0_2px_12px_rgba(0,0,0,0.05)] mb-8 sm:mb-10">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-5">
+        {/* Left: Lotus + Count & Description */}
+        <div className="flex items-center gap-3 sm:gap-3.5 shrink-0">
+          <Image
+            src="/images/lotus.png"
+            alt=""
+            width={44}
+            height={36}
+            className="h-8 w-auto sm:h-9 object-contain shrink-0"
+          />
 
-            <div>
-              <h3
-                className={`${cormorantInfant.className} text-[28px] font-bold text-[#3D352F]`}
-                style={{ marginTop: "10px" }}
-              >
-                {temples.length} Temple
-                {temples.length > 1 ? "s" : ""} Selected
-              </h3>
+          <div className="flex flex-col">
+            <h3
+              className={`${cormorant.className} text-[20px] sm:text-[22px] font-semibold text-[#2C241E] leading-tight`}
+            >
+              {temples.length} Temple{temples.length > 1 ? "s" : ""} Selected
+            </h3>
 
-              <p
-                className={`${cormorantInfant.className} text-[20px] font-bold text-[#6B5C4D]`}
-                style={{ marginBottom: "10px" }}
-              >
-                You can add more temples later if you wish.
-              </p>
-            </div>
+            <p
+              className={`${cormorant.className} text-[13px] sm:text-[14px] text-[#635345] leading-tight mt-0.5`}
+            >
+              You can add more temples later if you wish.
+            </p>
           </div>
+        </div>
 
-          {/* Selected Temples */}
-          <div className="flex flex-wrap gap-2">
+        {/* Middle: Selected Temple Tags (3 cards per row, wrapping) */}
+        <div className="flex-1 flex justify-center w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-2.5 max-w-[460px] w-full max-h-[148px] overflow-y-auto pr-1">
             {temples.map((temple) => (
               <div
                 key={temple.id}
-                className="flex items-center gap-2 rounded-md border border-[#6FAAB0] bg-[#DDEFF0] px-3 py-2"
+                className="flex items-center justify-between gap-1.5 rounded-[8px] border border-[#82A39D] bg-[#B8CBC7]/70 px-2.5 py-1.5 min-h-[42px] transition hover:bg-[#B0C5C1]/80"
               >
                 <span
-                  className={`${cormorantInfant.className} text-[24px] text-[#0F5C66]`}
-                  style={{ marginLeft: "10px" }}
+                  className={`${cormorant.className} text-[13.5px] sm:text-[14px] font-semibold leading-[1.15] text-[#0D5D63] text-left line-clamp-2 flex-1`}
+                  title={temple.name}
                 >
                   {temple.name}
                 </span>
 
-                <button onClick={() => onRemove(temple.id)}>
-                  <X
-                    size={16}
-                    className="text-[#0B6670]"
-                    style={{ marginRight: "10px" }}
-                  />
+                <button
+                  type="button"
+                  onClick={() => onRemove(temple.id)}
+                  className="text-[#0D5D63] hover:text-[#094146] transition p-0.5 rounded cursor-pointer shrink-0"
+                  aria-label={`Remove ${temple.name}`}
+                >
+                  <X size={14} strokeWidth={2.2} />
                 </button>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Button */}
+        {/* Right: Continue Button */}
         <button
+          type="button"
           onClick={onContinue}
-          className="flex h-[48px] items-center gap-2 rounded-md bg-[#0B6670] px-8 transition hover:bg-[#084F57]"
-          style={{ marginRight: "10px" }}
+          className="flex h-[42px] sm:h-[44px] items-center justify-center gap-2 rounded-[8px] bg-[#0B6670] hover:bg-[#08525A] px-6 sm:px-7 transition-colors shadow-xs shrink-0 cursor-pointer self-stretch sm:self-auto"
         >
           <span
-            className={`${cormorantInfant.className} text-[24px] text-[#EFDEC7]`}
-            style={{ marginLeft: "10px" }}
+            className={`${cormorant.className} text-[17px] sm:text-[18px] font-semibold text-white tracking-wide`}
           >
             Continue
           </span>
 
           <ArrowRight
-            size={24}
-            className="text-[#EFDEC7]"
-            style={{ marginRight: "5px" }}
+            size={16}
+            strokeWidth={2.2}
+            className="text-white"
           />
         </button>
       </div>
     </div>
   );
 }
+

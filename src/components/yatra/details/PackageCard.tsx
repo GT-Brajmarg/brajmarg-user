@@ -1,6 +1,7 @@
 "use client";
 
 import { CircleCheck } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { cormorantInfant } from "@/lib/fonts";
 
 interface Props {
@@ -12,19 +13,27 @@ interface Props {
     popular: boolean;
     features: string[];
   };
+  slug?: string;
   isSelected?: boolean;
   onSelect?: () => void;
 }
 
-export default function PackageCard({ pkg, isSelected = false, onSelect }: Props) {
+export default function PackageCard({ pkg, slug = "braj-yatra", isSelected = false, onSelect }: Props) {
+  const router = useRouter();
+
+  const handleSelectPackage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSelect?.();
+    router.push(`/yatra/${slug}/book?package=${pkg.name.toLowerCase()}`);
+  };
+
   return (
     <div
       onClick={onSelect}
-      className={`relative flex h-full flex-col justify-between rounded-[20px] bg-[#0F5C66]/5 p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer ${
-        isSelected
-          ? "border-2 border-[#0F5C66] shadow-[0_8px_24px_rgba(15,92,102,0.18)]"
-          : "border border-[#0F5C66]"
-      }`}
+      className={`relative flex h-full flex-col justify-between rounded-[20px] bg-[#0F5C66]/5 p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer ${isSelected
+        ? "border-2 border-[#0F5C66] shadow-[0_8px_24px_rgba(15,92,102,0.18)]"
+        : "border border-[#0F5C66]"
+        }`}
     >
       <div>
         <h3 className="font-cormorant text-[28px] font-bold text-[#0F5C66] leading-tight">
@@ -34,11 +43,15 @@ export default function PackageCard({ pkg, isSelected = false, onSelect }: Props
           {pkg.subtitle}
         </p>
 
-        <div className="mt-2.5 flex items-baseline gap-1">
-          <span className="font-cormorant text-[32px] font-bold text-[#0F5C66]">
+        <div className="mt-2.5 flex items-baseline">
+          <span
+            className={`${cormorantInfant.className} font-cormorant-infant text-[32px] sm:text-[36px] font-bold text-[#0F5C66] leading-none tracking-tight`}
+          >
             ₹{pkg.price.toLocaleString()}
           </span>
-          <span className="font-cormorant text-[15px] font-bold text-[#3D352F]">
+          <span
+            className={`${cormorantInfant.className} font-cormorant-infant text-[15px] sm:text-[16px] font-semibold text-[#3D352F] leading-none ml-0.5`}
+          >
             /person
           </span>
         </div>
@@ -57,15 +70,11 @@ export default function PackageCard({ pkg, isSelected = false, onSelect }: Props
 
       <button
         type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          onSelect?.();
-        }}
-        className={`font-cormorant mt-6 w-full rounded-xl border py-2 text-[22px] font-bold transition-all cursor-pointer ${
-          isSelected
-            ? "border-[#0F5C66] bg-[#0F5C66] text-[#EFDEC7] hover:bg-[#0c4b52]"
-            : "border-[#0F5C66] bg-[#EFDEC7]/60 text-[#0F5C66] hover:bg-[#0F5C66] hover:text-[#EFDEC7]"
-        }`}
+        onClick={handleSelectPackage}
+        className={`font-cormorant mt-6 w-full rounded-xl border py-2 text-[22px] font-bold transition-all cursor-pointer ${isSelected
+          ? "border-[#0F5C66] bg-[#0F5C66] text-[#EFDEC7] hover:bg-[#0c4b52]"
+          : "border-[#0F5C66] bg-[#EFDEC7]/60 text-[#0F5C66] hover:bg-[#0F5C66] hover:text-[#EFDEC7]"
+          }`}
       >
         Select Package
       </button>
