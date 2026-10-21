@@ -116,11 +116,10 @@ export default function PaymentHero({
               {Array.from({ length: totalSteps }).map((_, index) => (
                 <div key={index} className="flex items-center">
                   <div
-                    className={`h-[28px] w-[28px] rounded-full border ${
-                      index + 1 <= currentStep
-                        ? "border-[#C37000] bg-[#C37000]"
-                        : "border-[#C37000] bg-[#C37000]/20"
-                    }`}
+                    className={`h-[28px] w-[28px] rounded-full border ${index + 1 <= currentStep
+                      ? "border-[#C37000] bg-[#C37000]"
+                      : "border-[#C37000] bg-[#C37000]/20"
+                      }`}
                   />
 
                   {index < totalSteps - 1 && (

@@ -1,11 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { X, Check } from "lucide-react";
-import { cormorantInfant, inter } from "@/lib/fonts";
-
+import { X, Check, Bell } from "lucide-react";
+import { cormorant } from "@/lib/fonts";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { removeSelectedTemple } from "@/store/slices/subscriptionSlice";
+
+const ALERT_TITLES: Record<string, string> = {
+  darshan: "Darshan Timings",
+  festival: "Festival Alerts",
+  aarti: "Aarti Reminders",
+  yatra: "Yatra Updates",
+  prasad: "Prasad Dispatch",
+  seva: "Seva Availability",
+};
 
 export default function SubscriptionSummary() {
   const {
@@ -18,265 +26,172 @@ export default function SubscriptionSummary() {
     plans,
   } = useAppSelector((state) => state.subscriptions);
 
+  const allTemples = useAppSelector((state) => state.temples.temples);
   const dispatch = useAppDispatch();
 
-  const currentPlan = plans.find((plan) => plan.name === selectedPlan);
+  const isYearly = selectedPlan === "yearly";
+
+  const getTempleLocation = (name: string) => {
+    const found = allTemples.find((t) => t.name.toLowerCase() === name.toLowerCase());
+    return found?.location || "";
+  };
 
   return (
-    <aside className="min-h-[840px] overflow-hidden rounded-[18px] border border-[#C37000] bg-[#C37000]/4 p-6 shadow-sm">
-      {/* Heading */}
-
-      <div className="flex flex-col items-center" style={{ marginTop: "20px" }}>
+    <aside className="rounded-[18px] border border-[#C37000] bg-[#FAF3E8]/80 p-5 sm:p-6 shadow-xs">
+      {/* Header */}
+      <div className="flex flex-col items-center">
         <Image
           src="/images/lotus.png"
           alt="Lotus"
-          width={65}
-          height={56}
-          className="mb-2"
+          width={44}
+          height={36}
+          className="h-8 w-auto object-contain"
         />
 
-        <h2
-          className={`${cormorantInfant.className} text-center text-[28px] font-bold text-[#0F5C66]`}
-        >
-          Subscription Summary
+        <h2 className={`${cormorant.className} text-center text-[23px] sm:text-[25px] font-bold text-[#0F5C66] mt-1`}>
+          Your Subscription Summary
         </h2>
       </div>
 
-      <div className="mt-6 space-y-6">
-        {/* Plan */}
+      <div className="mt-5 space-y-4">
+        {/* Plan Row */}
+        <div className="flex items-center justify-between border-b border-dashed border-[#D4B276] pb-3">
+          <div>
+            <p className={`${cormorant.className} text-[13px] text-[#6B5C4D]`}>
+              Plan
+            </p>
+            <p className={`${cormorant.className} text-[18px] font-semibold text-[#2C241E] leading-tight`}>
+              {isYearly ? "Yearly Alerts" : "Monthly Alerts"}
+            </p>
+          </div>
 
-        <SummaryItem title="">
-          <div
-            className="flex w-[360px] items-center justify-between border-b border-dashed border-[#C37000] pb-2"
-            style={{ marginLeft: "10px", marginRight: "20px" }}
-          >
-            <div>
-              <p
-                className={`${cormorantInfant.className} text-[22px] font-semibold text-[#3D352F]`}
-              >
-                Plan
-              </p>
-              <p
-                className={`${cormorantInfant.className} text-[16px] text-[#7B5B3A]`}
-              >
-                {selectedPlan}
-              </p>
-            </div>
-            <span
-              className={`${cormorantInfant.className} text-[22px] font-semibold text-[#C37000]`}
-            >
-              ₹ {selectedPlan === "yearly" ? 799 : 99}{" "}
-              <span className="text-[16px] font-normal">
-                / {selectedPlan === "yearly" ? "year" : "month"}
-              </span>
+          <span className={`${cormorant.className} text-[18px] font-semibold text-[#C37000]`}>
+            ₹ {isYearly ? 799 : 99}{" "}
+            <span className="text-[13px] font-normal text-[#6B5C4D]">
+              / {isYearly ? "year" : "month"}
             </span>
-          </div>
-        </SummaryItem>
-        {/* Temples */}
+          </span>
+        </div>
 
-        <SummaryItem title={`Selected Temples (${selectedTemples.length}) `}>
-          <div
-            className="border-b border-dashed border-[#E7C9A3] pb-3"
-            style={{
-              marginLeft: "10px",
-              marginRight: "20px",
-              marginBottom: "2px",
-            }}
-          >
-            {selectedTemples.map((temple, index) => (
-              <div
-                key={temple}
-                className={`flex items-center justify-between ${
-                  index !== selectedTemples.length - 1 ? "mb-3" : ""
-                }`}
-              >
-                <div>
-                  <p
-                    className={`${cormorantInfant.className} text-[20px] leading-[1.2] font-bold text-[#4A2F16]`}
+        {/* Selected Temples */}
+        <div className="border-b border-dashed border-[#D4B276] pb-3.5">
+          <h4 className={`${cormorant.className} text-[16px] font-semibold text-[#0F5C66]`}>
+            Selected Temples ({selectedTemples.length})
+          </h4>
+
+          <div className="mt-2.5 space-y-2.5">
+            {selectedTemples.map((temple) => {
+              const location = getTempleLocation(temple);
+
+              return (
+                <div key={temple} className="flex items-center justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <p className={`${cormorant.className} text-[15.5px] font-semibold text-[#2C241E] leading-tight truncate`}>
+                      {temple}
+                    </p>
+                    {location && (
+                      <p className={`${cormorant.className} text-[12px] text-[#7A6A55] leading-tight truncate`}>
+                        {location}
+                      </p>
+                    )}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => dispatch(removeSelectedTemple(temple))}
+                    className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#E5B876]/40 text-[#4A2F16] transition hover:bg-[#D4A35B] hover:text-white cursor-pointer"
+                    aria-label={`Remove ${temple}`}
                   >
-                    {temple}
-                  </p>
-                  {/* <p
-                    className={`${cormorantInfant.className} text-[18px] font-bold text-[#8A7256]`}
-                  >
-                  {temp}
-                  </p> */}
+                    <X size={11} strokeWidth={2.5} />
+                  </button>
+                </div>
+              );
+            })}
+
+            {selectedTemples.length === 0 && (
+              <p className={`${cormorant.className} text-[13px] text-[#8C7A68] italic`}>
+                No temples selected yet
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Selected Alerts */}
+        <div className="border-b border-dashed border-[#D4B276] pb-3.5">
+          <h4 className={`${cormorant.className} text-[16px] font-semibold text-[#0F5C66]`}>
+            Selected Alerts ({updateTypes.length})
+          </h4>
+
+          <div className="mt-2 space-y-1.5">
+            {updateTypes.map((item) => (
+              <div key={item} className="flex items-center gap-2">
+                <div className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-[#0F5C66]">
+                  <Check className="h-2.5 w-2.5 text-[#0F5C66]" strokeWidth={3} />
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => dispatch(removeSelectedTemple(temple))}
-                  className="flex h-7 w-7 items-center justify-center rounded-full bg-[#E8C48A] text-[#3D2A16] transition hover:bg-[#DDB26C]"
-                >
-                  ✕
-                </button>
-              </div>
-            ))}
-          </div>
-        </SummaryItem>
-
-        {/* Alerts */}
-
-        <SummaryItem title={`Selected Alerts (${updateTypes.length})`}>
-          <div
-            className="border-b border-dashed border-[#E7C9A3] pb-4"
-            style={{
-              marginLeft: "10px",
-              marginRight: "20px",
-            }}
-          >
-            {updateTypes.map((item, index) => (
-              <div
-                key={item}
-                className={`flex items-center gap-2 ${
-                  index !== updateTypes.length - 1 ? "mb-2" : ""
-                }`}
-                style={{ marginTop: "4px" }}
-              >
-                <div className="flex h-4 w-4 items-center justify-center rounded-full border border-[#0F5C66]">
-                  <Check className="h-3 w-3 text-[#0F5C66]" strokeWidth={2.5} />
-                </div>
-
-                <span
-                  className={`text-[16px] leading-none text-[#3D352F]`}
-                  style={{ fontWeight: "300" }}
-                >
-                  {item}
+                <span className={`${cormorant.className} text-[14.5px] text-[#2C241E] leading-tight`}>
+                  {ALERT_TITLES[item] || item}
                 </span>
               </div>
             ))}
           </div>
-        </SummaryItem>
+        </div>
 
-        {/* Method */}
+        {/* Notification Method */}
+        <div className="border-b border-dashed border-[#D4B276] pb-3.5">
+          <h4 className={`${cormorant.className} text-[16px] font-semibold text-[#0F5C66]`}>
+            Notification Method
+          </h4>
 
-        <SummaryItem title="Notification Method">
-          <div
-            className="border-b border-dashed border-[#E7C9A3] pb-3"
-            style={{
-              marginLeft: "10px",
-              marginRight: "20px",
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <Image
-                src="/images/whatsapp.svg"
-                alt="WhatsApp"
-                width={24}
-                height={24}
-              />
-
-              <span
-                className={`${cormorantInfant.className} text-[20px] font-medium text-[#4A2F16]`}
-              >
-                {notificationMethod}
-              </span>
-            </div>
+          <div className="mt-2 flex items-center gap-2">
+            <Image
+              src="/images/whatsapp.svg"
+              alt=""
+              width={18}
+              height={18}
+              className="object-contain"
+            />
+            <span className={`${cormorant.className} text-[15px] font-medium text-[#2C241E]`}>
+              {notificationMethod || "Whatsapp"}
+            </span>
           </div>
-        </SummaryItem>
-        {/* Frequency */}
-        {/* Frequency */}
-        <SummaryItem title="Frequency">
-          <div
-            className="border-b border-dashed border-[#E7C9A3] pb-3"
-            style={{
-              marginLeft: "10px",
-              marginRight: "20px",
-            }}
-          >
-            <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#D18418]" />
+        </div>
 
-              <span
-                className={`${cormorantInfant.className} text-[20px] text-[#4A2F16]`}
-              >
-                {frequency}
-              </span>
-            </div>
+        {/* Notification Frequency */}
+        <div className="border-b border-dashed border-[#D4B276] pb-3.5">
+          <h4 className={`${cormorant.className} text-[16px] font-semibold text-[#0F5C66]`}>
+            Notification Frequency
+          </h4>
+
+          <div className="mt-2 flex items-center gap-2">
+            <Bell size={16} className="text-[#C37000]" />
+            <span className={`${cormorant.className} text-[15px] font-medium text-[#2C241E]`}>
+              {frequency || "Every Update"}
+            </span>
           </div>
-        </SummaryItem>
+        </div>
 
         {/* Language */}
-        <SummaryItem title="Language">
-          <div className="pb-3">
-            <div
-              className="flex items-center gap-2"
-              style={{
-                marginLeft: "10px",
-                marginRight: "20px",
-              }}
-            >
-              <Image
-                src="/images/language-both.png"
-                alt="Language"
-                width={34}
-                height={34}
-              />
+        <div className="pb-1">
+          <h4 className={`${cormorant.className} text-[16px] font-semibold text-[#0F5C66]`}>
+            Language
+          </h4>
 
-              <span
-                className={`${cormorantInfant.className} text-[20px] text-[#4A2F16]`}
-              >
-                {language}
-              </span>
-            </div>
+          <div className="mt-2 flex items-center gap-2">
+            <Image
+              src="/images/language-both.png"
+              alt=""
+              width={20}
+              height={20}
+              className="object-contain"
+            />
+            <span className={`${cormorant.className} text-[15px] font-medium text-[#2C241E]`}>
+              {language === "Both" ? "Both English and Hindi" : language || "Both English and Hindi"}
+            </span>
           </div>
-        </SummaryItem>
+        </div>
       </div>
     </aside>
   );
 }
 
-/* ---------- Components ---------- */
-
-function SummaryItem({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <h4
-        className="font-cormorant text-[20px] font-semibold text-[#0F5C66]"
-        style={{ marginLeft: "10px", marginTop: "10px" }}
-      >
-        {title}
-      </h4>
-
-      <div className="mt-3" style={{ marginBottom: "5px" }}>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function Tag({
-  children,
-  removable = false,
-  color = "gold",
-}: {
-  children: React.ReactNode;
-  removable?: boolean;
-  color?: "gold" | "orange" | "blue";
-}) {
-  const styles = {
-    gold: "bg-[#F7E5C7] border-[#D7B06B] text-[#7C5B29]",
-    orange: "bg-[#FFF2DE] border-[#C37000] text-[#C37000]",
-    blue: "bg-[#E8F5F6] border-[#0F5C66] text-[#0F5C66]",
-  };
-
-  return (
-    <div
-      className={`inline-flex items-center gap-2 rounded-full border px-3 py-2 ${styles[color]}`}
-    >
-      <span className="font-cormorant text-[16px]">{children}</span>
-
-      {removable && (
-        <button>
-          <X size={14} />
-        </button>
-      )}
-    </div>
-  );
-}

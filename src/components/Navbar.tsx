@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { toggleMenu, closeMenu } from "@/store/slices/navSlice";
+import { toggleMenu, closeMenu, setLoginModalOpen } from "@/store/slices/navSlice";
 import { useEffect, useState } from "react";
 import { fetchAlerts } from "@/store/slices/alertsSlice";
 import { Bell, User, Menu, X, ShoppingCart } from "lucide-react";
@@ -23,6 +23,7 @@ const navLinks = [
 export default function Navbar() {
   const [loginOpen, setLoginOpen] = useState(false);
   const menuOpen = useAppSelector((state) => state.nav.menuOpen);
+  const reduxLoginModalOpen = useAppSelector((state) => state.nav.loginModalOpen);
   const dispatch = useAppDispatch();
   const pathname = usePathname();
   const isCartActive = pathname === "/cart";
@@ -45,11 +46,17 @@ export default function Navbar() {
       setIsLoggedIn(loggedIn);
     };
 
+    const handleOpenLogin = () => {
+      setLoginOpen(true);
+    };
+
     checkLogin();
     window.addEventListener("storage", checkLogin);
+    window.addEventListener("open_login_modal", handleOpenLogin);
 
     return () => {
       window.removeEventListener("storage", checkLogin);
+      window.removeEventListener("open_login_modal", handleOpenLogin);
     };
   }, []);
 
@@ -700,7 +707,13 @@ export default function Navbar() {
         </div>
       </aside>
 
-      <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
+      <LoginModal
+        open={loginOpen || reduxLoginModalOpen}
+        onClose={() => {
+          setLoginOpen(false);
+          dispatch(setLoginModalOpen(false));
+        }}
+      />
     </>
   );
 }

@@ -102,7 +102,7 @@ export default async function YatraDetailsPage({ params }: YatraDetailsPageProps
                 </div>
                 <DayWiseItinerary />
                 <PlacesAlongJourney />
-                <PackageSelection />
+                <PackageSelection slug={slug} />
 
                 <div
                   className="grid gap-5 lg:grid-cols-[2fr_1fr]"

@@ -48,7 +48,11 @@ const packages = [
   },
 ];
 
-export default function PackageSelection() {
+interface PackageSelectionProps {
+  slug?: string;
+}
+
+export default function PackageSelection({ slug = "braj-yatra" }: PackageSelectionProps) {
   const [selectedId, setSelectedId] = useState<number>(2); // Default to Standard (id: 2)
 
   const handleSelect = (pkg: (typeof packages)[0]) => {
@@ -83,6 +87,7 @@ export default function PackageSelection() {
           <PackageCard
             key={pkg.id}
             pkg={pkg}
+            slug={slug}
             isSelected={selectedId === pkg.id}
             onSelect={() => handleSelect(pkg)}
           />

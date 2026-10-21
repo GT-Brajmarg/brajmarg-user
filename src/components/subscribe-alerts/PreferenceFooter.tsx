@@ -19,15 +19,12 @@ export default function PreferenceFooter({
 }: PreferenceFooterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-
   const plan = searchParams.get("plan") || "monthly";
+
   return (
-    <section className="mt-10" style={{ marginBottom: "40px" }}>
-      <div className="rounded-[18px] border border-[#C37000] bg-[#C37000]/4 px-6 py-5">
-        <div
-          className="grid grid-cols-2 gap-4"
-          style={{ marginTop: "20px", marginBottom: "20px" }}
-        >
+    <section className="mb-10">
+      <div className="rounded-[18px] border border-[#C37000] bg-[#FAF3E8]/80 px-5 py-4 sm:px-6 sm:py-5">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           {/* Back */}
           <button
             disabled={backDisabled}
@@ -36,18 +33,12 @@ export default function PreferenceFooter({
                 ? onBack()
                 : router.push(`/subscribe-alerts/temples?plan=${plan}`)
             }
-            className="flex h-[52px] w-[550px] items-center justify-center rounded-[8px] border border-[#0F5C66] bg-transparent px-6 text-[#0F5C66] transition hover:bg-[#F8F2E8] disabled:cursor-not-allowed disabled:opacity-50"
-            style={{ marginLeft: "20px" }}
+            className="relative flex h-[50px] w-full items-center justify-center rounded-[10px] border border-[#0F5C66] bg-transparent text-[#0F5C66] transition hover:bg-[#EEE5D5] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <ArrowLeft className="mr-auto h-5 w-5" />
-
-            <span
-              className={`${cormorantInfant.className} text-[24px] font-semibold`}
-            >
+            <ArrowLeft className="absolute left-4 h-4 w-4" />
+            <span className={`${cormorantInfant.className} text-[20px] font-semibold`}>
               Back
             </span>
-
-            <span className="w-5" />
           </button>
 
           {/* Continue */}
@@ -56,22 +47,14 @@ export default function PreferenceFooter({
             onClick={() =>
               onContinue
                 ? onContinue()
-                : router.push(
-                    `/subscribe-alerts/review-subscription?plan=${plan}`,
-                  )
+                : router.push(`/subscribe-alerts/review-subscription?plan=${plan}`)
             }
-            className="flex h-[52px] w-[550px] items-center justify-center rounded-[8px] bg-[#0F5C66] px-6 text-[#F9F3EA] transition hover:bg-[#0B4D56] disabled:cursor-not-allowed disabled:opacity-50"
-            style={{ marginLeft: "20px" }}
+            className="relative flex h-[50px] w-full items-center justify-center rounded-[10px] bg-[#0F5C66] text-[#F9F3EA] transition hover:bg-[#0B4D56] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <span className="w-5" />
-
-            <span
-              className={`${cormorantInfant.className} text-[24px] font-semibold`}
-            >
+            <span className={`${cormorantInfant.className} text-[20px] font-semibold`}>
               Continue to Review
             </span>
-
-            <ArrowRight className="ml-auto h-5 w-5" />
+            <ArrowRight className="absolute right-4 h-4 w-4" />
           </button>
         </div>
       </div>

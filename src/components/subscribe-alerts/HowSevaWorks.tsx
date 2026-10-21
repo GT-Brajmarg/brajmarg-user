@@ -34,11 +34,11 @@ const steps: Step[] = [
 
 export default function HowAlertsWork() {
   return (
-    <section className="py-16" style={{ marginBottom: "30px" }}>
+    <section className="py-16" style={{ marginBottom: "10px" }}>
       {/* Heading */}
       <div
         className="mb-14 flex items-center justify-center gap-3"
-        style={{ marginTop: "40px", marginBottom: "20px" }}
+        style={{ marginTop: "15px", marginBottom: "40px" }}
       >
         <Image src="/images/lotus.png" alt="" width={42} height={42} />
 

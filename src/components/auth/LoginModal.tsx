@@ -71,9 +71,9 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
           <X size={18} />
         </button>
 
-        <div className="grid lg:grid-cols-[48%_52%]">
+        <div className="grid lg:grid-cols-[48%_52%] items-stretch">
           {/* Left */}
-          <div className="hidden lg:flex lg:flex-col h-full">
+          <div className="hidden lg:flex lg:flex-col">
             <AuthLeftPanel />
           </div>
 

@@ -146,11 +146,19 @@ export default function SignupForm() {
 
           <span className="text-[12px] leading-5 text-[#6D5A47]">
             I agree to the{" "}
-            <Link href="/terms" className="font-medium text-[#0B6971] underline underline-offset-2 hover:text-[#095A61] transition-colors">
+            <Link
+              href="/terms"
+              style={{ color: "#2563EB", textDecoration: "underline" }}
+              className="font-medium !text-blue-600 !underline underline-offset-2 hover:!text-blue-700 transition-colors"
+            >
               Terms of Service
             </Link>{" "}
             and{" "}
-            <Link href="/privacy" className="font-medium text-[#0B6971] underline underline-offset-2 hover:text-[#095A61] transition-colors">
+            <Link
+              href="/privacy"
+              style={{ color: "#2563EB", textDecoration: "underline" }}
+              className="font-medium !text-blue-600 !underline underline-offset-2 hover:!text-blue-700 transition-colors"
+            >
               Privacy Policy
             </Link>
           </span>

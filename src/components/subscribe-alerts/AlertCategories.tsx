@@ -1,21 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import {
-  Bell,
-  CalendarDays,
-  HandCoins,
-  ShoppingBag,
-  Bus,
-  Landmark,
-} from "lucide-react";
 
 const alertCategories = [
   {
     title: "Temple Updates",
     description: "Darshan timings, aarti schedules, temple notices and more.",
     image: "/images/alert-temple.svg",
-    active: true,
   },
   {
     title: "Festival Alerts",
@@ -50,70 +41,51 @@ const alertCategories = [
 
 export default function AlertCategories() {
   return (
-    <section className="relative">
+    <section className="relative px-4 py-8 md:px-8">
       {/* Heading */}
-      <div
-        className="mb-10 flex items-center justify-center gap-4"
-        style={{ marginTop: "30px", marginBottom: "20px" }}
-      >
+      <div className="mb-8 flex items-center justify-center gap-4">
         <Image src="/images/lotus.png" alt="" width={54} height={36} />
-
-        <h2 className="font-cormorant text-[42px] font-bold text-[#0F5C66]">
+        <h2 className="font-cormorant text-[36px] font-bold text-[#0F5C66] md:text-[42px]">
           Get Notified About
         </h2>
-
         <Image src="/images/lotus.png" alt="" width={54} height={36} />
       </div>
 
       {/* Cards */}
-      <div className="grid grid-cols-2 gap-5 md:grid-cols-3 xl:grid-cols-6">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
         {alertCategories.map((item) => (
           <div
             key={item.title}
-            className={`group flex flex-col items-center rounded-[20px] border bg-[#EFDEC7]/20 p-6 text-center backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-              item.active
-                ? "border-[#C37000]/60 shadow-md"
-                : "border-[#C37000]/60 hover:border-[#C37000]"
-            }`}
+            className="group flex flex-col items-center rounded-[20px] border border-[#C37000]/60 bg-[#EFDEC7]/20 px-4 py-6 text-center backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
           >
             {/* Icon */}
             <div className="flex h-16 w-16 items-center justify-center">
               <Image
                 src={item.image}
                 alt={item.title}
-                width={72}
-                height={72}
+                width={60}
+                height={60}
                 className="object-contain"
-                style={{ marginTop: "20px" }}
               />
             </div>
 
             {/* Title */}
-            <h3
-              className="font-cormorant mt-5 text-center text-[22px] leading-tight font-bold text-[#3D352F]"
-              style={{ marginTop: "20px" }}
-            >
+            <h3 className="font-cormorant mt-4 text-center text-[18px] font-bold leading-tight text-[#3D352F] md:text-[20px]">
               {item.title}
             </h3>
 
             {/* Divider */}
-            <div
-              className="my-3 flex justify-center"
-              style={{ marginTop: "10px" }}
-            >
+            <div className="my-2 flex justify-center">
               <Image
                 src="/images/lotus-divider-1.svg"
                 alt=""
-                width={121}
+                width={100}
                 height={12}
               />
             </div>
 
             {/* Description */}
-            <p
-              className="font-cormorant text-center text-[16px] leading-[1.45] font-semibold text-[#3D352F]"
-              style={{ marginTop: "10px", marginBottom: "10px" }}
-            >
+            <p className="font-cormorant text-center text-[14px] font-semibold leading-[1.45] text-[#3D352F] md:text-[15px]">
               {item.description}
             </p>
           </div>

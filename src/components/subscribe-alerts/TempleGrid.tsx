@@ -144,13 +144,7 @@ export default function TempleGrid({ search = "" }: TempleGridProps) {
 
   return (
     <section>
-      {/* Section Header */}
 
-      <div className="mb-8 flex items-center justify-between">
-        <div></div>
-
-        <div className="rounded-full bg-[#0B6670] px-5 py-2 text-white"></div>
-      </div>
 
       {/* Temple Grid */}
 

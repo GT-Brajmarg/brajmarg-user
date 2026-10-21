@@ -19,10 +19,10 @@ export default function SubscribeHero() {
       />
 
       {/* Content */}
-      <div className="relative z-10 mx-auto flex h-full max-w-[1200px] items-center px-8">
+      <div className="relative z-10  flex h-full  items-center pl-10px">
         <div
           className="max-w-[520px] md:translate-x-[170px]"
-          style={{ marginLeft: "50px" }}
+          style={{ marginLeft: "-50px" }}
         >
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 backdrop-blur">

@@ -139,7 +139,7 @@ export default function FeaturedYatras() {
           Sacred journeys thoughtfully planned by Brajmarg
         </p>
 
-        <div className="mt-4 rounded-xl border border-[#C37000] bg-[#EFDEC7]/40 px-4 py-2 sm:px-6 sm:py-2.5 text-[#3D352F] shadow-sm">
+        <div className="mt-4 rounded-xl border-2 border-[#C37000] bg-[rgba(195,112,0,0.2)] px-4 py-2 sm:px-6 sm:py-2.5 text-[#3D352F] shadow-sm">
           <div className="flex flex-wrap items-center justify-center gap-2 text-center">
             <Image src="/images/group.svg" alt="" width={24} height={24} className="shrink-0" />
 
