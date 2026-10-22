@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us - Connecting Devotees to the Divine | Brajmarg",
+  title: "About Us",
   description:
     "Brajmarg is a devotional platform dedicated to bringing temples, sacred services, and spiritual experiences closer to every devotee.",
 };

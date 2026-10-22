@@ -41,13 +41,13 @@ export default function TemplesSection() {
           {/* Centered Title */}
           <div className={`${styles.headingContent} flex flex-col items-center px-4 text-center`}>
             <div className="flex items-center gap-2">
-              <Image src="/images/lotus.png" alt="" width={54} height={36} />
+              <Image src="/images/lotus_bright.png" alt="" width={54} height={36} />
 
               <h2 className="font-cormorant text-[20px] leading-tight font-semibold text-[#0C6D72] sm:text-[26px] md:text-[34px]">
                 Explore Sacred Temples
               </h2>
 
-              <Image src="/images/lotus.png" alt="" width={54} height={36} />
+              <Image src="/images/lotus_bright.png" alt="" width={54} height={36} />
             </div>
 
             <p className="font-cormorant mt-2 px-4 text-center text-[14px] text-[#3D352F] md:text-[18px]">
@@ -117,12 +117,12 @@ export default function TemplesSection() {
                 <div className="relative z-10 h-full w-full overflow-visible">
                   {/* Badge */}
                   {temple.is_coming_soon ? (
-                    <span className="absolute top-[68px] left-[188px] z-30 inline-flex -translate-x-1/2 items-center justify-center rounded-full bg-[#D8A24A] px-3 py-[3px] text-[10px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
+                    <span className="absolute top-[64px] left-[38px] z-30 inline-flex items-center justify-center rounded-full bg-[#D8A24A] px-2 py-[2px] text-[9.1px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
                       COMING SOON
                     </span>
                   ) : (
-                    <span className="absolute top-[69px] left-[35px] z-30 inline-flex items-center gap-1.5 rounded-full bg-[#15A44D] px-2.5 py-[3px] text-[11px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
-                      <span className="h-[7px] w-[7px] flex-shrink-0 rounded-full bg-white" />
+                    <span className="absolute top-[64px] left-[38px] z-30 inline-flex items-center gap-1.5 rounded-full bg-[#15A44D] px-2 py-[2px] text-[9.8px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
+                      <span className="h-[6px] w-[6px] flex-shrink-0 rounded-full bg-white" />
                       <span>LIVE</span>
                     </span>
                   )}
@@ -262,11 +262,12 @@ export default function TemplesSection() {
 
                 {/* Badge */}
                 <span
-                  className={`absolute top-[65px] left-[25px] z-50 inline-flex h-[26px] items-center rounded-full px-3 text-[10px] font-bold text-white ${temple.is_coming_soon ? "bg-[#D8A24A]" : "bg-[#15A44D]"
-                    }`}
+                  className={`absolute top-[52px] left-[28px] z-50 inline-flex items-center rounded-full px-2 py-[2px] text-[9px] font-bold tracking-wide text-white whitespace-nowrap ${
+                    temple.is_coming_soon ? "bg-[#D8A24A]" : "bg-[#15A44D]"
+                  }`}
                 >
                   {!temple.is_coming_soon && (
-                    <span className="mr-1 h-[6px] w-[6px] rounded-full bg-white" />
+                    <span className="mr-1 h-[4px] w-[4px] flex-shrink-0 rounded-full bg-white" />
                   )}
                   {temple.is_coming_soon ? "COMING SOON" : "LIVE"}
                 </span>

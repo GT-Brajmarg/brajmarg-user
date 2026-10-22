@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import CartBenefits from "@/components/cart/CartBenefits";
 import CartSection from "@/components/cart/CartSection";
 import CartSupportSection from "@/components/cart/CartSupportSection";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Cart",
+  description: "View and manage items in your Brajmarg devotional cart.",
+};
 
 export default function CartPage() {
   return (

@@ -62,10 +62,10 @@ export default function WhyTravelWithUs() {
       {/* Heading */}
       <div className="mb-8 sm:mb-10 md:mb-12 flex items-center justify-center gap-2 sm:gap-3 px-2">
         <Image
-          src="/images/lotus.png"
+          src="/images/lotus_bright.png"
           alt=""
-          width={52}
-          height={36}
+          width={48}
+          height={48}
           className="h-6 w-9 sm:h-8 sm:w-11 md:h-9 md:w-13 object-contain shrink-0"
         />
 
@@ -74,10 +74,10 @@ export default function WhyTravelWithUs() {
         </h2>
 
         <Image
-          src="/images/lotus.png"
+          src="/images/lotus_bright.png"
           alt=""
-          width={52}
-          height={36}
+          width={48}
+          height={48}
           className="h-6 w-9 sm:h-8 sm:w-11 md:h-9 md:w-13 object-contain shrink-0"
         />
       </div>

@@ -107,13 +107,13 @@ export function SectionTitle({ title }: { title: string }) {
       className="flex items-center justify-center gap-3"
       style={{ marginTop: "40px", marginBottom: "30px" }}
     >
-      <Image src="/images/lotus.png" alt="" width={54} height={36} />
+      <Image src="/images/lotus_bright.png" alt="" width={48} height={48} />
 
       <h2 className="font-cormorant text-[18px] leading-tight font-semibold text-[#0C6D72] sm:text-[22px] md:text-[30px]">
         Shop by Category
       </h2>
 
-      <Image src="/images/lotus.png" alt="" width={54} height={36} />
+      <Image src="/images/lotus_bright.png" alt="" width={48} height={48} />
     </div>
   );
 }

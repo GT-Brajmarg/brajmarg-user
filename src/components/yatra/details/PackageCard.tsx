@@ -3,6 +3,8 @@
 import { CircleCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cormorantInfant } from "@/lib/fonts";
+import { useAppDispatch } from "@/store/hooks";
+import { setLoginModalOpen } from "@/store/slices/navSlice";
 
 interface Props {
   pkg: {
@@ -18,22 +20,32 @@ interface Props {
   onSelect?: () => void;
 }
 
-export default function PackageCard({ pkg, slug = "braj-yatra", isSelected = false, onSelect }: Props) {
+export default function PackageCard({ pkg, slug = "braj-yatra" }: Props) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
-  const handleSelectPackage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onSelect?.();
-    router.push(`/yatra/${slug}/book?package=${pkg.name.toLowerCase()}`);
+  const handleRedirect = () => {
+    const targetUrl = `/yatra/${slug}/book?package=${pkg.name.toLowerCase()}`;
+    const isLoggedIn =
+      typeof window !== "undefined" &&
+      localStorage.getItem("brajmarg_is_logged_in") === "true";
+
+    if (!isLoggedIn) {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("brajmarg_login_redirect", targetUrl);
+        window.dispatchEvent(new Event("open_login_modal"));
+      }
+      dispatch(setLoginModalOpen(true));
+      return;
+    }
+
+    router.push(targetUrl);
   };
 
   return (
     <div
-      onClick={onSelect}
-      className={`relative flex h-full flex-col justify-between rounded-[20px] bg-[#0F5C66]/5 p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer ${isSelected
-        ? "border-2 border-[#0F5C66] shadow-[0_8px_24px_rgba(15,92,102,0.18)]"
-        : "border border-[#0F5C66]"
-        }`}
+      onClick={handleRedirect}
+      className="relative flex h-full flex-col justify-between rounded-[20px] bg-[#0F5C66]/5 p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer border border-[#0F5C66]"
     >
       <div>
         <h3 className="font-cormorant text-[28px] font-bold text-[#0F5C66] leading-tight">
@@ -70,11 +82,15 @@ export default function PackageCard({ pkg, slug = "braj-yatra", isSelected = fal
 
       <button
         type="button"
-        onClick={handleSelectPackage}
-        className={`font-cormorant mt-6 w-full rounded-xl border py-2 text-[22px] font-bold transition-all cursor-pointer ${isSelected
-          ? "border-[#0F5C66] bg-[#0F5C66] text-[#EFDEC7] hover:bg-[#0c4b52]"
-          : "border-[#0F5C66] bg-[#EFDEC7]/60 text-[#0F5C66] hover:bg-[#0F5C66] hover:text-[#EFDEC7]"
-          }`}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleRedirect();
+        }}
+        className={`font-cormorant mt-6 w-full rounded-xl border py-2 text-[22px] font-bold transition-all cursor-pointer ${
+          pkg.popular
+            ? "border-[#0F5C66] bg-[#0F5C66] text-[#EFDEC7] hover:bg-[#0c4b52]"
+            : "border-[#0F5C66] bg-[#EFDEC7]/60 text-[#0F5C66] hover:bg-[#0F5C66] hover:text-[#EFDEC7]"
+        }`}
       >
         Select Package
       </button>

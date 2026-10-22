@@ -250,6 +250,9 @@
   text-decoration: none;
   letter-spacing: 0.5px;
   transition: background 0.25s ease;
+  border: none;
+  cursor: pointer;
+  width: 100%;
 }
 
 .btnMonthly:hover {
@@ -272,6 +275,9 @@
   text-decoration: none;
   letter-spacing: 0.5px;
   transition: background 0.25s ease;
+  border: none;
+  cursor: pointer;
+  width: 100%;
 }
 
 .btnYearly:hover {

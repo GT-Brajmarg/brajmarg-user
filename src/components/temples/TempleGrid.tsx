@@ -121,128 +121,226 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-9">
-            {paginatedTemples.map((temple) => (
-              <div
-                key={temple.id}
-                className={`relative mx-auto h-[420px] w-[260px] transition-all duration-300 hover:-translate-y-2 ${temple.is_coming_soon ? "opacity-65 grayscale-[20%]" : ""}`}
-                style={{ marginBottom: "0px" }}
-              >
-                {/* Scroll Frame */}
-                <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
-                  <div className="relative h-[420px] w-[260px]">
-                    <Image
-                      src="/images2/image 45.png"
-                      alt=""
-                      fill
-                      className="object-contain"
-                      priority
-                    />
-                  </div>
-                </div>
-
-                {/* Badge */}
-                {temple.is_coming_soon ? (
-                  <span className="absolute top-[68px] left-[188px] z-30 inline-flex -translate-x-1/2 items-center justify-center rounded-full bg-[#D8A24A] px-3 py-[3px] text-[10px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
-                    COMING SOON
-                  </span>
-                ) : (
-                  <span className="absolute top-[69px] left-[35px] z-30 inline-flex items-center gap-1.5 rounded-full bg-[#15A44D] px-2.5 py-[3px] text-[11px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
-                    <span className="h-[7px] w-[7px] flex-shrink-0 rounded-full bg-white" />
-                    <span>LIVE</span>
-                  </span>
-                )}
-
-                {/* Temple Image */}
-                <div className="absolute top-[40px] left-1/2 h-[180px] w-[200px] -translate-x-1/2">
-                  <div className="relative h-full w-full">
-                    <div className="absolute top-[-25px] left-1/2 h-[280px] w-[280px] -translate-x-1/2">
-                      <div
-                        className="absolute top-[58px] left-1/2 z-10 h-[165px] w-[155px] -translate-x-1/2 overflow-hidden rounded-t-[80px]"
-                        style={{
-                          clipPath:
-                            "polygon(50% 0%, 85% 18%, 100% 42%, 100% 100%, 0% 100%, 0% 42%, 15% 18%)",
-                        }}
-                      >
-                        <Image
-                          src={temple.image_url || ""}
-                          alt={temple.name}
-                          fill
-                          unoptimized
-                          className="object-cover"
-                        />
-                      </div>
-
+          <>
+            {/* ── Mobile Layout (< lg) ── */}
+            <div className="flex w-full flex-col items-center gap-6 lg:hidden">
+              {paginatedTemples.map((temple) => (
+                <div
+                  key={temple.id}
+                  className={`relative h-[420px] w-[260px] transition-all duration-300 ${temple.is_coming_soon ? "opacity-65 grayscale-[20%]" : ""}`}
+                >
+                  {/* Scroll Frame */}
+                  <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
+                    <div className="relative h-[420px] w-[260px]">
                       <Image
-                        src="/images2/temple-arch-frame.png"
+                        src="/images2/image 45.png"
                         alt=""
                         fill
-                        className="pointer-events-none absolute inset-0 z-20 object-contain"
+                        className="object-contain"
+                        priority
                       />
                     </div>
                   </div>
+
+                  {/* Badge */}
+                  {temple.is_coming_soon ? (
+                    <span className="absolute top-[68px] left-[35px] z-30 inline-flex items-center justify-center rounded-full bg-[#D8A24A] px-2.5 py-[3px] text-[10px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
+                      COMING SOON
+                    </span>
+                  ) : (
+                    <span className="absolute top-[69px] left-[35px] z-30 inline-flex items-center gap-1.5 rounded-full bg-[#15A44D] px-2.5 py-[3px] text-[11px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
+                      <span className="h-[7px] w-[7px] flex-shrink-0 rounded-full bg-white" />
+                      <span>LIVE</span>
+                    </span>
+                  )}
+
+                  {/* Temple Image */}
+                  <div className="absolute top-[40px] left-1/2 h-[180px] w-[200px] -translate-x-1/2">
+                    <div className="relative h-full w-full">
+                      <div className="absolute top-[-25px] left-1/2 h-[280px] w-[280px] -translate-x-1/2">
+                        <div
+                          className="absolute top-[58px] left-1/2 z-10 h-[165px] w-[155px] -translate-x-1/2 overflow-hidden rounded-t-[80px]"
+                          style={{
+                            clipPath: "polygon(50% 0%, 85% 18%, 100% 42%, 100% 100%, 0% 100%, 0% 42%, 15% 18%)",
+                          }}
+                        >
+                          <Image
+                            src={temple.image_url || ""}
+                            alt={temple.name}
+                            fill
+                            unoptimized
+                            className="object-cover"
+                          />
+                        </div>
+                        <Image
+                          src="/images2/temple-arch-frame.png"
+                          alt=""
+                          fill
+                          className="pointer-events-none absolute inset-0 z-20 object-contain"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Name */}
+                  <h3 className="font-cormorant absolute top-[254px] left-1/2 w-[90%] -translate-x-1/2 text-center text-[16px] font-semibold leading-tight text-[#0D5560]">
+                    {temple.name}
+                  </h3>
+
+                  {/* Location */}
+                  <div className="absolute top-[282px] left-1/2 flex -translate-x-1/2 items-center justify-center gap-1.5">
+                    <svg
+                      className="h-3.5 w-3.5 flex-shrink-0 text-[#c8860a]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2.5"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                    </svg>
+                    <span className="font-cormorant block max-w-[140px] truncate text-[12px] font-medium text-[#7A6A55]">
+                      {temple.location}
+                    </span>
+                  </div>
+
+                  {/* Button */}
+                  {temple.is_coming_soon ? (
+                    <button
+                      disabled
+                      className="font-cormorant absolute top-[312px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 cursor-not-allowed items-center justify-center rounded-full border border-[#D7B36A] bg-gray-400 text-[15px] font-semibold text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)]"
+                    >
+                      <span className="absolute -left-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
+                      <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3]" />
+                      Coming Soon
+                      <span className="absolute -right-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
+                    </button>
+                  ) : (
+                    <Link
+                      href={`/temples/${temple.name.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "")}`}
+                      className="font-cormorant absolute top-[312px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 items-center justify-center rounded-full border border-[#D7B36A] bg-[#2B8182]/80 text-[15px] font-semibold text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)] transition-all hover:bg-[#236f70]"
+                      style={{ color: "#EFDEC7" }}
+                    >
+                      <span className="absolute -left-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
+                      <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3]" style={{ color: "#EFDEC7" }} />
+                      Visit Temple
+                      <span className="absolute -right-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
+                    </Link>
+                  )}
                 </div>
+              ))}
+            </div>
 
-                {/* Name */}
-                <h3 className="font-cormorant absolute top-[254px] left-1/2 w-[90%] -translate-x-1/2 text-center text-[16px] font-semibold text-[#0D5560] leading-tight">
-                  {temple.name}
-                </h3>
+            {/* ── Desktop Layout (lg+) ── */}
+            <div className="hidden lg:grid lg:grid-cols-4 lg:gap-x-9">
+              {paginatedTemples.map((temple) => (
+                <div
+                  key={temple.id}
+                  className={`relative mx-auto h-[420px] w-[260px] transition-all duration-300 hover:-translate-y-2 ${temple.is_coming_soon ? "opacity-65 grayscale-[20%]" : ""}`}
+                  style={{ marginBottom: "0px" }}
+                >
+                  {/* Scroll Frame */}
+                  <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
+                    <div className="relative h-[420px] w-[260px]">
+                      <Image
+                        src="/images2/image 45.png"
+                        alt=""
+                        fill
+                        className="object-contain"
+                        priority
+                      />
+                    </div>
+                  </div>
 
-                {/* Location */}
-                <div className="absolute top-[282px] left-1/2 flex -translate-x-1/2 items-center justify-center gap-1.5">
-                  <svg
-                    className="h-3.5 w-3.5 flex-shrink-0 text-[#c8860a]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2.5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                    />
-                  </svg>
+                  {/* Badge */}
+                  {temple.is_coming_soon ? (
+                    <span className="absolute top-[64px] left-[38px] z-30 inline-flex items-center justify-center rounded-full bg-[#D8A24A] px-1 py-[2px] text-[9.6px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
+                      COMING SOON
+                    </span>
+                  ) : (
+                    <span className="absolute top-[64px] left-[38px] z-30 inline-flex items-center gap-1.5 rounded-full bg-[#15A44D] px-2 py-[1.6px] text-[9.5px] font-bold tracking-wider text-white shadow-sm whitespace-nowrap">
+                      <span className="h-[7px] w-[7px] flex-shrink-0 rounded-full bg-white" />
+                      <span>LIVE</span>
+                    </span>
+                  )}
 
-                  <span className="font-cormorant block max-w-[140px] truncate text-[12px] text-[#7A6A55] font-medium">
-                    {temple.location}
-                  </span>
+                  {/* Temple Image */}
+                  <div className="absolute top-[40px] left-1/2 h-[180px] w-[200px] -translate-x-1/2">
+                    <div className="relative h-full w-full">
+                      <div className="absolute top-[-25px] left-1/2 h-[280px] w-[280px] -translate-x-1/2">
+                        <div
+                          className="absolute top-[58px] left-1/2 z-10 h-[165px] w-[155px] -translate-x-1/2 overflow-hidden rounded-t-[80px]"
+                          style={{
+                            clipPath: "polygon(50% 0%, 85% 18%, 100% 42%, 100% 100%, 0% 100%, 0% 42%, 15% 18%)",
+                          }}
+                        >
+                          <Image
+                            src={temple.image_url || ""}
+                            alt={temple.name}
+                            fill
+                            unoptimized
+                            className="object-cover"
+                          />
+                        </div>
+                        <Image
+                          src="/images2/temple-arch-frame.png"
+                          alt=""
+                          fill
+                          className="pointer-events-none absolute inset-0 z-20 object-contain"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Name */}
+                  <h3 className="font-cormorant absolute top-[254px] left-1/2 w-[90%] -translate-x-1/2 text-center text-[16px] font-semibold text-[#0D5560] leading-tight">
+                    {temple.name}
+                  </h3>
+
+                  {/* Location */}
+                  <div className="absolute top-[282px] left-1/2 flex -translate-x-1/2 items-center justify-center gap-1.5">
+                    <svg
+                      className="h-3.5 w-3.5 flex-shrink-0 text-[#c8860a]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2.5"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                    </svg>
+                    <span className="font-cormorant block max-w-[140px] truncate text-[12px] text-[#7A6A55] font-medium">
+                      {temple.location}
+                    </span>
+                  </div>
+
+                  {/* Button */}
+                  {temple.is_coming_soon ? (
+                    <button
+                      disabled
+                      className="font-cormorant absolute top-[312px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 cursor-not-allowed items-center justify-center rounded-full border border-[#D7B36A] bg-gray-400 text-[15px] font-semibold text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)]"
+                    >
+                      <span className="absolute -left-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
+                      <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3]" />
+                      Coming Soon
+                      <span className="absolute -right-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
+                    </button>
+                  ) : (
+                    <Link
+                      href={`/temples/${temple.name.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "")}`}
+                      className="font-cormorant absolute top-[312px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 items-center justify-center rounded-full border border-[#D7B36A] bg-[#2B8182]/80 text-[15px] font-semibold text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)] transition-all hover:bg-[#236f70]"
+                      style={{ color: "#EFDEC7" }}
+                    >
+                      <span className="absolute -left-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
+                      <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3]" style={{ color: "#EFDEC7" }} />
+                      Visit Temple
+                      <span className="absolute -right-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
+                    </Link>
+                  )}
                 </div>
-
-                {/* Button */}
-                {temple.is_coming_soon ? (
-                  <button
-                    disabled
-                    className="font-cormorant absolute top-[312px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 cursor-not-allowed items-center justify-center rounded-full border border-[#D7B36A] bg-gray-400 text-[15px] font-semibold text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)]"
-                  >
-                    <span className="absolute -left-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
-                    <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3]" />
-                    Coming Soon
-                    <span className="absolute -right-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
-                  </button>
-                ) : (
-                  <Link
-                    href={`/temples/${temple.name
-                      .toLowerCase()
-                      .replace(/\s+/g, "-")
-                      .replace(/[^\w-]/g, "")}`}
-                    className="font-cormorant absolute top-[312px] left-1/2 flex h-[26px] w-[125px] -translate-x-1/2 items-center justify-center rounded-full border border-[#D7B36A] bg-[#2B8182]/80 text-[15px] font-semibold text-white shadow-[0_2px_6px_rgba(0,0,0,0.15)] transition-all hover:bg-[#236f70]"
-                    style={{ color: "#EFDEC7" }}
-                  >
-                    <span className="absolute -left-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
-                    <span className="pointer-events-none absolute inset-[2px] rounded-full border border-[#E8D4A3]" style={{ color: "#EFDEC7" }} />
-                    Visit Temple
-                    <span className="absolute -right-[2px] h-[4px] w-[4px] rounded-full bg-[#D7B36A]" />
-                  </Link>
-                )}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
       <div className="mt-8 mb-4 flex items-center justify-center gap-2">
@@ -282,8 +380,8 @@ export default function TempleGrid({ searchTerm }: TempleGridProps) {
               key={page}
               onClick={() => setCurrentPage(page as number)}
               className={`flex h-[34px] w-[34px] items-center justify-center rounded-[6px] border text-[15px] font-semibold transition-all ${currentPage === page
-                  ? "border-[#0D6B73] bg-[#0D6B73] text-white shadow-sm"
-                  : "border-[#D7B06B] bg-transparent text-[#0D6B73] hover:border-[#0D6B73]"
+                ? "border-[#0D6B73] bg-[#0D6B73] text-white shadow-sm"
+                : "border-[#D7B06B] bg-transparent text-[#0D6B73] hover:border-[#0D6B73]"
                 }`}
             >
               {page}

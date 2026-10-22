@@ -53,33 +53,16 @@ interface PackageSelectionProps {
 }
 
 export default function PackageSelection({ slug = "braj-yatra" }: PackageSelectionProps) {
-  const [selectedId, setSelectedId] = useState<number>(2); // Default to Standard (id: 2)
-
-  const handleSelect = (pkg: (typeof packages)[0]) => {
-    setSelectedId(pkg.id);
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("yatra_package_change", {
-          detail: {
-            id: pkg.id,
-            name: pkg.name,
-            price: pkg.price,
-          },
-        })
-      );
-    }
-  };
-
   return (
     <section className="py-4">
       <div className="mb-6 flex items-center justify-center gap-3">
-        <Image src="/images/lotus.png" alt="" width={36} height={36} className="h-9 w-9 object-contain" />
+        <Image src="/images/lotus_bright.png" alt="" width={48} height={48} className="h-9 w-9 object-contain" />
 
         <h2 className="font-cormorant text-[32px] sm:text-[36px] font-bold text-[#0F5C66]">
           Choose Your Package
         </h2>
 
-        <Image src="/images/lotus.png" alt="" width={36} height={36} className="h-9 w-9 object-contain" />
+        <Image src="/images/lotus_bright.png" alt="" width={48} height={48} className="h-9 w-9 object-contain" />
       </div>
 
       <div className="grid gap-5 md:grid-cols-3">
@@ -88,8 +71,6 @@ export default function PackageSelection({ slug = "braj-yatra" }: PackageSelecti
             key={pkg.id}
             pkg={pkg}
             slug={slug}
-            isSelected={selectedId === pkg.id}
-            onSelect={() => handleSelect(pkg)}
           />
         ))}
       </div>

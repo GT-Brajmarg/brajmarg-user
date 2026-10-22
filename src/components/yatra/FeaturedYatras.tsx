@@ -115,10 +115,10 @@ export default function FeaturedYatras() {
       <div className="mb-8 flex flex-col items-center text-center px-4">
         <div className="flex items-center justify-center gap-2 sm:gap-3">
           <Image
-            src="/images/lotus.png"
+            src="/images/lotus_bright.png"
             alt=""
-            width={46}
-            height={46}
+            width={48}
+            height={48}
             className="h-6 w-7 sm:h-8 sm:w-9 md:h-10 md:w-11 object-contain"
           />
 
@@ -127,10 +127,10 @@ export default function FeaturedYatras() {
           </h2>
 
           <Image
-            src="/images/lotus.png"
+            src="/images/lotus_bright.png"
             alt=""
-            width={46}
-            height={46}
+            width={48}
+            height={48}
             className="h-6 w-7 sm:h-8 sm:w-9 md:h-10 md:w-11 object-contain"
           />
         </div>

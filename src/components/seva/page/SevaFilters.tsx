@@ -32,10 +32,10 @@ export default function SevaFilters() {
         className="mt-4 sm:mt-6 md:mt-[30px] mb-6 sm:mb-8 md:mb-[45px] flex items-center justify-center gap-2 sm:gap-3"
       >
         <Image
-          src="/images/lotus.png"
+          src="/images/lotus_bright.png"
           alt=""
-          width={54}
-          height={36}
+          width={48}
+          height={48}
           className="h-6 w-9 sm:h-7 sm:w-11 md:h-9 md:w-14 object-contain"
         />
 
@@ -44,10 +44,10 @@ export default function SevaFilters() {
         </h2>
 
         <Image
-          src="/images/lotus.png"
+          src="/images/lotus_bright.png"
           alt=""
-          width={54}
-          height={36}
+          width={48}
+          height={48}
           className="h-6 w-9 sm:h-7 sm:w-11 md:h-9 md:w-14 object-contain"
         />
       </div>

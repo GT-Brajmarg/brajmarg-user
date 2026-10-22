@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import PaymentPage from "@/components/checkout/payment/PaymentPage";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Payment",
+  description: "Secure payment gateway for Brajmarg bookings and offerings.",
+};
 
 export default function Page() {
   return (

@@ -1,11 +1,18 @@
 import Image from "next/image";
 
+import type { Metadata } from "next";
+
 import YatraHero from "@/components/yatra/YatraHero";
 // import YatraFilters from "@/components/yatra/page/YatraFilters";
 import FeaturedYatras from "@/components/yatra/FeaturedYatras";
 import WhyTravelWithUs from "@/components/yatra/WhyTravelWithUs";
 import YatraPageClient from "@/components/yatra/YatraPageClient";
 // import WhyTravelWithUs from "@/components/yatra/page/WhyTravelWithUs";
+
+export const metadata: Metadata = {
+  title: "Yatra",
+  description: "Curated pilgrimages and sacred spiritual yatras across Braj Bhoomi.",
+};
 
 export default function YatraPage() {
   return (

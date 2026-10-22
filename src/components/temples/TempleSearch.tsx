@@ -313,7 +313,7 @@ export default function TempleSearch({ onSearch }: TempleSearchProps) {
               style={{
                 height: "30px",
                 padding: "0 20px",
-                border: "px solid #C88A1A",
+                border: "2px solid #C88A1A",
                 borderRadius: "999px",
                 display: "flex",
                 alignItems: "center",

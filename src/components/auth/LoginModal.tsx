@@ -2,11 +2,11 @@
 
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import AuthLeftPanel from "./AuthLeftPanel";
 import LoginForm from "./LoginForm";
 import SignupForm from "./SignupForm";
-import { LogIn, UserPlus } from "lucide-react";
 
 interface LoginModalProps {
   open: boolean;
@@ -14,8 +14,13 @@ interface LoginModalProps {
 }
 
 export default function LoginModal({ open, onClose }: LoginModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   const pathname = usePathname();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (open) {
@@ -46,10 +51,10 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
     }
   }, [open]);
 
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
-  return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto bg-black/60 p-3 sm:p-4 md:p-6 backdrop-blur-md">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] overflow-y-auto bg-black/60 backdrop-blur-md">
       {/* Backdrop */}
       <div
         className="fixed inset-0"
@@ -57,56 +62,61 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
         aria-hidden="true"
       />
 
-      {/* Modal */}
-      <div
-        className="relative z-10 my-auto w-full max-w-[960px] overflow-hidden rounded-2xl sm:rounded-[26px] bg-[#F7ECD9] shadow-[0_25px_80px_rgba(0,0,0,.3)] transition-all duration-300"
-        style={{ overscrollBehavior: "contain" }}
-      >
-        {/* Close */}
-        <button
-          onClick={onClose}
-          aria-label="Close login modal"
-          className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 z-30 flex h-9 w-9 items-center justify-center rounded-full border border-[#DCC7A7] bg-white text-[#5F4E3B] shadow-sm transition hover:rotate-90 hover:bg-[#FAF4EB]"
+      {/* Alignment Container */}
+      <div className="flex min-h-full items-center justify-center p-3 sm:p-4 md:p-6">
+        {/* Modal */}
+        <div
+          className="relative z-10 w-full max-w-[960px] overflow-hidden rounded-2xl sm:rounded-[26px] bg-[#F7ECD9] shadow-[0_25px_80px_rgba(0,0,0,.3)] transition-all duration-300"
+          style={{ overscrollBehavior: "contain" }}
+          onClick={(e) => e.stopPropagation()}
         >
-          <X size={18} />
-        </button>
-
-        <div className="grid lg:grid-cols-[48%_52%] items-stretch">
-          {/* Left */}
-          <div className="hidden lg:flex lg:flex-col">
-            <AuthLeftPanel />
-          </div>
-
-          {/* Right */}
-          <div
-            className="relative flex flex-col justify-center bg-[#F8EEDB] px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12 min-h-[540px] lg:min-h-[640px]"
-            style={{
-              backgroundImage: `
-                radial-gradient(circle at 0% 0%, rgba(214,171,93,.08), transparent 35%),
-                radial-gradient(circle at 100% 100%, rgba(214,171,93,.08), transparent 40%)
-              `,
-            }}
+          {/* Close */}
+          <button
+            onClick={onClose}
+            aria-label="Close login modal"
+            className="absolute top-3.5 right-3.5 sm:top-5 sm:right-5 z-30 flex h-9 w-9 items-center justify-center rounded-full border border-[#DCC7A7] bg-white text-[#5F4E3B] shadow-sm transition hover:rotate-90 hover:bg-[#FAF4EB] cursor-pointer"
           >
-            {/* Mobile Logo */}
-            <div className="flex flex-col items-center pb-4 lg:hidden">
-              <img
-                src="/images/image 49.png"
-                className="h-12 w-auto"
-                alt="Brajmarg"
-              />
+            <X size={18} />
+          </button>
 
-              <h2 className="font-cormorant mt-2 text-2xl font-semibold text-[#0B6971]">
-                Brajmarg
-              </h2>
+          <div className="grid lg:grid-cols-[48%_52%] items-stretch">
+            {/* Left */}
+            <div className="hidden lg:flex lg:flex-col">
+              <AuthLeftPanel />
             </div>
 
-            {/* Forms */}
-            <div className="flex flex-1 flex-col justify-center">
-              {activeTab === "login" ? <LoginForm /> : <SignupForm />}
+            {/* Right */}
+            <div
+              className="relative flex flex-col justify-center bg-[#F8EEDB] px-5 py-8 sm:px-8 sm:py-10 lg:px-10 lg:py-12 min-h-[520px] lg:min-h-[600px]"
+              style={{
+                backgroundImage: `
+                  radial-gradient(circle at 0% 0%, rgba(214,171,93,.08), transparent 35%),
+                  radial-gradient(circle at 100% 100%, rgba(214,171,93,.08), transparent 40%)
+                `,
+              }}
+            >
+              {/* Mobile Logo */}
+              <div className="flex flex-col items-center pb-4 lg:hidden">
+                <img
+                  src="/images/image 49.png"
+                  className="h-12 w-auto"
+                  alt="Brajmarg"
+                />
+
+                <h2 className="font-cormorant mt-2 text-2xl font-semibold text-[#0B6971]">
+                  Brajmarg
+                </h2>
+              </div>
+
+              {/* Forms */}
+              <div className="flex flex-1 flex-col justify-center">
+                {activeTab === "login" ? <LoginForm /> : <SignupForm />}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

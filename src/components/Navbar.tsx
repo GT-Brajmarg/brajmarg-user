@@ -206,11 +206,10 @@ export default function Navbar() {
                       className="relative flex flex-col items-center  transition-transform hover:-translate-y-0.5"
                     >
                       <span
-                        className={`text-[17px] xl:text-[18px] font-medium transition-colors ${
-                          isActive
-                            ? "text-[#C88A2A] font-semibold"
-                            : "text-[#2D2924] hover:text-[#005D63]"
-                        }`}
+                        className={`text-[17px] xl:text-[18px] font-medium transition-colors ${isActive
+                          ? "text-[#C88A2A] font-semibold"
+                          : "text-[#2D2924] hover:text-[#005D63]"
+                          }`}
                       >
                         {link.label}
                       </span>
@@ -235,24 +234,44 @@ export default function Navbar() {
               {/* Subscribe Alerts button */}
               <Link
                 href="/subscribe-alerts"
-                className={`relative flex h-[38px] items-center justify-center gap-2 rounded-[10px] px-3.5 xl:px-4 transition shadow-xs ${
-                  isAlertsActive
-                    ? "bg-[#004e54] ring-2 ring-[#C88A2A]/40"
-                    : "bg-[#005D63] hover:bg-[#004e54]"
-                }`}
+                className={`group relative flex h-[38px] items-center justify-center gap-2 rounded-[10px] px-3.5 xl:px-4 transition ${isAlertsActive
+                  ? "border-[1.5px] border-[#C37000] border-b-0 bg-transparent"
+                  : "border border-transparent bg-[#005D63] hover:border-[1.5px] hover:border-[#C37000] hover:border-b-0 hover:bg-transparent"
+                  }`}
               >
-                <Bell size={16} strokeWidth={2} className="text-[#F7F1E8]" />
-                <span className="font-cormorant text-[14px] font-medium text-[#F7F1E8] whitespace-nowrap">
+                <Bell
+                  size={16}
+                  strokeWidth={2}
+                  className={`transition-colors ${isAlertsActive
+                    ? "text-[#C37000]"
+                    : "text-[#F7F1E8] group-hover:text-[#C37000]"
+                    }`}
+                />
+                <span
+                  className={`font-cormorant text-[15px] xl:text-[16px] font-semibold whitespace-nowrap transition-colors ${isAlertsActive
+                    ? "text-[#C37000]"
+                    : "text-[#F7F1E8] group-hover:text-[#C37000]"
+                    }`}
+                >
                   Subscribe Alerts
                 </span>
 
-                {isAlertsActive && (
+                {/* Lotus motif ornament: shown when active or on hover, with open bottom border */}
+                {isAlertsActive ? (
                   <Image
                     src="/images/lotus 2.png"
                     alt=""
-                    width={28}
-                    height={8}
-                    className="pointer-events-none absolute -bottom-2.5 left-1/2 -translate-x-1/2"
+                    width={46}
+                    height={46}
+                    className="pointer-events-none absolute -bottom-[7px] left-1/2 -translate-x-1/2"
+                  />
+                ) : (
+                  <Image
+                    src="/images/lotus 2.png"
+                    alt=""
+                    width={46}
+                    height={46}
+                    className="pointer-events-none absolute -bottom-[7px] left-1/2 -translate-x-1/2 hidden group-hover:block"
                   />
                 )}
               </Link>
@@ -262,11 +281,10 @@ export default function Navbar() {
                   {/* Cart */}
                   <Link
                     href="/cart"
-                    className={`relative flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border transition ${
-                      isCartActive
-                        ? "border-[#005D63] bg-[#E2CCA9]"
-                        : "border-[#005D63] bg-[#EFDEC7] hover:bg-[#E8D4B8]"
-                    }`}
+                    className={`relative flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border transition ${isCartActive
+                      ? "border-[#005D63] bg-[#E2CCA9]"
+                      : "border-[#005D63] bg-[#EFDEC7] hover:bg-[#E8D4B8]"
+                      }`}
                     aria-label={`Cart with ${cartItemCount} items`}
                   >
                     <ShoppingCart
@@ -284,11 +302,10 @@ export default function Navbar() {
                   {/* Profile */}
                   <Link
                     href="/profile"
-                    className={`flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border transition ${
-                      pathname === "/profile"
-                        ? "border-[#005D63] bg-[#E2CCA9]"
-                        : "border-[#005D63] bg-[#EFDEC7] hover:bg-[#E8D4B8]"
-                    }`}
+                    className={`flex h-[38px] w-[38px] items-center justify-center rounded-[10px] border transition ${pathname === "/profile"
+                      ? "border-[#005D63] bg-[#E2CCA9]"
+                      : "border-[#005D63] bg-[#EFDEC7] hover:bg-[#E8D4B8]"
+                      }`}
                     aria-label="Profile"
                   >
                     <User
@@ -299,13 +316,13 @@ export default function Navbar() {
                   </Link>
 
                   {/* Logout Button */}
-                  <button
+                  {/* <button
                     type="button"
                     onClick={handleLogout}
                     className="font-cormorant flex h-[38px] items-center justify-center rounded-[10px] border border-[#B85C38] bg-transparent px-3.5 text-[14px] font-medium text-[#B85C38] transition hover:bg-[#FBE5DA] hover:border-[#9E4725] cursor-pointer whitespace-nowrap"
                   >
                     Logout
-                  </button>
+                  </button> */}
                 </div>
               ) : (
                 <button
@@ -330,9 +347,8 @@ export default function Navbar() {
 
       {/* ══ Mobile & Tablet Right-Side Drawer Backdrop ══ */}
       <div
-        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
-          menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
         style={{ touchAction: "none" }}
         onTouchMove={(e) => e.preventDefault()}
         onClick={() => dispatch(closeMenu())}
@@ -357,9 +373,8 @@ export default function Navbar() {
           boxShadow: "-12px 0 40px rgba(0,0,0,0.35)",
           overscrollBehavior: "contain",
         }}
-        className={`transition-transform duration-300 ease-in-out lg:hidden ${
-          menuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`transition-transform duration-300 ease-in-out lg:hidden ${menuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         {/* Paper texture overlay */}
         <div
@@ -637,7 +652,7 @@ export default function Navbar() {
                   <User size={18} color="#0F5C66" />
                 </Link>
               </div>
-              <button
+              {/* <button
                 type="button"
                 onClick={handleLogout}
                 style={{
@@ -657,7 +672,7 @@ export default function Navbar() {
                 }}
               >
                 Logout
-              </button>
+              </button> */}
             </div>
           ) : (
             <button

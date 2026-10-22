@@ -131,27 +131,28 @@ body *::after {
   background: #0b6670;
 }
 
-.cart-items-scroll {
+/* ─── Request Temple Modal Custom Scrollbar ─── */
+.request-modal-scroll {
   scrollbar-width: thin;
-  scrollbar-color: #c37000 #f8f2e8;
+  scrollbar-color: #D8B27C #F4EBDC;
 }
 
-.cart-items-scroll::-webkit-scrollbar {
-  width: 7px;
+.request-modal-scroll::-webkit-scrollbar {
+  width: 5px;
 }
 
-.cart-items-scroll::-webkit-scrollbar-track {
-  background: #f8f2e8;
+.request-modal-scroll::-webkit-scrollbar-track {
+  background: #F4EBDC;
   border-radius: 999px;
 }
 
-.cart-items-scroll::-webkit-scrollbar-thumb {
-  background: #c37000;
+.request-modal-scroll::-webkit-scrollbar-thumb {
+  background: #D8B27C;
   border-radius: 999px;
 }
 
-.cart-items-scroll::-webkit-scrollbar-thumb:hover {
-  background: #0b6670;
+.request-modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: #C37000;
 }
 
 /* ─── Global Toast Custom Container & Font Resets ─── */

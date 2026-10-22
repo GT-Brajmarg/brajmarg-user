@@ -1,16 +1,36 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import styles from "./SubscriptionSection.module.css";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchPlans } from "@/store/slices/subscriptionSlice";
+import { setLoginModalOpen } from "@/store/slices/navSlice";
 
 export default function SubscriptionSection() {
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const { plans, loading } = useAppSelector((state) => state.subscriptions);
+
+  const handleSubscribe = (planType: "monthly" | "yearly") => {
+    const targetUrl = `/subscribe-alerts/temples?plan=${planType}`;
+    const isLoggedIn =
+      typeof window !== "undefined" &&
+      localStorage.getItem("brajmarg_is_logged_in") === "true";
+
+    if (!isLoggedIn) {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("brajmarg_login_redirect", targetUrl);
+        window.dispatchEvent(new Event("open_login_modal"));
+      }
+      dispatch(setLoginModalOpen(true));
+      return;
+    }
+
+    router.push(targetUrl);
+  };
 
   useEffect(() => {
     dispatch(fetchPlans());
@@ -113,8 +133,9 @@ export default function SubscriptionSection() {
               </ul>
 
               {/* CTA */}
-              <Link
-                href="/subscribe-alerts/temples?plan=monthly"
+              <button
+                type="button"
+                onClick={() => handleSubscribe("monthly")}
                 className={styles.btnMonthly}
               >
                 <span>{monthlyPlan.button_text}</span>
@@ -134,7 +155,7 @@ export default function SubscriptionSection() {
                     strokeLinejoin="round"
                   />
                 </svg>
-              </Link>
+              </button>
             </div>
           </div>
 
@@ -202,8 +223,9 @@ export default function SubscriptionSection() {
               </ul>
 
               {/* CTA */}
-              <Link
-                href="/subscribe-alerts/temples?plan=yearly"
+              <button
+                type="button"
+                onClick={() => handleSubscribe("yearly")}
                 className={styles.btnYearly}
               >
                 <span>{yearlyPlan.button_text}</span>
@@ -223,7 +245,7 @@ export default function SubscriptionSection() {
                     strokeLinejoin="round"
                   />
                 </svg>
-              </Link>
+              </button>
             </div>
           </div>
         </div>

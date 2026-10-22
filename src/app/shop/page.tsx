@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import ShopHero from "@/components/shop/ShopHero";
 import ShopCategories from "@/components/shop/ShopCategories";
 import FeaturedCollections from "@/components/shop/FeaturedCollections";
 import ShopPageClient from "@/components/shop/ShopPageClient";
+
+export const metadata: Metadata = {
+  title: "Shop",
+  description: "Authentic spiritual items, puja samagri, and devotional gifts from Braj.",
+};
 
 export default function ShopPage() {
   return (

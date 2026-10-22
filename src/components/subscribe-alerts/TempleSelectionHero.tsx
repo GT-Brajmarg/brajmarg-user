@@ -45,17 +45,15 @@ export default function TempleSelectionHero({
 
           {/* Divider */}
           <div className="mt-3.5 sm:mt-4 flex items-center gap-2.5">
-            <div className="h-[1.5px] w-12 sm:w-16 bg-[#D8B06E]" />
-            <div className="h-1.5 w-1.5 rounded-full bg-[#D8B06E]" />
+
             <Image
-              src="/images/lotus.png"
+              src="/images/group_lotus.png"
               alt=""
-              width={34}
-              height={34}
-              className="h-7 w-7 sm:h-8 sm:w-8 object-contain"
+              width={94}
+              height={84}
+              className="h-10 w-10 sm:h-10 sm:w-80 object-contain"
             />
-            <div className="h-1.5 w-1.5 rounded-full bg-[#D8B06E]" />
-            <div className="h-[1.5px] w-12 sm:w-16 bg-[#D8B06E]" />
+
           </div>
 
           {/* Description */}

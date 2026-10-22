@@ -1,8 +1,6 @@
 "use client";
 
 import { Info, CheckCircle2 } from "lucide-react";
-import Image from "next/image";
-import { cormorantInfant, inter } from "@/lib/fonts";
 
 const notes = [
   "You can change these preferences anytime from your dashboard.",
@@ -12,41 +10,21 @@ const notes = [
 
 export default function GoodToKnowCard() {
   return (
-    <section
-      className="rounded-[16px] border border-[#C37000] bg-[#C37000]/10 p-5"
-      style={{ marginTop: "20px" }}
-    >
-      <div
-        className="mb-4 flex items-center gap-2"
-        style={{ marginLeft: "10px" }}
-      >
-        <Info size={18} className="text-[#0F5C66]" />
-
-        <h2
-          className={`${cormorantInfant.className} text-[28px] font-bold text-[#0F5C66]`}
-        >
+    <section className="rounded-[16px] border border-[#C37000] bg-[#FAF4EB]/70 p-5 shadow-xs">
+      {/* Header */}
+      <div className="mb-3.5 flex items-center gap-2.5">
+        <Info size={19} className="text-[#0F5C66] shrink-0" strokeWidth={2} />
+        <h2 className="font-cormorant text-[22px] sm:text-[24px] font-bold text-[#0F5C66]">
           Good to Know
         </h2>
       </div>
 
-      <div
-        className="space-y-3"
-        style={{ marginLeft: "10px", marginBottom: "10px" }}
-      >
+      {/* Notes List */}
+      <div className="space-y-2.5">
         {notes.map((item) => (
-          <div key={item} className="flex items-start gap-2">
-            <Image
-              src="/images/star-1.svg"
-              alt="Star"
-              width={14}
-              height={14}
-              className="mt-1 shrink-0"
-              style={{ marginTop: "2px" }}
-            />
-
-            <span
-              className={`${inter.className} text-[14px] leading-5 text-[#3D352F]`}
-            >
+          <div key={item} className="flex items-start gap-2.5">
+            <CheckCircle2 size={16} className="text-[#0F5C66] shrink-0 mt-0.5" strokeWidth={2} />
+            <span className="text-[13.5px] sm:text-[14px] font-medium text-[#2C241E] leading-normal">
               {item}
             </span>
           </div>

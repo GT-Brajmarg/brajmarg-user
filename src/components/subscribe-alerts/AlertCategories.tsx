@@ -44,11 +44,11 @@ export default function AlertCategories() {
     <section className="relative px-4 py-8 md:px-8">
       {/* Heading */}
       <div className="mb-8 flex items-center justify-center gap-4">
-        <Image src="/images/lotus.png" alt="" width={54} height={36} />
+        <Image src="/images/lotus_bright.png" alt="" width={48} height={48} />
         <h2 className="font-cormorant text-[36px] font-bold text-[#0F5C66] md:text-[42px]">
           Get Notified About
         </h2>
-        <Image src="/images/lotus.png" alt="" width={54} height={36} />
+        <Image src="/images/lotus_bright.png" alt="" width={48} height={48} />
       </div>
 
       {/* Cards */}
