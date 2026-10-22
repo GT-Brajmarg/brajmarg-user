@@ -92,8 +92,8 @@ export default function AlertPreferenceHero({
                 <div key={index} className="flex items-center">
                   <div
                     className={`h-[22px] w-[22px] sm:h-[24px] sm:w-[24px] rounded-full border-[1.5px] border-[#C37000] transition-colors ${index + 1 <= currentStep
-                        ? "bg-[#C37000]"
-                        : "bg-[#F7E7CE]/60"
+                      ? "bg-[#C37000]"
+                      : "bg-[#F7E7CE]/60"
                       }`}
                   />
 

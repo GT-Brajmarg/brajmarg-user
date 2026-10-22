@@ -64,13 +64,13 @@ export default function TemplePrasad({ templeSlug }: TemplePrasadProps) {
       <div className="relative">
         {/* Heading */}
         <div className="my-3 flex items-center justify-center gap-3 text-center">
-          <Image src="/images/lotus.png" alt="" width={38} height={38} />
+          <Image src="/images/lotus_bright.png" alt="" width={48} height={48} />
 
           <h2 className="font-cormorant text-[28px] font-bold text-[#0B6670]">
             Prasad from ShreenathJi Temple
           </h2>
 
-          <Image src="/images/lotus.png" alt="" width={38} height={38} />
+          <Image src="/images/lotus_bright.png" alt="" width={48} height={48} />
         </div>
 
         <div className="mt-6 flex flex-col gap-6 lg:flex-row lg:items-center">

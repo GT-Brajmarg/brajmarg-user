@@ -38,13 +38,13 @@ export default function TempleSevas({ templeSlug }: TempleSevasProps) {
       <div className="relative">
         {/* Header */}
         <div className="my-3 flex items-center justify-center gap-3 text-center">
-          <Image src="/images/lotus.png" alt="" width={38} height={38} />
+          <Image src="/images/lotus_bright.png" alt="" width={48} height={48} />
 
           <h2 className="font-cormorant text-[28px] font-bold text-[#0B6670]">
             Seva at ShreenathJi Temple
           </h2>
 
-          <Image src="/images/lotus.png" alt="" width={38} height={38} />
+          <Image src="/images/lotus_bright.png" alt="" width={48} height={48} />
         </div>
 
         {/* Cards Carousel Container */}

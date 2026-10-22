@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { ArrowRight, Pencil } from "lucide-react";
+import { ArrowRight, Pencil, Mail } from "lucide-react";
 import { cormorant } from "@/lib/fonts";
 import {
   showToast,
@@ -306,6 +306,10 @@ export default function LoginForm() {
                   <div className="flex h-full items-center gap-2 pl-3.5 pr-3 border-r border-[#E0D2BE] select-none shrink-0">
                     <IndiaFlag />
                     <span className="text-[15px] font-semibold text-[#3E3228]">+91</span>
+                  </div>
+                ) : isEmail ? (
+                  <div className="flex h-full items-center pl-3.5 pr-3 border-r border-[#E0D2BE] select-none shrink-0 text-[#0C6B73]">
+                    <Mail size={18} />
                   </div>
                 ) : null}
 

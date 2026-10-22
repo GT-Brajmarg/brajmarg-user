@@ -27,7 +27,7 @@ export default function PageLoader({
             {/* Lotus */}
             <div className="animate-pulse">
               <Image
-                src="/images/lotus.png"
+                src="/images/lotus_bright.png"
                 alt="Loading"
                 width={70}
                 height={70}

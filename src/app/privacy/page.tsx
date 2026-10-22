@@ -3,7 +3,7 @@ import Link from "next/link";
 import LegalTableOfContents from "@/components/legal/LegalTableOfContents";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Brajmarg - Sacred Devotional Services",
+  title: "Privacy Policy",
   description:
     "Learn how Brajmarg protects devotee privacy, handles temple seva records, and safeguards personal information in accordance with Indian data protection laws.",
 };

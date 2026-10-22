@@ -1,8 +1,6 @@
 "use client";
 
-import { CheckCircle2, Star } from "lucide-react";
-import { cormorantInfant, inter } from "@/lib/fonts";
-import Image from "next/image";
+import { CheckCircle2, Star, Plus } from "lucide-react";
 
 const monthlyBenefits = [
   "Aarti & Pooja Reminders",
@@ -15,7 +13,7 @@ const monthlyBenefits = [
 
 const yearlyBenefits = [
   "Priority Seva Booking",
-  "Festival Day Fast Access",
+  "Festival Day Early Access",
   "Priority Prasad Booking",
   "10% Discount on Yatra Packages",
   "Birthday & Anniversary Blessings",
@@ -24,50 +22,28 @@ const yearlyBenefits = [
 
 export default function MembershipBenefitsCard() {
   return (
-    <section
-      className="rounded-[16px] border border-[#C37000] bg-[#C37000]/4 p-5"
-      style={{ marginTop: "20px" }}
-    >
-      <h2
-        className={`${cormorantInfant.className} mb-5 text-center text-[28px] font-bold text-[#0F5C66]`}
-        style={{ marginTop: "10px", marginBottom: "10px" }}
-      >
+    <section className="rounded-[18px] border border-[#C37000] bg-[#FAF4EB]/70 p-5 sm:p-6 shadow-xs">
+      <h2 className="font-cormorant mb-5 text-center text-[24px] sm:text-[28px] font-bold text-[#0F5C66]">
         Included in Your Yearly Membership
       </h2>
 
-      <div
-        className="grid grid-cols-2 gap-4"
-        style={{
-          marginLeft: "20px",
-          marginRight: "20px",
-          marginBottom: "20px",
-        }}
-      >
-        {/* Monthly */}
+      <div className="relative grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Central Plus Badge */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 hidden md:flex h-8 w-8 items-center justify-center rounded-full border border-[#C37000] bg-[#FAF4EB] shadow-xs">
+          <Plus size={16} strokeWidth={2.5} className="text-[#C37000]" />
+        </div>
 
-        <div className="rounded-xl border border-[#C37000] p-4">
-          <h3
-            className={`${cormorantInfant.className} mb-3 text-[22px] font-bold text-[#0F5C66]`}
-            style={{ marginLeft: "10px" }}
-          >
+        {/* Monthly Benefits Box */}
+        <div className="rounded-[14px] border border-[#C37000] bg-[#FAF4EB]/80 p-4 sm:p-5">
+          <h3 className="font-cormorant mb-3 text-[19px] sm:text-[21px] font-bold text-[#0F5C66]">
             All Monthly Alert Benefits
           </h3>
 
-          <div className="space-y-2" style={{ marginLeft: "10px" }}>
+          <div className="space-y-2.5">
             {monthlyBenefits.map((item) => (
-              <div key={item} className="flex items-start gap-2">
-                <Image
-                  src="/images/star-1.svg"
-                  alt="Star"
-                  width={14}
-                  height={14}
-                  className="mt-1 shrink-0"
-                  style={{ marginTop: "2px" }}
-                />
-
-                <span
-                  className={`${inter.className} text-[14px] leading-5 text-[#3D352F]`}
-                >
+              <div key={item} className="flex items-center gap-2.5">
+                <CheckCircle2 size={16} className="text-[#0F5C66] shrink-0" strokeWidth={2} />
+                <span className="text-[13.5px] sm:text-[14px] font-medium text-[#2C241E]">
                   {item}
                 </span>
               </div>
@@ -75,30 +51,17 @@ export default function MembershipBenefitsCard() {
           </div>
         </div>
 
-        {/* Yearly */}
-
-        <div className="rounded-xl border border-[#C37000] p-4">
-          <h3
-            className={`${cormorantInfant.className} mb-3 text-[22px] font-bold text-[#C37000]`}
-            style={{ marginLeft: "10px" }}
-          >
+        {/* Yearly Benefits Box */}
+        <div className="rounded-[14px] border border-[#C37000] bg-[#FAF4EB]/80 p-4 sm:p-5">
+          <h3 className="font-cormorant mb-3 text-[19px] sm:text-[21px] font-bold text-[#C37000]">
             Your Yearly Benefits (Exclusive)
           </h3>
 
-          <div className="space-y-2" style={{ marginLeft: "10px" }}>
+          <div className="space-y-2.5">
             {yearlyBenefits.map((item) => (
-              <div key={item} className="flex items-start gap-2">
-                <Image
-                  src="/images/gold-star.svg"
-                  alt=""
-                  width={16}
-                  height={16}
-                  className="mt-0.5 shrink-0"
-                />
-
-                <span
-                  className={`${inter.className} text-[14px] leading-5 text-[#3D352F]`}
-                >
+              <div key={item} className="flex items-center gap-2.5">
+                <Star size={15} className="text-[#C37000] fill-[#C37000]/15 shrink-0" strokeWidth={1.8} />
+                <span className="text-[13.5px] sm:text-[14px] font-medium text-[#2C241E]">
                   {item}
                 </span>
               </div>

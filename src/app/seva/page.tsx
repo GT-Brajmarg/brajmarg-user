@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import type { Metadata } from "next";
+
 import SevaHero from "@/components/seva/page/SevaHero";
 import SevaFilters from "@/components/seva/page/SevaFilters";
 import FeaturedSevas from "@/components/seva/page/FeaturedSevas";
@@ -8,6 +10,11 @@ import SevaPageClient from "@/components/seva/SevaPageClient";
 // import SevaDateSection from "@/components/seva/SevaDateSection";
 // import SevaTypeSection from "@/components/seva/SevaTypeSection";
 // import FeaturedSevas from "@/components/seva/FeaturedSevas";
+
+export const metadata: Metadata = {
+  title: "Seva",
+  description: "Perform authentic temple sevas, pujas, and spiritual offerings in Braj.",
+};
 
 export default function SevaPage() {
   return (

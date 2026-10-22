@@ -30,17 +30,17 @@ export default function TemplePage() {
             className="mt-2 flex items-center gap-3"
             style={{ marginTop: "15px" }}
           >
-            <div className="h-px w-16 bg-[#D7B06B]" />
+            {/* <div className="h-px w-16 bg-[#D7B06B]" /> */}
 
             <Image
-              src="/images/lotus.png"
+              src="/images/group_lotus.png"
               alt=""
-              width={80}
-              height={56}
+              width={240}
+              height={126}
               className="object-contain"
             />
 
-            <div className="h-px w-16 bg-[#D7B06B]" />
+            {/* <div className="h-px w-16 bg-[#D7B06B]" /> */}
           </div>
 
           <p

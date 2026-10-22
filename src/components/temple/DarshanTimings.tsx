@@ -58,36 +58,36 @@ export default function DarshanTimings() {
 
   const currentDarshan = isToday
     ? selectedDayTimings.find((timing) => {
-        const start = timeToSeconds(timing.opening_time);
-        const end = timeToSeconds(timing.closing_time);
+      const start = timeToSeconds(timing.opening_time);
+      const end = timeToSeconds(timing.closing_time);
 
-        return currentTimeInSeconds >= start && currentTimeInSeconds <= end;
-      }) || null
+      return currentTimeInSeconds >= start && currentTimeInSeconds <= end;
+    }) || null
     : null;
 
   const nextDarshan = isToday
     ? selectedDayTimings
-        .filter(
-          (timing) => timeToSeconds(timing.opening_time) > currentTimeInSeconds,
-        )
-        .sort(
-          (a, b) =>
-            timeToSeconds(a.opening_time) - timeToSeconds(b.opening_time),
-        )[0] || null
+      .filter(
+        (timing) => timeToSeconds(timing.opening_time) > currentTimeInSeconds,
+      )
+      .sort(
+        (a, b) =>
+          timeToSeconds(a.opening_time) - timeToSeconds(b.opening_time),
+      )[0] || null
     : selectedDayTimings.sort(
-        (a, b) => timeToSeconds(a.opening_time) - timeToSeconds(b.opening_time),
-      )[0] || null;
+      (a, b) => timeToSeconds(a.opening_time) - timeToSeconds(b.opening_time),
+    )[0] || null;
 
   //   const activeDarshan = currentDarshan || nextDarshan;
 
   const lastDarshan =
     selectedDayTimings.length > 0
       ? selectedDayTimings.reduce((latest, current) =>
-          timeToSeconds(current.closing_time) >
+        timeToSeconds(current.closing_time) >
           timeToSeconds(latest.closing_time)
-            ? current
-            : latest,
-        )
+          ? current
+          : latest,
+      )
       : null;
   const allDarshansCompleted =
     isToday &&
@@ -226,13 +226,13 @@ export default function DarshanTimings() {
 
             {/* Title */}
             <div className="flex items-center justify-center gap-3">
-              <Image src="/images/lotus.png" alt="" width={38} height={38} />
+              <Image src="/images/lotus_bright.png" alt="" width={48} height={48} />
 
               <h2 className="font-cormorant text-[30px] font-bold text-[#0B6670]">
                 Darshan Timings
               </h2>
 
-              <Image src="/images/lotus.png" alt="" width={38} height={38} />
+              <Image src="/images/lotus_bright.png" alt="" width={48} height={48} />
             </div>
 
             {/* Placeholder for symmetry */}
@@ -344,9 +344,8 @@ export default function DarshanTimings() {
                   <span className="font-medium truncate">
                     {allDarshansCompleted && isToday
                       ? "Today's schedule finished"
-                      : `${isToday ? "Today" : selectedDayName} • ${
-                          formatTo12Hour(nextDarshan?.opening_time)
-                        }`}
+                      : `${isToday ? "Today" : selectedDayName} • ${formatTo12Hour(nextDarshan?.opening_time)
+                      }`}
                   </span>
                 </div>
               </div>
@@ -358,16 +357,16 @@ export default function DarshanTimings() {
       <div className="block lg:hidden">
         <div
           className="relative overflow-hidden rounded-[28px] bg-transparent p-5"
-          // style={{ marginTop: "50px" }}
+        // style={{ marginTop: "50px" }}
         >
           {/* Background Pattern */}
           <div
             className="absolute inset-0 opacity-[0.04]"
-            // style={{
-            //   backgroundImage:
-            //     "radial-gradient(circle,#D89A3D 1px,transparent 1px)",
-            //   backgroundSize: "18px 18px",
-            // }}
+          // style={{
+          //   backgroundImage:
+          //     "radial-gradient(circle,#D89A3D 1px,transparent 1px)",
+          //   backgroundSize: "18px 18px",
+          // }}
           />
 
           <div className="relative">
@@ -420,11 +419,10 @@ export default function DarshanTimings() {
                 return (
                   <div
                     key={timing.id}
-                    className={`group relative min-h-[75px] overflow-hidden rounded-[22px] border transition-all duration-300 ${
-                      isActive
-                        ? "border-[#D89A3D] bg-gradient-to-r from-[#FFF8ED] to-white shadow-[0_10px_30px_rgba(216,154,61,0.18)]"
-                        : "border-[#EFE7DB] bg-transparent shadow-[0_3px_12px_rgba(0,0,0,0.05)]"
-                    }`}
+                    className={`group relative min-h-[75px] overflow-hidden rounded-[22px] border transition-all duration-300 ${isActive
+                      ? "border-[#D89A3D] bg-gradient-to-r from-[#FFF8ED] to-white shadow-[0_10px_30px_rgba(216,154,61,0.18)]"
+                      : "border-[#EFE7DB] bg-transparent shadow-[0_3px_12px_rgba(0,0,0,0.05)]"
+                      }`}
                   >
                     {/* Active Gold Line */}
 

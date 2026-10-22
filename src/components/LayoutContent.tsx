@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { getDynamicTitle } from "@/lib/dynamicTitle";
 
 // export default function LayoutContent({
 //   children,
@@ -55,12 +56,13 @@ export default function LayoutContent({
     pathname.startsWith("/subscribe-alerts/review-subscription") ||
     pathname.startsWith("/subscribe-alerts/payment");
 
-  // Scroll to top on every route change and clean up any body overflow lock
+  // Scroll to top on every route change, clean up any body overflow lock, and update document title
   useEffect(() => {
     document.body.style.overflow = "";
     document.documentElement.style.overflow = "";
     document.body.style.touchAction = "";
     window.scrollTo(0, 0);
+    document.title = getDynamicTitle(pathname);
   }, [pathname]);
 
   return (

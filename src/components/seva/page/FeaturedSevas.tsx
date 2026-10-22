@@ -46,10 +46,10 @@ export default function FeaturedSevas() {
       <div className="mb-6 sm:mb-8 flex flex-col items-center px-2 text-center">
         <div className="flex items-center justify-center gap-2 sm:gap-3">
           <Image
-            src="/images/lotus.png"
+            src="/images/lotus_bright.png"
             alt=""
-            width={54}
-            height={36}
+            width={48}
+            height={48}
             className="h-5 w-8 sm:h-7 sm:w-11 md:h-9 md:w-14 shrink-0 object-contain"
           />
 
@@ -60,10 +60,10 @@ export default function FeaturedSevas() {
           </h2>
 
           <Image
-            src="/images/lotus.png"
+            src="/images/lotus_bright.png"
             alt=""
-            width={54}
-            height={36}
+            width={48}
+            height={48}
             className="h-5 w-8 sm:h-7 sm:w-11 md:h-9 md:w-14 shrink-0 object-contain"
           />
         </div>

@@ -3,7 +3,7 @@ import Link from "next/link";
 import LegalTableOfContents from "@/components/legal/LegalTableOfContents";
 
 export const metadata: Metadata = {
-  title: "Terms of Use | Brajmarg - Sacred Devotional Services",
+  title: "Terms of Use",
   description:
     "Review the Terms of Use and devotional service guidelines for Brajmarg. Transparent policies governing temple sevas, holy prasad, and yatra pilgrimage facilitation.",
 };

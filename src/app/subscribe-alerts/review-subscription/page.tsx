@@ -54,34 +54,27 @@ function ReviewSubscriptionContent() {
       </div>
 
       {/* Content */}
-
       <div className="relative z-10 mx-auto flex justify-center">
-        <div className="w-full max-w-[1200px] px-4 py-10">
-          <div
-            className="grid grid-cols-12 gap-6"
-            style={{ marginTop: "40px" }}
-          >
-            {/* Left */}
-
-            {/* Right */}
-            <div className="col-span-4">
-              <div className="sticky top-28">
+        <div className="w-full max-w-[1240px] px-4 sm:px-6 py-6 md:py-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            {/* Left Column: Subscription Summary */}
+            <div className="lg:col-span-4">
+              <div className="lg:sticky lg:top-28">
                 <SubscriptionSummary />
               </div>
             </div>
-            <div className="col-span-8">
+
+            {/* Right Column */}
+            <div className="lg:col-span-8">
               {isYearly ? (
                 <div className="space-y-6">
                   <ActivateBenefitsCard />
-
                   <MembershipBenefitsCard />
-
                   <GoodToKnowCard />
                 </div>
               ) : (
                 <div className="space-y-6">
                   <MonthlyPlanBenefitsCard />
-
                   <GoodToKnowCard />
                 </div>
               )}
@@ -89,7 +82,7 @@ function ReviewSubscriptionContent() {
           </div>
 
           {/* Footer */}
-          <div className="mt-8" style={{ marginTop: "20px" }}>
+          <div className="mt-8">
             <ReviewFooter />
           </div>
         </div>

@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { cormorantInfant } from "@/lib/fonts";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface ReviewFooterProps {
@@ -20,89 +19,68 @@ export default function ReviewFooter({
 }: ReviewFooterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const plan = searchParams.get("plan") ?? "yearly";
 
-  const plan = searchParams.get("plan") ?? "monthly";
+  const handleBack = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      router.push(`/subscribe-alerts/preferences?plan=${plan}`);
+    }
+  };
+
+  const handleContinue = () => {
+    if (onContinue) {
+      onContinue();
+    } else {
+      router.push(`/subscribe-alerts/payment?plan=${plan}`);
+    }
+  };
+
   return (
-    <section className="mt-8" style={{ marginBottom: "20px" }}>
-      <div className="rounded-[14px] border border-[#C37000] bg-[#C37000]/4 p-4">
-        <div className="grid grid-cols-[1.3fr_1fr_1.35fr] gap-4">
-          {/* Info */}
-
-          <div
-            className="flex items-center gap-3 rounded-[10px] border border-[#C37000] bg-[#C37000]/10 px-4 py-3"
-            style={{
-              marginTop: "20px",
-              marginLeft: "20px",
-              marginBottom: "20px",
-            }}
-          >
+    <footer className="mt-8 mb-6">
+      <div className="rounded-[18px] border border-[#C37000] bg-[#FAF4EB]/70 p-4 sm:p-5 shadow-xs">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+          {/* Left Notice Box */}
+          <div className="flex items-center gap-4 rounded-[12px] border border-[#C37000]/70 bg-[#EFDEC7]/60 px-4 py-3 flex-1 w-full lg:w-auto">
             <Image
-              src="/images/lotus.png"
+              src="/images/lotus_bright.png"
               alt=""
-              width={68}
-              height={59}
-              style={{
-                marginTop: "10px",
-                marginBottom: "10px",
-                marginLeft: "20px",
-              }}
+              width={48}
+              height={48}
+              className="h-9 w-auto shrink-0 object-contain"
             />
-
-            <p
-              className={`${cormorantInfant.className} text-[18px] leading-[1.2] font-bold text-[#0F5C66]`}
-            >
-              You can go back and edit your choices before confirming your
-              subscription.
+            <p className="font-cormorant text-[15.5px] sm:text-[17px] font-bold text-[#0F5C66] leading-snug">
+              You can go back and edit your choices before confirming your subscription.
             </p>
           </div>
 
-          {/* Back */}
-
-          <button
-            onClick={() =>
-              onBack
-                ? onBack()
-                : router.push(`/subscribe-alerts/preferences?plan=${plan}`)
-            }
-            disabled={backDisabled}
-            className="flex h-[66px] items-center justify-center rounded-[8px] border border-[#0F5C66] bg-transparent px-5 text-[#0F5C66] transition hover:bg-[#F8F2E8] disabled:opacity-50"
-            style={{ marginTop: "20px" }}
-          >
-            <ArrowLeft className="mr-auto h-5 w-5" />
-
-            <span
-              className={`${cormorantInfant.className} text-[24px] font-semibold`}
+          {/* Right Action Buttons */}
+          <div className="flex items-center gap-2.5 sm:gap-3.5 shrink-0 w-full lg:w-auto">
+            {/* Back Button */}
+            <button
+              type="button"
+              onClick={handleBack}
+              disabled={backDisabled}
+              className="flex h-[46px] sm:h-[50px] shrink-0 items-center justify-center gap-1.5 sm:gap-2 rounded-[10px] border border-[#0F5C66] bg-transparent px-3.5 sm:px-8 font-cormorant text-[15px] sm:text-[18px] font-bold text-[#0F5C66] transition hover:bg-[#0F5C66]/10 disabled:opacity-50 cursor-pointer whitespace-nowrap"
             >
-              Back
-            </span>
+              <ArrowLeft size={16} strokeWidth={2} className="sm:h-[18px] sm:w-[18px]" />
+              <span>Back</span>
+            </button>
 
-            <span className="w-5" />
-          </button>
-
-          {/* Continue */}
-
-          <button
-            onClick={() =>
-              onContinue
-                ? onContinue()
-                : router.push(`/subscribe-alerts/payment?plan=${plan}`)
-            }
-            disabled={continueDisabled}
-            className="flex h-[66px] items-center justify-center rounded-[8px] bg-[#0F5C66] px-5 text-[#EFDEC7] transition hover:bg-[#0B4D56] disabled:opacity-50"
-            style={{ marginTop: "20px", marginRight: "20px" }}
-          >
-            <span className="w-5" />
-
-            <span
-              className={`${cormorantInfant.className} text-[24px] font-semibold`}
+            {/* Continue to Payment Button */}
+            <button
+              type="button"
+              onClick={handleContinue}
+              disabled={continueDisabled}
+              className="flex h-[46px] sm:h-[50px] flex-1 lg:flex-initial items-center justify-center gap-1.5 sm:gap-2.5 rounded-[10px] bg-[#0F5C66] px-3.5 sm:px-8 font-cormorant text-[15px] sm:text-[18px] font-bold text-[#EFDEC7] transition hover:bg-[#0B4D56] disabled:opacity-50 cursor-pointer shadow-md whitespace-nowrap"
             >
-              Continue to Payment
-            </span>
-
-            <ArrowRight className="ml-auto h-5 w-5" />
-          </button>
+              <span>Continue to Payment</span>
+              <ArrowRight size={16} strokeWidth={2} className="sm:h-[18px] sm:w-[18px]" />
+            </button>
+          </div>
         </div>
       </div>
-    </section>
+    </footer>
   );
 }

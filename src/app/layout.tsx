@@ -10,8 +10,13 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+const BRAND_TAGLINE = "Brajmarg - Connecting Devotees to the Divine";
+
 export const metadata: Metadata = {
-  title: "Brajmarg – Discover Sacred Temples & Pilgrimages",
+  title: {
+    default: BRAND_TAGLINE,
+    template: `%s | ${BRAND_TAGLINE}`,
+  },
   description:
     "Explore Brajmarg for curated pilgrimages, temple visits, seva opportunities, and spiritual yatras across Braj Bhoomi.",
 };

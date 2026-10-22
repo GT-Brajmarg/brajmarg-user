@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import SubscribeHero from "@/components/subscribe-alerts/SubscribeHero";
 import AlertCategories from "@/components/subscribe-alerts/AlertCategories";
 import SubscriptionPlans from "@/components/subscribe-alerts/SubscriptionPlans";
 import HowAlertsWork from "@/components/subscribe-alerts/HowSevaWorks";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Daily Darshan Alerts",
+  description: "Receive sacred daily darshan and festival alerts from Braj temples directly on WhatsApp.",
+};
 
 export default function SubscribeAlertsPage() {
   return (

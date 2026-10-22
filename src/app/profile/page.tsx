@@ -48,13 +48,17 @@
 //     </main>
 //   );
 // }
+import type { Metadata } from "next";
 import DashboardHero from "@/components/dashboard/DashboardHero";
 import DashboardOverview from "@/components/dashboard/DashboardOverview";
-// import DashboardOverview from "@/components/dashboard/DashboardOverview";
-// import RecentActivity from "@/components/dashboard/RecentActivity";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import RecentActivity from "@/components/dashboard/RecentActivity";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Profile",
+  description: "Manage your Brajmarg devotional account, bookings, and preferences.",
+};
 
 export default function DashboardPage() {
   return (

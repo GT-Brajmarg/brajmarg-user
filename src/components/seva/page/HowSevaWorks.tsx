@@ -69,10 +69,10 @@ export default function HowSevaWorks() {
       {/* Heading */}
       <div className="mb-8 sm:mb-10 md:mb-12 flex items-center justify-center gap-2 sm:gap-3">
         <Image
-          src="/images/lotus.png"
+          src="/images/lotus_bright.png"
           alt=""
-          width={54}
-          height={36}
+          width={48}
+          height={48}
           className="h-6 w-9 sm:h-7 sm:w-11 md:h-9 md:w-14 object-contain"
         />
 
@@ -81,10 +81,10 @@ export default function HowSevaWorks() {
         </h2>
 
         <Image
-          src="/images/lotus.png"
+          src="/images/lotus_bright.png"
           alt=""
-          width={54}
-          height={36}
+          width={48}
+          height={48}
           className="h-6 w-9 sm:h-7 sm:w-11 md:h-9 md:w-14 object-contain"
         />
       </div>

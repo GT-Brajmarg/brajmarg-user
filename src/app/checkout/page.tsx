@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import CheckoutPage from "@/components/checkout/CheckoutPage";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Checkout",
+  description: "Secure checkout for Brajmarg spiritual services and products.",
+};
 
 export default function Page() {
   return (

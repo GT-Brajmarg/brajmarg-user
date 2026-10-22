@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import OrderConfirmationPage from "@/components/checkout/confirmation/OrderConfirmationPage";
 import type { CheckoutItem } from "@/components/checkout/types";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Order Confirmation",
+  description: "Your Brajmarg order and devotional seva confirmation details.",
+};
 
 const items: CheckoutItem[] = [
   {

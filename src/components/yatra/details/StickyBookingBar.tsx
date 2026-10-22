@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { cormorantInfant } from "@/lib/fonts";
+import { useAppDispatch } from "@/store/hooks";
+import { setLoginModalOpen } from "@/store/slices/navSlice";
 
 interface StickyBookingBarProps {
   slug?: string;
@@ -13,10 +15,31 @@ interface StickyBookingBarProps {
 export default function StickyBookingBar({
   slug = "braj-yatra",
 }: StickyBookingBarProps) {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const [selectedPackage, setSelectedPackage] = useState({
     name: "Standard",
     price: 3999,
   });
+
+  const handleBookYatra = () => {
+    const targetUrl = `/yatra/${slug}/book?package=${selectedPackage.name.toLowerCase()}`;
+    const isLoggedIn =
+      typeof window !== "undefined" &&
+      localStorage.getItem("brajmarg_is_logged_in") === "true";
+
+    if (!isLoggedIn) {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("brajmarg_login_redirect", targetUrl);
+        window.dispatchEvent(new Event("open_login_modal"));
+      }
+      dispatch(setLoginModalOpen(true));
+      return;
+    }
+
+    router.push(targetUrl);
+  };
 
   useEffect(() => {
     const handlePackageChange = (e: Event) => {
@@ -99,14 +122,15 @@ export default function StickyBookingBar({
           </div>
         </div>
 
-        {/* CTA Button — now a Link */}
-        <Link
-          href={`/yatra/${slug}/book?package=${selectedPackage.name.toLowerCase()}`}
+        {/* CTA Button — login-gated */}
+        <button
+          type="button"
+          onClick={handleBookYatra}
           className={`${cormorantInfant.className} flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-[#0F5C66] px-6 py-2.5 text-[18px] font-bold text-[#EFDEC7] transition hover:bg-[#0C4C54] active:scale-[0.98] cursor-pointer`}
         >
           <span className="text-[#EFDEC7]">Book This Yatra</span>
           <ArrowRight className="text-[#EFDEC7]" size={18} strokeWidth={2.2} />
-        </Link>
+        </button>
       </div>
     </div>
   );
