@@ -21,7 +21,6 @@ import { showToast } from "@/lib/toast";
 import ProfileOtpModal, {
   OtpVerificationMode,
 } from "./ProfileOtpModal";
-import DateSelectInput from "./DateSelectInput";
 
 export interface UserProfile {
   fullName: string;
@@ -668,14 +667,23 @@ export default function ProfileCard() {
                 >
                   Date of Birth
                 </label>
-                <div className="mt-1.5">
-                  <DateSelectInput
+                <div className="relative mt-1.5">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-[#8A715E]">
+                    <Calendar size={16} />
+                  </div>
+                  <input
                     id={dobId}
+                    type="date"
+                    max={todayStr}
                     value={form.dateOfBirth}
-                    onChange={(val) => handleInputChange("dateOfBirth", val)}
+                    onChange={(e) =>
+                      handleInputChange("dateOfBirth", e.target.value)
+                    }
                     onBlur={() => handleBlur("dateOfBirth")}
-                    hasError={Boolean(errors.dateOfBirth)}
-                    maxYear={new Date().getFullYear()}
+                    className={`w-full rounded-xl border bg-transparent py-2.5 pr-4 pl-10 text-[15px] text-[#3D352F] outline-none transition focus:ring-1 ${errors.dateOfBirth
+                      ? "border-[#B3261E] focus:ring-[#B3261E]"
+                      : "border-[#C37000]/50 focus:border-[#C37000] focus:ring-[#C37000]/30"
+                      }`}
                   />
                 </div>
                 {errors.dateOfBirth && (
