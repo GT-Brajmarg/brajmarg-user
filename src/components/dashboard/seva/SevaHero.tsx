@@ -28,15 +28,13 @@ export default function SevaHero() {
           className="mt-[10px] mb-[10px] flex items-center"
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
-          <div className="h-[1px] w-[160px] bg-[#D8A96B]" />
-
-          <Image
-            src="/images/lotus.png"
+             <Image
+            src="/images/group_lotus.png"
             alt=""
-            width={30}
-            height={20}
-            className="ml-[5px]"
-            style={{ marginLeft: "5px" }}
+            width={180}
+            height={50}
+            className="mx-3"
+            style={{ marginLeft: "1px" }}
           />
         </div>
 
