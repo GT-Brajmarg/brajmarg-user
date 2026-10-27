@@ -23,6 +23,7 @@ export function getDynamicTitle(pathname: string): string {
   // Exact static routes
   const staticRouteMap: Record<string, string> = {
     "/about": "About Us",
+    "/contact": "Contact Us",
     "/temples": "Temples",
     "/yatra": "Yatra",
     "/seva": "Seva",

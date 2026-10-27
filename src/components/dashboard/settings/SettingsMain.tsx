@@ -208,32 +208,6 @@ export default function SettingsMain({
                 className="text-[#8A715E] group-hover:text-[#0F5C66] group-hover:translate-x-0.5 transition shrink-0"
               />
             </Link>
-
-            {/* Contact Us */}
-            <Link
-              href="/support#contact"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center justify-between py-3.5 px-2 rounded-xl transition hover:bg-[#FAF3E7]/50 cursor-pointer"
-            >
-              <div>
-                <h3
-                  className={`${cormorantInfant.className} text-[18px] sm:text-[20px] font-bold text-[#2D241E] group-hover:text-[#0F5C66] transition`}
-                >
-                  Contact Us
-                </h3>
-                <p
-                  className={`${cormorantInfant.className} text-[14px] sm:text-[15px] text-[#7A6A5C] font-medium`}
-                >
-                  Get in touch with our dedicated devotee care team.
-                </p>
-              </div>
-
-              <ChevronRight
-                size={18}
-                className="text-[#8A715E] group-hover:text-[#0F5C66] group-hover:translate-x-0.5 transition shrink-0"
-              />
-            </Link>
           </div>
         </div>
 

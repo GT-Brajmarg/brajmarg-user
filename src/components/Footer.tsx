@@ -51,6 +51,7 @@ const quickLinks = [
   { label: "Temples", href: "/temples" },
   { label: "Seva", href: "/seva" },
   { label: "About Us", href: "/about" },
+  { label: "Contact Us", href: "/contact" },
 ];
 
 export default function Footer() {

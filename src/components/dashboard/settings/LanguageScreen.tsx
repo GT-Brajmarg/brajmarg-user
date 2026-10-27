@@ -16,12 +16,12 @@ const SUPPORTED_LANGUAGES = [
     native: "English",
     description: "Standard English interface with transliterated mantras",
   },
-  {
-    id: "hi",
-    label: "हिन्दी (Hindi)",
-    native: "हिन्दी",
-    description: "पूर्ण हिन्दी इंटरफ़ेस और दैनिक दर्शन अपडेट",
-  }
+  // {
+  //   id: "hi",
+  //   label: "हिन्दी (Hindi)",
+  //   native: "हिन्दी",
+  //   description: "पूर्ण हिन्दी इंटरफ़ेस और दैनिक दर्शन अपडेट",
+  // }
 ];
 
 export default function LanguageScreen({ onBack }: LanguageScreenProps) {
@@ -128,14 +128,14 @@ export default function LanguageScreen({ onBack }: LanguageScreenProps) {
                   </div>
                 </div>
 
-                <div
+                {/* <div
                   className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition ${isSelected
                     ? "border-[#0F5C66] bg-[#0F5C66] text-white"
                     : "border-[#C37000]/30 bg-transparent text-transparent"
                     }`}
                 >
                   <Check size={14} strokeWidth={2.5} />
-                </div>
+                </div> */}
               </label>
             );
           })}

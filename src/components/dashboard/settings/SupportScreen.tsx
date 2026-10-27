@@ -14,6 +14,7 @@ import {
   MapPin,
   Send,
   CheckCircle2,
+  Check,
 } from "lucide-react";
 import { cormorantInfant } from "@/lib/fonts";
 import { showToast } from "@/lib/toast";
@@ -132,7 +133,7 @@ export default function SupportScreen({
         <h1
           className={`${cormorantInfant.className} mt-3 text-[28px] sm:text-[34px] font-bold text-[#0F5C66]`}
         >
-          Help & Support / Contact Us
+          Help & Support
         </h1>
         <p
           className={`${cormorantInfant.className} text-[16px] sm:text-[18px] text-[#634E3E] font-medium`}
@@ -157,31 +158,43 @@ export default function SupportScreen({
                 key={cat.id}
                 type="button"
                 onClick={() => setSelectedTopic(cat.title)}
-                className={`flex items-start gap-3.5 rounded-[18px] border p-4 text-left transition cursor-pointer ${isSelected
-                  ? "border-[#D8A35D] bg-[#FFFDF9]/60 shadow-sm"
-                  : "border-[#C37000]/30  hover:bg-[#FAF3E7]/80"
+                className={`flex items-center justify-between gap-3.5 rounded-[18px] border p-4 text-left transition cursor-pointer ${isSelected
+                  ? "border-2 border-[#D8A35D] bg-[#FFFDF9]/80 shadow-xl"
+                  : "border-[#C37000]/30 hover:bg-[#FAF3E7]/80"
                   }`}
               >
-                <div
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
-                  style={{
-                    backgroundColor: `${cat.color}15`,
-                    color: cat.color,
-                  }}
-                >
-                  <Icon size={22} />
+                <div className="flex items-start gap-3.5 min-w-0">
+                  <div
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                    style={{
+                      backgroundColor: `${cat.color}15`,
+                      color: cat.color,
+                    }}
+                  >
+                    <Icon size={22} />
+                  </div>
+                  <div className="min-w-0">
+                    <h3
+                      className={`${cormorantInfant.className} text-[19px] sm:text-[20px] font-bold text-[#2D241E] leading-tight`}
+                    >
+                      {cat.title}
+                    </h3>
+                    <p
+                      className={`${cormorantInfant.className} mt-1 text-[14px] text-[#7A6A5C] leading-snug`}
+                    >
+                      {cat.desc}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3
-                    className={`${cormorantInfant.className} text-[19px] sm:text-[20px] font-bold text-[#2D241E] leading-tight`}
-                  >
-                    {cat.title}
-                  </h3>
-                  <p
-                    className={`${cormorantInfant.className} mt-1 text-[14px] text-[#7A6A5C] leading-snug`}
-                  >
-                    {cat.desc}
-                  </p>
+
+                {/* Right rounded circle with tick symbol when selected */}
+                <div
+                  className={`ml-2 flex h-5 w-5 sm:h-6 sm:w-6 shrink-0 items-center justify-center rounded-full border transition ${isSelected
+                    ? "border-[#0F5C66] bg-[#0F5C66] text-white"
+                    : "border-[#C37000]/40 bg-transparent text-transparent"
+                    }`}
+                >
+                  {isSelected && <Check size={13} strokeWidth={2.5} />}
                 </div>
               </button>
             );
