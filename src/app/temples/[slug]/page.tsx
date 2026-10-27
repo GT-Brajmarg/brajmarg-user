@@ -140,17 +140,32 @@ export default function TempleDetailsPage() {
         <div className="w-full max-w-[1200px] space-y-6 sm:space-y-8 lg:space-y-10">
           <TempleHero temple={temple} loading={loading} />
 
-          <DarshanTimings />
+          <div className="relative">
+            {/* Lite Lotus BG — desktop only */}
+            <div className="hidden lg:block pointer-events-none absolute -top-16 inset-0 z-0 overflow-hidden">
+              <Image
+                src="/images/lite-lotus-bg.png"
+                alt=""
+                width={1500}
+                height={100}
+                className="object-cover opacity-70"
+              />
+            </div>
 
-          <TempleSevas templeSlug={slug} />
+            <div className="relative z-10 space-y-6 sm:space-y-8 lg:space-y-10">
+              <DarshanTimings />
 
-          <TemplePrasad templeSlug={slug} />
+              <TempleSevas templeSlug={slug} />
 
-          <TempleOfferings templeSlug={slug} />
+              <TemplePrasad templeSlug={slug} />
 
-          <TempleGallery />
+              <TempleOfferings templeSlug={slug} />
 
-          <TempleLocation />
+              <TempleGallery />
+
+              <TempleLocation />
+            </div>
+          </div>
 
           <div className="pt-4 pb-12">
             <RelatedTemples currentTempleId={temple.id} />

@@ -1,7 +1,7 @@
 import "./globals.css";
 import ReduxProvider from "@/components/ReduxProvider";
 import LayoutContent from "@/components/LayoutContent";
-import { cormorant } from "@/lib/fonts";
+import { cormorant, cormorantInfant } from "@/lib/fonts";
 import type { Metadata, Viewport } from "next";
 import { Toaster } from "sonner";
 
@@ -28,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={cormorant.variable}>
+      <body className={`${cormorant.variable} ${cormorantInfant.variable}`}>
         <ReduxProvider>
           <LayoutContent>{children}</LayoutContent>
           <Toaster

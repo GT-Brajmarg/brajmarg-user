@@ -228,7 +228,7 @@ export default function RequestTemplePage() {
 
         {/* Content */}
         <div className="relative z-10 mx-auto flex h-full max-w-[1200px] items-center px-6 sm:px-8 lg:px-12">
-          <div className="max-w-[500px] pt-6 sm:pt-0 sm:ml-10 lg:ml-[60px]">
+          <div className="max-w-[500px] pt-6 sm:pt-0 sm:ml-10 lg:ml-[-90px]">
 
             {/* Badge */}
             <div className="inline-flex items-center gap-2 py-1">
@@ -248,7 +248,7 @@ export default function RequestTemplePage() {
             {/* Divider */}
             <div className="mt-3 sm:mt-4 flex items-center gap-3">
               <div className="h-px w-12 sm:w-16 bg-[#D7B06B]" />
-              <Image src="/images/lotus.png" alt="" width={36} height={36} className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
+              <Image src="/images/lotus_bright.png" alt="" width={36} height={36} className="w-8 h-8 sm:w-10 sm:h-10 object-contain" />
               <div className="h-px w-12 sm:w-16 bg-[#D7B06B]" />
             </div>
 
@@ -284,7 +284,7 @@ export default function RequestTemplePage() {
             {/* ── 1. Temple Details ── */}
             <div>
               <div className="mb-4 flex items-center gap-2.5">
-                <Image src="/images/temple-icon.png" alt="" width={24} height={24} className="object-contain shrink-0" />
+                <Image src="/images/temple-icon.png" alt="" width={38} height={38} className="object-contain shrink-0" />
                 <h2 className="font-cormorant text-[22px] sm:text-[26px] font-bold text-[#0E5C66]">
                   Temple Details
                 </h2>
@@ -419,7 +419,7 @@ export default function RequestTemplePage() {
                 </div>
 
                 <div className="flex items-center gap-2.5 rounded-[10px] border border-[rgba(195,112,0,0.45)] p-2.5 sm:p-3" style={{ backgroundColor: "rgba(195, 112, 0, 0.12)" }}>
-                  <Image src="/images/temple-icon-1.png" alt="" width={34} height={34} className="shrink-0 object-contain" />
+                  <Image src="/images/temple-icon-1.png" alt="" width={100} height={100} className="shrink-0 object-contain" />
                   <div>
                     <h4 className="font-cormorant text-[16px] font-bold text-[#0E5C66] leading-tight">Tip</h4>
                     <p className="font-cormorant text-[12px] sm:text-[13px] font-medium leading-snug text-[#5A4D3E]">
@@ -478,7 +478,13 @@ export default function RequestTemplePage() {
         >
           <div className="flex flex-col gap-4 md:flex-row md:items-center">
             <div className="flex items-center gap-2.5 shrink-0 md:border-r md:border-[#C37000]/40 md:pr-5">
-              <Image src="/images/temple-icon-1.png" alt="" width={36} height={36} className="shrink-0 object-contain" />
+              <Image
+                src="/images/temple-icon-orange.png"
+                alt=""
+                width={100}
+                height={100}
+                className="h-[100px] w-[110px] object-contain md:h-[120px] md:w-[130px] lg:h-[150px] lg:w-[150px]"
+              />
               <h3 className="font-cormorant text-[18px] sm:text-[20px] font-bold text-[#0E5C66] whitespace-nowrap">
                 What Happens Next?
               </h3>
@@ -505,7 +511,7 @@ export default function RequestTemplePage() {
             className="flex flex-1 items-center gap-3 rounded-[14px] border border-[rgba(195,112,0,0.5)] px-4 py-3 sm:py-3.5"
             style={{ backgroundColor: "rgba(239, 222, 199, 0.55)" }}
           >
-            <Image src="/images/lotus.png" alt="" width={40} height={40} className="shrink-0 object-contain opacity-70 w-8 h-8 sm:w-10 sm:h-10" />
+            <Image src="/images/lotus_bright.png" alt="" width={40} height={40} className="shrink-0 object-contain opacity-70 w-8 h-8 sm:w-10 sm:h-10" />
             <p className="font-cormorant text-[14px] sm:text-[15px] font-semibold text-[#5A4D3E] leading-snug">
               You can go back and browse temples before submitting your request.
             </p>

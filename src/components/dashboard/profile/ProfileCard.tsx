@@ -91,6 +91,17 @@ export default function ProfileCard() {
   const [otpModalOpen, setOtpModalOpen] = useState(false);
   const [otpMode, setOtpMode] = useState<OtpVerificationMode>("phone");
 
+  // Track if any field in the profile has actually changed
+  const isFormChanged =
+    form.fullName.trim() !== profile.fullName.trim() ||
+    form.mobile.trim() !== profile.mobile.trim() ||
+    form.email.trim() !== profile.email.trim() ||
+    form.address.trim() !== profile.address.trim() ||
+    (form.dateOfBirth || "") !== (profile.dateOfBirth || "") ||
+    form.photoUrl !== profile.photoUrl;
+
+  const isSaveDisabled = !isFormChanged;
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Unique accessible IDs for form fields
@@ -268,6 +279,8 @@ export default function ProfileCard() {
   };
 
   const handleSaveClick = () => {
+    if (isSaveDisabled) return;
+
     if (!validateAll()) {
       showToast.error("Please resolve the validation errors before saving.");
       return;
@@ -322,6 +335,28 @@ export default function ProfileCard() {
     setIsEditing(false);
   };
 
+  const getDisabledReason = (): string => {
+    if (!isFormChanged) {
+      return "No changes made yet. Modify your details to enable saving.";
+    }
+    if (!form.fullName.trim()) {
+      return "Please enter your full name.";
+    }
+    if (errors.fullName) {
+      return errors.fullName;
+    }
+    if (form.mobile && !isMobileVerified) {
+      return "Please verify your updated mobile number with OTP.";
+    }
+    if (form.email && !isEmailVerified) {
+      return "Please verify your updated email address with OTP.";
+    }
+    if (errors.email || errors.mobile || errors.dateOfBirth || errors.address) {
+      return "Please resolve the validation errors above before saving.";
+    }
+    return "Please complete the required details to save changes.";
+  };
+
   const currentDisplayPhoto = isEditing ? form.photoUrl : profile.photoUrl;
   const currentDisplayName = isEditing ? form.fullName : profile.fullName;
   const currentInitials = getInitials(currentDisplayName);
@@ -332,14 +367,14 @@ export default function ProfileCard() {
   return (
     <>
       {/* Grouped Profile Card with transparent background matching other tabs */}
-      <div className="rounded-[22px] border border-[#C37000]/64 bg-transparent p-6 sm:p-8">
+      <div className="rounded-[20px] sm:rounded-[22px] border border-[#C37000]/64 bg-transparent p-4 sm:p-6 md:p-8">
         {/* Header: Photo / Initials & Full Name & Edit Profile Button */}
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between pb-6 border-b border-[#C37000]/30">
-          <div className="flex items-center gap-5">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 sm:pb-6 border-b border-[#C37000]/30">
+          <div className="flex items-center gap-4 sm:gap-5">
             {/* Avatar */}
             <div className="relative shrink-0">
               {currentDisplayPhoto ? (
-                <div className="relative h-20 w-20 sm:h-22 sm:w-22 overflow-hidden rounded-full border border-[#D9B382]">
+                <div className="relative h-18 w-18 sm:h-20 sm:w-20 md:h-22 md:w-22 overflow-hidden rounded-full border border-[#D9B382]">
                   <Image
                     src={currentDisplayPhoto}
                     alt={profile.fullName || "Profile"}
@@ -350,7 +385,7 @@ export default function ProfileCard() {
                   />
                 </div>
               ) : (
-                <div className="flex h-20 w-20 sm:h-22 sm:w-22 items-center justify-center rounded-full border border-[#D9B382] bg-gradient-to-br from-[#0F5C66] to-[#083E45]">
+                <div className="flex h-18 w-18 sm:h-20 sm:w-20 md:h-22 md:w-22 items-center justify-center rounded-full border border-[#D9B382] bg-gradient-to-br from-[#0F5C66] to-[#083E45]">
                   {currentInitials ? (
                     <span
                       className={`${cormorantInfant.className} text-2xl sm:text-3xl font-bold tracking-widest text-[#FFF7E8]`}
@@ -400,7 +435,7 @@ export default function ProfileCard() {
             {/* Name only */}
             <div>
               <h2
-                className={`${cormorantInfant.className} text-[26px] sm:text-[30px] font-bold text-[#0F5C66] leading-tight`}
+                className={`${cormorantInfant.className} text-[24px] sm:text-[28px] md:text-[32px] font-bold text-[#0F5C66] leading-tight`}
               >
                 {profile.fullName?.trim() ? profile.fullName : ""}
               </h2>
@@ -413,7 +448,7 @@ export default function ProfileCard() {
               <button
                 type="button"
                 onClick={handleEditClick}
-                className="inline-flex items-center gap-2 rounded-xl border border-[#C37000] bg-transparent px-5 py-2.5 text-sm font-semibold text-[#C37000] transition hover:bg-[#C37000]/10 active:scale-98"
+                className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-[#C37000] bg-transparent px-5 py-2.5 text-[16px] font-semibold text-[#C37000] transition hover:bg-[#C37000]/10 active:scale-98 cursor-pointer ${cormorantInfant.className}`}
               >
                 <Pencil size={15} />
                 <span>Edit Profile</span>
@@ -424,16 +459,16 @@ export default function ProfileCard() {
 
         {/* VIEW MODE */}
         {!isEditing && (
-          <div className="pt-6 space-y-5">
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div className="pt-6 space-y-4 sm:space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
               {/* Full Name */}
               <div className="rounded-[16px] border border-[#C37000]/30 bg-transparent p-4">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#8A715E] uppercase tracking-wider">
-                  <User size={14} className="text-[#0F5C66]" />
+                <div className={`flex items-center gap-2 text-[14px] font-bold text-[#8A715E] uppercase tracking-wider ${cormorantInfant.className}`}>
+                  <User size={15} className="text-[#0F5C66]" />
                   <span>Full Name</span>
                 </div>
                 <div
-                  className={`${cormorantInfant.className} mt-2 text-[20px] font-bold text-[#3D352F]`}
+                  className={`${cormorantInfant.className} mt-2 text-[18px] sm:text-[20px] font-bold text-[#3D352F]`}
                 >
                   {profile.fullName?.trim() ? profile.fullName : ""}
                 </div>
@@ -442,19 +477,19 @@ export default function ProfileCard() {
               {/* Mobile Number */}
               <div className="rounded-[16px] border border-[#C37000]/30 bg-transparent p-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-[#8A715E] uppercase tracking-wider">
-                    <Phone size={14} className="text-[#0F5C66]" />
+                  <div className={`flex items-center gap-2 text-[14px] font-bold text-[#8A715E] uppercase tracking-wider ${cormorantInfant.className}`}>
+                    <Phone size={15} className="text-[#0F5C66]" />
                     <span>Mobile Number</span>
                   </div>
                   {profile.mobile?.trim() && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#137333] bg-[#E6F4EA] px-2 py-0.5 rounded-md border border-[#CEEAD6]">
-                      <CheckCircle2 size={12} className="text-[#137333]" />
+                    <span className={`inline-flex items-center gap-1 text-[13px] font-bold text-[#137333] bg-[#E6F4EA] px-2.5 py-0.5 rounded-md border border-[#CEEAD6] ${cormorantInfant.className}`}>
+                      <CheckCircle2 size={13} className="text-[#137333]" />
                       <span>Verified</span>
                     </span>
                   )}
                 </div>
                 <div
-                  className={`${cormorantInfant.className} mt-2 text-[20px] font-bold text-[#3D352F] tracking-wide`}
+                  className={`${cormorantInfant.className} mt-2 text-[18px] sm:text-[20px] font-bold text-[#3D352F] tracking-wide`}
                 >
                   {profile.mobile?.trim()
                     ? `+91 ${profile.mobile.slice(0, 5)} ${profile.mobile.slice(5)}`
@@ -465,19 +500,19 @@ export default function ProfileCard() {
               {/* Email Address */}
               <div className="rounded-[16px] border border-[#C37000]/30 bg-transparent p-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-[#8A715E] uppercase tracking-wider">
-                    <Mail size={14} className="text-[#0F5C66]" />
+                  <div className={`flex items-center gap-2 text-[14px] font-bold text-[#8A715E] uppercase tracking-wider ${cormorantInfant.className}`}>
+                    <Mail size={15} className="text-[#0F5C66]" />
                     <span>Email Address</span>
                   </div>
                   {profile.email?.trim() && (
-                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#137333] bg-[#E6F4EA] px-2 py-0.5 rounded-md border border-[#CEEAD6]">
-                      <CheckCircle2 size={12} className="text-[#137333]" />
+                    <span className={`inline-flex items-center gap-1 text-[13px] font-bold text-[#137333] bg-[#E6F4EA] px-2.5 py-0.5 rounded-md border border-[#CEEAD6] ${cormorantInfant.className}`}>
+                      <CheckCircle2 size={13} className="text-[#137333]" />
                       <span>Verified</span>
                     </span>
                   )}
                 </div>
                 <div
-                  className={`${cormorantInfant.className} mt-2 text-[19px] font-bold text-[#3D352F] break-all`}
+                  className={`${cormorantInfant.className} mt-2 text-[17px] sm:text-[19px] font-bold text-[#3D352F] break-all`}
                 >
                   {profile.email?.trim() ? profile.email : ""}
                 </div>
@@ -485,12 +520,12 @@ export default function ProfileCard() {
 
               {/* Date of Birth */}
               <div className="rounded-[16px] border border-[#C37000]/30 bg-transparent p-4">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#8A715E] uppercase tracking-wider">
-                  <Calendar size={14} className="text-[#0F5C66]" />
+                <div className={`flex items-center gap-2 text-[14px] font-bold text-[#8A715E] uppercase tracking-wider ${cormorantInfant.className}`}>
+                  <Calendar size={15} className="text-[#0F5C66]" />
                   <span>Date of Birth</span>
                 </div>
                 <div
-                  className={`${cormorantInfant.className} mt-2 text-[20px] font-bold text-[#3D352F]`}
+                  className={`${cormorantInfant.className} mt-2 text-[18px] sm:text-[20px] font-bold text-[#3D352F]`}
                 >
                   {profile.dateOfBirth?.trim()
                     ? formatDateDisplay(profile.dateOfBirth)
@@ -500,13 +535,13 @@ export default function ProfileCard() {
             </div>
 
             {/* Saved Delivery Address */}
-            <div className="rounded-[16px] border border-[#C37000]/30 bg-transparent p-5">
-              <div className="flex items-center gap-2 text-xs font-semibold text-[#8A715E] uppercase tracking-wider">
+            <div className="rounded-[16px] border border-[#C37000]/30 bg-transparent p-4 sm:p-5">
+              <div className={`flex items-center gap-2 text-[14px] font-bold text-[#8A715E] uppercase tracking-wider ${cormorantInfant.className}`}>
                 <MapPin size={15} className="text-[#0F5C66]" />
                 <span>Saved Delivery Address</span>
               </div>
               <p
-                className={`${cormorantInfant.className} mt-2 text-[19px] leading-relaxed font-bold text-[#3D352F]`}
+                className={`${cormorantInfant.className} mt-2 text-[18px] sm:text-[19px] leading-relaxed font-bold text-[#3D352F]`}
               >
                 {profile.address?.trim() ? profile.address : ""}
               </p>
@@ -516,13 +551,13 @@ export default function ProfileCard() {
 
         {/* EDIT MODE */}
         {isEditing && (
-          <div className="pt-6 space-y-6">
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div className="pt-6 space-y-5 sm:space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
               {/* Full Name Field */}
               <div>
                 <label
                   htmlFor={nameId}
-                  className="block text-xs font-bold uppercase tracking-wider text-[#634E3E]"
+                  className={`${cormorantInfant.className} block text-[15px] sm:text-[16px] font-bold uppercase tracking-wider text-[#634E3E]`}
                 >
                   Full Name <span className="text-[#B3261E]">*</span>
                 </label>
@@ -537,15 +572,15 @@ export default function ProfileCard() {
                     onChange={(e) => handleInputChange("fullName", e.target.value)}
                     onBlur={() => handleBlur("fullName")}
                     placeholder="Enter full name"
-                    className={`w-full rounded-xl border bg-transparent py-2.5 pr-4 pl-10 text-[15px] text-[#3D352F] outline-none transition focus:ring-1 ${errors.fullName
+                    className={`${cormorantInfant.className} w-full rounded-xl border bg-transparent py-2.5 pr-4 pl-10 text-[16px] sm:text-[17px] font-semibold text-[#3D352F] outline-none transition focus:ring-1 ${errors.fullName
                       ? "border-[#B3261E] focus:ring-[#B3261E]"
                       : "border-[#C37000]/50 focus:border-[#C37000] focus:ring-[#C37000]/30"
                       }`}
                   />
                 </div>
                 {errors.fullName && (
-                  <p className="mt-1 flex items-center gap-1 text-xs font-medium text-[#B3261E]">
-                    <AlertCircle size={12} />
+                  <p className={`${cormorantInfant.className} mt-1 flex items-center gap-1 text-[13px] font-semibold text-[#B3261E]`}>
+                    <AlertCircle size={13} />
                     {errors.fullName}
                   </p>
                 )}
@@ -555,12 +590,12 @@ export default function ProfileCard() {
               <div>
                 <label
                   htmlFor={mobileId}
-                  className="block text-xs font-bold uppercase tracking-wider text-[#634E3E]"
+                  className={`${cormorantInfant.className} block text-[15px] sm:text-[16px] font-bold uppercase tracking-wider text-[#634E3E]`}
                 >
                   Mobile Number <span className="text-[#B3261E]">*</span>
                 </label>
                 <div className="relative mt-1.5 flex items-center">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-xs font-bold text-[#634E3E]">
+                  <div className={`pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-[14px] font-bold text-[#634E3E] ${cormorantInfant.className}`}>
                     <span>+91</span>
                   </div>
                   <input
@@ -572,7 +607,7 @@ export default function ProfileCard() {
                     onChange={(e) => handleInputChange("mobile", e.target.value)}
                     onBlur={() => handleBlur("mobile")}
                     placeholder="10-digit mobile number"
-                    className={`w-full rounded-xl border bg-transparent py-2.5 pr-28 pl-12 text-[15px] text-[#3D352F] outline-none transition focus:ring-1 ${errors.mobile
+                    className={`${cormorantInfant.className} w-full rounded-xl border bg-transparent py-2.5 pr-24 sm:pr-28 pl-11 sm:pl-12 text-[16px] sm:text-[17px] font-semibold text-[#3D352F] outline-none transition focus:ring-1 ${errors.mobile
                       ? "border-[#B3261E] focus:ring-[#B3261E]"
                       : "border-[#C37000]/50 focus:border-[#C37000] focus:ring-[#C37000]/30"
                       }`}
@@ -580,7 +615,7 @@ export default function ProfileCard() {
                   <div className="absolute right-2 inset-y-0 flex items-center">
                     {isMobileVerified ? (
                       <span
-                        className="inline-flex items-center gap-1 rounded-lg bg-[#E6F4EA] px-2.5 py-1 text-xs font-semibold text-[#137333] border border-[#CEEAD6] select-none"
+                        className={`inline-flex items-center gap-1 rounded-lg bg-[#E6F4EA] px-2.5 py-1 text-[12px] font-bold text-[#137333] border border-[#CEEAD6] select-none ${cormorantInfant.className}`}
                         title="Mobile number verified"
                       >
                         <CheckCircle2 size={13} className="text-[#137333]" />
@@ -590,7 +625,7 @@ export default function ProfileCard() {
                       <button
                         type="button"
                         onClick={handleVerifyMobileClick}
-                        className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-[#0F5C66] to-[#0A474E] px-3 py-1 text-xs font-semibold text-white shadow-xs transition hover:opacity-90 active:scale-95 cursor-pointer"
+                        className={`inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-[#0F5C66] to-[#0A474E] px-3 py-1 text-[13px] font-bold text-white shadow-xs transition hover:opacity-90 active:scale-95 cursor-pointer ${cormorantInfant.className}`}
                         title="Verify mobile number with OTP"
                       >
                         <span>Verify</span>
@@ -599,8 +634,8 @@ export default function ProfileCard() {
                   </div>
                 </div>
                 {errors.mobile && (
-                  <p className="mt-1 flex items-center gap-1 text-xs font-medium text-[#B3261E]">
-                    <AlertCircle size={12} />
+                  <p className={`${cormorantInfant.className} mt-1 flex items-center gap-1 text-[13px] font-semibold text-[#B3261E]`}>
+                    <AlertCircle size={13} />
                     {errors.mobile}
                   </p>
                 )}
@@ -610,7 +645,7 @@ export default function ProfileCard() {
               <div>
                 <label
                   htmlFor={emailId}
-                  className="block text-xs font-bold uppercase tracking-wider text-[#634E3E]"
+                  className={`${cormorantInfant.className} block text-[15px] sm:text-[16px] font-bold uppercase tracking-wider text-[#634E3E]`}
                 >
                   Email Address <span className="text-[#B3261E]">*</span>
                 </label>
@@ -625,7 +660,7 @@ export default function ProfileCard() {
                     onChange={(e) => handleInputChange("email", e.target.value)}
                     onBlur={() => handleBlur("email")}
                     placeholder="Enter email address"
-                    className={`w-full rounded-xl border bg-transparent py-2.5 pr-28 pl-10 text-[15px] text-[#3D352F] outline-none transition focus:ring-1 ${errors.email
+                    className={`${cormorantInfant.className} w-full rounded-xl border bg-transparent py-2.5 pr-24 sm:pr-28 pl-10 text-[16px] sm:text-[17px] font-semibold text-[#3D352F] outline-none transition focus:ring-1 ${errors.email
                       ? "border-[#B3261E] focus:ring-[#B3261E]"
                       : "border-[#C37000]/50 focus:border-[#C37000] focus:ring-[#C37000]/30"
                       }`}
@@ -633,7 +668,7 @@ export default function ProfileCard() {
                   <div className="absolute right-2 inset-y-0 flex items-center">
                     {isEmailVerified ? (
                       <span
-                        className="inline-flex items-center gap-1 rounded-lg bg-[#E6F4EA] px-2.5 py-1 text-xs font-semibold text-[#137333] border border-[#CEEAD6] select-none"
+                        className={`inline-flex items-center gap-1 rounded-lg bg-[#E6F4EA] px-2.5 py-1 text-[12px] font-bold text-[#137333] border border-[#CEEAD6] select-none ${cormorantInfant.className}`}
                         title="Email address verified"
                       >
                         <CheckCircle2 size={13} className="text-[#137333]" />
@@ -643,7 +678,7 @@ export default function ProfileCard() {
                       <button
                         type="button"
                         onClick={handleVerifyEmailClick}
-                        className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-[#0F5C66] to-[#0A474E] px-3 py-1 text-xs font-semibold text-white shadow-xs transition hover:opacity-90 active:scale-95 cursor-pointer"
+                        className={`inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-[#0F5C66] to-[#0A474E] px-3 py-1 text-[13px] font-bold text-white shadow-xs transition hover:opacity-90 active:scale-95 cursor-pointer ${cormorantInfant.className}`}
                         title="Verify email address with OTP"
                       >
                         <span>Verify</span>
@@ -652,8 +687,8 @@ export default function ProfileCard() {
                   </div>
                 </div>
                 {errors.email && (
-                  <p className="mt-1 flex items-center gap-1 text-xs font-medium text-[#B3261E]">
-                    <AlertCircle size={12} />
+                  <p className={`${cormorantInfant.className} mt-1 flex items-center gap-1 text-[13px] font-semibold text-[#B3261E]`}>
+                    <AlertCircle size={13} />
                     {errors.email}
                   </p>
                 )}
@@ -663,7 +698,7 @@ export default function ProfileCard() {
               <div>
                 <label
                   htmlFor={dobId}
-                  className="block text-xs font-bold uppercase tracking-wider text-[#634E3E]"
+                  className={`${cormorantInfant.className} block text-[15px] sm:text-[16px] font-bold uppercase tracking-wider text-[#634E3E]`}
                 >
                   Date of Birth
                 </label>
@@ -680,15 +715,15 @@ export default function ProfileCard() {
                       handleInputChange("dateOfBirth", e.target.value)
                     }
                     onBlur={() => handleBlur("dateOfBirth")}
-                    className={`w-full rounded-xl border bg-transparent py-2.5 pr-4 pl-10 text-[15px] text-[#3D352F] outline-none transition focus:ring-1 ${errors.dateOfBirth
+                    className={`${cormorantInfant.className} w-full rounded-xl border bg-transparent py-2.5 pr-4 pl-10 text-[16px] sm:text-[17px] font-semibold text-[#3D352F] outline-none transition focus:ring-1 ${errors.dateOfBirth
                       ? "border-[#B3261E] focus:ring-[#B3261E]"
                       : "border-[#C37000]/50 focus:border-[#C37000] focus:ring-[#C37000]/30"
                       }`}
                   />
                 </div>
                 {errors.dateOfBirth && (
-                  <p className="mt-1 flex items-center gap-1 text-xs font-medium text-[#B3261E]">
-                    <AlertCircle size={12} />
+                  <p className={`${cormorantInfant.className} mt-1 flex items-center gap-1 text-[13px] font-semibold text-[#B3261E]`}>
+                    <AlertCircle size={13} />
                     {errors.dateOfBirth}
                   </p>
                 )}
@@ -699,7 +734,7 @@ export default function ProfileCard() {
             <div>
               <label
                 htmlFor={addressId}
-                className="block text-xs font-bold uppercase tracking-wider text-[#634E3E]"
+                className={`${cormorantInfant.className} block text-[15px] sm:text-[16px] font-bold uppercase tracking-wider text-[#634E3E]`}
               >
                 Saved Delivery Address
               </label>
@@ -711,15 +746,15 @@ export default function ProfileCard() {
                   onChange={(e) => handleInputChange("address", e.target.value)}
                   onBlur={() => handleBlur("address")}
                   placeholder="Enter house/flat no., street, city, state, and pincode"
-                  className={`w-full rounded-xl border bg-transparent p-3 text-[15px] leading-relaxed text-[#3D352F] outline-none transition focus:ring-1 ${errors.address
+                  className={`${cormorantInfant.className} w-full rounded-xl border bg-transparent p-3 text-[16px] sm:text-[17px] leading-relaxed font-semibold text-[#3D352F] outline-none transition focus:ring-1 ${errors.address
                     ? "border-[#B3261E] focus:ring-[#B3261E]"
                     : "border-[#C37000]/50 focus:border-[#C37000] focus:ring-[#C37000]/30"
                     }`}
                 />
               </div>
               {errors.address && (
-                <p className="mt-1 flex items-center gap-1 text-xs font-medium text-[#B3261E]">
-                  <AlertCircle size={12} />
+                <p className={`${cormorantInfant.className} mt-1 flex items-center gap-1 text-[13px] font-semibold text-[#B3261E]`}>
+                  <AlertCircle size={13} />
                   {errors.address}
                 </p>
               )}
@@ -730,20 +765,44 @@ export default function ProfileCard() {
               <button
                 type="button"
                 onClick={handleCancelClick}
-                className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#C37000]/60 bg-transparent px-5 py-2.5 text-sm font-semibold text-[#66503E] transition hover:bg-[#C37000]/10 active:scale-98"
+                className={`w-full sm:w-auto inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#C37000]/60 bg-transparent px-5 py-2.5 text-[16px] font-semibold text-[#66503E] transition hover:bg-[#C37000]/10 active:scale-98 cursor-pointer ${cormorantInfant.className}`}
               >
                 <X size={16} />
                 <span>Cancel</span>
               </button>
 
-              <button
-                type="button"
-                onClick={handleSaveClick}
-                className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-[#0F5C66] to-[#0A474E] px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-95 active:scale-98"
+              <div
+                className="relative group/save w-full sm:w-auto"
+                title={isSaveDisabled ? getDisabledReason() : undefined}
               >
-                <Save size={16} />
-                <span>Save Changes</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={handleSaveClick}
+                  disabled={isSaveDisabled}
+                  className={`w-full sm:w-auto inline-flex items-center justify-center gap-1.5 rounded-xl px-6 py-2.5 text-[16px] font-semibold transition ${cormorantInfant.className} ${
+                    isSaveDisabled
+                      ? "cursor-not-allowed bg-[#BDB3A6]/35 text-[#7A6A5C]/60 shadow-none border border-[#C37000]/25"
+                      : "bg-gradient-to-r from-[#0F5C66] to-[#0A474E] text-white shadow-sm hover:opacity-95 active:scale-98 cursor-pointer"
+                  }`}
+                >
+                  <Save size={16} />
+                  <span>Save Changes</span>
+                </button>
+
+                {/* Meaningful Tooltip when Disabled on hover */}
+                {isSaveDisabled && (
+                  <div
+                    role="tooltip"
+                    className="pointer-events-none absolute bottom-full right-0 sm:right-auto sm:left-1/2 sm:-translate-x-1/2 mb-2 hidden group-hover/save:flex items-center gap-1.5 rounded-lg bg-[#2D241E] px-3.5 py-1.5 text-xs text-[#FFF7ED] shadow-xl whitespace-nowrap z-30 transition-all border border-[#C37000]/30"
+                  >
+                    <AlertCircle size={13} className="text-[#E0A96D] shrink-0" />
+                    <span className={`${cormorantInfant.className} text-[14px] font-medium`}>
+                      {getDisabledReason()}
+                    </span>
+                    <div className="absolute top-full right-6 sm:right-auto sm:left-1/2 sm:-translate-x-1/2 -mt-1 border-4 border-transparent border-t-[#2D241E]" />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}

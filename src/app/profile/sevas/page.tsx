@@ -61,12 +61,12 @@ export default function MySevasPage() {
       </div>
 
       <div className="relative z-10 mx-auto flex justify-center">
-        <div className="flex w-full max-w-[1200px] gap-8 px-4 py-10">
-          <div className="w-[270px] shrink-0 border-r border-[#C37000]/30">
+        <div className="flex w-full max-w-[1360px] flex-col lg:flex-row gap-8 lg:gap-10 px-4 sm:px-6 lg:px-8 xl:px-10 py-8 sm:py-10">
+          <div className="w-full lg:w-[260px] shrink-0 lg:border-r border-[#C37000]/30 lg:pr-6">
             <DashboardSidebar />
           </div>
 
-          <div className="mt-8 flex-1 space-y-8" style={{ marginTop: "30px" }}>
+          <div className="flex-1 space-y-8">
             <SevaHero />
 
             <SevaFilters

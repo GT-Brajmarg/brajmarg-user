@@ -29,6 +29,17 @@ export default function SubscribeAlertsPage() {
           className="pointer-events-none object-cover opacity-34 mix-blend-multiply"
         />
 
+        {/* Lite Lotus BG — desktop only */}
+        <div className="hidden lg:block pointer-events-none absolute top-[490px] inset-0 z-0 overflow-hidden">
+          <Image
+            src="/images/lite-lotus-bg.png"
+            alt=""
+            width={1500}
+            height={100}
+            className="object-cover opacity-70"
+          />
+        </div>
+
         {/* Decorative Mandalas */}
         <Image
           src="/images/mandala_bg_1.png"
