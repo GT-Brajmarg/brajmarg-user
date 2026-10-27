@@ -29,10 +29,10 @@ export default function PaymentHero({
 
       {/* Content */}
 
-      <div className="relative z-10 mx-auto flex h-full max-w-[1200px] items-center px-8">
+      <div className="relative z-10 mx-auto flex h-full max-w-[1200px] items-center px-0">
         <div
-          className="max-w-[520px] md:translate-x-[170px]"
-          style={{ marginLeft: "60px", marginTop: "50px" }}
+          className="max-w-[500px] md:translate-x-[170px]"
+          style={{ marginLeft: "-220px", marginTop: "50px" }}
         >
           {/* Badge */}
 

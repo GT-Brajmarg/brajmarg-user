@@ -21,6 +21,17 @@ export default function TemplePage() {
         className="pointer-events-none object-cover opacity-34 mix-blend-multiply"
       />
 
+      {/* Lite Lotus BG — desktop only */}
+      <div className="hidden lg:block pointer-events-none absolute top-[430px] inset-0 z-0 overflow-hidden">
+        <Image
+          src="/images/lite-lotus-bg.png"
+          alt=""
+          width={1500}
+          height={100}
+          className="object-cover opacity-70"
+        />
+      </div>
+
       <div className="relative z-10">
         <div className="relative">
           <TempleHero />

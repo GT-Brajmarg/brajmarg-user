@@ -87,15 +87,14 @@ export default function OrdersHero() {
           className="mt-4 flex items-center"
           style={{ marginTop: "10px", marginBottom: "10px" }}
         >
-          <div className="h-[1px] w-[160px] bg-[#D8A96B]" />
-
+        
           <Image
-            src="/images/lotus.png"
+            src="/images/group_lotus.png"
             alt=""
-            width={30}
-            height={20}
+            width={180}
+            height={50}
             className="mx-3"
-            style={{ marginLeft: "5px" }}
+            style={{ marginLeft: "1px" }}
           />
         </div>
 

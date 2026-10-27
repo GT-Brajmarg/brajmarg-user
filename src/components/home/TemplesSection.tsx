@@ -29,10 +29,9 @@ export default function TemplesSection() {
         <Image
           src="/images/lite-lotus-bg.png"
           alt=""
-          // fill
           width={1500}
           height={100}
-          className="object-cover opacity-60"
+          className="object-cover opacity-70"
         />
       </div>
       <div className="relative z-10">
@@ -262,9 +261,8 @@ export default function TemplesSection() {
 
                 {/* Badge */}
                 <span
-                  className={`absolute top-[52px] left-[28px] z-50 inline-flex items-center rounded-full px-2 py-[2px] text-[9px] font-bold tracking-wide text-white whitespace-nowrap ${
-                    temple.is_coming_soon ? "bg-[#D8A24A]" : "bg-[#15A44D]"
-                  }`}
+                  className={`absolute top-[52px] left-[28px] z-50 inline-flex items-center rounded-full px-2 py-[2px] text-[9px] font-bold tracking-wide text-white whitespace-nowrap ${temple.is_coming_soon ? "bg-[#D8A24A]" : "bg-[#15A44D]"
+                    }`}
                 >
                   {!temple.is_coming_soon && (
                     <span className="mr-1 h-[4px] w-[4px] flex-shrink-0 rounded-full bg-white" />

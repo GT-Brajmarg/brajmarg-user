@@ -1,18 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Cormorant+Infant:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 @import "tailwindcss";
 
 :root {
   --background: #f7f0e5;
   --foreground: #171717;
-  --font-primary: var(--font-cormorant), 'Cormorant Garamond', 'Cormorant Infant', serif;
+  --font-primary: var(--font-cormorant), 'Cormorant Garamond', serif;
 }
 .font-cormorant {
-  font-family: var(--font-cormorant), 'Cormorant Garamond', 'Cormorant Infant', serif !important;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif !important;
 }
 
 .font-cormorant-infant,
 .font-cormorant-infant * {
-  font-family: var(--font-cormorant-infant), 'Cormorant Infant', serif !important;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif !important;
 }
 
 .opacity-34 {
@@ -44,7 +44,7 @@ body {
 body *,
 body *::before,
 body *::after {
-  font-family: var(--font-primary) !important;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif !important;
 }
 
 @layer base {
@@ -52,6 +52,13 @@ body *::after {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+  }
+
+  input,
+  textarea,
+  button,
+  select {
+    font-family: inherit;
   }
 
   a {

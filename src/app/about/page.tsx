@@ -156,6 +156,17 @@ export default function AboutPage() {
           - our_story_temple.png anchored on left, baseline resting flush above What We Bring box
       ═══════════════════════════════════════════════════════ */}
       <section className="relative z-10 w-full border-t border-[#C37000]/30 pt-8 sm:pt-12 pb-12 sm:pb-16 overflow-hidden">
+        {/* Lite Lotus BG — desktop only */}
+        <div className="hidden lg:block pointer-events-none absolute top-[-60px] inset-0 z-0 overflow-hidden">
+          <Image
+            src="/images/lite-lotus-bg.png"
+            alt=""
+            width={1500}
+            height={100}
+            className="object-cover opacity-70"
+          />
+        </div>
+
         {/* Subtle Central Mandala Background */}
         <div className="absolute top-[20px] left-1/2 -translate-x-1/2 w-[700px] md:w-[900px] pointer-events-none opacity-[0.055] -z-10">
           <Image
@@ -637,6 +648,16 @@ export default function AboutPage() {
         className="relative z-10 w-full border-y border-[#C37000]/40 py-12 sm:py-16 md:py-20 overflow-hidden flex items-center justify-center"
         style={{ backgroundColor: "#EFE0C0" }}
       >
+        {/* Lite Lotus BG — desktop only */}
+        <div className="hidden lg:block pointer-events-none absolute top-[-60px] inset-0 z-0 overflow-hidden">
+          <Image
+            src="/images/lite-lotus-bg.png"
+            alt=""
+            width={1500}
+            height={100}
+            className="object-cover opacity-70"
+          />
+        </div>
 
         {/* Left Lotus (Half Mandala) pinned flush to far left edge, vertically centered */}
         <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[150px] sm:w-[180px] md:w-[210px] lg:w-[230px] xl:w-[250px] pointer-events-none select-none z-10">

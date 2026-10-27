@@ -35,6 +35,7 @@ export function getDynamicTitle(pathname: string): string {
     "/terms": "Terms of Use",
     "/privacy": "Privacy Policy",
     "/profile": "Profile",
+    "/profile/account": "Profile",
     "/profile/orders": "My Orders",
     "/profile/sevas": "My Sevas",
     "/profile/yatras": "My Yatras",

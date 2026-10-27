@@ -86,7 +86,7 @@
 }
 
 .disclaimerArrow {
-  font-family: sans-serif;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
   font-size: 18px;
   transition: transform 0.2s ease;
 }

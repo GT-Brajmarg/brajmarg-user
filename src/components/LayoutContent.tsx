@@ -44,6 +44,8 @@ export default function LayoutContent({
 
   const hideFooter =
     pathname.startsWith("/profile") ||
+    pathname.startsWith("/support") ||
+    pathname.startsWith("/contact") ||
     pathname.startsWith("/cart") ||
     pathname.startsWith("/checkout") ||
     pathname.startsWith("/payment") ||

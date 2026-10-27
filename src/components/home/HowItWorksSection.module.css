@@ -54,7 +54,7 @@
 }
 
 .title {
-  font-family: var(--font-lato), serif;
+  font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
   font-size: clamp(22px, 3.5vw, 32px);
   font-weight: 700;
   color: #08545e;

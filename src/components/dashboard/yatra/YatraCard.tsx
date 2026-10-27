@@ -48,8 +48,8 @@ export default function YatraCard({
                 "/images2/default.png",
                 "/images2/default.png",
                 "/images2/default.png",
-              ].map((src) => (
-                <div key={src} className="relative">
+              ].map((src, index) => (
+                <div key={index} className="relative">
                   <Image src={src} alt="" fill className="object-cover" />
                 </div>
               ))}
