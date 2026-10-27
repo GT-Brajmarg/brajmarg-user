@@ -28,7 +28,7 @@ export default function AboutPage() {
       {/* ═══════════════════════════════════════════════════════
           SECTION 1: HERO
           Full bright warm golden temple & clouds
-          Clean, bright, luminous layout matching reference image
+          Clean, bright, luminous layout
       ═══════════════════════════════════════════════════════ */}
       <section className="relative z-10 w-full min-h-[400px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[550px] flex items-center overflow-hidden">
         {/* Hero image background - bright and natural */}
@@ -151,9 +151,7 @@ export default function AboutPage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          SECTION 2: OUR STORY & WHAT WE BRING (Image 3)
-          - temple-bell.png hanging flush from top edge of section
-          - our_story_temple.png anchored on left, baseline resting flush above What We Bring box
+          SECTION 2: OUR STORY & WHAT WE BRING
       ═══════════════════════════════════════════════════════ */}
       <section className="relative z-10 w-full border-t border-[#C37000]/30 pt-8 sm:pt-12 pb-12 sm:pb-16 overflow-hidden">
         {/* Lite Lotus BG — desktop only */}
@@ -639,10 +637,7 @@ export default function AboutPage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          SECTION 3: OUR PROMISE (Image 2)
-          Left: /images/left_lotus.png (pinned to far left edge, vertically centered)
-          Right: /images/right_lotus.png (pinned to far right edge, vertically centered)
-          Center: Circular mandala background & 4 Promise items with 3 discrete vertical dividers
+          SECTION 3: OUR PROMISE
       ═══════════════════════════════════════════════════════ */}
       <section
         className="relative z-10 w-full border-y border-[#C37000]/40 py-12 sm:py-16 md:py-20 overflow-hidden flex items-center justify-center"

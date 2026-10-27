@@ -42,10 +42,16 @@ export default function LayoutContent({
 }) {
   const pathname = usePathname();
 
+  const hideNavbar =
+    pathname.startsWith("/support") ||
+    pathname.startsWith("/privacy") ||
+    pathname.startsWith("/terms");
+
   const hideFooter =
     pathname.startsWith("/profile") ||
     pathname.startsWith("/support") ||
-    pathname.startsWith("/contact") ||
+    pathname.startsWith("/privacy") ||
+    pathname.startsWith("/terms") ||
     pathname.startsWith("/cart") ||
     pathname.startsWith("/checkout") ||
     pathname.startsWith("/payment") ||
@@ -69,8 +75,8 @@ export default function LayoutContent({
 
   return (
     <>
-      <Navbar />
-      <main className="min-h-screen pt-[64px] lg:pt-[84px]">{children}</main>
+      {!hideNavbar && <Navbar />}
+      <main className={`min-h-screen ${hideNavbar ? "" : "pt-[64px] lg:pt-[84px]"}`}>{children}</main>
       {!hideFooter && <Footer />}
     </>
   );
